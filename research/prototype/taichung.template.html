@@ -391,6 +391,11 @@
     renderTrack(); renderNow();
   }
 
+  // 視窗寬度跨過 860px 要重畫：ageText 會在「27 個月大」與「27 個月大（2 歲 3 個月）」
+  // 之間切換，長版在 390px 會把控制列撐破（實測撐到 440px）。只在載入時判斷一次不夠——
+  // 手機轉向、桌機縮視窗都會跨過這條線。
+  NARROW.addEventListener('change', () => setAge(age));
+
   el('age').addEventListener('input', e => setAge(+e.target.value));
   el('birth').addEventListener('change', e => {
     if (!e.target.value) return;
