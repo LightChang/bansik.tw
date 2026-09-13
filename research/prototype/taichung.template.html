@@ -263,6 +263,37 @@
   const num = v => (v === '' || v == null ? null : Number(v));
   const el = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // 動態資訊照 entity_key 分組。這些是各縣市衛生局頁解析出來的：門診時間、
+  // 預約方式、電話分機。放在機構清單上，不然它們只存在資料層、家長看不到。
+  const OBS = {};
+  for (const o of DATA.observations || []) (OBS[o.entity_key] ||= []).push(o);
+  const OBS_LABEL = {
+    clinic_hours: '門診', booking_method: '預約', booking_tel: '分機',
+    quota_release_date: '下次開放名額', monthly_capacity: '每月名額',
+  };
+  // 一家機構可能有好幾筆，同一種只取第一筆；分機只在它比 entity 的電話多給資訊時才顯示
+  function obsLine(key, tel) {
+    const list = OBS[key] || [];
+    const parts = [];
+    for (const f of ['clinic_hours', 'booking_method', 'booking_tel']) {
+      const hit = list.find(o => o.field === f);
+      if (!hit) continue;
+      // 電話別重複顯示：entity 存「(04)3604-5483」、衛生局頁存「04-36045483」，
+      // 比字串比不出來（格式不同），要比數字。但像「分機12130(初評)、12131(複評)」
+      // 這種帶標註的要留著——那是 entity 的電話欄沒有的資訊。
+      // 「分機」這兩個字本身不算資訊，先拿掉再判斷，否則「04-36060666 分機4136」
+      // 跟電話欄的「(04)36060666#4136」明明一樣，只因為有中文就被當成新資訊。
+      if (f === 'booking_tel' && tel) {
+        const extra = hit.value.replace(/分機/g, '');
+        if (!/[一-鿿]/.test(extra)
+            && extra.replace(/\D/g, '') === tel.replace(/\D/g, '')) continue;
+      }
+      parts.push(`${OBS_LABEL[f]}：${esc(hit.value)}`);
+    }
+    return parts.length ? `<div class="geo">${parts.join('　')}</div>` : '';
+  }
+
   let age = 27;
   const inBand = t => age >= num(t.month_min) && age < num(t.month_max);
 
@@ -468,7 +499,8 @@
         <td>${e.tier ? `<span class="pill ${e.tier === '重點' ? 'key' : ''}">${esc(e.tier)}</span>` : ''}${
           e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.name)}</a>` : esc(e.name)}</td>
         <td>${esc(e.plain_cat)}</td>
-        <td>${esc(e.address)}${e.geo_level === 'district' ? ' <span class="geo">（座標只到行政區）</span>' : ''}</td>
+        <td>${esc(e.address)}${e.geo_level === 'district' ? ' <span class="geo">（座標只到行政區）</span>' : ''}
+          ${obsLine(e.entity_key, e.tel)}</td>
         <td class="num">${esc(e.tel)}</td></tr>`).join('')
         : '<tr><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>');
   }
