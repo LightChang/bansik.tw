@@ -1,0 +1,27 @@
+{
+  "note": "機構的聯評／早療頁面網址。人工維護，不放進自動抓取流程——來源是各縣市衛生局頁的連結欄，而那些連結多半是 reurl.cc 短網址，必須用瀏覽器實際開啟才展得開（見 how_expanded）。每筆都經過實際開啟、確認標題是該機構的聯評或早療單位才收錄。",
+  "why": "動態層要逐站解析放名額日、門診時段，前提是拿得到各中心的網址。但社家署名錄只有 9/90 家聯評中心填了官網，全庫也只有 68 家有。這份對照就是補那一段。",
+  "how_expanded": "reurl.cc 的頁面不含任何轉址語法——沒有 HTTP 3xx、沒有 meta refresh、也沒有 location.href，body 裡只有 og:title 與 favicon，真正的跳轉由 /asset/javascripts/redirect/redirect.js 執行後才發生。所以 curl 一律拿不到目標（會誤抓成 favicon 的網址），只能用瀏覽器開啟、等 JS 跑完再讀 location.href。",
+  "not_expanded": "shorturl.at 的連結取不到：回 HTTP 403 且 header 帶 cf-mitigated: challenge，是 Cloudflare 的反機器人挑戰。繞過它不在該做的範圍內，所以這幾家留空：童綜合、衛福部臺中醫院、衛福部豐原醫院、國軍臺中總醫院、大里仁愛。要補就人工開啟填進來。",
+  "verified_at": "2026-09-13",
+  "urls": [
+    {"county": "臺中市", "name": "中國醫藥大學兒童醫院", "url": "http://www.cmuch.org.tw/Department/Detail?depid=75", "title": "兒童發展聯合評估中心", "how": "direct"},
+    {"county": "臺中市", "name": "臺中榮民總醫院", "url": "https://www.vghtc.gov.tw/CP/2589", "title": "臺中榮民總醫院全球資訊網-兒童發展聯合評估中心", "how": "expanded"},
+    {"county": "臺中市", "name": "中山醫學大學附設醫院", "url": "https://web.csh.org.tw/web/a24000/", "title": "兒童發展評估中心", "how": "direct"},
+    {"county": "臺中市", "name": "光田醫療社團法人光田綜合醫院", "url": "https://www.ktgh.com.tw/ktgh/Department/DptFeature?DptID=A2EFB0DBB908A85203E578B431AD667A&id=64EBEC85EA114E2A58000EC179EA2258", "title": "光田綜合醫院", "how": "expanded"},
+    {"county": "臺中市", "name": "佛教慈濟醫療財團法人台中慈濟醫院", "url": "https://taichung.tzuchi.com.tw/index.php/xun-xi-zhuan-qu/xing-zheng-gong-gao", "title": "台中慈濟醫院", "how": "direct"},
+
+    {"county": "新北市", "name": "醫療財團法人徐元智先生醫藥基金會亞東紀念醫院", "url": "https://sites.google.com/view/femhcdc/%E6%9C%8D%E5%8B%99%E5%85%A7%E5%AE%B9/%E8%81%AF%E5%90%88%E8%A9%95%E4%BC%B0", "title": "亞東紀念醫院兒童發展中心 - 聯合評估", "how": "expanded", "note": "兒發中心用 Google Sites 架設，所以 favicon 在 googleusercontent——curl 剖析會誤抓成那個網址。"},
+    {"county": "新北市", "name": "國泰醫療財團法人汐止國泰綜合醫院", "url": "https://sijhih.cgh.org.tw/ec99/rwd102/category.asp?category_id=167", "title": "早期療育就醫流程 - 汐止國泰綜合醫院", "how": "expanded"},
+    {"county": "新北市", "name": "天主教耕莘醫療財團法人耕莘醫院", "url": "https://www.cth.org.tw/?aid=62&pid=48", "title": "聯合評估門診 | 天主教耕莘醫療財團法人耕莘醫院", "how": "expanded"},
+    {"county": "新北市", "name": "佛教慈濟醫療財團法人台北慈濟醫院", "url": "https://taipei.tzuchi.com.tw/%E5%85%92%E7%AB%A5%E5%BE%A9%E5%81%A5%E4%B8%AD%E5%BF%83", "title": "兒童復健中心", "how": "direct"},
+    {"county": "新北市", "name": "衛生福利部雙和醫院(委託臺北醫學大學興建經營)", "url": "https://shh.tmu.edu.tw/page/IntroFeaturse.aspx?IntroType=S&deptCode=4300", "title": "衛生福利部雙和醫院", "how": "expanded"},
+    {"county": "新北市", "name": "行天宮醫療志業醫療財團法人恩主公醫院", "url": "http://www.eck6800.idv.tw/contents/default_5.htm", "title": "財團法人恩主公醫院兒童發展聯合評估暨早療中心", "how": "expanded", "note": "網域是 idv.tw 看起來像個人網站，但實際開啟確認就是該院兒發聯評暨早療中心自建的站。不要憑網域判斷。"},
+    {"county": "新北市", "name": "衛生福利部臺北醫院", "url": "https://www.tph.mohw.gov.tw/?aid=60&pid=39", "title": "服務項目 | 單位介紹 | 衛生福利部臺北醫院", "how": "expanded"},
+    {"county": "新北市", "name": "台灣基督長老教會馬偕醫療財團法人淡水馬偕紀念醫院", "url": "https://www.mmh.org.tw/departmain.php?id=73", "title": "兒童發展暨早期療育評估中心：馬偕紀念醫院", "how": "expanded"},
+    {"county": "新北市", "name": "新北市立聯合醫院", "url": "https://www.ntch.ntpc.gov.tw/home.jsp?id=536cfc86f920edf2", "title": "早療介紹-新北市立聯合醫院", "how": "expanded", "note": "衛生局頁寫的是「新北市立聯合醫院三重院區」，但健保名冊裡這是單一機構（0131020016，登記地址同時含三重區新北大道一段3號與板橋區英士路），沒有獨立的三重院區代碼，名錄裡也是「新北市立聯合醫院」。這裡用名錄的寫法才對得上，院區後綴記在這。"},
+    {"county": "新北市", "name": "輔仁大學學校財團法人輔仁大學附設醫院", "url": "https://webdept.fjuh.fju.edu.tw/FjuhDep/childdev/serviceitem/earlytreatment/", "title": "早療評估 – 兒童發展評估暨療育中心", "how": "expanded"},
+    {"county": "新北市", "name": "天主教耕莘醫療財團法人永和耕莘醫院", "url": "https://www.cthyh.org.tw/?aid=52&pid=150", "title": "兒童發展聯合評估中心 | 永和耕莘醫院", "how": "expanded"},
+    {"county": "新北市", "name": "新北市立土城醫院（委託長庚醫療財團法人興建經營）", "url": "https://cghdpt.cgmh.org.tw/dept/V3900/m/988/page/256", "title": "長庚醫療財團法人", "how": "expanded"}
+  ]
+}

@@ -122,6 +122,20 @@ def load_alias():
             for a in json.load(open(path)).get('hosp_id_alias', [])}
 
 
+def load_urls():
+    """機構的聯評／早療頁面網址（urls.json），人工維護。
+
+    來源是各縣市衛生局頁的連結欄，但那些多半是 reurl.cc 短網址，而 reurl 不含任何
+    轉址語法（跳轉由 JS 執行後才發生），curl 拿不到目標、剖 body 會誤抓成 favicon。
+    只能用瀏覽器開啟讀 location.href，所以不放進自動抓取流程，展開結果存成對照檔。
+    """
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'urls.json')
+    if not os.path.exists(path):
+        return {}
+    return {(u['county'], core(u['name'])): u['url']
+            for u in json.load(open(path)).get('urls', []) if u.get('url')}
+
+
 def make_matcher(active, by_core):
     alias = load_alias()
     by_id = {r['HOSP_ID']: r for r in active}
@@ -380,6 +394,15 @@ def merge_entities(raws):
             'sources': ';'.join(dict.fromkeys(r['source'] for r in rows)),
             'source_updated': pick('更新日期'),
         })
+    # 名錄只有 9/90 家聯評中心填了官網，用人工對照補上衛生局頁展開出來的那批。
+    # 只補空的，不覆蓋來源自己給的網址。
+    urls = load_urls()
+    for e in out:
+        if not e.get('url'):
+            hit = urls.get((e['county'], core(e['name'])))
+            if hit:
+                e['url'] = hit
+
     out.sort(key=lambda r: (r['cat'], r['county'], r['name']))
     return out
 
