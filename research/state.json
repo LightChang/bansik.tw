@@ -1,0 +1,564 @@
+{
+ "sources": {
+  "csh_quota": {
+   "files": {
+    "dyn/csh.html": {
+     "sha256": "c6931344270d45ac14a520ad51e482f668e159f69aae52f7bf094c1bcd5c4ae3",
+     "bytes": 36038,
+     "fetched_at": "2026-09-12T03:30:22.543338+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:30:22.543353+00:00",
+   "next_due": "2026-09-13T03:30:22.543357+00:00",
+   "last_changed": "2026-09-12T03:06:58.078278+00:00",
+   "pending_big": false
+  },
+  "stats_special_ed": {
+   "files": {
+    "setstat.csv": {
+     "sha256": "0d5fcec5212a24555dfbcb1c1a71430f8e268e8c8c82bdc028d7457824ac93bc",
+     "bytes": 1317,
+     "fetched_at": "2026-09-12T03:14:24.021006+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:24.021062+00:00",
+   "next_due": "2026-12-12T03:14:24.021065+00:00",
+   "last_changed": "2026-09-12T03:06:58.267995+00:00"
+  },
+  "nhi_clinic_hours": {
+   "files": {
+    "nhi_clinic_hours.json": {
+     "sha256": "a6de1d9a001401b8b2ac12cec115c4221a3afe8de6c1a0a3de9e12b95577d0bc",
+     "bytes": 8414084,
+     "fetched_at": "2026-09-12T03:13:41.733392+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:13:41.733423+00:00",
+   "next_due": "2026-09-19T03:13:41.733429+00:00",
+   "last_changed": "2026-09-12T03:13:41.733441+00:00"
+  },
+  "sfaa_resource": {
+   "files": {
+    "sfaa/1_qtype2_1.html": {
+     "sha256": "a4f01861032add53ca3e51339d6d74db0cf1277087ef880e0430975172cd7375",
+     "bytes": 102259,
+     "fetched_at": "2026-09-12T03:12:21.663667+00:00"
+    },
+    "sfaa/1_qtype2_2.html": {
+     "sha256": "71aeddf8d3438598d3b88ccb5849bab28b0ebc3a2e90ff6f9fab7f1ca2e20912",
+     "bytes": 176352,
+     "fetched_at": "2026-09-12T03:12:22.699127+00:00"
+    },
+    "sfaa/1_qtype2_3.html": {
+     "sha256": "03aca4d263435d223570b2feed85ab61aac435376e50c7350fee4a731a7a5a80",
+     "bytes": 47530,
+     "fetched_at": "2026-09-12T03:12:23.193043+00:00"
+    },
+    "sfaa/1_qtype2_4.html": {
+     "sha256": "c72e7f243e9af8e40d757a8a8fe41662f9d56b264280c3ff24556f52941ee5bf",
+     "bytes": 132705,
+     "fetched_at": "2026-09-12T03:12:23.916154+00:00"
+    },
+    "sfaa/1_qtype2_5.html": {
+     "sha256": "5321741c7104f5249b04b3a25c73f90a5e401eedb0cd56806972d865a12bd48e",
+     "bytes": 386884,
+     "fetched_at": "2026-09-12T03:12:25.480030+00:00"
+    },
+    "sfaa/1_qtype2_6.html": {
+     "sha256": "572764dc4609a3c257442e7882d98d861eea5a763f9485300533d11f40afb411",
+     "bytes": 107406,
+     "fetched_at": "2026-09-12T03:12:26.487250+00:00"
+    },
+    "sfaa/1_qtype2_7.html": {
+     "sha256": "9d2195b98782d3e8b4fdcef25e4ea0bfb97f20b3d138ab2995080938b2374cfd",
+     "bytes": 141474,
+     "fetched_at": "2026-09-12T03:12:27.768451+00:00"
+    },
+    "sfaa/1_qtype2_8.html": {
+     "sha256": "f6d0978dbe0a0727292dc425f598d78528836633b1a75e72e04b209c85578457",
+     "bytes": 56523,
+     "fetched_at": "2026-09-12T03:12:28.036247+00:00"
+    },
+    "sfaa/2_qtype2_4.html": {
+     "sha256": "ef48787e94df791be291d284a340918e1280edcd92e663c8cfe2126704937bdf",
+     "bytes": 7438902,
+     "fetched_at": "2026-09-12T03:12:41.764240+00:00"
+    },
+    "sfaa/2_qtype2_5.html": {
+     "sha256": "0c7c80f077462eca7252b3a9982f08828fd5abcc7bab40f8ddf74675e6df567a",
+     "bytes": 748754,
+     "fetched_at": "2026-09-12T03:12:44.483249+00:00"
+    },
+    "sfaa/2_qtype2_7_qtype3_1.html": {
+     "sha256": "0ec38996915114e031362d4bdd78148632c4ae2ecc5e84535279892b70d5f939",
+     "bytes": 155163,
+     "fetched_at": "2026-09-12T03:12:45.212983+00:00"
+    },
+    "sfaa/2_qtype2_7_qtype3_3.html": {
+     "sha256": "6af5be3ec2e6ff1d7f5b7b93c248f64c1fa9ee920c69d74a6ade2de9806c09ae",
+     "bytes": 465211,
+     "fetched_at": "2026-09-12T03:12:46.766635+00:00"
+    },
+    "sfaa/2_qtype2_7_qtype3_9.html": {
+     "sha256": "dee0dadd4168d3a21a546f97001497a8a20e420f309759f2c497fa044e9bc5e6",
+     "bytes": 856104,
+     "fetched_at": "2026-09-12T03:12:49.196433+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:12:49.196448+00:00",
+   "next_due": "2026-10-12T03:12:49.196451+00:00",
+   "last_changed": "2026-09-12T03:12:49.196463+00:00"
+  },
+  "hpa_center_list": {
+   "files": {
+    "hpa115.pdf": {
+     "sha256": "de34178e972133ae9d2c9a05534a94922a71eff1c55a3911a567353357ac1975",
+     "bytes": 246688,
+     "fetched_at": "2026-09-12T03:12:49.778762+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:12:49.778772+00:00",
+   "next_due": "2027-09-12T03:12:49.778775+00:00",
+   "last_changed": "2026-09-12T03:12:49.778782+00:00"
+  },
+  "nhi_roster": {
+   "files": {
+    "nhi_roster.json": {
+     "sha256": "3fcd6d449c6f4d1357ecd697a3ec1138b1fd10bc056c0f2f237c33ab0ae2f4fa",
+     "bytes": 12431868,
+     "fetched_at": "2026-09-12T03:13:18.913306+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:13:18.913340+00:00",
+   "next_due": "2026-09-19T03:13:18.913347+00:00",
+   "last_changed": "2026-09-12T03:13:18.913363+00:00"
+  },
+  "nhi_specialty": {
+   "files": {
+    "nhi_specialty.json": {
+     "sha256": "69765dc7cf9655789b894cdc77efcf9e9f255f1fc8b3faafb5d9eddba86142f5",
+     "bytes": 1345454,
+     "fetched_at": "2026-09-12T03:13:57.788734+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:13:57.788758+00:00",
+   "next_due": "2026-10-12T03:13:57.788764+00:00",
+   "last_changed": "2026-09-12T03:13:57.788776+00:00"
+  },
+  "moh_inst": {
+   "files": {
+    "moh_inst.ods": {
+     "sha256": "0cecabbc3770f28fc84c0699e9ca313c5e8196658bf308f80e2f6eb04374d2aa",
+     "bytes": 2193354,
+     "fetched_at": "2026-09-12T03:14:02.891320+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:02.891330+00:00",
+   "next_due": "2027-09-12T03:14:02.891333+00:00",
+   "last_changed": "2026-09-12T03:14:02.891339+00:00"
+  },
+  "hfk_map": {
+   "files": {
+    "hfk_joint.ods": {
+     "sha256": "7885aaffed7956334c67ce6513c764403d44383b4ab08498297a60bd57f23f5c",
+     "bytes": 8480,
+     "fetched_at": "2026-09-12T03:14:03.356305+00:00"
+    },
+    "hfk_joint_page.html": {
+     "sha256": "a4fe3c4968c8f3720664e33210308e1da7c96233440b8d7081a658e72649cd54",
+     "bytes": 244580,
+     "fetched_at": "2026-09-12T03:14:04.230415+00:00"
+    },
+    "hfk_screen.ods": {
+     "sha256": "432d1160eac6813384d34b27ec941f6a0a3ed77d5ebb53cb8b2b813c72422512",
+     "bytes": 59441,
+     "fetched_at": "2026-09-12T03:14:07.865478+00:00"
+    },
+    "hfk_screen_page.html": {
+     "sha256": "af80971a9af113a6e54898e1e805407759e539034c5f416df14700deb824db57",
+     "bytes": 2805038,
+     "fetched_at": "2026-09-12T03:14:13.886338+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:13.886352+00:00",
+   "next_due": "2026-10-12T03:14:13.886355+00:00",
+   "last_changed": "2026-09-12T03:14:13.886362+00:00"
+  },
+  "ntpc_booking": {
+   "files": {
+    "dyn/ntpc_booking.html": {
+     "sha256": "9a4128bdac1f0b7b11cb4d542e2720b6aed6586654c39123b30a9cb2ec917e7b",
+     "bytes": 72844,
+     "fetched_at": "2026-09-12T03:14:15.477400+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:15.477460+00:00",
+   "next_due": "2026-09-19T03:14:15.477463+00:00",
+   "last_changed": "2026-09-12T03:14:15.477470+00:00"
+  },
+  "tc_health_booking": {
+   "files": {
+    "dyn/tc_health.html": {
+     "sha256": "31009868ae896258588e4ce3c9fd1851849d94f0ea8d89d5d9f93790ce686f89",
+     "bytes": 101086,
+     "fetched_at": "2026-09-12T03:14:17.235965+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:17.236031+00:00",
+   "next_due": "2026-09-19T03:14:17.236034+00:00",
+   "last_changed": "2026-09-12T03:14:17.236062+00:00"
+  },
+  "tc_selfpay": {
+   "files": {
+    "dyn/tc_selfpay.html": {
+     "sha256": "613a5c550b4b1a4153bd6b94d74ae7ad0658bb2af894dff9a30be56aebdfe38d",
+     "bytes": 104635,
+     "fetched_at": "2026-09-12T03:14:17.774819+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:17.774863+00:00",
+   "next_due": "2026-12-12T03:14:17.774866+00:00",
+   "last_changed": "2026-09-12T03:14:17.774889+00:00"
+  },
+  "stats_report": {
+   "files": {
+    "stats/254.xlsx": {
+     "sha256": "bfbeade7c4febfbe7a4975e59fc7a7c987e882cff43934618150e6f4e1af10e2",
+     "bytes": 259014,
+     "fetched_at": "2026-09-12T03:30:23.338101+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:30:23.338115+00:00",
+   "next_due": "2026-12-12T03:30:23.338118+00:00",
+   "last_changed": "2026-09-12T03:14:18.289694+00:00",
+   "pending_big": false
+  },
+  "stats_early_intervention": {
+   "files": {
+    "stats/255.xlsx": {
+     "sha256": "bac67740d1293074f18cfacb4961c787adad87804e942f1d6a2915f7c6fda9f6",
+     "bytes": 66936,
+     "fetched_at": "2026-09-12T03:14:18.614536+00:00"
+    },
+    "stats/256.xlsx": {
+     "sha256": "563a9c3f6bbb2d2586983656e586f4d137fa54af072a8bab51ee104c1ebbddd9",
+     "bytes": 94273,
+     "fetched_at": "2026-09-12T03:14:19.004576+00:00"
+    },
+    "stats/257.xlsx": {
+     "sha256": "751fa6660a18d5cfea7769e68df832405518e1f65f4f324f51054ad81417d3b2",
+     "bytes": 86118,
+     "fetched_at": "2026-09-12T03:14:19.333111+00:00"
+    },
+    "stats/258.xlsx": {
+     "sha256": "50e9954f55e7ce6765628ab5bd9a3e3e6c4c072beb890e5d90a547efd4ebd291",
+     "bytes": 89387,
+     "fetched_at": "2026-09-12T03:14:19.711839+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:19.711848+00:00",
+   "next_due": "2027-09-12T03:14:19.711850+00:00",
+   "last_changed": "2026-09-12T03:14:19.711856+00:00"
+  },
+  "stats_protection": {
+   "files": {
+    "s322.xlsx": {
+     "sha256": "ecbb48f33048038976b8e92306880badb8165d639088241241ef5e09828fee5d",
+     "bytes": 547695,
+     "fetched_at": "2026-09-12T03:14:21.181712+00:00"
+    },
+    "s355.xlsx": {
+     "sha256": "d1a1cf2f5b3dc08752035f4be99674d58fea3279d87919fd78526b4e19b1dd5f",
+     "bytes": 212414,
+     "fetched_at": "2026-09-12T03:14:21.630965+00:00"
+    },
+    "s356.xlsx": {
+     "sha256": "3273c1e7ed43596fd9b3fd8b631a3e2828e144efec40a6de7944e00e2a019b99",
+     "bytes": 225311,
+     "fetched_at": "2026-09-12T03:14:22.191808+00:00"
+    },
+    "s359.xlsx": {
+     "sha256": "a1f8bb80b296f73ad78e9e41c5965d4525e768f380ebc6f0bfd38fb252d0d313",
+     "bytes": 337429,
+     "fetched_at": "2026-09-12T03:14:22.768695+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:22.768705+00:00",
+   "next_due": "2027-03-13T03:14:22.768708+00:00",
+   "last_changed": "2026-09-12T03:14:22.768715+00:00"
+  },
+  "stats_protection_field": {
+   "files": {
+    "s_field.pdf": {
+     "sha256": "6f8c754ed9da06384af830087b67c572dd0387f3114c15946b76bd8d4c793a23",
+     "bytes": 228083,
+     "fetched_at": "2026-09-12T03:14:23.302706+00:00"
+    },
+    "dops_child.html": {
+     "sha256": "171af6000b0744b3edcc553719bcabadb33d3cbb53330344f2664eb1e1cf50a4",
+     "bytes": 29357,
+     "fetched_at": "2026-09-12T03:14:23.643821+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:23.643829+00:00",
+   "next_due": "2027-09-12T03:14:23.643851+00:00",
+   "last_changed": "2026-09-12T03:14:23.643858+00:00"
+  },
+  "serc_yearbook": {
+   "files": {
+    "serc_year.html": {
+     "sha256": "1e7d1686476bf0340d8ee7b49399bdf903281d8888a568acce6f204211a7776a",
+     "bytes": 84582,
+     "fetched_at": "2026-09-12T03:14:26.092005+00:00"
+    },
+    "serc_113.pdf": {
+     "sha256": "fc1947a31e0facb55760a7edf50e7a2db41ed649b5572fb77f6dcd75187d84eb",
+     "bytes": 6050472,
+     "fetched_at": "2026-09-12T03:14:29.782836+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:29.782847+00:00",
+   "next_due": "2027-09-12T03:14:29.782850+00:00",
+   "last_changed": "2026-09-12T03:14:29.782856+00:00"
+  },
+  "screen_checklist": {
+   "files": {
+    "screen/2026_06_20.html": {
+     "sha256": "f010f477858e1d5cd373c496636518ed7be2256716a4732d4bed319b39af78f9",
+     "bytes": 94814,
+     "fetched_at": "2026-09-12T03:14:30.302337+00:00"
+    },
+    "screen/2026_03_01.html": {
+     "sha256": "453d5a4a8e3e5d93f31457489b0d2a09c2ca57ab5a724f00724b2cea4f195dd7",
+     "bytes": 95030,
+     "fetched_at": "2026-09-12T03:14:30.684827+00:00"
+    },
+    "screen/2025_12_01.html": {
+     "sha256": "4cd2b46edf1af18bd22c963661fa22b770c7b3da39b3ea87e8ea1ff06185f501",
+     "bytes": 94671,
+     "fetched_at": "2026-09-12T03:14:30.979788+00:00"
+    },
+    "screen/2025_09_01.html": {
+     "sha256": "adf97da02ad35b3bfb7cf0c66e7184fe4c4f70dc5600ae345ab8131e2716bd0c",
+     "bytes": 94014,
+     "fetched_at": "2026-09-12T03:14:31.189837+00:00"
+    },
+    "screen/2025_06_01.html": {
+     "sha256": "89400b14e02fda5d192bd77f68bca64384ff3b0abb41d4d9e73645d61fb2b890",
+     "bytes": 94959,
+     "fetched_at": "2026-09-12T03:14:31.399563+00:00"
+    },
+    "screen/2025_03_01.html": {
+     "sha256": "290b835fd986f526033fc8ff483b433144031fb480a43a7a641a02901d9d36f5",
+     "bytes": 96682,
+     "fetched_at": "2026-09-12T03:14:31.659880+00:00"
+    },
+    "screen/2024_09_01.html": {
+     "sha256": "cf4aa36dc5d6955a0de5cf545e65f3f6cd872a0e1164ea6ea76541ac8fb0d46f",
+     "bytes": 95225,
+     "fetched_at": "2026-09-12T03:14:31.915928+00:00"
+    },
+    "screen/2024_01_15.html": {
+     "sha256": "2f75076b74338e716ecab727889d88e264940c2da320fda7e1fe2933c58022cd",
+     "bytes": 95915,
+     "fetched_at": "2026-09-12T03:14:32.122011+00:00"
+    },
+    "screen/2023_09_10.html": {
+     "sha256": "f87eae43ed235e7122bb2dc01e70a11e4a46c8079902f8857004b3afcab0411d",
+     "bytes": 97972,
+     "fetched_at": "2026-09-12T03:14:32.377204+00:00"
+    },
+    "screen/2023_03_10.html": {
+     "sha256": "c52f75a045719c275c3aef7616b0c7438d51083b28730a0caa96d159ac54fc45",
+     "bytes": 98157,
+     "fetched_at": "2026-09-12T03:14:32.618364+00:00"
+    },
+    "screen/2022_09_10.html": {
+     "sha256": "eb86a6ca2a6653aabcc7d4b71171e2e42e8fde833b2e2aa2b0f5891ba2875074",
+     "bytes": 98565,
+     "fetched_at": "2026-09-12T03:14:33.131561+00:00"
+    },
+    "screen/2021_01_05.html": {
+     "sha256": "a88e67731d7cb492aedce188d0c9e28163937f220a0752cf4c5fe4482d3322ff",
+     "bytes": 98323,
+     "fetched_at": "2026-09-12T03:14:33.301568+00:00"
+    },
+    "screen/2020_09_10.html": {
+     "sha256": "c0f926ff9476d6497cc24adf99a4aec12bdd37f2a95bb6bdb8756466dcb7000f",
+     "bytes": 100590,
+     "fetched_at": "2026-09-12T03:14:33.481162+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:33.481178+00:00",
+   "next_due": "2026-10-12T03:14:33.481191+00:00",
+   "last_changed": "2026-09-12T03:14:33.481199+00:00"
+  },
+  "sfaa_promo": {
+   "files": {
+    "cecm_video.html": {
+     "sha256": "c55f8ea9343bba7f21af7e50e3a555c07e9839919e5d2f9cb8bc634e256070b3",
+     "bytes": 30299,
+     "fetched_at": "2026-09-12T03:14:33.669272+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:33.669284+00:00",
+   "next_due": "2026-10-12T03:14:33.669287+00:00",
+   "last_changed": "2026-09-12T03:14:33.669293+00:00"
+  },
+  "hpa_scales": {
+   "files": {
+    "hpa_scale.html": {
+     "sha256": "2fc7d549146fdcbf1684753c5dba0c59e628694f1f31c17f820da9483be23cff",
+     "bytes": 191859,
+     "fetched_at": "2026-09-12T03:14:35.733335+00:00"
+    },
+    "hpa_card.html": {
+     "sha256": "b7ba2d866baca1a00af60248e99acdbddc00a1abf120826eee59fbac121475f1",
+     "bytes": 187045,
+     "fetched_at": "2026-09-12T03:14:38.215131+00:00"
+    },
+    "hpa_plan.html": {
+     "sha256": "02d655f6d4174467b3541b1628eba6616e299956897eaca3646f36dc4a84f32a",
+     "bytes": 198226,
+     "fetched_at": "2026-09-12T03:14:40.154696+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:40.154709+00:00",
+   "next_due": "2026-10-12T03:14:40.154711+00:00",
+   "last_changed": "2026-09-12T03:14:40.154718+00:00"
+  },
+  "hpa_kidbook": {
+   "files": {
+    "hpa_kidbook.html": {
+     "sha256": "8f41bf0bb7d50cbd710b88b7f63d82fe4252edcbf29837b01ec45522665c3f10",
+     "bytes": 228318,
+     "fetched_at": "2026-09-12T03:20:14.456059+00:00"
+    },
+    "kidbook.pdf": {
+     "sha256": "418ebad867f37219cd54c35756584426c344824f8dd6c250911007d1da22916c",
+     "bytes": 25452435,
+     "fetched_at": "2026-09-12T03:20:31.069219+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:20:31.069238+00:00",
+   "next_due": "2027-09-12T03:20:31.069242+00:00",
+   "last_changed": "2026-09-12T03:20:31.069254+00:00",
+   "pending_big": false
+  },
+  "tp_manual": {
+   "files": {
+    "tp_manual.html": {
+     "sha256": "714b5c6ddcd275e5d1a0d2b0fd0b709c6c3689f828072eb92fd32c0fd55460fb",
+     "bytes": 111947,
+     "fetched_at": "2026-09-12T03:14:44.124141+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:44.124159+00:00",
+   "next_due": "2026-10-12T03:14:44.124162+00:00",
+   "last_changed": "2026-09-12T03:14:44.124170+00:00"
+  },
+  "crpd_books": {
+   "files": {
+    "crpd_1521.html": {
+     "sha256": "95add12075adf785ba9b64938a257fa372b6868c4dee22427cfcb81b47dea798",
+     "bytes": 4406514,
+     "fetched_at": "2026-09-12T03:14:47.869037+00:00"
+    },
+    "crpd_book.pdf": {
+     "sha256": "359aaa5657f0aede9f2d3c0f31f2bdbcb58cc52bd292d1b238c6572f54535e91",
+     "bytes": 17349574,
+     "fetched_at": "2026-09-12T03:14:57.520152+00:00"
+    },
+    "crpd_sheet.pdf": {
+     "sha256": "748181eb6fa40ad5c061e114fa2dca0a3cee06af32d870b3b1e268f20e75629d",
+     "bytes": 567666,
+     "fetched_at": "2026-09-12T03:14:58.034860+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:58.034880+00:00",
+   "next_due": "2026-10-12T03:14:58.034883+00:00",
+   "last_changed": "2026-09-12T03:14:58.034889+00:00"
+  },
+  "doe_inclusive": {
+   "files": {
+    "doe_list.html": {
+     "sha256": "33df9c6160e6e06e844c39182be8242a1a3582c4accf51eb36c39d4f2f54bb1a",
+     "bytes": 95830,
+     "fetched_at": "2026-09-12T03:14:58.298815+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:14:58.298827+00:00",
+   "next_due": "2026-10-12T03:14:58.298830+00:00",
+   "last_changed": "2026-09-12T03:14:58.298837+00:00"
+  },
+  "moe_lessons": {
+   "files": {
+    "spehouse.html": {
+     "sha256": "56d8057afc2c8a18f27ef2ad8f54f453f2af1f47003952fb04ccfec1e6922b06",
+     "bytes": 66658,
+     "fetched_at": "2026-09-12T03:15:39.816023+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:15:39.816036+00:00",
+   "next_due": "2026-10-12T03:15:39.816038+00:00",
+   "last_changed": "2026-09-12T03:15:39.816045+00:00"
+  },
+  "sibling_support": {
+   "files": {
+    "ahh_qa.html": {
+     "sha256": "3be1bc95b3c923ba17415e68ad5cb494b4b40b875a4065d30bafa045c4d08f64",
+     "bytes": 64045,
+     "fetched_at": "2026-09-12T03:15:40.075686+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:15:40.075700+00:00",
+   "next_due": "2026-10-12T03:15:40.075703+00:00",
+   "last_changed": "2026-09-12T03:15:40.075711+00:00"
+  },
+  "gender_special_ed": {
+   "files": {
+    "gender_index.html": {
+     "sha256": "d802970968f1997e5e2ac4011f7b15b7c46aedd31d26c99410c8033a588d402c",
+     "bytes": 68365,
+     "fetched_at": "2026-09-12T03:15:40.375582+00:00"
+    },
+    "gender2_index.html": {
+     "sha256": "2728dbaae4fde38919a996bfb3f85591e38e285661ceec1a553aeffca676e8ce",
+     "bytes": 68175,
+     "fetched_at": "2026-09-12T03:15:40.572147+00:00"
+    },
+    "gender3_index.html": {
+     "sha256": "d2e7a41468f5cd37d469e8e567c04003a0ef2f87004e02e9f8e26875f1842179",
+     "bytes": 68964,
+     "fetched_at": "2026-09-12T03:15:40.818335+00:00"
+    },
+    "gender4_index.html": {
+     "sha256": "cd405143ab862a3334c55db10e0a0d32264d3431b2e7bde82d30647c8a964ada",
+     "bytes": 69840,
+     "fetched_at": "2026-09-12T03:15:41.034526+00:00"
+    },
+    "gender5_index.html": {
+     "sha256": "975e998665ea89d1fcecabc9a8769b7acbd84d3ac328c980514a37465b951b0d",
+     "bytes": 67993,
+     "fetched_at": "2026-09-12T03:15:41.203004+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:15:41.203017+00:00",
+   "next_due": "2026-10-12T03:15:41.203020+00:00",
+   "last_changed": "2026-09-12T03:15:41.203026+00:00"
+  },
+  "gender_sexedu_manual": {
+   "files": {
+    "sexedu_manual.pdf": {
+     "sha256": "3a235f65e919bc65642b85a7e6a9489c113a4a989e551c533e4d6b08c68f18fa",
+     "bytes": 106867060,
+     "fetched_at": "2026-09-12T03:21:00.630061+00:00"
+    }
+   },
+   "last_fetched": "2026-09-12T03:21:00.630079+00:00",
+   "next_due": "2026-10-12T03:21:00.630084+00:00",
+   "pending_big": false,
+   "last_changed": "2026-09-12T03:21:00.630093+00:00"
+  }
+ }
+}

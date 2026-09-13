@@ -1,0 +1,258 @@
+{
+ "社家署線上兒童發展檢核表": {
+  "2歲半(2歲5個月16天~2歲11個月15天)": {
+   "題數": 12,
+   "警訊題": 7,
+   "範例": "★1. 能不須扶東西輕易地蹲下或彎腰檢起地上的東西，然後恢復站的姿勢"
+  },
+  "1歲半(1歲5個月16天~1歲11個月15天)": {
+   "題數": 13,
+   "警訊題": 7,
+   "範例": "★1. 能不須扶東西自己由坐或躺的姿勢站起來"
+  },
+  "6歲(5歲11個月16天~6歲11個月15天)": {
+   "題數": 13,
+   "警訊題": 7,
+   "範例": "1. 能單腳跳4步(兩腳均能做到才算通過)"
+  },
+  "9個月(8個月16天~11個月15天)": {
+   "題數": 12,
+   "警訊題": 6,
+   "範例": "★1. (趴)翻身(趴著變成仰躺和仰躺變成趴著均能做到才通過)"
+  },
+  "4個月(3個月16天~5個月15天)": {
+   "題數": 12,
+   "警訊題": 5,
+   "範例": "1. (仰)仰躺時雙手手掌均能自然地張開，不再一直緊握"
+  },
+  "1歲(11個月16天~1歲2個月15天)": {
+   "題數": 11,
+   "警訊題": 6,
+   "範例": "★1. (仰)能由躺的姿勢(俯臥或仰臥均可)自己坐起來"
+  },
+  "4歲(3歲11個月16天~4歲11個月15天)": {
+   "題數": 13,
+   "警訊題": 5,
+   "範例": "★1. 能不須扶東西輕易地蹲下玩玩具然後恢復站的姿勢"
+  },
+  "5歲(4歲11個月16天~5歲11個月15天)": {
+   "題數": 13,
+   "警訊題": 5,
+   "範例": "★1. 能不須扶東西輕易地蹲下玩玩具然後恢復站的姿勢"
+  },
+  "3歲半(3歲5個月16天~3歲11個月15天)": {
+   "題數": 13,
+   "警訊題": 3,
+   "範例": "★1. 能不須扶東西輕易地蹲下玩玩具然後恢復站的姿勢"
+  },
+  "6個月(5個月16天~8個月15天)": {
+   "題數": 12,
+   "警訊題": 3,
+   "範例": "1. (仰)換尿布時感覺雙腿有明顯不尋常的阻力，不容易打閉、彎曲"
+  },
+  "2歲(1歲11個月16天~2歲5個月15天)": {
+   "題數": 11,
+   "警訊題": 5,
+   "範例": "★1. 在少許支撐下能蹲下或彎腰檢起地上的東西，然後恢復站的姿勢"
+  },
+  "1歲3個月(1歲2個月16天~1歲5個月15天)": {
+   "題數": 11,
+   "警訊題": 5,
+   "範例": "1. 能不須扶束西自己站起來"
+  },
+  "3歲(2歲11個月16天~3歲5個月15天)": {
+   "題數": 13,
+   "警訊題": 3,
+   "範例": "★1. 能不須扶東西輕易地蹲下玩玩具然後恢復站的姿勢"
+  }
+ },
+ "社家署宣導資料": [
+  {
+   "title": "早期療育線上通報及線上篩檢宣導短片-15秒動畫",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/304812056"
+  },
+  {
+   "title": "早期療育線上通報及線上篩檢宣導單張",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/304812034"
+  },
+  {
+   "title": "113年全國社區療育服務單位一覽表-1130320",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/304479627"
+  },
+  {
+   "title": "111年全國社區療育服務單位一覽表",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/294958954"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(印尼文版2)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798197"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(印尼文版1)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798196"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(泰文版2)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798195"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(泰文版1)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798192"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(越南文版2)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798189"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(越南文版1)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798187"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(英文版2)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798185"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(英文版1)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798184"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(中文版2)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798182"
+  },
+  {
+   "title": "早期療育福利與服務宣導單張(中文版1)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/288798180"
+  },
+  {
+   "title": "寶貝發展篩檢指南光碟-滿2歲半(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100459"
+  },
+  {
+   "title": "寶貝發展篩檢指南光碟-滿2歲(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100456"
+  },
+  {
+   "title": "寶貝發展篩檢指南光碟-滿1歲半(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100455"
+  },
+  {
+   "title": "寶貝發展篩檢指南光碟-滿1歲(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100454"
+  },
+  {
+   "title": "寶貝發展篩檢指南光碟-滿9個月(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100451"
+  },
+  {
+   "title": "寶貝發展篩檢指南光碟-滿6個月(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100450"
+  },
+  {
+   "title": "新生兒聽力篩檢-心肝寶貝篇(資料來源衛生福利部國民健康署)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278100059"
+  },
+  {
+   "title": "早期療育宣導-守護篇(臺語版)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278089351"
+  },
+  {
+   "title": "早期療育宣導-守護篇(客語版)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278089350"
+  },
+  {
+   "title": "早期療育宣導短片(臺語版)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278089349"
+  },
+  {
+   "title": "早期療育宣導短片(國語版)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278089186"
+  },
+  {
+   "title": "早期療育宣導-守護篇(國語版)",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/278089172"
+  },
+  {
+   "title": "心愛寶貝 刻不容緩",
+   "url": "https://system.sfaa.gov.tw/cecm/videoView/detail/268447054"
+  }
+ ],
+ "國健署兒童發展篩檢量表": [
+  "兒童發展篩檢量表",
+  "兒童發展篩檢量表(12-15個月)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(15-18個月)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(18-24個月)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(2-3歲)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(3-4歲)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(4-5歲)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(5-7歲)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(6-9個月)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(9-12個月)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表(9次發展篩檢檢核總表)(格式為 pdf)(另開新視窗)",
+  "兒童發展篩檢量表圖卡及工具規格"
+ ],
+ "臺北市早療資源手冊": [
+  "113學年度臺北市早療兒童入公立非營利幼兒園轉銜手冊",
+  "早期療育服務手冊113年改版(英文)",
+  "早期療育服務手冊113年改版(越南文)",
+  "早療兒童幼兒園轉銜入學",
+  "臺北市早療服務手冊-中文版(115年版)",
+  "資源手冊及宣導品專區",
+  "轉銜相關單位通訊錄"
+ ],
+ "臺北市融合教育現場教學手冊": [
+  {
+   "title": "臺北市融合教育校園–特教學生嚴重情緒行為問題處理指引",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=5E5255245F0316F3"
+  },
+  {
+   "title": "融合教育現場教學手冊(下三)自閉症",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=5570670F92527D2F"
+  },
+  {
+   "title": "融合教育現場教學手冊(下二)學習障礙",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=74ACA85340EB1349"
+  },
+  {
+   "title": "融合教育現場教學手冊(下一)情緒行為障礙",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=5FBE9AAAC2344CBB"
+  },
+  {
+   "title": "融合教育現場教學手冊(上六)發展遲緩",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=734BA6370E1E7728"
+  },
+  {
+   "title": "融合教育現場教學手冊(上五)肢體障礙及身體病弱",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=0DC5D6960FE49AA6"
+  },
+  {
+   "title": "融合教育現場教學手冊(上四)語言障礙",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=0A606299E111A309"
+  },
+  {
+   "title": "融合教育現場教學手冊(上三)聽覺障礙",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=0C960ECB7DF949B3"
+  },
+  {
+   "title": "融合教育現場教學手冊(上二)視覺障礙",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=2EC880DB4EC6F66F"
+  },
+  {
+   "title": "融合教育現場教學手冊(上一)智能障礙",
+   "page": "https://www.doe.gov.taipei/News_Content.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E&s=45D87F7C46904759"
+  }
+ ],
+ "CRPD繪本": [
+  {
+   "title": "希兒與皮帝的神奇之旅（臺灣手語繪本，25頁）",
+   "file": "https://crpd.sfaa.gov.tw/BulletinCtrl?func=downloadFile&type=file&id=3293&code=CACEC5C8C0CDCEC6C2C2CFCBCDC8C7CB"
+  },
+  {
+   "title": "學習單（注音版，2頁）",
+   "file": "https://crpd.sfaa.gov.tw/BulletinCtrl?func=downloadFile&type=file&id=2705&code=828F8C8580898B878C8F8D8C84888C87"
+  },
+  {
+   "title": "每一個都要到 臺灣手語繪本",
+   "page": "https://crpd.sfaa.gov.tw/BulletinCtrl?func=getBulletin&p=b_2&c=G&bulletinId=842"
+  }
+ ]
+}

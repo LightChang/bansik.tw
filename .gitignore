@@ -1,0 +1,12 @@
+# 抓取的原始檔與解析輸出：都能用 research/scripts/prepare.sh 重建，不進版控。
+# 注意不要用 *.pdf / *.xlsx 這種全域規則——research/*/data/ 裡的國健署名單 PDF
+# 與統計表是刻意留檔的來源快照（那些來源不留歷史，只能自己存）。
+research/work/
+research/build/
+# 原型頁面是把 build/ 的資料注入模板產生的（約 300KB），
+# 進版控的是 prototype/taichung.template.html 與 build_page.py
+research/prototype/taichung.html
+
+# research/archive/ 與 research/state.json 要進版控：
+# archive 是來源端不留歷史、只能自己存的快照；state.json 是排程的下次到期時間，
+# 遺失會讓所有來源被判定到期而全部重抓。

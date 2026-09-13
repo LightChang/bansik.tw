@@ -1,0 +1,320 @@
+<title>臺中兒童發展地圖</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap">
+<style>
+  /* 首頁是一條問題鏈：孩子幾個月大 → 到哪一站 → 現在該做什麼 → 去哪裡。
+     「現在該做什麼」是主角，其餘是輔助，所以空間分配也照這個主從關係，
+     不讓四個區塊平鋪搶空間。內容夠少，正常字級就成立。 */
+  :root {
+    --paper: #F7F8F4;
+    --card: #FFFFFF;
+    --ink: #1C2B26;
+    --ink-soft: #55655E;
+    --seal: #2F6F5E;
+    --seal-weak: #E3EDE7;
+    --alert: #B4462F;
+    --alert-weak: #F6E7E2;
+    --line: #D6DCD4;
+    --stamp: #EDF1EA;
+    --serif: "Noto Serif TC", "Songti TC", serif;
+    --sans: "Noto Sans TC", -apple-system, "PingFang TC", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #141A18; --card: #1C2421; --ink: #E8EDE7; --ink-soft: #9AAAA2;
+      --seal: #6FBFA3; --seal-weak: #1E3830; --alert: #E08268; --alert-weak: #3A241E;
+      --line: #2E3A35; --stamp: #222C28;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #141A18; --card: #1C2421; --ink: #E8EDE7; --ink-soft: #9AAAA2;
+    --seal: #6FBFA3; --seal-weak: #1E3830; --alert: #E08268; --alert-weak: #3A241E;
+    --line: #2E3A35; --stamp: #222C28;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; overflow: hidden;
+    background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app {
+    height: 100%; max-width: 1100px; margin: 0 auto;
+    padding: 20px 24px 12px;
+    display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; gap: 12px;
+  }
+  h1, h2, .lead { font-family: var(--serif); margin: 0; }
+  h1 { font-size: 19px; }
+  a { color: var(--seal); }
+  .num { font-variant-numeric: tabular-nums; }
+  :focus-visible { outline: 2px solid var(--seal); outline-offset: 2px; }
+
+  /* 1 孩子幾個月大 */
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; }
+  .brand { margin-inline-end: auto; }
+  .brand span { font-size: 12px; letter-spacing: .14em; color: var(--ink-soft); margin-inline-start: 8px; }
+  .field { display: flex; align-items: center; gap: 8px; }
+  .field label { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+  input[type="range"] { width: 190px; accent-color: var(--seal); }
+  input[type="date"] {
+    font: inherit; font-size: 14px; padding: 4px 6px;
+    border: 1px solid var(--line); border-radius: 3px; background: var(--card); color: var(--ink);
+  }
+  .age { font-family: var(--serif); font-size: 24px; line-height: 1; white-space: nowrap; }
+  .age small { font-size: 13px; color: var(--ink-soft); font-family: var(--sans); }
+
+  /* 2 到哪一站：6 次發展篩檢壓成一條細軸 */
+  .track { display: flex; align-items: flex-start; gap: 0; padding: 0 2px; }
+  .stop { flex: 1 1 0; min-width: 0; text-align: center; position: relative; }
+  .stop::before {
+    content: ""; position: absolute; top: 7px; left: -50%; width: 100%; height: 2px;
+    background: var(--line);
+  }
+  .stop:first-child::before { display: none; }
+  .stop .dot {
+    position: relative; width: 14px; height: 14px; margin: 0 auto 3px;
+    border-radius: 50%; border: 2px solid var(--line); background: var(--paper);
+  }
+  .stop.done .dot { background: var(--line); }
+  /* 叫 current 不叫 now：主角卡片的 class 就是 .now，同名會讓卡片的白底邊框內距
+     整套套到時間軸的當前站上，畫面會多出一個莫名其妙的方框。 */
+  .stop.current .dot { border-color: var(--seal); background: var(--seal); box-shadow: 0 0 0 4px var(--seal-weak); }
+  .stop .lbl { font-size: 12px; color: var(--ink-soft); line-height: 1.35; }
+  .stop.current .lbl { color: var(--seal); font-weight: 700; }
+
+  /* 3 現在該做什麼（主角） */
+  .now {
+    min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--card);
+    padding: 14px 16px;
+  }
+  .now::-webkit-scrollbar { width: 8px; }
+  .now::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  .now .eyebrow { font-size: 13px; color: var(--seal); letter-spacing: .04em; }
+  .now .lead { font-size: 21px; line-height: 1.3; margin-top: 2px; }
+  .now .when { color: var(--ink-soft); margin-top: 4px; }
+  .action {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+    margin-top: 14px; padding: 12px 14px; background: var(--stamp); border-radius: 4px;
+  }
+  .action .tag { font-size: 12.5px; color: var(--seal); }
+  .action .name { font-weight: 500; }
+  .action .warn { color: var(--alert); font-weight: 700; }
+  .also { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+  .also b { font-weight: 500; color: var(--ink); }
+
+  /* 4 去哪裡 */
+  /* align-items:start：左卡內容少，不要被 grid 拉成跟右卡等高而多佔一截空白 */
+  .go { display: grid; grid-template-columns: 1fr 1.35fr; gap: 16px; align-items: start; }
+  .card { border: 1px solid var(--line); border-radius: 4px; padding: 8px 12px; background: var(--card); }
+  .card.call { border-color: var(--seal); background: var(--seal-weak); }
+  .card h2 { font-size: 14px; margin: 0 0 5px; }
+  .card h2 .sub { font-family: var(--sans); font-weight: 400; font-size: 12.5px; color: var(--ink-soft); margin-inline-start: 8px; }
+  .card.call h2 { color: var(--seal); }
+  .row { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; font-size: 14px; }
+  .row + .row { margin-top: 3px; border-top: 1px solid var(--line); padding-top: 3px; }
+  .tel { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+  .hint { margin: 5px 0 0; font-size: 12px; color: var(--ink-soft); }
+  .pill {
+    display: inline-block; font-size: 11.5px; padding: 0 6px; border-radius: 3px;
+    background: var(--seal-weak); color: var(--seal); margin-inline-end: 5px;
+  }
+  .pill.key { background: var(--alert-weak); color: var(--alert); }
+  .quota { margin-top: 5px; font-size: 12.5px; color: var(--ink-soft); }
+
+  footer { border-top: 1px solid var(--line); padding-top: 7px; font-size: 12px; color: var(--ink-soft); }
+
+  /* 手機：390px 寬放不下橫排的控制列與 6 格時間軸，一定要改排法，
+     不是把兩欄併成一欄就算數。overflow-x 是最後一道防線，避免任何元素撐破畫面。 */
+  @media (max-width: 860px) {
+    html, body { height: auto; }
+    body { overflow-x: hidden; overflow-y: auto; }
+    .app {
+      height: auto; grid-template-rows: none; gap: 14px;
+      padding: 14px 14px 24px; max-width: 100%;
+    }
+
+    /* 標題自己一行，出生年月與月齡併在同一列；兩者都要能收縮，390px 才不會被撐破 */
+    .bar { flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+    .brand { flex: 1 0 100%; margin-inline-end: 0; }
+    /* 兩個欄位高度不同（日期框比滑桿高），用 stretch + center 讓它們的內容對齊同一條線 */
+    .field { flex: 1 1 0; min-width: 0; gap: 6px; align-self: stretch; align-items: center; }
+    .field label { flex: 0 0 auto; }
+    input[type="date"] { flex: 1 1 auto; min-width: 0; font-size: 13px; padding: 3px 4px; }
+    input[type="range"] { flex: 1 1 auto; width: auto; min-width: 60px; }
+    /* 單位不能整個藏掉，只剩裸數字看不出是月齡；留「個月」，省掉括號裡的歲數換算 */
+    .age { font-size: 18px; }
+    .age small { font-size: 11.5px; }
+
+    /* 6 站改 3 欄 2 列，連線在這個排法沒有意義就拿掉 */
+    .track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
+    .stop::before { display: none; }
+    .stop .dot { margin-bottom: 4px; }
+    .stop .lbl { font-size: 11.5px; }
+
+    .now { overflow: visible; padding: 14px; }
+    .now .lead { font-size: 19px; }
+    .action { gap: 2px 8px; }
+
+    .go { grid-template-columns: 1fr; }
+    /* 機構名稱長、電話又 nowrap，窄螢幕會把整列撐開 */
+    .row { flex-wrap: wrap; }
+    .row .tel { white-space: normal; }
+
+    /* 手機第一屏只留：月齡、現在該做什麼、求助電話、一家評估中心。
+       時間軸的資訊主角已經寫了（第幾次、哪個年齡區間），重複佔 125px 不值得。 */
+    .track { display: none; }
+    .also { display: none; }
+    /* 整組隱藏，機構與它的名額不會被拆散 */
+    #places .item:nth-of-type(n+2) { display: none; }
+    .brand { display: flex; align-items: baseline; gap: 8px; }
+    .brand h1 { font-size: 17px; }
+    .brand span { margin: 0; }
+    .now .when { display: none; }
+    footer { font-size: 11.5px; padding-top: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <div class="bar">
+    <div class="brand"><h1>臺中兒童發展地圖</h1><span>原型</span></div>
+    <div class="field">
+      <label for="birth">出生年月</label>
+      <input type="date" id="birth">
+    </div>
+    <div class="field">
+      <label for="age">月齡</label>
+      <input type="range" id="age" min="0" max="84" step="1" value="27">
+      <div class="age"><span class="num" id="ageNum">27</span> <small id="ageText">個月大</small></div>
+    </div>
+  </div>
+
+  <div class="track" id="track"></div>
+
+  <div class="now" id="now"></div>
+
+  <div class="go">
+    <div class="card call" id="call"></div>
+    <div class="card" id="places"></div>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script id="bansik-data" type="application/json">__DATA__</script>
+<script>
+  const DATA = JSON.parse(document.getElementById('bansik-data').textContent);
+  const num = v => (v === '' || v == null ? null : Number(v));
+  const el = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let age = 27;
+  const inBand = t => age >= num(t.month_min) && age < num(t.month_max);
+
+  const SCREENS = DATA.timeline.filter(t => t.kind === '兒童發展篩檢')
+    .sort((a, b) => num(a.month_min) - num(b.month_min));
+
+  const NARROW = window.matchMedia('(max-width: 860px)');
+  function ageText(m) {
+    if (m < 12 || NARROW.matches) return '個月大';   // 窄螢幕省掉括號裡的歲數換算
+    const y = Math.floor(m / 12), r = m % 12;
+    return '個月大（' + y + ' 歲' + (r ? ' ' + r + ' 個月' : '') + '）';
+  }
+
+  function renderTrack() {
+    el('track').innerHTML = SCREENS.map((t, i) => {
+      const cls = inBand(t) ? 'current' : (age >= num(t.month_max) ? 'done' : '');
+      return `<div class="stop ${cls}"><div class="dot"></div>
+        <div class="lbl">第 ${i + 1} 次 ${esc(t.age_label)}</div></div>`;
+    }).join('');
+  }
+
+  // 主角：這個月齡的發展檢查。沒有正在進行的就指向下一次，不要留白。
+  function renderNow() {
+    const current = SCREENS.find(inBand);
+    const next = SCREENS.find(t => num(t.month_min) > age);
+    const idx = current ? SCREENS.indexOf(current) + 1 : (next ? SCREENS.indexOf(next) + 1 : null);
+    const check = DATA.timeline.find(t => t.kind === '線上發展檢核表' && inBand(t));
+    const others = DATA.timeline.filter(t => inBand(t)
+      && ['兒童預防保健', '家長紀錄事項', '學前特教安置'].includes(t.kind));
+
+    let head;
+    if (current) {
+      head = `<div class="eyebrow">現在就是這一次</div>
+        <div class="lead">第 ${idx} 次兒童發展篩檢</div>
+        <div class="when">${esc(current.age_label)}，由專科醫師就粗大動作、精細動作、語言認知、社會發展四面向檢查。</div>`;
+    } else if (next) {
+      head = `<div class="eyebrow">這個月齡沒有排定的篩檢</div>
+        <div class="lead">下一次是第 ${idx} 次</div>
+        <div class="when">${esc(next.age_label)}　在那之前仍可以自己觀察與紀錄。</div>`;
+    } else {
+      head = `<div class="eyebrow">已滿 7 歲</div>
+        <div class="lead">兒童發展篩檢已全部完成</div>
+        <div class="when">後續由學校特教系統接手。</div>`;
+    }
+
+    const action = check
+      ? `<div class="action"><span class="tag">先自己做</span>
+          <span class="name"><a href="${esc(check.url)}" target="_blank" rel="noopener">${esc(check.title)}</a></span>
+          <span>${esc(check.detail).replace(/(\d+ 題為警訊題)/, '<span class="warn">$1</span>')}</span></div>`
+      : '';
+    const also = others.length
+      ? `<p class="also">同一時期還有：${others.map(o => '<b>' + esc(o.title.replace(/兒童健康手冊「|」/g, '')) + '</b>').join('、')}</p>`
+      : '';
+    el('now').innerHTML = head + action + also;
+  }
+
+  function renderCall() {
+    const centers = DATA.entities.filter(e => e.journey_step === '2');
+    const first = centers[0];
+    if (!first) return;
+    el('call').innerHTML = `<h2>不知道從哪開始，先打這支</h2>
+      <div class="row"><span>${esc(first.name)}</span><span class="tel">${esc(first.tel)}</span></div>
+      <p class="hint">通報轉介中心是單一窗口，臺中市共 ${centers.length} 區，打這支會幫你轉。</p>`;
+  }
+
+  function renderPlaces() {
+    const all = DATA.entities.filter(e => e.cat === '聯合評估中心')
+      .sort((a, b) => (a.tier === '重點' ? -1 : b.tier === '重點' ? 1 : 0)
+        || a.name.localeCompare(b.name, 'zh-Hant'));
+    const top = all.slice(0, 2);
+    const quota = top.map(e => {
+      const rows = DATA.observations.filter(o => o.entity_key === e.entity_key
+        && o.field === 'quota_release_date').map(o => o.value).sort();
+      return rows.length ? { name: e.name, dates: rows } : null;
+    }).find(Boolean);
+    // 名額那行必須跟著它所屬的機構一起輸出：先前把它獨立放在清單末尾，
+    // 手機版隱藏第 2 列之後就變成「榜上是甲醫院、名額寫乙醫院」，會誤導家長。
+    const quotaOf = key => {
+      const dates = DATA.observations
+        .filter(o => o.entity_key === key && o.field === 'quota_release_date')
+        .map(o => o.value).sort();
+      return dates.length ? `<p class="quota">下次開放名額 ${esc(dates[0])}（醫院公告，以院方為準）</p>` : '';
+    };
+    el('places').innerHTML = `<h2>做評估的地方<span class="sub">臺中市 ${all.length} 家，重點中心優先</span></h2>
+      ${top.map(e => `<div class="item"><div class="row">
+        <span>${e.tier ? `<span class="pill ${e.tier === '重點' ? 'key' : ''}">${esc(e.tier)}</span>` : ''}${esc(e.name)}</span>
+        <span class="tel">${esc(e.tel)}</span></div>${quotaOf(e.entity_key)}</div>`).join('')}`;
+  }
+
+  function setAge(m) {
+    age = Math.max(0, Math.min(84, Math.round(m)));
+    el('age').value = age;
+    el('ageNum').textContent = age;
+    el('ageText').textContent = ageText(age);
+    renderTrack(); renderNow();
+  }
+
+  el('age').addEventListener('input', e => setAge(+e.target.value));
+  el('birth').addEventListener('change', e => {
+    if (!e.target.value) return;
+    const b = new Date(e.target.value), n = new Date();
+    setAge((n.getFullYear() - b.getFullYear()) * 12 + (n.getMonth() - b.getMonth()));
+  });
+
+  el('foot').textContent = '資料產生於 ' + DATA.generated_at.slice(0, 10)
+    + '　來源：社家署、國健署、兒童醫療平台　這裡是路標不是掛號窗口，不做品質排名';
+
+  renderCall(); renderPlaces(); setAge(27);
+</script>

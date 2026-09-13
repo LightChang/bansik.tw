@@ -1,0 +1,340 @@
+{
+  "cadence_days": {
+    "daily": 1,
+    "weekly": 7,
+    "monthly": 30,
+    "quarterly": 91,
+    "semiannual": 182,
+    "yearly": 365,
+    "on_change": 30
+  },
+  "sources": [
+    {
+      "id": "sfaa_resource",
+      "title": "社家署 資源查詢（13 分類名錄）",
+      "group": "A 名錄",
+      "cadence": "monthly",
+      "archive": false,
+      "method": "get",
+      "files": [
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=1", "out": "sfaa/1_qtype2_1.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=2", "out": "sfaa/1_qtype2_2.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=3", "out": "sfaa/1_qtype2_3.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=4", "out": "sfaa/1_qtype2_4.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=5", "out": "sfaa/1_qtype2_5.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=6", "out": "sfaa/1_qtype2_6.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=7", "out": "sfaa/1_qtype2_7.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=1&qtype2=8", "out": "sfaa/1_qtype2_8.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=2&qtype2=4", "out": "sfaa/2_qtype2_4.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=2&qtype2=5", "out": "sfaa/2_qtype2_5.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=2&qtype2=7&qtype3=1", "out": "sfaa/2_qtype2_7_qtype3_1.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=2&qtype2=7&qtype3=3", "out": "sfaa/2_qtype2_7_qtype3_3.html"},
+        {"url": "https://system.sfaa.gov.tw/cecm/resourceView/detail2?qtype1=2&qtype2=7&qtype3=9", "out": "sfaa/2_qtype2_7_qtype3_9.html"}
+      ]
+    },
+    {
+      "id": "hpa_center_list",
+      "title": "國健署 聯合評估中心名單（年度 PDF，重點中心靠色塊判讀）",
+      "group": "A 名錄",
+      "cadence": "yearly",
+      "archive": true,
+      "note": "sid 每年會換，換年時到 hpa.gov.tw nodeid=1602&pid=548 重找",
+      "method": "get",
+      "files": [{"url": "https://www.hpa.gov.tw/Pages/ashx/GetFile.ashx?lang=c&type=1&sid=ee3c4c006a4b475faadf4a8ad7d0ee9f", "out": "hpa115.pdf"}]
+    },
+    {
+      "id": "nhi_roster",
+      "title": "健保署 特約醫療院所名冊（醫事機構代碼權威來源）",
+      "group": "A 名錄",
+      "cadence": "weekly",
+      "archive": false,
+      "method": "api_paged",
+      "api": "https://info.nhi.gov.tw/api/iode0010/v1/rest/datastore/A21030000I-D2100G-001",
+      "out": "nhi_roster.json"
+    },
+    {
+      "id": "nhi_clinic_hours",
+      "title": "健保署 特約院所固定服務時段（門診時段的結構化來源）",
+      "group": "A 名錄",
+      "cadence": "weekly",
+      "archive": false,
+      "method": "api_paged",
+      "api": "https://info.nhi.gov.tw/api/iode0010/v1/rest/datastore/A21030000I-D21006-001",
+      "out": "nhi_clinic_hours.json"
+    },
+    {
+      "id": "nhi_specialty",
+      "title": "健保署 醫療院所診療科別明細（篩復健科、兒科用）",
+      "group": "A 名錄",
+      "cadence": "monthly",
+      "archive": false,
+      "method": "api_paged",
+      "api": "https://info.nhi.gov.tw/api/iode0010/v1/rest/datastore/A21030000I-D2100C-001",
+      "out": "nhi_specialty.json"
+    },
+    {
+      "id": "moh_inst",
+      "title": "醫事司 醫療機構與人員基本資料（各類治療師人數）",
+      "group": "A 名錄",
+      "cadence": "yearly",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://www.mohw.gov.tw/dl-96581-66dbb751-f83a-416a-a998-893222e20fef.html", "out": "moh_inst.ods"}]
+    },
+    {
+      "id": "hfk_map",
+      "title": "兒童醫療平台 就醫地圖（聯評 88、篩檢院所 1393，座標在頁面 JS）",
+      "group": "A 名錄",
+      "cadence": "monthly",
+      "archive": false,
+      "note": "TLS 憑證 2026-09-10 過期，需略過憑證檢查",
+      "method": "get",
+      "files": [
+        {"url": "https://healthforkids.mohw.gov.tw/HospitalMap/Export?id=47bd252c33cc4ff68a49f772f69e02f6&city=&district=&keys=", "out": "hfk_joint.ods"},
+        {"url": "https://healthforkids.mohw.gov.tw/HospitalMap/?id=47bd252c33cc4ff68a49f772f69e02f6", "out": "hfk_joint_page.html"},
+        {"url": "https://healthforkids.mohw.gov.tw/HospitalMap/Export?id=920da57226144ffab67339c1a5f2fec1&city=&district=&keys=", "out": "hfk_screen.ods"},
+        {"url": "https://healthforkids.mohw.gov.tw/HospitalMap/?id=920da57226144ffab67339c1a5f2fec1", "out": "hfk_screen_page.html"}
+      ]
+    },
+    {
+      "id": "csh_quota",
+      "title": "中山醫附醫 聯評門診放名額公告（目前唯一會公布放名額日的中心）",
+      "group": "B 動態",
+      "cadence": "daily",
+      "archive": true,
+      "note": "放名額日是覆蓋式的，漏一天就沒了，所以每天抓且變動就存檔",
+      "method": "get",
+      "files": [{"url": "https://web.csh.org.tw/web/a24000/", "out": "dyn/csh.html"}]
+    },
+    {
+      "id": "ntpc_booking",
+      "title": "新北市衛生局 聯評中心聯絡資訊及預約情況",
+      "group": "B 動態",
+      "cadence": "weekly",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://www.health.ntpc.gov.tw/article/%E6%96%B0%E5%8C%97%E5%B8%82%E5%85%92%E7%AB%A5%E7%99%BC%E5%B1%95%E8%81%AF%E5%90%88%E8%A9%95%E4%BC%B0%E4%B8%AD%E5%BF%83_%E8%81%AF%E7%B5%A1%E8%B3%87%E8%A8%8A%E5%8F%8A%E9%A0%90%E7%B4%84%E6%83%85%E6%B3%81", "out": "dyn/ntpc_booking.html"}]
+    },
+    {
+      "id": "tc_health_booking",
+      "title": "臺中市衛生局 聯評中心資訊",
+      "group": "B 動態",
+      "cadence": "weekly",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://www.health.taichung.gov.tw/1970993/post", "out": "dyn/tc_health.html"}]
+    },
+    {
+      "id": "tc_selfpay",
+      "title": "臺中市社會局 自費療育單位名單與收費（每季新增公告）",
+      "group": "B 動態",
+      "cadence": "quarterly",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://www.society.taichung.gov.tw/461264/post", "out": "dyn/tc_selfpay.html"}]
+    },
+    {
+      "id": "stats_report",
+      "title": "統計處 2.5.4 早療通報概況（季更，縣市別）",
+      "group": "C 統計",
+      "cadence": "quarterly",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://www.mohw.gov.tw/dl-22258-cd347bc1-efc1-46c5-b953-ae34795427a3.html", "out": "stats/254.xlsx"}]
+    },
+    {
+      "id": "stats_early_intervention",
+      "title": "統計處 2.5.5–2.5.8 早療個管、收托單位、療育人數、補助（年更）",
+      "group": "C 統計",
+      "cadence": "yearly",
+      "archive": true,
+      "method": "get",
+      "files": [
+        {"url": "https://www.mohw.gov.tw/dl-22259-01f318e0-b99f-47f4-b21b-34b51fdf9a75.html", "out": "stats/255.xlsx"},
+        {"url": "https://www.mohw.gov.tw/dl-22261-dfdd3673-5316-4500-afd5-a5e2bf26e779.html", "out": "stats/256.xlsx"},
+        {"url": "https://www.mohw.gov.tw/dl-22262-b0439eab-2785-467c-8ad4-d7b83c211914.html", "out": "stats/257.xlsx"},
+        {"url": "https://www.mohw.gov.tw/dl-22892-4263b013-4806-44bf-be0d-13cf87c994d9.html", "out": "stats/258.xlsx"}
+      ]
+    },
+    {
+      "id": "stats_protection",
+      "title": "統計處 3.2.2 性侵害（含身心障礙別）、3.5.5／3.5.6／3.5.9 兒少保護（半年更）",
+      "group": "C 統計",
+      "cadence": "semiannual",
+      "archive": true,
+      "method": "get",
+      "files": [
+        {"url": "https://www.mohw.gov.tw/dl-22350-52e594ab-786b-4cdc-bd31-9fd4c2b279ed.html", "out": "s322.xlsx"},
+        {"url": "https://www.mohw.gov.tw/dl-22366-a574ceb0-aaa9-42e9-a46e-f5bcbeb79983.html", "out": "s355.xlsx"},
+        {"url": "https://www.mohw.gov.tw/dl-22367-6cf8f862-9c05-49e9-9f1c-25185bd8bc36.html", "out": "s356.xlsx"},
+        {"url": "https://www.mohw.gov.tw/dl-22371-d9603162-6f01-4267-972c-1d61ed9b2a2e.html", "out": "s359.xlsx"}
+      ]
+    },
+    {
+      "id": "stats_protection_field",
+      "title": "保護服務司 各場域兒少保護統計圖表（副檔名寫 .html，實際是 PDF）",
+      "group": "C 統計",
+      "cadence": "yearly",
+      "archive": true,
+      "method": "get",
+      "files": [
+        {"url": "https://www.mohw.gov.tw/dl-92296-219ede4c-9935-4f2d-8cd4-1003f5537957.html", "out": "s_field.pdf"},
+        {"url": "https://dep.mohw.gov.tw/DOPS/lp-1303-105-xCat-cat04.html", "out": "dops_child.html"}
+      ]
+    },
+    {
+      "id": "stats_special_ed",
+      "title": "教育部 特殊教育各障礙類別學生人數（含學前發展遲緩）",
+      "group": "C 統計",
+      "cadence": "quarterly",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://quality.data.gov.tw/dq_download_csv.php?nid=176892&md5_url=9c4fedaef2f50543ab5f8b9d7c374698", "out": "setstat.csv"}]
+    },
+    {
+      "id": "serc_yearbook",
+      "title": "臺南市特教資源中心 統計年報（唯一有行政區級發展遲緩人數）",
+      "group": "C 統計",
+      "cadence": "yearly",
+      "archive": true,
+      "note": "每學年換檔名，換年時到 serc.tn.edu.tw 的年報分類頁重找",
+      "method": "get",
+      "files": [
+        {"url": "https://serc.tn.edu.tw/category/%E5%87%BA%E7%89%88%E5%93%81/%E5%90%84%E5%AD%B8%E5%B9%B4%E5%BA%A6%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1/", "out": "serc_year.html"},
+        {"url": "https://serc.tn.edu.tw/wp-content/uploads/2025/11/113%E5%AD%B8%E5%B9%B4%E5%BA%A6%E7%89%B9%E6%AE%8A%E6%95%99%E8%82%B2%E7%B5%B1%E8%A8%88%E5%B9%B4%E5%A0%B1.pdf", "out": "serc_113.pdf"}
+      ]
+    },
+    {
+      "id": "screen_checklist",
+      "title": "社家署 線上兒童發展檢核表（13 個年齡層，POST 取得）",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "method": "post",
+      "url": "https://system.sfaa.gov.tw/cecm/screenView/form",
+      "posts": [
+        {"data": {"birthDt": "2026/06/20"}, "out": "screen/2026_06_20.html"},
+        {"data": {"birthDt": "2026/03/01"}, "out": "screen/2026_03_01.html"},
+        {"data": {"birthDt": "2025/12/01"}, "out": "screen/2025_12_01.html"},
+        {"data": {"birthDt": "2025/09/01"}, "out": "screen/2025_09_01.html"},
+        {"data": {"birthDt": "2025/06/01"}, "out": "screen/2025_06_01.html"},
+        {"data": {"birthDt": "2025/03/01"}, "out": "screen/2025_03_01.html"},
+        {"data": {"birthDt": "2024/09/01"}, "out": "screen/2024_09_01.html"},
+        {"data": {"birthDt": "2024/01/15"}, "out": "screen/2024_01_15.html"},
+        {"data": {"birthDt": "2023/09/10"}, "out": "screen/2023_09_10.html"},
+        {"data": {"birthDt": "2023/03/10"}, "out": "screen/2023_03_10.html"},
+        {"data": {"birthDt": "2022/09/10"}, "out": "screen/2022_09_10.html"},
+        {"data": {"birthDt": "2021/01/05"}, "out": "screen/2021_01_05.html"},
+        {"data": {"birthDt": "2020/09/10"}, "out": "screen/2020_09_10.html"}
+      ]
+    },
+    {
+      "id": "sfaa_promo",
+      "title": "社家署 宣導資料（27 筆，含 5 種語言單張）",
+      "group": "D 素材",
+      "cadence": "monthly",
+      "archive": false,
+      "method": "get",
+      "files": [{"url": "https://system.sfaa.gov.tw/cecm/videoView/index", "out": "cecm_video.html"}]
+    },
+    {
+      "id": "hpa_scales",
+      "title": "國健署 兒童發展篩檢量表、圖卡規格、服務方案",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "method": "get",
+      "files": [
+        {"url": "https://www.hpa.gov.tw/Pages/List.aspx?nodeid=4821", "out": "hpa_scale.html"},
+        {"url": "https://www.hpa.gov.tw/Pages/List.aspx?nodeid=4822", "out": "hpa_card.html"},
+        {"url": "https://www.hpa.gov.tw/Pages/List.aspx?nodeid=4824", "out": "hpa_plan.html"}
+      ]
+    },
+    {
+      "id": "hpa_kidbook",
+      "title": "國健署 兒童健康手冊（9 個時段家長紀錄事項，6 語）",
+      "group": "D 素材",
+      "cadence": "yearly",
+      "archive": true,
+      "method": "get",
+      "files": [
+        {"url": "https://www.hpa.gov.tw/Pages/EBook.aspx?nodeid=1139", "out": "hpa_kidbook.html"},
+        {"url": "https://www.hpa.gov.tw/Pages/ashx/GetFile.ashx?lang=c&type=1&sid=fa4a5fb2ccf0444ca1a6dbfbee7bdf5a", "out": "kidbook.pdf", "big": true}
+      ]
+    },
+    {
+      "id": "tp_manual",
+      "title": "臺北市 早療資源手冊清單",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "method": "get",
+      "files": [{"url": "https://www.eirrc.gov.taipei/cp.aspx?n=9A9EA69C37BA30E5", "out": "tp_manual.html"}]
+    },
+    {
+      "id": "crpd_books",
+      "title": "CRPD 手語繪本與學習單（唯一能直接給孩子看的官方素材）",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": true,
+      "method": "get",
+      "files": [
+        {"url": "https://crpd.sfaa.gov.tw/BulletinCtrl?func=getBulletin&p=b_2&c=G&bulletinId=1521", "out": "crpd_1521.html"},
+        {"url": "https://crpd.sfaa.gov.tw/BulletinCtrl?func=downloadFile&type=file&id=3293&code=CACEC5C8C0CDCEC6C2C2CFCBCDC8C7CB", "out": "crpd_book.pdf"},
+        {"url": "https://crpd.sfaa.gov.tw/BulletinCtrl?func=downloadFile&type=file&id=2705&code=828F8C8580898B878C8F8D8C84888C87", "out": "crpd_sheet.pdf"}
+      ]
+    },
+    {
+      "id": "doe_inclusive",
+      "title": "臺北市 融合教育現場教學手冊（含發展遲緩專章）",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "note": "2014 年版，已停更，留著只是為了偵測改版",
+      "method": "get",
+      "files": [{"url": "https://www.doe.gov.taipei/News.aspx?n=09EB907447DBD66F&sms=69B4E6B26379EE4E", "out": "doe_list.html"}]
+    },
+    {
+      "id": "moe_lessons",
+      "title": "教育部 特教萬事屋教案分享",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "method": "get",
+      "files": [{"url": "https://proj.moe.edu.tw/spehouse/News.aspx?n=6045&sms=14337", "out": "spehouse.html"}]
+    },
+    {
+      "id": "sibling_support",
+      "title": "天使心家族 手足專區（官方無手足素材，民間唯一有系統者）",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "method": "get",
+      "files": [{"url": "https://ah-h.org/siblings/common_qa?cat=1", "out": "ahh_qa.html"}]
+    },
+    {
+      "id": "gender_special_ed",
+      "title": "教育部性平網 特教教學資源（73 筆，含特教性平教材 57 筆）",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": false,
+      "method": "get",
+      "files": [
+        {"url": "https://www.gender.edu.tw/web/index.php/m5/m5_05_07_index?k=", "out": "gender_index.html"},
+        {"url": "https://www.gender.edu.tw/web/index.php/m5/m5_05_07_index/2?k=", "out": "gender2_index.html"},
+        {"url": "https://www.gender.edu.tw/web/index.php/m5/m5_05_07_index/3?k=", "out": "gender3_index.html"},
+        {"url": "https://www.gender.edu.tw/web/index.php/m5/m5_05_07_index/4?k=", "out": "gender4_index.html"},
+        {"url": "https://www.gender.edu.tw/web/index.php/m5/m5_05_07_index/5?k=", "out": "gender5_index.html"}
+      ]
+    },
+    {
+      "id": "gender_sexedu_manual",
+      "title": "教育部性平網 性教育教材手冊（306 頁）",
+      "group": "D 素材",
+      "cadence": "on_change",
+      "archive": true,
+      "method": "get",
+      "files": [{"url": "https://www.gender.edu.tw/web/upload/SpecialResource/%E6%80%A7%E6%95%99%E8%82%B2%E6%95%99%E6%9D%90%E6%89%8B%E5%86%8A.pdf", "out": "sexedu_manual.pdf", "big": true}]
+    }
+  ]
+}
