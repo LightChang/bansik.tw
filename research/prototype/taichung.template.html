@@ -123,7 +123,47 @@
   .pill.key { background: var(--alert-weak); color: var(--alert); }
   .quota { margin-top: 5px; font-size: 12.5px; color: var(--ink-soft); }
 
+  /* footer 同時是內頁入口：首頁放不下的東西（預防保健 9 次、上百家機構、補助規則、
+     教育素材）都從這裡進去。做成獨立一列會再吃掉 30px 版面高度，所以併進 footer。 */
   footer { border-top: 1px solid var(--line); padding-top: 7px; font-size: 12px; color: var(--ink-soft); }
+  footer nav { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 4px; }
+  footer nav a { font-size: 12.5px; text-decoration: none; border-bottom: 1px solid var(--seal-weak); }
+  footer nav a:hover { border-bottom-color: var(--seal); }
+
+  /* 內頁：首頁是一屏不捲動，內頁相反——內容本來就長，就讓它捲。 */
+  body.sub { overflow: auto; }
+  body.sub .app { display: none; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 18px 24px 56px; }
+  .page .back { font-size: 13px; text-decoration: none; }
+  .page h1 { font-size: 22px; margin: 10px 0 2px; }
+  .page .sub-lead { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 18px; }
+  .page h2 { font-size: 15px; margin: 22px 0 8px; }
+  .page section { margin-bottom: 26px; }
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .tbl th, .tbl td { text-align: start; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl th { font-weight: 500; color: var(--ink-soft); font-size: 12.5px; white-space: nowrap; }
+  .tbl td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .band { display: flex; flex-wrap: wrap; gap: 6px; }
+  .band .cell {
+    flex: 1 1 96px; min-width: 0; border: 1px solid var(--line); border-radius: 3px;
+    padding: 6px 8px; font-size: 12px; background: var(--card);
+  }
+  /* 兒童健康手冊的格子：當前月齡落在哪一格就蓋章 */
+  .band .cell.on { border-color: var(--seal); background: var(--seal-weak); color: var(--seal); }
+  .band .cell b { display: block; font-weight: 500; font-size: 12.5px; color: var(--ink); }
+  .band .cell.on b { color: var(--seal); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 10px; }
+  .filters select { font: inherit; font-size: 13px; padding: 3px 6px; border: 1px solid var(--line);
+                    border-radius: 3px; background: var(--card); color: var(--ink); }
+  .count { font-size: 12.5px; color: var(--ink-soft); }
+  .geo { font-size: 11.5px; color: var(--ink-soft); }
+  .step { border-inline-start: 3px solid var(--line); padding: 2px 0 2px 12px; margin-bottom: 14px; }
+  .step.here { border-inline-start-color: var(--seal); }
+  .step h3 { font-size: 14px; margin: 0 0 2px; }
+  .step p { margin: 0; font-size: 13px; color: var(--ink-soft); }
+  .money { font-family: var(--serif); font-size: 20px; }
+  .warnbox { border: 1px solid var(--alert); background: var(--alert-weak); border-radius: 4px;
+             padding: 10px 12px; font-size: 13px; }
 
   /* 手機：390px 寬放不下橫排的控制列與 6 格時間軸，一定要改排法，
      不是把兩欄併成一欄就算數。overflow-x 是最後一道防線，避免任何元素撐破畫面。 */
@@ -173,6 +213,19 @@
     .brand span { margin: 0; }
     .now .when { display: none; }
     footer { font-size: 11.5px; padding-top: 6px; }
+
+    /* 內頁 */
+    .page { padding: 14px 14px 40px; }
+    .page h1 { font-size: 19px; }
+
+    /* 機構清單在 390px 放不下四欄：電話是 nowrap、機構名又長，實測會把表格撐到 511px，
+       整頁橫向捲 145px。555 列的清單橫向捲根本沒法用，所以手機改成一家一張卡片，
+       每個欄位自己一行。只改這一張表——其他表格欄位少，在 390px 量過不會溢出。 */
+    #ftable, #ftable tbody, #ftable tr, #ftable td { display: block; }
+    #ftable tr:first-child { display: none; }      /* 卡片式沒有表頭 */
+    #ftable tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
+    #ftable td { border: 0; padding: 1px 0; }
+    #ftable td.num { white-space: normal; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -202,6 +255,8 @@
 
   <footer id="foot"></footer>
 </div>
+
+<main class="page" id="page" hidden></main>
 
 <script id="bansik-data" type="application/json">__DATA__</script>
 <script>
@@ -313,8 +368,185 @@
     setAge((n.getFullYear() - b.getFullYear()) * 12 + (n.getMonth() - b.getMonth()));
   });
 
-  el('foot').textContent = '資料產生於 ' + DATA.generated_at.slice(0, 10)
+  const NAV = [
+    ['checkups', '這個年齡的所有檢查'],
+    ['steps', '完整流程五步'],
+    ['places', '全部機構'],
+    ['subsidy', '補助怎麼申請'],
+    ['materials', '看懂發展的素材'],
+  ];
+  el('foot').innerHTML = '<nav>' + NAV.map(([k, t]) =>
+    `<a href="#/${k}">${esc(t)}</a>`).join('') + '</nav>'
+    + '資料產生於 ' + esc(DATA.generated_at.slice(0, 10))
     + '　來源：社家署、國健署、兒童醫療平台　這裡是路標不是掛號窗口，不做品質排名';
 
-  renderCall(); renderPlaces(); setAge(27);
+  // ---------- 內頁 ----------
+  // 首頁只回答「現在該做什麼」，其餘全部移到這裡。每頁都吃同一份 DATA 與同一個月齡，
+  // 所以從首頁點進來看到的內容會跟著滑桿走，不是一份靜態清單。
+  const band = (list, label) => `<div class="band">` + list.map(t =>
+    `<div class="cell ${inBand(t) ? 'on' : ''}"><b>${esc(t.age_label)}</b>${esc(label(t))}</div>`
+  ).join('') + '</div>';
+
+  function pageCheckups() {
+    const of = k => DATA.timeline.filter(t => t.kind === k)
+      .sort((a, b) => num(a.month_min) - num(b.month_min));
+    const scale = of('分齡篩檢量表');
+    return `<h1>這個年齡的所有檢查</h1>
+      <p class="sub-lead">孩子 ${age} 個月大。亮起來的格子就是現在這一格。
+        兒童預防保健和兒童發展篩檢是兩套不同的東西，都印在兒童健康手冊上，很容易混在一起。</p>
+      <section><h2>兒童發展篩檢（6 次）</h2>
+        <p class="sub-lead">由專科醫師就粗大動作、精細動作、語言認知、社會發展四面向檢查。</p>
+        ${band(SCREENS, t => '第 ' + (SCREENS.indexOf(t) + 1) + ' 次')}</section>
+      <section><h2>兒童預防保健（9 次）</h2>
+        <p class="sub-lead">健保給付，含身體檢查與衛教指導。次數與發展篩檢不同，不要弄混。</p>
+        ${band(of('兒童預防保健'), t => '第 ' + (of('兒童預防保健').indexOf(t) + 1) + ' 次')}</section>
+      <section><h2>家長自己做的</h2>
+        <table class="tbl"><tr><th>年齡</th><th>項目</th><th>內容</th></tr>
+        ${DATA.timeline.filter(t => ['線上發展檢核表', '家長紀錄事項'].includes(t.kind) && inBand(t))
+          .map(t => `<tr><td>${esc(t.age_label)}</td><td>${t.url
+            ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.title)}</a>`
+            : esc(t.title)}</td><td>${esc(t.detail || '')}</td></tr>`).join('')
+          || '<tr><td colspan="3">這個月齡沒有對應的項目</td></tr>'}</table></section>
+      ${scale.length ? `<section><h2>醫師篩檢用的分齡量表</h2>
+        <p class="sub-lead">國健署公布的工具，家長可以先看過，知道醫師會問什麼。</p>
+        ${band(scale, t => t.title.replace(/兒童發展篩檢量表/, ''))}</section>` : ''}`;
+  }
+
+  function pageSteps() {
+    const STEPS = [
+      ['1', '篩檢', '在診所或衛生所做兒童發展篩檢，這是入口。'],
+      ['2', '通報', '篩檢覺得有疑慮，由通報轉介中心接手，這是單一窗口。'],
+      ['3', '評估', '到聯合評估中心做完整評估，拿到綜合報告書。這一段最花時間。'],
+      ['4', '療育', '依報告書安排療育：醫院復健科、早療機構、社區據點或到宅。'],
+      ['5', '學前教育', '銜接幼兒園的學前特教資源與巡迴輔導。'],
+    ];
+    const cnt = s => DATA.entities.filter(e => e.journey_step === s).length;
+    return `<h1>完整流程五步</h1>
+      <p class="sub-lead">每一步由不同機關管，沒有任何一處把它們接起來——這也是這個站想補的那一段。
+        括號裡是${esc(DATA.county)}目前的家數。</p>
+      ${STEPS.map(([s, name, desc]) => `<div class="step ${cnt(s) ? 'here' : ''}">
+        <h3>${s}　${esc(name)}　<span class="count">${cnt(s)} 家</span></h3>
+        <p>${esc(desc)}</p></div>`).join('')}
+      <section><h2>各類型家數</h2>
+        <table class="tbl"><tr><th>說法</th><th>官方分類</th><th class="num">家數</th></tr>
+        ${Object.entries(DATA.entities.reduce((m, e) => {
+          const k = e.plain_cat + '|' + e.cat;
+          m[k] = (m[k] || 0) + 1; return m;
+        }, {})).sort((a, b) => b[1] - a[1]).map(([k, n]) => {
+          const [plain, cat] = k.split('|');
+          return `<tr><td>${esc(plain)}</td><td class="geo">${esc(cat)}</td><td class="num">${n}</td></tr>`;
+        }).join('')}</table></section>`;
+  }
+
+  function pagePlaces() {
+    const dists = Object.keys(DATA.districts).sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+    const cats = [...new Set(DATA.entities.map(e => e.plain_cat))];
+    return `<h1>全部機構</h1>
+      <p class="sub-lead">${esc(DATA.county)}共 ${DATA.entities.length} 家。
+        這裡不做品質排名，只列出是什麼、在哪裡、怎麼打電話。</p>
+      <div class="filters">
+        <label>行政區 <select id="fd"><option value="">全市</option>
+          ${dists.map(d => `<option>${esc(d)}</option>`).join('')}</select></label>
+        <label>類型 <select id="fc"><option value="">全部</option>
+          ${cats.map(c => `<option>${esc(c)}</option>`).join('')}</select></label>
+        <span class="count" id="fcount"></span>
+      </div>
+      <table class="tbl" id="ftable"></table>`;
+  }
+
+  function fillPlaces() {
+    const d = el('fd').value, c = el('fc').value;
+    const list = DATA.entities.filter(e => (!d || e.district === d) && (!c || e.plain_cat === c))
+      .sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant'));
+    el('fcount').textContent = `${list.length} 家`
+      + (d || c ? `（全市共 ${DATA.entities.length} 家）` : '');
+    // 區級座標是整區共用一個點，標出來才不會被當成門牌位置
+    el('ftable').innerHTML = '<tr><th>名稱</th><th>類型</th><th>地址</th><th>電話</th></tr>'
+      + (list.length ? list.map(e => `<tr>
+        <td>${e.tier ? `<span class="pill ${e.tier === '重點' ? 'key' : ''}">${esc(e.tier)}</span>` : ''}${
+          e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.name)}</a>` : esc(e.name)}</td>
+        <td>${esc(e.plain_cat)}</td>
+        <td>${esc(e.address)}${e.geo_level === 'district' ? ' <span class="geo">（座標只到行政區）</span>' : ''}</td>
+        <td class="num">${esc(e.tel)}</td></tr>`).join('')
+        : '<tr><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>');
+  }
+
+  function pageSubsidy() {
+    const s = DATA.subsidy;
+    if (!s) return `<h1>補助怎麼申請</h1><p class="sub-lead">這個縣市的規則還沒整理。</p>`;
+    if (s.status === 'pending') {
+      return `<h1>補助怎麼申請</h1>
+        <div class="warnbox">${esc(s.county)}的「${esc(s.rule_name)}」查得到計畫名稱，
+          但金額沒有公開在任何可以讀到的頁面上。${esc(s.note || '')}</div>`;
+    }
+    const row = (k, v) => v ? `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>` : '';
+    return `<h1>補助怎麼申請</h1>
+      <p class="sub-lead">${esc(s.rule_name)}</p>
+      <section><h2>每人每月上限</h2>
+        <table class="tbl">
+          <tr><th>一般戶（多含中低收）</th><td class="money num">${s.monthly_max_general.toLocaleString()} 元</td></tr>
+          <tr><th>低收入戶</th><td class="money num">${s.monthly_max_low_income.toLocaleString()} 元</td></tr>
+        </table></section>
+      <section><h2>細節</h2><table class="tbl">
+        ${row('補助項目', (s.items || []).join('、'))}
+        ${row('交通費', s.transport)}
+        ${row('申請期限', s.apply_window)}
+        ${row('另有規定', s.extra)}
+        ${row('不補助', s.exclusions)}
+      </table></section>
+      <p class="geo">金額是療育費與交通費合計的上限，各縣市算法不同。
+        資料核對於 ${esc(s.verified_at)}，以
+        <a href="${esc(s.source_url)}" target="_blank" rel="noopener">主管機關公告</a>為準；
+        這裡只列規則與連結，不代為試算。</p>`;
+  }
+
+  function pageMaterials() {
+    const m = DATA.materials || {};
+    const chk = m['社家署線上兒童發展檢核表'] || {};
+    // 素材清單的形狀不一致，三種都要接：國健署量表是純字串陣列、宣導與繪本是物件，
+    // 而物件的連結有的是絕對網址、有的是相對路徑（社家署寫 /cecm/...）。
+    // 相對路徑直接放進 href 會連到這個頁面自己的網域，變成壞連結。
+    const abs = (u, base) => /^https?:/i.test(u) ? u : (base ? base + u : '');
+    const list = (arr, n, base) => (arr || []).slice(0, n).map(x => {
+      if (typeof x === 'string') return `<li>${esc(x)}</li>`;
+      const u = abs(x.url || x.file || x.page || '', base);
+      return `<li>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x.title)}</a>`
+        : esc(x.title)}</li>`;
+    }).join('');
+    return `<h1>看懂發展的素材</h1>
+      <p class="sub-lead">都是官方或公益單位做的，可以直接下載。</p>
+      <section><h2>線上發展檢核表（${Object.keys(chk).length} 個年齡層）</h2>
+        <table class="tbl"><tr><th>年齡層</th><th class="num">題數</th><th class="num">警訊題</th><th>第一題長這樣</th></tr>
+        ${Object.entries(chk).map(([k, v]) =>
+          `<tr><td>${esc(k)}</td><td class="num">${v.items ?? ''}</td>
+           <td class="num">${v.alerts ?? ''}</td><td>${esc(v.sample || '')}</td></tr>`).join('')}
+        </table></section>
+      <section><h2>國健署篩檢量表</h2><ul>${list(m['國健署兒童發展篩檢量表'], 12)}</ul></section>
+      <section><h2>宣導與繪本</h2>
+        <ul>${list(m['社家署宣導資料'], 10, 'https://system.sfaa.gov.tw')}${list(m['CRPD繪本'], 5)}</ul></section>
+      <p class="geo">官方素材裡沒有任何一份是寫給孩子本人看的，手足的部分也只有民間單位有。</p>`;
+  }
+
+  const VIEWS = {
+    checkups: pageCheckups, steps: pageSteps, places: pagePlaces,
+    subsidy: pageSubsidy, materials: pageMaterials,
+  };
+
+  function route() {
+    const key = location.hash.replace(/^#\/?/, '');
+    const view = VIEWS[key];
+    document.body.classList.toggle('sub', !!view);
+    el('page').hidden = !view;
+    if (!view) { el('page').innerHTML = ''; return; }
+    el('page').innerHTML = `<a class="back" href="#/">← 回到「現在該做什麼」</a>` + view();
+    if (key === 'places') {
+      el('fd').addEventListener('change', fillPlaces);
+      el('fc').addEventListener('change', fillPlaces);
+      fillPlaces();
+    }
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+
+  renderCall(); renderPlaces(); setAge(27); route();
 </script>

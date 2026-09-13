@@ -41,9 +41,18 @@ for r in rows('relation.csv'):
 districts = {}
 for e in ent:
     if e['district']:
-        districts.setdefault(e['district'], {'located': 0, 'serving': {}})['located'] += 1
+        d = districts.setdefault(e['district'], {'located': 0, 'serving': {}, 'keys': []})
+        d['located'] += 1
+        d['keys'].append(e['entity_key'])      # 行政區頁要列出「實際在這一區」的機構
 for area, counter in serves.items():
-    districts.setdefault(area, {'located': 0, 'serving': {}})['serving'] = dict(counter.most_common())
+    d = districts.setdefault(area, {'located': 0, 'serving': {}, 'keys': []})
+    d['serving'] = dict(counter.most_common())
+
+# 行政區中心點：地圖與行政區頁用。只放這個縣市有機構的區。
+dist_geo = {}
+for r in rows('district.csv'):
+    if r['county'] == COUNTY and r['district'] in districts:
+        dist_geo[r['district']] = {'lat': float(r['lat']), 'lng': float(r['lng'])}
 
 # 補助規則與教育素材不在 build/ 而在 scripts/ 與 build/materials.json，
 # 頁面需要它們才有內頁可放（首頁放不下的東西都在這裡）。
@@ -73,6 +82,7 @@ data = {
     'timeline': rows('timeline.csv'),
     'entities': [{k: e.get(k, '') for k in ENTITY_FIELDS} for e in ent],
     'districts': districts,
+    'district_geo': dist_geo,
     'observations': [o for o in rows('observation.csv') if o['entity_key'] in keys],
     'stats': [s for s in rows('stats.csv')
               if s['dim1_value'] == COUNTY or s['metric'] != '早療通報人數'],
