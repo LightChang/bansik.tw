@@ -3,14 +3,14 @@
   "csh_quota": {
    "files": {
     "dyn/csh.html": {
-     "sha256": "c6931344270d45ac14a520ad51e482f668e159f69aae52f7bf094c1bcd5c4ae3",
+     "sha256": "bd571699bc93c49d1a2a4134850a57d2a57112412bd141eac0827658707c69bd",
      "bytes": 36038,
-     "fetched_at": "2026-09-12T03:30:22.543338+00:00"
+     "fetched_at": "2026-09-13T06:02:01.953045+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:30:22.543353+00:00",
-   "next_due": "2026-09-13T03:30:22.543357+00:00",
-   "last_changed": "2026-09-12T03:06:58.078278+00:00",
+   "last_fetched": "2026-09-13T06:02:01.953055+00:00",
+   "next_due": "2026-09-14T06:02:01.953058+00:00",
+   "last_changed": "2026-09-13T06:02:01.953070+00:00",
    "pending_big": false
   },
   "stats_special_ed": {
@@ -559,6 +559,150 @@
    "next_due": "2026-10-12T03:21:00.630084+00:00",
    "pending_big": false,
    "last_changed": "2026-09-12T03:21:00.630093+00:00"
+  },
+  "subsidy_rules": {
+   "files": {
+    "subsidy/taipei.html": {
+     "sha256": "31e4224133f64406a2d60ea1939b65a170cb9d6f9199e6deefd298c0a64ebfed",
+     "bytes": 87430,
+     "fetched_at": "2026-09-13T06:10:52.825440+00:00"
+    },
+    "subsidy/new_taipei.html": {
+     "sha256": "7b964f360b88f30b92e4bf74b85e5eb2f6f33699ca141237956615a9c3354d72",
+     "bytes": 113972,
+     "fetched_at": "2026-09-13T06:10:53.569536+00:00"
+    },
+    "subsidy/taoyuan.html": {
+     "sha256": "25efa01da7509d21c2a70d323b8917faf99f7b5fa9cdf26c155b6fa7ad915db8",
+     "bytes": 284120,
+     "fetched_at": "2026-09-13T06:10:54.993308+00:00"
+    },
+    "subsidy/taichung.html": {
+     "sha256": "36e4c34b3279e826a02a276ae92ce83c17a0286f346990c05715ee1293737245",
+     "bytes": 101663,
+     "fetched_at": "2026-09-13T06:10:56.028664+00:00"
+    },
+    "subsidy/tainan.html": {
+     "sha256": "03217cfeb732aa7d7f30a377b87558f1ff78dc3d6ea623a5d749fcf82cf46a90",
+     "bytes": 168240,
+     "fetched_at": "2026-09-13T06:10:56.184587+00:00"
+    },
+    "subsidy/kaohsiung.html": {
+     "sha256": "a3006f61fd1514be7823a3b44099158b9ab5c3e95f2f6b44b369cc4e4f7e1b8a",
+     "bytes": 28221,
+     "fetched_at": "2026-09-13T06:10:56.334355+00:00"
+    },
+    "subsidy/yilan.html": {
+     "sha256": "de426901656daeb64bdf417b41bf1dc0881855046b85708af4e0876ccc52cf36",
+     "bytes": 79672,
+     "fetched_at": "2026-09-13T06:10:56.534722+00:00"
+    },
+    "subsidy/hsinchu_city.html": {
+     "sha256": "6a8dfd1160c786ebfb8f9e5ac8244521287dc49d9409616b8f1f4a591e0b7ac3",
+     "bytes": 253073,
+     "fetched_at": "2026-09-13T06:10:57.598160+00:00"
+    },
+    "subsidy/hsinchu_county.html": {
+     "sha256": "49b95c3001004c404d49c9467037925f9d0c4e7f1af0065cc7cd38ac14a8ca95",
+     "bytes": 73316,
+     "fetched_at": "2026-09-13T06:10:57.796692+00:00"
+    },
+    "subsidy/miaoli.html": {
+     "sha256": "26860cb417dc7d08adfb2095e738483adb4e780059e90d1652b8fa6201f3e075",
+     "bytes": 96733,
+     "fetched_at": "2026-09-13T06:10:58.263584+00:00"
+    },
+    "subsidy/changhua.html": {
+     "sha256": "985b25334a91530f28f9aa489ee4a7489cb8c69134983f4df649dd452d2ae23c",
+     "bytes": 115705,
+     "fetched_at": "2026-09-13T06:10:59.355807+00:00"
+    },
+    "subsidy/nantou.html": {
+     "sha256": "cee12321cca6cd0c1bac3ac23e6b12a9d811c2535aaed63c0d745897178625dc",
+     "bytes": 238058,
+     "fetched_at": "2026-09-13T06:10:59.813455+00:00"
+    },
+    "subsidy/yunlin.pdf": {
+     "sha256": "f378466ffa2deee057712a7f6f53cf669f18922cb6e2ad8f4bacadbad96e8556",
+     "bytes": 360536,
+     "fetched_at": "2026-09-13T06:11:00.676449+00:00"
+    },
+    "subsidy/chiayi_city.html": {
+     "sha256": "257129999f864b1e2a8f0193fc0034c4e490b51a9682b78dacb3893997b673da",
+     "bytes": 31850,
+     "fetched_at": "2026-09-13T06:11:01.190218+00:00"
+    },
+    "subsidy/pingtung.html": {
+     "sha256": "11d82f2e5806d8926527e2b26ab63a9891058bdb8185b46282befb9cb97866e8",
+     "bytes": 10371,
+     "fetched_at": "2026-09-13T06:11:01.314779+00:00"
+    },
+    "subsidy/taitung.html": {
+     "sha256": "7ed9b5338c8ec544d2687fa53df2c70652d8a03ce5594af670f90122f22c03ab",
+     "bytes": 37489,
+     "fetched_at": "2026-09-13T06:11:02.656387+00:00"
+    },
+    "subsidy/hualien.html": {
+     "sha256": "de42b1667b41d0df84c4cea6c6116be2daba4f0472ab0217a2baa042012c796b",
+     "bytes": 19797,
+     "fetched_at": "2026-09-13T06:11:02.821934+00:00"
+    },
+    "subsidy/penghu.html": {
+     "sha256": "eb767f2abcba5de7ca0570bfd96b2ab4aaea25800a2a2b2d5d7bdf561e2149e7",
+     "bytes": 30545,
+     "fetched_at": "2026-09-13T06:11:03.692800+00:00"
+    },
+    "subsidy/keelung.html": {
+     "sha256": "c2eaa9560fc915b17c1c69c7f6bf4cb45bb3bc530bd3584fcf0031007087189b",
+     "bytes": 49123,
+     "fetched_at": "2026-09-13T06:11:04.088420+00:00"
+    },
+    "subsidy/kinmen.html": {
+     "sha256": "22a150b176c3879e697d7080ed26eda80929bdcc98147e448a0192c926752a8e",
+     "bytes": 90406,
+     "fetched_at": "2026-09-13T06:11:04.453242+00:00"
+    },
+    "subsidy/lienchiang.html": {
+     "sha256": "1322464deba52571ec4cfaf29753156c0f93c6a1fb347758f4038d8577538618",
+     "bytes": 94385,
+     "fetched_at": "2026-09-13T06:11:05.685878+00:00"
+    },
+    "subsidy/chiayi_county.html": {
+     "sha256": "3c32bd417a1891452ec76ca2039afdba2fff66bf7f27ac8c4820b94b6d64bda8",
+     "bytes": 97625,
+     "fetched_at": "2026-09-13T06:11:00.971198+00:00"
+    }
+   },
+   "last_fetched": "2026-09-13T06:11:05.685897+00:00",
+   "next_due": "2026-12-13T06:11:05.685903+00:00",
+   "pending_big": false,
+   "last_changed": "2026-09-13T06:11:05.685921+00:00"
+  },
+  "county_booking_more": {
+   "files": {
+    "dyn/cy_health.html": {
+     "sha256": "d79d486d57ff30cde8fc5c1971becd951fbb3ff6c94b0b95df2d68c2e74fc26f",
+     "bytes": 147469,
+     "fetched_at": "2026-09-13T06:06:52.729587+00:00"
+    }
+   },
+   "last_fetched": "2026-09-13T06:06:52.729605+00:00",
+   "next_due": "2026-09-20T06:06:52.729611+00:00",
+   "pending_big": false,
+   "last_changed": "2026-09-13T06:06:52.729623+00:00"
+  },
+  "tw_town_geo": {
+   "files": {
+    "geo/twTown.geo.json": {
+     "sha256": "e8f6e19f1b41513818f287543f3be3a96ca7731e8e108715426efb6b2e0fcbb2",
+     "bytes": 20314776,
+     "fetched_at": "2026-09-13T06:07:18.728988+00:00"
+    }
+   },
+   "last_fetched": "2026-09-13T06:07:18.729003+00:00",
+   "next_due": "2026-10-13T06:07:18.729006+00:00",
+   "pending_big": false,
+   "last_changed": "2026-09-13T06:07:18.729014+00:00"
   }
  }
 }

@@ -6,7 +6,7 @@
 |---|---|---|
 | `entity.csv` | 3,073 | 一家機構（跨來源合併） |
 | `entity_raw.csv` | 3,835 | 某個來源說的某家機構（保真） |
-| `observation.csv` `.md` | 16 | 某時間點在某機構觀察到的一個值 |
+| `observation.csv` `.md` | 134 | 某時間點在某機構觀察到的一個值 |
 | `relation.csv` | 16,169 | 一組關係（超過 1500 列，不匯 md） |
 | `stats.csv` `.md` | 690 | 一個統計數值 |
 | `district.csv` | 369 | 一個行政區的中心點座標 |
@@ -58,14 +58,16 @@
 
 | 欄位 | 說明 |
 |---|---|
-| `entity_key` | 可直接 join `entity.csv`（目前 16 列全部對得回去） |
+| `entity_key` | 可 join `entity.csv`；配不到醫事機構代碼時退回 `x:<縣市>:<正規化名稱>` |
 | `observed_at` | 觀察時間，取原始檔的抓取時間 |
-| `source` | 哪個來源（`csh_quota`／`ntpc_booking`…） |
-| `field` | `quota_release_date`（放名額日）／`monthly_capacity`（每月名額）／`booking_method`（預約方式） |
+| `source` | 哪個來源：`csh_quota`（中山醫附醫）／`ntpc_booking`（新北衛生局）／`tc_health`（臺中衛生局）／`cy_health`（嘉義市衛生局） |
+| `field` | `quota_release_date`（放名額日）／`monthly_capacity`（每月名額）／`booking_method`（預約方式）／`booking_tel`（電話與分機）／`clinic_hours`（門診時間） |
 | `value` | 值。日期已轉成西元 `YYYY-MM-DD` |
-| `note` | 原文脈絡，例如「115年10月份門診名額開放日」 |
+| `note` | 原文脈絡，例如「115年10月份門診名額開放日」，或該筆的機構原名 |
 
-**這張表很短是現況，不是解析失敗**：13 家聯評中心抽查只有 1 家公布放名額日。等候天數則沒有任何公開來源。
+**這張表短是現況，不是解析失敗**：13 家聯評中心抽查只有 1 家公布放名額日，**等候天數沒有任何公開來源**——不只各中心不公布，連縣市衛生局的彙整頁也只有聯絡方式。
+
+四個縣市彙整頁的資訊密度差很多：新北只有預約方式、臺中只有電話與分機（但標了哪支是初評哪支是複評）、**嘉義市是目前唯一有門診時間的**。所以 `field` 要看來源，不能假設每家都有同樣的欄位。
 
 ## relation.csv
 

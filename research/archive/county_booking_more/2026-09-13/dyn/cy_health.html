@@ -1,0 +1,970 @@
+﻿
+<!DOCTYPE html>
+
+<html id="FormHtml" xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant-tw">
+<head id="Head1">    <style>
+        .for_accessibility a {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 999;
+            width: 1px;
+            height: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: #000;
+        }
+            .for_accessibility a:focus {
+                width: auto;
+                height: auto;
+                padding: 6px;
+                background-color: #fff;
+            }
+        .for_accessibility div {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: transparent;
+            opacity: .1
+        }
+    </style>
+<script src='https://health.chiayi.gov.tw/Scripts/jquery-3.6.0.min.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/jquery.lazy.min.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/jquery.lazy.plugins.min.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/vue.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/jquery.cookie.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/jUtil.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/fancybox/jquery.fancybox.js'></script>
+<link rel='stylesheet' type='text/css'  href='https://health.chiayi.gov.tw/Scripts/fancybox/jquery.fancybox.css'> 
+<script src='https://health.chiayi.gov.tw/Scripts/lightGallery/js/lightgallery-all.min.js'></script>
+<link rel='stylesheet' type='text/css'  href='https://health.chiayi.gov.tw/Scripts/lightGallery/css/lightgallery.min.css'> 
+<script src='https://health.chiayi.gov.tw/Scripts/J_Pager.js'></script>
+<script src='https://health.chiayi.gov.tw/Scripts/freegoUtil.js'></script>
+<script  src='https://health.chiayi.gov.tw/Scripts/Chart/chart.js'></script> 
+<script  src='https://health.chiayi.gov.tw/Scripts/Chart/chartjs-plugin-datalabels.min.js'></script> 
+<script  src='https://health.chiayi.gov.tw/Scripts/jquery.mousewheel.min.js'></script> 
+<script  src='https://health.chiayi.gov.tw/Scripts/jquery.touchwipe.min.js'></script> 
+<script  src='https://health.chiayi.gov.tw/Scripts/Select2/select2.full.min.js'></script>
+<script  src='https://health.chiayi.gov.tw/Scripts/Select2/i18n/zh-TW.js'></script>
+<link rel='stylesheet' type='text/css'  href='https://health.chiayi.gov.tw/Scripts/Select2/select2.min.css'> 
+<script  src='https://health.chiayi.gov.tw/js/airdatepicker/datepicker.min.js'></script> 
+<script  src='https://health.chiayi.gov.tw/js/airdatepicker/datepicker.zh-tw.js'></script> 
+<script  src='https://health.chiayi.gov.tw/js/airdatepicker/datepicker.en.js'></script> 
+<link rel='stylesheet' type='text/css'  href='https://health.chiayi.gov.tw/js/airdatepicker/datepicker.min.css'> 
+<script  src='/Common/tgosJS.ashx' type='text/javascript'></script> 
+<script  src='https://health.chiayi.gov.tw/Scripts/jGMap.js'></script> 
+<script  src='/Common/GMapJS.ashx' type='text/javascript'></script> 
+<script>var CCMS_WWWURL='https://health.chiayi.gov.tw';var CCMS_LanguageSN=1;var CCMS_SitesSN_Encryption='434';</script><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="DC.Title" content="嘉義市政府衛生局" />
+<meta name="DC.Subject" content="嘉義市政府衛生局" />
+<meta name="DC.Creator" content="" />
+<meta name="DC.Publisher" content="" />
+<meta name="DC.Date" content="" />
+<meta name="DC.Type" content="" />
+<meta name="DC.Identifier" content="" />
+<meta name="DC.Description" content="" />
+<meta name="DC.Contributor" content="" />
+<meta name="DC.Format" content="" />
+<meta name="DC.Relation" content="" />
+<meta name="DC.Source" content="" />
+<meta name="DC.Language" content="" />
+<meta name="DC.Rights" content="" />
+<meta name="Category.Theme" content="" />
+<meta name="Category.Cake" content="" />
+<meta name="Category.Service" content="" />
+<meta name="DC.Keywords" content="" />
+<title>
+	嘉義市政府衛生局-兒童發展篩檢及聯合評估服務
+</title><link id="likCssGlobal" href="/css/global.css" rel="stylesheet" type="text/css" /><link id="likCssPage" href="/css/page.css" rel="stylesheet" type="text/css" /><link id="likPrint" href="/css/print.css" rel="stylesheet" type="text/css" media="print" /><link id="lnkCssSysDetail" href="/css/sys_detail.css" rel="stylesheet" type="text/css" /><link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="https://icmp-ws.chiayi.gov.tw/001/Upload/434/sites/pagebackimage/af6d3278-8c86-4dc7-9538-738714f91e14.png" rel="icon" type="image/x-icon"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150214695-29"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-150214695-29');
+</script>
+<meta property="og:title" content="兒童發展篩檢及聯合評估服務" >
+<meta property="og:type" content="article" >
+<meta property="og:url" content="https://health.chiayi.gov.tw/cp.aspx?n=12593" >
+<meta property="og:site_name" content="嘉義市政府衛生局" >
+<meta property="og:image" content="" >
+<meta property="og:image:width" content="1200" >
+<meta property="og:image:height" content="630" >
+<meta property="og:description" content="" >
+<script defer src="/client.ns.js"></script></head>
+<body id="Formbody" data-js="false"><div class="for_accessibility" id="for_accessibility">
+    <a href="#CCMS_Content" class="" title="跳到主要內容區塊">跳到主要內容區塊</a>    <div>
+    </div>
+    <script>
+        var $a = $('.for_accessibility a');
+        $a.on('click', function (evt) {
+            var $href = $($(this).attr('href')),
+                $target = $href.find('a').eq(0).get(0);
+            setTimeout(function () { try { $target.focus(); } catch (e) { } }, 0);
+        });
+    </script>
+</div>
+<script> document.body.setAttribute("data-js", "true");</script>
+
+    <form method="post" action="./cp.aspx?n=12593&amp;Create=1" id="form1"><input name="__RequestVerificationToken" type="hidden" value="51ztC4MTokzM5IrX7NCqE1_bkvum-8QreEPvmS4EBkpa-bHQQCmWyx50xk2HRxGvGFPZMNgDfMVHu_qoQLQrz_vMDDEvDtATiKL8oasCztw1" />
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="lDLdoXblxwmWB/UT7m/mHLH4V+3IdgmVgUWtUxoj2uF380wAWy3l+7DUJyqVOpOn71I/iyw5uSAoddS5V/233Y5q0KG6eOk2jEozE2NI7L8=" />
+</div>
+
+        <!--主選單 結束-->
+        <!--標題-->
+
+        <div class="title">
+            
+        </div>
+        
+        
+        
+        
+
+        
+     <div class="group sys-root" data-func="{&#39;datePicker&#39;:{&#39;autoClose&#39;:true,&#39;language&#39;:&#39;zh-tw&#39;,&#39;navTitles&#39;:{&#39;days&#39;:&#39;&lt;i&amp;gt;民國 rrr 年&lt;/i&amp;gt; &amp;nbsp; MM&#39;,&#39;months&#39;:&#39;民國 rrr 年&#39;,&#39;years&#39;:&#39;民國 rrr1 至 rrr2 年&#39;}}}" data-nojs="您的瀏覽器似乎不支援 JavaScript 語法，但沒關係，這並不會影響到內容的陳述。如需要選擇適合您的字級大小，可利用鍵盤 Ctrl   ( )放大 (-)縮小。如需要回到上一頁，可使用瀏覽器提供的 Alt   左方向鍵(←)。如需要列印，可利用鍵盤 Ctrl   p 使用瀏覽器提供的列印功能。" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="group base-mobile" data-func="{&#39;toggleBtn&#39;:{}}" data-index="1" data-type="3"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a    title="手機版選單" role='button'  >手機版選單</a> </span></div></div></div><div class="ct"><div class="in"> <div class="area-form search" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="search"   >search</a> </span></div></div></div><div class="ct"><div class="in"><div class="fieldset">
+  <span class="search"><input data-search="btn_4d1474114d044b1397c8a6c433a5365a" type="search" placeholder="Search" title="搜尋"></span>
+  <span class="submit"><a href="#" class='CCMS_SearchBtn' data-search="btn_4d1474114d044b1397c8a6c433a5365a" title="搜尋" >搜尋</a></span>
+</div>
+<div class="list">
+  <ul data-index="1" data-child="0">
+  </ul>
+</div>
+<script >
+$(function () {
+    $('[data-search="4d1474114d044b1397c8a6c433a5365a"]').on("keydown", function (event) {
+        if (event.which == 13) {
+             doSearch($('#btn_4d1474114d044b1397c8a6c433a5365a'));
+            return false;
+        }
+    });
+});
+</script>
+</div></div><div class="ft"><div class="in"><ul data-index="1" data-child="1">
+  <li data-index="1" class="advanced"><span><a target="_blank" href="https://www.google.com.tw/advanced_search?hl=zh-Hant-tw&as_sitesearch=https://health.chiayi.gov.tw" title="進階搜尋[另開新視窗]">進階搜尋</a></span></li>
+</ul>
+</div></div></div></div> <div class="list-text share" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="#"   title="分享"   >分享</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  class="facebook"  >	<span  ><a   href="javascript: void(window.open('http://www.facebook.com/share.php?u='.concat(encodeURIComponent(location.href)) ));"   title="分享至Facebook[另開新視窗]" button  target="_self"  >Facebook</a> </span></li><li   data-index="2"  class="twitter"  >	<span  ><a   href="javascript: void(window.open('http://twitter.com/home/?status='.concat(encodeURIComponent(document.title)) .concat(' ') .concat(encodeURIComponent(location.href))));"   title="分享至twitter[另開新視窗]" button  target="_self"  >Twitter</a> </span></li><li   data-index="3"  class="line"  >	<span  ><a   href="javascript: void(window.open('http://line.naver.jp/R/msg/text/?'.concat(encodeURIComponent(location.href)) ));"   title="分享至line[另開新視窗]" button  target="_self"  >line</a> </span></li><li   data-index="4"  class="IG"  >	<span  ><a   href="javascript:  void(window.open('https://www.instagram.com/accounts/login/?' + encodeURIComponent(document.title) + '&amp;body=' +  encodeURIComponent(document.URL)));"   title="分享至ig[另開新視窗]" button  target="_self"  >IG</a> </span></li></ul>
+</div></div></div></div> <div class="group-list nav" data-func="{&#39;majorNavMobile&#39;:{}}" data-index="3" data-type="4" data-child="8"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li data-index="1"> <div class="group nav" data-index="1" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4591"      title="認識衛生局"   >認識衛生局</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4592"      title="衛生局簡介"   >衛生局簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cp.aspx?n=4593"      title="大事記"   >大事記</a> </span></li><li   data-index="3"  >	<span  ><a   href="cp.aspx?n=4594"      title="地理位置"   >地理位置</a> </span></li><li   data-index="4"  >	<span  ><a   href="cp.aspx?n=4595"      title="組織規程"   >組織規程</a> </span></li><li   data-index="5"  >	<span  ><a   href="cp.aspx?n=4596"      title="組織編制架構圖"   >組織編制架構圖</a> </span></li><li   data-index="6"  >	<span  ><a   href="cp.aspx?n=4597"      title="局長介紹"   >局長介紹</a> </span></li><li   data-index="7"  >	<span  ><a   href="cp.aspx?n=4598"      title="副局長介紹"   >副局長介紹</a> </span></li><li   data-index="8"  >	<span  ><a   href="cp.aspx?n=4599"      title="局長信箱"   >局長信箱</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="2"> <div class="group nav" data-index="2" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4600"      title="科室簡介"   >科室簡介</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="12"><li   data-index="1"  >	<span  ><a   href="cl.aspx?n=5932"      title="醫政科"   >醫政科</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=5953"      title="心理健康科"   >心理健康科</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=5956"      title="食品藥物管理科"   >食品藥物管理科</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=5993"      title="國民健康科"   >國民健康科</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=5994"      title="疾病管制科"   >疾病管制科</a> </span></li><li   data-index="6"  >	<span  ><a   href="cl.aspx?n=5995"      title="檢驗科"   >檢驗科</a> </span></li><li   data-index="7"  >	<span  ><a   href="cl.aspx?n=5996"      title="企劃科"   >企劃科</a> </span></li><li   data-index="8"  >	<span  ><a   href="cl.aspx?n=5997"      title="行政科"   >行政科</a> </span></li><li   data-index="9"  >	<span  ><a   href="cl.aspx?n=5004"      title="會計室"   >會計室</a> </span></li><li   data-index="10"  >	<span  ><a   href="cl.aspx?n=5998"      title="人事室"   >人事室</a> </span></li><li   data-index="11"  >	<span  ><a   href="cl.aspx?n=5999"      title="政風室"   >政風室</a> </span></li><li   data-index="12"  >	<span  ><a   href="cp.aspx?n=4612"      title="與我們聯絡"   >與我們聯絡</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="3"> <div class="group nav" data-index="3" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6075"      title="附屬單位"   >附屬單位</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  >	<span  ><a   href="https://healtheast.chiayi.gov.tw/"  data-ccms_hitcount_node='6077'    title="[另開新視窗]東區衛生所"  rel="noopener noreferrer"  target="_blank"  >東區衛生所</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://healthwest.chiayi.gov.tw/"  data-ccms_hitcount_node='6078'    title="[另開新視窗]西區衛生所"  rel="noopener noreferrer"  target="_blank"  >西區衛生所</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://longcare.chiayi.gov.tw/"  data-ccms_hitcount_node='6079'    title="[另開新視窗]長期照顧管理中心"  rel="noopener noreferrer"  target="_blank"  >長期照顧管理中心</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="4"> <div class="group nav" data-index="4" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6076"      title="公開資訊"   >公開資訊</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=6080"      title="衛生統計資料發布"   >衛生統計資料發布</a> </span></li><li   data-index="2"  >	<span  ><a   href=" ./Health_StatPost.aspx"  data-ccms_hitcount_node='4811'    title="[另開新視窗]預告統計資料發布時間表-110年以前"  rel="noopener noreferrer"  target="_blank"  >預告統計資料發布時間表-110年以前</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://chiayi.dgbas.gov.tw/statweb/Page/stat01_1.aspx?Mid=5002"  data-ccms_hitcount_node='11495'    title="[另開新視窗]預告統計資料發布時間表-111年以後"  rel="noopener noreferrer"  target="_blank"  >預告統計資料發布時間表-111年以後</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=6082&sms=13081"      title="性別統計專區"   >性別統計專區</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=6931"      title="視覺化專區"   >視覺化專區</a> </span></li><li   data-index="6"  >	<span  ><a   href="News.aspx?n=6083&sms=13082"      title="內部控制暨內部稽核專區"   >內部控制暨內部稽核專區</a> </span></li><li   data-index="7"  >	<span  ><a   href="News.aspx?n=6084&sms=13083"      title="年度施政績效報告"   >年度施政績效報告</a> </span></li><li   data-index="8"  >	<span  ><a   href="News.aspx?n=6085&sms=13084"      title="[另開新視窗]其他公開資訊"  rel="noopener noreferrer"  target="_blank"  >其他公開資訊</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="5"> <div class="group nav" data-index="5" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4613"      title="公告訊息"   >公告訊息</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="News.aspx?n=4614&sms=12199"      title="焦點新聞"   >焦點新聞</a> </span></li><li   data-index="2"  >	<span  ><a   href="News.aspx?n=4615&sms=12200"      title="最新消息"   >最新消息</a> </span></li><li   data-index="3"  >	<span  ><a   href="News.aspx?n=4616&sms=12201"      title="徵才公告"   >徵才公告</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=4617&sms=12202"      title="招標公告"   >招標公告</a> </span></li><li   data-index="5"  >	<span  ><a   href="News.aspx?n=9240&sms=13868"      title="公示送達公告"   >公示送達公告</a> </span></li><li   data-index="6"  >	<span  ><a   href="News.aspx?n=9333&sms=13882"      title="補助資訊專區(身分揭露公開)"   >補助資訊專區(身分揭露公開)</a> </span></li><li   data-index="7"  >	<span  ><a   href="News.aspx?n=9867&sms=13928"      title="電子公告欄"   >電子公告欄</a> </span></li><li   data-index="8"  >	<span  ><a   href="News.aspx?n=6086&sms=13085"      title="法規查詢"   >法規查詢</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="6"> <div class="group nav" data-index="6" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4624"      title="服務專區"   >服務專區</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="6"><li   data-index="1"  >	<span  ><a   href="News.aspx?n=4625&sms=12203"      title="書表下載"   >書表下載</a> </span></li><li   data-index="2"  >	<span  ><a   href="Questionnaire.aspx?n=4626&sms=12204"      title="申辦服務"   >申辦服務</a> </span></li><li   data-index="3"  >	<span  ><a   href="News_Link.aspx?n=4627&sms=12205"      title="快速連結"   >快速連結</a> </span></li><li   data-index="4"  >	<span  ><a   href="News_Video.aspx?n=4628&sms=12206"      title="影音專區"   >影音專區</a> </span></li><li   data-index="5"  >	<span  ><a   href="https://zh-tw.facebook.com/cichb100"  data-ccms_hitcount_node='4629'    title="[另開新視窗]粉絲專頁"  rel="noopener noreferrer"  target="_blank"  >粉絲專頁</a> </span></li><li   data-index="6"  >	<span  ><a   href="ActiveList.aspx?n=4630&sms=12207"      title="活動報名"   >活動報名</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="7"> <div class="group nav" data-index="7" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6087"      title="主題專區"   >主題專區</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="19"><li   data-index="1"  >	<span  ><a   href="https://foodsafety.chiayi.gov.tw/"  data-ccms_hitcount_node='6088'    title="[另開新視窗]食安在嘉"  rel="noopener noreferrer"  target="_blank"  >食安在嘉</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://antidrug.chiayi.gov.tw"  data-ccms_hitcount_node='6089'    title="[另開新視窗]毒品危害防制中心"  rel="noopener noreferrer"  target="_blank"  >毒品危害防制中心</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://diabetes.chiayi.gov.tw"  data-ccms_hitcount_node='6090'    title="[另開新視窗]糖尿病共同照護網"  rel="noopener noreferrer"  target="_blank"  >糖尿病共同照護網</a> </span></li><li   data-index="4"  >	<span  ><a   href="https://mental.chiayi.gov.tw"  data-ccms_hitcount_node='6091'    title="[另開新視窗]社區心理衛生中心"  rel="noopener noreferrer"  target="_blank"  >社區心理衛生中心</a> </span></li><li   data-index="5"  >	<span  ><a   href="https://strong.chiayi.gov.tw/"  data-ccms_hitcount_node='9661'    title="[另開新視窗]樂齡勇壯城"  rel="noopener noreferrer"  target="_blank"  >樂齡勇壯城</a> </span></li><li   data-index="6"  >	<span  ><a   href="https://foodsafety.chiayi.gov.tw/cl.aspx?n=4643"  data-ccms_hitcount_node='6559'    title="[另開新視窗]美豬美牛進口議題專區"  rel="noopener noreferrer"  target="_blank"  >美豬美牛進口議題專區</a> </span></li><li   data-index="7"  >	<span  ><a   href="https://healthmap.cichb.gov.tw"  data-ccms_hitcount_node='11346'    title="[另開新視窗]健康飲食運動地圖"  rel="noopener noreferrer"  target="_blank"  >健康飲食運動地圖</a> </span></li><li   data-index="8"  >	<span  ><a   href="https://imsr.cichb.gov.tw/"  data-ccms_hitcount_node='7101'    title="[另開新視窗]嘉義市整合性健康篩檢系統"  rel="noopener noreferrer"  target="_blank"  >嘉義市整合性健康篩檢系統</a> </span></li><li   data-index="9"  >	<span  ><a   href="https://hpmpoint.cichb.gov.tw"  data-ccms_hitcount_node='10651'    title="[另開新視窗]健康點數系統-點點成金換獎金"  rel="noopener noreferrer"  target="_blank"  >健康點數系統-點點成金換獎金</a> </span></li><li   data-index="10"  >	<span  ><a   href="cp.aspx?n=7690"      title="疫苗專區"   >疫苗專區</a> </span></li><li   data-index="11"  >	<span  ><a   href="News.aspx?n=8215&sms=13576"      title="衛生教育主軸專區"   >衛生教育主軸專區</a> </span></li><li   data-index="12"  >	<span  ><a   href="cl.aspx?n=9652"      title="登革熱專區"   >登革熱專區</a> </span></li><li   data-index="13"  >	<span  ><a   href="cl.aspx?n=9746"      title="[另開新視窗]衛生保健志工專區"  rel="noopener noreferrer"  target="_blank"  >衛生保健志工專區</a> </span></li><li   data-index="14"  >	<span  ><a   href="cl.aspx?n=11156"      title="COVID-19專區"   >COVID-19專區</a> </span></li><li   data-index="15"  >	<span  ><a   href="News.aspx?n=6736&sms=13241"      title="成人預防保健B、C型肝炎篩檢服務合約醫療院所"   >成人預防保健B、C型肝炎篩檢服務合約醫療院所</a> </span></li><li   data-index="16"  >	<span  ><a   href="cp.aspx?n=11831"      title="嘉義市執行代謝症候群防治計畫之院所查詢"   >嘉義市執行代謝症候群防治計畫之院所查詢</a> </span></li><li   data-index="17"  >	<span  ><a   href="https://health.chiayi.gov.tw/cp.aspx?n=13160"  data-ccms_hitcount_node='13161'    title="青少年檳榔健康危害防制"   >青少年檳榔健康危害防制</a> </span></li><li   data-index="18"  >	<span  ><a   href="https://health.chiayi.gov.tw/cp.aspx?n=13221"  data-ccms_hitcount_node='13222'    title="預立醫療諮商照護"   >預立醫療諮商照護</a> </span></li><li   data-index="19"  >	<span  ><a   href="cp.aspx?n=13462"      title="嘉義市防偷拍醫事機構查核專區"   >嘉義市防偷拍醫事機構查核專區</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="8"> <div class="group nav" data-index="8" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=11347"      title="English"   >English</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="cl.aspx?n=11350"      title="Disease control 疾病管制"   >Disease control 疾病管制</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=11351"      title="Health promotion 健康促進"   >Health promotion 健康促進</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=11371"      title="Mental Health Promotion 心理健康促進"   >Mental Health Promotion 心理健康促進</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=11377"      title="Food and Drug Administration 食品藥物管理"   >Food and Drug Administration 食品藥物管理</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=11383"      title="Tobacco Control 菸害防制"   >Tobacco Control 菸害防制</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li></ul></div></div></div></div> <div class="list-text hot-key-word" data-index="4" data-type="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="熱門關鍵字"   >熱門關鍵字</a> </span></div></div></div><div class="ct"><div class="in"></div></div></div></div> <div class="list-text link" data-index="5" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="上方連結"   >上方連結</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  >	<span  ><a   href="Default.aspx"   title="回首頁"   target="_self"  >回首頁</a> </span></li><li   data-index="2"  >	<span  ><a   href="SiteMap.aspx"   title="網站導覽"   target="_self"  >網站導覽</a> </span></li><li   data-index="3"  >	<span  ><a   href="/cp.aspx?n=4599"   title="局長信箱"   target="_self"  >局長信箱</a> </span></li><li   data-index="4"  >	<span  ><a   href="https://www.facebook.com/cichb100"   title="[另開新視窗]粉絲專頁[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >粉絲專頁</a> </span></li></ul>
+</div></div></div></div> <div class="list-text link" data-index="6" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="下方連結"   >下方連結</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  >	<span  ><a   href="https://www.chiayi.gov.tw/cp.aspx?n=990"   title="[另開新視窗]資訊安全政策[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >資訊安全政策</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://www.chiayi.gov.tw/cp.aspx?n=576"   title="[另開新視窗]隱私權政策[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >隱私權政策</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://www.chiayi.gov.tw/cp.aspx?n=577"   title="[另開新視窗]資料開放宣告[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >資料開放宣告</a> </span></li></ul>
+</div></div></div></div></div></div></div></div> <div class="group base-extend" data-index="2" data-type="3"><div class="in"><div class="ct"><div class="in"></div></div></div></div> <div class="group base-wrapper" data-index="3" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="group base-header" data-index="1" data-type="3" data-child="1"><div class="in"><div class="ct"><div class="in"> <div class="group default info" data-index="1" data-type="3"><div class="in"><div class="ct"><div class="in"> <div class="simple-text accesskey" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><span><a href="#Accesskey_U" id="Accesskey_U" accesskey="U" title="上方選單連結區，此區塊列有本網站的主要連結">:::</a></span></div></div></div></div> <div class="simple-text major-logo" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><h1><a href="Default.aspx" title="回首頁">嘉義市政府衛生局</a><strong style="display: none;">嘉義市政府衛生局</strong></h1></div></div></div></div> <div class="list-text link" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="上方連結"   >上方連結</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  >	<span  ><a   href="Default.aspx"   title="回首頁"   target="_self"  >回首頁</a> </span></li><li   data-index="2"  >	<span  ><a   href="SiteMap.aspx"   title="網站導覽"   target="_self"  >網站導覽</a> </span></li><li   data-index="3"  >	<span  ><a   href="/cp.aspx?n=4599"   title="局長信箱"   target="_self"  >局長信箱</a> </span></li><li   data-index="4"  >	<span  ><a   href="https://www.facebook.com/cichb100"   title="[另開新視窗]粉絲專頁[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >粉絲專頁</a> </span></li></ul>
+</div></div></div></div> <div class="list-text font-size" data-func="{&#39;toggleBtn&#39;:{&#39;clickToRemove&#39;:true},&#39;fontSize&#39;:{}}" data-index="3" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="#"   title="字級"   >字級</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  class="small"  >	<span  ><a   href="#"   title="調整字級為小" role='button'  >調整字級為小</a> </span></li><li   data-index="2"  class="medium"  >	<span  ><a   href="#"   title="調整字級為中" role='button'  >調整字級為中</a> </span></li><li   data-index="3"  class="large"  >	<span  ><a   href="#"   title="調整字級為大" role='button'  >調整字級為大</a> </span></li></ul>
+</div></div></div></div> <div class="list-text share" data-func="{&#39;toggleBtn&#39;:{&#39;clickToRemove&#39;:true}}" data-index="4" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="#"   title="分享"   >分享</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  class="facebook"  >	<span  ><a   href="javascript: void(window.open('http://www.facebook.com/share.php?u='.concat(encodeURIComponent(location.href)) ));"   title="分享至Facebook[另開新視窗]" button  target="_self"  >Facebook</a> </span></li><li   data-index="2"  class="twitter"  >	<span  ><a   href="javascript: void(window.open('http://twitter.com/home/?status='.concat(encodeURIComponent(document.title)) .concat(' ') .concat(encodeURIComponent(location.href))));"   title="分享至twitter[另開新視窗]" button  target="_self"  >Twitter</a> </span></li><li   data-index="3"  class="line"  >	<span  ><a   href="javascript: void(window.open('http://line.naver.jp/R/msg/text/?'.concat(encodeURIComponent(location.href)) ));"   title="分享至line[另開新視窗]" button  target="_self"  >line</a> </span></li><li   data-index="4"  class="IG"  >	<span  ><a   href="javascript:  void(window.open('https://www.instagram.com/accounts/login/?' + encodeURIComponent(document.title) + '&amp;body=' +  encodeURIComponent(document.URL)));"   title="分享至ig[另開新視窗]" button  target="_self"  >IG</a> </span></li></ul>
+</div></div></div></div> <div class="right-box" data-index="5" data-type="0" data-child="2"><div class="in"><div class="ct"><div class="in"><div id="divSideInformation" class="area-customize right-box">
+<div class="in">
+<div class="ct">
+<div class="in">
+<ul>
+	<li>
+	<div class="box-tab">
+	<ul>
+		<li id="liDisaster2"><span><a href="javascript: sfDisaster();">災害示警</a> </span></li>
+	</ul>
+	</div>
+	</li>
+	<li id="liDisaster">
+	<div class="title">災害示警</div>
+<div id="Group_34723_eHPjuWWkpQ" class="DisWarning300100" >
+<script type="text/javascript" src="https://alerts.ncdr.nat.gov.tw/temp/StaticFiles/Immediately/CapInfoNormal_10020_300100.js"></script>
+<div class="tempDisWarning"><div id="capInfo300100_Normal_10020"></div></div>
+<span style='display:none'></span>
+</div>
+	</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    var nowactivename = "";
+    function sfOpenClose(str){ 
+        $("li[id='liDisaster2']").attr("class", "")
+        $("li[id='liContact2']").attr("class", "")
+        if(nowactivename == str){
+            $("div[id='divSideInformation']").attr("class", "area-customize right-box");
+            nowactivename = "";
+        }
+        else{
+            $("div[id='divSideInformation']").attr("class", "area-customize right-box is-active");
+            if(str == 'Weather'){
+                $("li[id='liDisaster2']").attr("class", "is-active")
+            }
+            else if(str == 'Contact'){
+                $("li[id='liContact2']").attr("class", "is-active")
+            }
+            nowactivename = str;
+        }
+    }
+    function sfDisaster(){ 
+        $("li[id='liDisaster']").attr("style", "")
+        $("li[id='liContact']").attr("style", "display: none")
+        sfOpenClose('Weather');
+    }
+    function sfContact(){ 
+        $("li[id='liDisaster']").attr("style", "display: none")
+        $("li[id='liContact']").attr("style", "")
+        sfOpenClose('Contact');
+    }
+</script>
+</div></div></div></div></div></div></div></div> <div class="group-list nav" data-func="{&#39;majorNavHorizontal&#39;:{},&#39;hud&#39;:{}, &#39;setNavWidth&#39;:{}}" data-index="2" data-type="4" data-child="8"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li data-index="1"> <div id="Group_40075_fnEnDHWVAg" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="40075" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="1" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4591"      title="認識衛生局"   >認識衛生局</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_40076_esVAwtdFPt" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="40076" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4592"      title="衛生局簡介"   >衛生局簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cp.aspx?n=4593"      title="大事記"   >大事記</a> </span></li><li   data-index="3"  >	<span  ><a   href="cp.aspx?n=4594"      title="地理位置"   >地理位置</a> </span></li><li   data-index="4"  >	<span  ><a   href="cp.aspx?n=4595"      title="組織規程"   >組織規程</a> </span></li><li   data-index="5"  >	<span  ><a   href="cp.aspx?n=4596"      title="組織編制架構圖"   >組織編制架構圖</a> </span></li><li   data-index="6"  >	<span  ><a   href="cp.aspx?n=4597"      title="局長介紹"   >局長介紹</a> </span></li><li   data-index="7"  >	<span  ><a   href="cp.aspx?n=4598"      title="副局長介紹"   >副局長介紹</a> </span></li><li   data-index="8"  >	<span  ><a   href="cp.aspx?n=4599"      title="局長信箱"   >局長信箱</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="2" data-width="8"> <div id="Group_40077_CBVqBGAHJu" data-width="8" data-Margin_right="0" data-sort="" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="40077" data-WidthDeskTop="0" data-anchor="" data-tabType="3" class="group nav" data-index="2" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="8" data-isgroup="true" data-Margin_bottom="0" data-child="1" data-Margin_Top="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4600"      title="科室簡介"   >科室簡介</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_40078_wkMfreVdTy" data-SitesModuleSN="75" data-Margin_right="0" data-sort="2" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="40078" data-WidthDeskTop="0" data-anchor="" data-tabType="0" class="group mega-nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="" data-isgroup="true" data-setLen="6" data-Margin_bottom="0" data-child="12" data-Margin_Top="0"><div class="in"><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5932"      title="醫政科"   >醫政科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4601"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=5933"      title="醫政管理"   >醫政管理</a> </span></li><li   data-index="3"  >	<span  ><a   href="cp.aspx?n=12441"      title="幼兒專責醫師與你童行抽獎活動"   >幼兒專責醫師與你童行抽獎活動</a> </span></li><li   data-index="4"  >	<span  ><a   href="cp.aspx?n=13456"      title="醫療通譯資訊"   >醫療通譯資訊</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5953"      title="心理健康科"   >心理健康科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4602"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=7053"      title="心理健康業務"   >心理健康業務</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=5954"      title="毒品防制"   >毒品防制</a> </span></li><li   data-index="4"  >	<span  ><a   href="cp.aspx?n=7063"      title="衛教宣導單張"   >衛教宣導單張</a> </span></li><li   data-index="5"  >	<span  ><a   href="cp.aspx?n=13557"      title="網網相連"   >網網相連</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="3" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5956"      title="食品藥物管理科"   >食品藥物管理科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="6"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4603"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=5957"      title="食藥安全"   >食藥安全</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=5984"      title="藥政管理"   >藥政管理</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=5983"      title="食品管理"   >食品管理</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=5972"      title="抽、檢驗公開"   >抽、檢驗公開</a> </span></li><li   data-index="6"  >	<span  ><a   href="ghp.htm?"      title="GHP衛生稽查專區(稽查結果次月公告)"   >GHP衛生稽查專區(稽查結果次月公告)</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="4" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5993"      title="國民健康科"   >國民健康科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4604"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=6000"      title="癌症防治"   >癌症防治</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=6001"      title="疾病防治"   >疾病防治</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=6002"      title="衛生保健"   >衛生保健</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=6003"      title="健康飲食"   >健康飲食</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="5" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5994"      title="疾病管制科"   >疾病管制科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4605"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=6034"      title="傳染病防治"   >傳染病防治</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=6035"      title="抽、檢驗公開"   >抽、檢驗公開</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=6036"      title="志工園地"   >志工園地</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="6" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5995"      title="檢驗科"   >檢驗科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4606"      title="業務簡介"   >業務簡介</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="7" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5996"      title="企劃科"   >企劃科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4607"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=6058"      title="菸害防制專區"   >菸害防制專區</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=6059"      title="社區健康營造"   >社區健康營造</a> </span></li><li   data-index="4"  >	<span  ><a   href="News_Link.aspx?n=6060&sms=13080"      title="公衛資源應用"   >公衛資源應用</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="8" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5997"      title="行政科"   >行政科</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4608"      title="業務簡介"   >業務簡介</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="9" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5004"      title="會計室"   >會計室</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4609"      title="業務簡介"   >業務簡介</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="10" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5998"      title="人事室"   >人事室</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4610"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=6070"      title="人事園地"   >人事園地</a> </span></li><li   data-index="3"  >	<span  ><a   href="News.aspx?n=6557&sms=13201"      title="人事常用表格"   >人事常用表格</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=6556&sms=13200"      title="常用網址"   >常用網址</a> </span></li><li   data-index="5"  >	<span  ><a   href="News.aspx?n=6555&sms=13199"      title="常用法規"   >常用法規</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="11" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cl.aspx?n=5999"      title="政風室"   >政風室</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4611"      title="業務簡介"   >業務簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="News.aspx?n=12585&sms=14623"      title="公告專區"   >公告專區</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=11886"      title="宣導區"   >宣導區</a> </span></li></ul>
+</div></div></div></div> <div class="list-text nav" data-index="12" data-type="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="cp.aspx?n=4612"      title="與我們聯絡"   >與我們聯絡</a> </span></div></div></div><div class="ct"><div class="in"></div></div></div></div></div></div></div></div></div></div></div></div></li><li data-index="3"> <div id="Group_52803_SrwjsctnMd" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="52803" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="3" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6075"      title="附屬單位"   >附屬單位</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_52804_jLaeYxoWem" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="52804" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  >	<span  ><a   href="https://healtheast.chiayi.gov.tw/"  data-ccms_hitcount_node='6077'    title="[另開新視窗]東區衛生所"  rel="noopener noreferrer"  target="_blank"  >東區衛生所</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://healthwest.chiayi.gov.tw/"  data-ccms_hitcount_node='6078'    title="[另開新視窗]西區衛生所"  rel="noopener noreferrer"  target="_blank"  >西區衛生所</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://longcare.chiayi.gov.tw/"  data-ccms_hitcount_node='6079'    title="[另開新視窗]長期照顧管理中心"  rel="noopener noreferrer"  target="_blank"  >長期照顧管理中心</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="4"> <div id="Group_52805_nMjPtkejmi" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="52805" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="4" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6076"      title="公開資訊"   >公開資訊</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_52806_KLrwQogogC" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="52806" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=6080"      title="衛生統計資料發布"   >衛生統計資料發布</a> </span></li><li   data-index="2"  >	<span  ><a   href=" ./Health_StatPost.aspx"  data-ccms_hitcount_node='4811'    title="[另開新視窗]預告統計資料發布時間表-110年以前"  rel="noopener noreferrer"  target="_blank"  >預告統計資料發布時間表-110年以前</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://chiayi.dgbas.gov.tw/statweb/Page/stat01_1.aspx?Mid=5002"  data-ccms_hitcount_node='11495'    title="[另開新視窗]預告統計資料發布時間表-111年以後"  rel="noopener noreferrer"  target="_blank"  >預告統計資料發布時間表-111年以後</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=6082&sms=13081"      title="性別統計專區"   >性別統計專區</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=6931"      title="視覺化專區"   >視覺化專區</a> </span></li><li   data-index="6"  >	<span  ><a   href="News.aspx?n=6083&sms=13082"      title="內部控制暨內部稽核專區"   >內部控制暨內部稽核專區</a> </span></li><li   data-index="7"  >	<span  ><a   href="News.aspx?n=6084&sms=13083"      title="年度施政績效報告"   >年度施政績效報告</a> </span></li><li   data-index="8"  >	<span  ><a   href="News.aspx?n=6085&sms=13084"      title="[另開新視窗]其他公開資訊"  rel="noopener noreferrer"  target="_blank"  >其他公開資訊</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="5"> <div id="Group_40079_FMTigtkqkc" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="40079" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="5" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4613"      title="公告訊息"   >公告訊息</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_40080_suhQKkaXEr" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="40080" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="News.aspx?n=4614&sms=12199"      title="焦點新聞"   >焦點新聞</a> </span></li><li   data-index="2"  >	<span  ><a   href="News.aspx?n=4615&sms=12200"      title="最新消息"   >最新消息</a> </span></li><li   data-index="3"  >	<span  ><a   href="News.aspx?n=4616&sms=12201"      title="徵才公告"   >徵才公告</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=4617&sms=12202"      title="招標公告"   >招標公告</a> </span></li><li   data-index="5"  >	<span  ><a   href="News.aspx?n=9240&sms=13868"      title="公示送達公告"   >公示送達公告</a> </span></li><li   data-index="6"  >	<span  ><a   href="News.aspx?n=9333&sms=13882"      title="補助資訊專區(身分揭露公開)"   >補助資訊專區(身分揭露公開)</a> </span></li><li   data-index="7"  >	<span  ><a   href="News.aspx?n=9867&sms=13928"      title="電子公告欄"   >電子公告欄</a> </span></li><li   data-index="8"  >	<span  ><a   href="News.aspx?n=6086&sms=13085"      title="法規查詢"   >法規查詢</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="6"> <div id="Group_40083_YtppBBNPIt" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="40083" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="6" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4624"      title="服務專區"   >服務專區</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_40084_DXwTqfEaaw" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="40084" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="6"><li   data-index="1"  >	<span  ><a   href="News.aspx?n=4625&sms=12203"      title="書表下載"   >書表下載</a> </span></li><li   data-index="2"  >	<span  ><a   href="Questionnaire.aspx?n=4626&sms=12204"      title="申辦服務"   >申辦服務</a> </span></li><li   data-index="3"  >	<span  ><a   href="News_Link.aspx?n=4627&sms=12205"      title="快速連結"   >快速連結</a> </span></li><li   data-index="4"  >	<span  ><a   href="News_Video.aspx?n=4628&sms=12206"      title="影音專區"   >影音專區</a> </span></li><li   data-index="5"  >	<span  ><a   href="https://zh-tw.facebook.com/cichb100"  data-ccms_hitcount_node='4629'    title="[另開新視窗]粉絲專頁"  rel="noopener noreferrer"  target="_blank"  >粉絲專頁</a> </span></li><li   data-index="6"  >	<span  ><a   href="ActiveList.aspx?n=4630&sms=12207"      title="活動報名"   >活動報名</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="7"> <div id="Group_52807_MmbBnBRrqo" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="52807" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="7" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6087"      title="主題專區"   >主題專區</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_52808_hvgpWujhQU" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="52808" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="19"><li   data-index="1"  >	<span  ><a   href="https://foodsafety.chiayi.gov.tw/"  data-ccms_hitcount_node='6088'    title="[另開新視窗]食安在嘉"  rel="noopener noreferrer"  target="_blank"  >食安在嘉</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://antidrug.chiayi.gov.tw"  data-ccms_hitcount_node='6089'    title="[另開新視窗]毒品危害防制中心"  rel="noopener noreferrer"  target="_blank"  >毒品危害防制中心</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://diabetes.chiayi.gov.tw"  data-ccms_hitcount_node='6090'    title="[另開新視窗]糖尿病共同照護網"  rel="noopener noreferrer"  target="_blank"  >糖尿病共同照護網</a> </span></li><li   data-index="4"  >	<span  ><a   href="https://mental.chiayi.gov.tw"  data-ccms_hitcount_node='6091'    title="[另開新視窗]社區心理衛生中心"  rel="noopener noreferrer"  target="_blank"  >社區心理衛生中心</a> </span></li><li   data-index="5"  >	<span  ><a   href="https://strong.chiayi.gov.tw/"  data-ccms_hitcount_node='9661'    title="[另開新視窗]樂齡勇壯城"  rel="noopener noreferrer"  target="_blank"  >樂齡勇壯城</a> </span></li><li   data-index="6"  >	<span  ><a   href="https://foodsafety.chiayi.gov.tw/cl.aspx?n=4643"  data-ccms_hitcount_node='6559'    title="[另開新視窗]美豬美牛進口議題專區"  rel="noopener noreferrer"  target="_blank"  >美豬美牛進口議題專區</a> </span></li><li   data-index="7"  >	<span  ><a   href="https://healthmap.cichb.gov.tw"  data-ccms_hitcount_node='11346'    title="[另開新視窗]健康飲食運動地圖"  rel="noopener noreferrer"  target="_blank"  >健康飲食運動地圖</a> </span></li><li   data-index="8"  >	<span  ><a   href="https://imsr.cichb.gov.tw/"  data-ccms_hitcount_node='7101'    title="[另開新視窗]嘉義市整合性健康篩檢系統"  rel="noopener noreferrer"  target="_blank"  >嘉義市整合性健康篩檢系統</a> </span></li><li   data-index="9"  >	<span  ><a   href="https://hpmpoint.cichb.gov.tw"  data-ccms_hitcount_node='10651'    title="[另開新視窗]健康點數系統-點點成金換獎金"  rel="noopener noreferrer"  target="_blank"  >健康點數系統-點點成金換獎金</a> </span></li><li   data-index="10"  >	<span  ><a   href="cp.aspx?n=7690"      title="疫苗專區"   >疫苗專區</a> </span></li><li   data-index="11"  >	<span  ><a   href="News.aspx?n=8215&sms=13576"      title="衛生教育主軸專區"   >衛生教育主軸專區</a> </span></li><li   data-index="12"  >	<span  ><a   href="cl.aspx?n=9652"      title="登革熱專區"   >登革熱專區</a> </span></li><li   data-index="13"  >	<span  ><a   href="cl.aspx?n=9746"      title="[另開新視窗]衛生保健志工專區"  rel="noopener noreferrer"  target="_blank"  >衛生保健志工專區</a> </span></li><li   data-index="14"  >	<span  ><a   href="cl.aspx?n=11156"      title="COVID-19專區"   >COVID-19專區</a> </span></li><li   data-index="15"  >	<span  ><a   href="News.aspx?n=6736&sms=13241"      title="成人預防保健B、C型肝炎篩檢服務合約醫療院所"   >成人預防保健B、C型肝炎篩檢服務合約醫療院所</a> </span></li><li   data-index="16"  >	<span  ><a   href="cp.aspx?n=11831"      title="嘉義市執行代謝症候群防治計畫之院所查詢"   >嘉義市執行代謝症候群防治計畫之院所查詢</a> </span></li><li   data-index="17"  >	<span  ><a   href="https://health.chiayi.gov.tw/cp.aspx?n=13160"  data-ccms_hitcount_node='13161'    title="青少年檳榔健康危害防制"   >青少年檳榔健康危害防制</a> </span></li><li   data-index="18"  >	<span  ><a   href="https://health.chiayi.gov.tw/cp.aspx?n=13221"  data-ccms_hitcount_node='13222'    title="預立醫療諮商照護"   >預立醫療諮商照護</a> </span></li><li   data-index="19"  >	<span  ><a   href="cp.aspx?n=13462"      title="嘉義市防偷拍醫事機構查核專區"   >嘉義市防偷拍醫事機構查核專區</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="8"> <div id="Group_111806_CxdhAGmphh" data-Margin_right="" data-sort="" data-bgColor="" data-AddParentGroup="" data-GroupSN="111806" data-WidthDeskTop="" data-anchor="" data-tabType="3" class="group nav" data-index="8" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=11347"      title="English"   >English</a> </span></div></div></div><div class="ct"><div class="in"> <div id="Group_111807_otmNoaYQXi" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="111807" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="cl.aspx?n=11350"      title="Disease control 疾病管制"   >Disease control 疾病管制</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=11351"      title="Health promotion 健康促進"   >Health promotion 健康促進</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=11371"      title="Mental Health Promotion 心理健康促進"   >Mental Health Promotion 心理健康促進</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=11377"      title="Food and Drug Administration 食品藥物管理"   >Food and Drug Administration 食品藥物管理</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=11383"      title="Tobacco Control 菸害防制"   >Tobacco Control 菸害防制</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li></ul></div></div></div></div></div></div></div></div> <div id="base-content" class="group base-content" data-index="2" data-type="3" data-child="1"><div class="in"><div class="ct"><div class="in"> <div class="group base-page-area" data-index="1" data-type="3" data-child="1"><div class="in"><div class="ct"><div class="in"> <div class="group base-section" data-index="1" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="simple-text accesskey" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><span><a href="#Accesskey_C" id="Accesskey_C" accesskey="C" title="中間主要內容區，此區塊呈現網頁的網頁內容">:::</a></span></div></div></div></div> <div class="group page-header" data-index="1" data-type="3" data-child="2"><div class="in"><div class="ct"><div class="in"> <div class="list-text breadcrumb" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="Default.aspx"   title="首頁"   target="_self"  >首頁</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=4600"   title="科室簡介"   target="_self"  >科室簡介</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=5993"   title="國民健康科"   target="_self"  >國民健康科</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=6002"   title="衛生保健"   target="_self"  >衛生保健</a> </span></li><li   data-index="5"  >	<span  ><a   href="cp.aspx?n=12593"   title="兒童發展篩檢及聯合評估服務"   target="_self"  >兒童發展篩檢及聯合評估服務</a> </span></li></ul>
+</div></div></div></div> <div class="group default info" data-index="2" data-type="3" data-child="2"><div class="in"><div class="ct"><div class="in"> <div class="simple-text heading" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><h2><span>兒童發展篩檢及聯合評估服務</span></h2></div></div></div></div> <div class="group default msg-tool" data-index="2" data-type="3" data-child="1"><div class="in"><div class="ct"><div class="in"> <div class="simple-text accesskey" data-func="{&#39;focusContent&#39;:{}}" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><span><a href="#CCMS_Content" title="跳過此子選單列請按[Enter]，繼續則按[Tab]">_</a></span></div></div></div></div> <div class="list-text user-tool" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a   href="javascript :return false;"   title="網頁功能"   target="_self"  >網頁功能</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  class="print"  >	<span  ><a   href="javascript:CCMS_Print(434);"   title="列印內容"   target="_self"  >列印內容</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div> <div class="group page-content " id="CCMS_Content" data-func="{&#39;linkType&#39;:{&#39;domains&#39;:[&#39;https://icmp-ws.chiayi.gov.tw&#39;,&#39;https://icmp-ws.chiayi.gov.tw&#39;]}}" data-index="2" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in">
+        
+        
+    <link href="css/cp.css" rel="stylesheet" type="text/css" />
+
+
+
+    <script>
+        $(function () {
+            $('[tab-cp]').each(function () {
+                var $tabCpTarget = $('[tab-cp-target="' + $(this).attr('tab-cp') + '"]');
+                var $anchorTag = $(this).find('a');
+
+                // 根據 is-active 狀態設置 aria-selected 的值
+                var isActive = $(this).hasClass('is-active');
+                $anchorTag.attr('role', 'tab');
+                $anchorTag.attr('aria-selected', isActive);
+
+                $(this).click(function (event) {
+                    event.preventDefault();
+                    $('[tab-cp]').removeClass('is-active');
+                    $(this).addClass('is-active');
+
+                    $('[tab-cp] a').attr('aria-selected', false); // 重置所有 a 標籤的 aria-selected 狀態
+
+                    // 更新點擊後的 aria-selected 狀態
+                    var isActive = $(this).hasClass('is-active');
+                    $anchorTag.attr('aria-selected', isActive);
+
+                    $('[tab-cp-target]').hide();
+                    $tabCpTarget.show();
+                    //$tabCpTarget.find('a').eq(0).focus();//無障礙排序
+                });
+
+                $(this).keydown(function (event) {
+                    if (event.keyCode == 13) {
+                        var $cp_a = $tabCpTarget.find("a");
+                        $cp_a.each(function () {
+                            if ($(this).attr('href') != undefined) {
+                                $(this).focus();
+                                return false;
+                            }
+                        });
+                    }
+                });
+            }).eq(0).click();
+
+            if (getParameterByName('s') != '') {
+                $('[tab-cp="' + getParameterByName('s') + '"]').click();
+            }
+            $('[tab-show="false"]').each(function () {
+                $(this).hide();
+            });
+            var $Item = $(".group page-footer").find('a');
+            var $Item_first_a = $Item.eq(0).focus();
+        });
+    </script>
+ <div class="list-text classify" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="2"><li  tab-cp='4694' tab-show='true'  data-index="1"  >	<span  ><a   href="#"   title="兒童發展篩檢及聯合評估服務"   >兒童發展篩檢及聯合評估服務</a> </span></li><li  tab-cp='5077' tab-show='true'  data-index="2"  >	<span  ><a   href="#"   title="115年嘉義市寶貝「嘉」倍幸福從發展篩檢開始抽獎活動"   >115年嘉義市寶貝「嘉」倍幸福從發展篩檢開始抽獎活動</a> </span></li></ul>
+</div></div></div></div> <div tab-cp-target="4694" data-type="0" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="list-text detail" data-type="0"><div class="in"><div class="ct"><div class="in"></div></div></div></div> <div class="area-editor user-edit" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><h1 style="text-align: center;"><strong>115年嘉義市「寶貝「嘉」倍幸福從發展篩檢開始」抽獎活動</strong></h1>
+
+<h2><big>親愛的家長您好：<br />
+謝謝您一直以來對孩子健康成長的用心陪伴，這裡有一項關於孩子發展的新服務想跟您分享&mdash;&mdash;自113年7月起，衛福部國民健康署針對未滿7歲的兒童，新增了 6次免費的兒童發展篩檢。如您的孩子已符合篩檢資格，請攜帶孩子的健保卡和兒童健康手冊，到兒童發展醫療院所做篩檢，讓我們一起了解他在每個階段的發展狀況，及早發現、及早療育。</big></h2>
+
+<p><big><img alt="Art editor Img" src="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L2NrZmlsZS9hMGEwYjI4OC03ZTY5LTRmODYtOTUwNC0zZmVlNTU0YzVjYTkucG5n&amp;n=MDcxNy3lmInnvqnluILlr7bosp3lmInlgI3lubjnpo%2flvp7nmbzlsZXnr6nmqqLplovlp4vmir3njY7mtLvli5UucG5n&amp;icon=.png" style="width: 100%;" /></big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>一、主辦單位：</strong>嘉義市政府衛生局</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>二、活動期間：</strong>115年4月1日至10月31日止。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>三、上傳資料期間：</strong>自即日起至115年11月6日(星期五)止。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>四、抽獎資格：</strong>設籍嘉義市具健保身分且於活動期間完成任一次兒童發展篩檢之未滿7歲兒童 。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>五、活動辦法：</strong><br />
+請符合抽獎資格之兒童家長於活動期間內攜帶「兒童健保卡」及「兒童健康手冊」，帶兒童至兒童發展篩檢服務院所完成任1次兒童發展篩檢，並於11月6日前至嘉義市政府衛生局網站＞服務專區＞活動報名＞115年嘉義市寶貝「嘉」倍幸福從發展篩檢開始抽獎活動，填寫資料，經審核符合活動資格者，可獲得抽獎機會1次。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>六、 活動獎項:</strong>500元禮券，共292名。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>七、抽獎機制及領獎方式：</strong><br />
+(一)抽獎機制：預訂於11月進行抽獎並公布於嘉義市政府衛生局官網。<br />
+(二)領獎方式：<br />
+1、得獎名單將於抽獎日後公告於嘉義市政府衛生局官網、發送中獎簡訊通知及郵寄中獎通知單。<br />
+2、請中獎兒童之家長於接獲本局簡訊或中獎通知單後，於指定期限內攜帶家長國民身分證、中獎兒童之兒童健康手冊及設籍嘉義市之戶口名簿，至嘉義市政府衛生局3樓國民健康科領獎。家長如無法親自領獎，得委託他人代領；受委託人除應攜帶前開相關證件外，並須出示本人國民身分證。本活動恕不提供郵寄獎品服務。<br />
+3、經本局審查，如發現得獎者資格不符（包含非設籍嘉義市等情形），將取消其獲獎資格，並不得提出異議。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>八、注意事項 :</strong><br />
+(一)請參加兒童之家長需填寫正確資料，若因資料填寫錯誤導致無法通知或有其他無法核對中獎人資料及其他可歸責中獎人事由，則視同自動放棄中獎資格。<br />
+(二)參加者提供之個人資料僅供本活動使用，並依個人資料保護相關法令辦理，凡參加本活動即視為同意本活動辦法及相關規定。<br />
+(三) 得獎者經主辦單位發現或經第三人檢舉有偽造或不實者，經查證屬實，主辦單位有權利立即取消中獎資格，除追回獎品外，並對於任何破壞本活動之行為保留法律追訴權。<br />
+(四)本活動為機會中獎活動，依所得稅法規定，年度累積中獎價值超過 NT$1,000元整，將併入中獎人個人年度綜合所得稅申報；若年度累積中獎價值超過NT$20,010元整，中獎人須自行負擔10%之機會中獎所得稅（海外人士或不具中華民國身份者，不論中獎價值大小，一律自行負擔繳納20%所得稅）並配合嘉義市政府衛生局辦理扣繳相關事宜。<br />
+(五)本局保留對活動方式、辦法及獎項修改之權利。<br />
+(六)聯絡電話：05-2338066#519&nbsp;&nbsp; 鄭小姐， 請於平日9:00-12：00、13：30-17：30來電。</big></p>
+
+<p>&nbsp;</p>
+
+<h4><big><strong>九、兒童發展篩檢服務院所查詢:</strong></big></h4>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 1148px;">
+	<tbody>
+		<tr>
+			<td style="width: 44px; text-align: center;">序號</td>
+			<td style="width: 289px; text-align: center;">院所名稱</td>
+			<td style="text-align: center; width: 154px;">電話</td>
+			<td style="text-align: center; width: 634px;">門診時間</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">1</td>
+			<td style="width: 289px; text-align: center;">嘉義市西區衛生所</td>
+			<td style="width: 154px; text-align: center;">05-2337355</td>
+			<td style="width: 634px;">&nbsp; 星期一至五早上08:30&ndash;11:30門診時段</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">2</td>
+			<td style="width: 289px; text-align: center;">衛生福利部嘉義醫院<br />
+			<span style="color:#FF0000;"><strong>(非聯合評估門診)</strong></span></td>
+			<td style="width: 154px; text-align: center;">05-2319090</td>
+			<td style="width: 634px;">&nbsp; 星期二、四早上門診，需上醫院網站先預約</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">3</td>
+			<td style="width: 289px; text-align: center;">信合美診所</td>
+			<td style="width: 154px; text-align: center;">05-2867272</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早、晚門診(星期二晚上除外)<br />
+			&nbsp; 2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">4</td>
+			<td style="width: 289px; text-align: center;">欣愛診所</td>
+			<td style="width: 154px; text-align: center;">05-2285980</td>
+			<td style="width: 634px;">&nbsp; 1.星期一、二、三、五早上、下午、晚上門診<br />
+			&nbsp; 2.星期六早上、晚上門診<br />
+			&nbsp; 3.星期日早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">5</td>
+			<td style="width: 289px; text-align: center;">嘉安婦幼診所</td>
+			<td style="width: 154px; text-align: center;">05-2335515</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早、下、晚門診時段(星期二早上除外)<br />
+			&nbsp; 2.星期六早上、下午門診<br />
+			&nbsp; *詳細參考院所網頁為主</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">6</td>
+			<td style="width: 289px; text-align: center;">佛教慈濟醫療財團法人嘉義慈濟診所</td>
+			<td style="width: 154px; text-align: center;">05-2167000</td>
+			<td style="width: 634px;">&nbsp; 星期一:早上、晚上門診<br />
+			&nbsp; 星期二:早上、中午門診<br />
+			&nbsp; 星期三:早上門診<br />
+			&nbsp; 星期四:早上、晚上門診<br />
+			&nbsp; 星期五:下午、晚上門診<br />
+			&nbsp; 星期六:早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">7</td>
+			<td style="width: 289px; text-align: center;">啟仁診所</td>
+			<td style="width: 154px; text-align: center;">05-2257959</td>
+			<td style="width: 634px;">&nbsp; 請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">8</td>
+			<td style="width: 289px; text-align: center;">黃思超小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2163232</td>
+			<td style="width: 634px;">&nbsp; 1.楊醫師:星期一早上門診、星期二晚上門診、星期四晚上門診&nbsp;<br />
+			&nbsp; *楊醫師時段都需視現場人潮情況決定。<br />
+			&nbsp; 2.黃醫師:星期一晚上門診(20:30後)、星期三早上門診、星期四下午門診、星期五下午、晚上門診&nbsp;<br />
+			&nbsp; *黃醫師門診時段都可以施作。<br />
+			&nbsp; 3.星期六請先電話詢問。</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">9</td>
+			<td style="width: 289px; text-align: center;">愛兒診所</td>
+			<td style="width: 154px; text-align: center;">05-2238233</td>
+			<td style="width: 634px;">&nbsp; 星期一:下午門診<br />
+			&nbsp; 星期二:晚上門診<br />
+			&nbsp; 星期三:早上、中午門診<br />
+			&nbsp; 星期四:下午門診<br />
+			&nbsp; 星期五:晚上門診<br />
+			&nbsp; 星期六:早上門診(請先電話詢問)<br />
+			&nbsp; 星期日:每月第一、三週有(請先電話詢問)</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">10</td>
+			<td style="width: 289px; text-align: center;">
+			<div>戴德森醫療財團法人嘉義基督教醫院<br />
+			<span style="color:#FF0000;"><strong>(非聯合評估門診)</strong></span></div>
+			</td>
+			<td style="width: 154px; text-align: center;">05-2765041</td>
+			<td style="width: 634px;">&nbsp; 1.星期三下午(14:00~17:00)門診 *請先電話預約<br />
+			&nbsp; 2.星期四早上、下午門診 *可現場掛號或醫院網站線上掛號</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">11</td>
+			<td style="width: 289px; text-align: center;">天主教中華聖母修女會醫療財團法人天主教聖馬爾定醫院<br />
+			<span style="color:#FF0000;"><strong>(非聯合評估門診)</strong></span></td>
+			<td style="width: 154px; text-align: center;">05-2756000</td>
+			<td style="width: 634px;">&nbsp; 1.李欣蓉醫師星期二、四早上門診<br />
+			&nbsp; 2.張育誠醫師星期四早上及星期五下午門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">12</td>
+			<td style="width: 289px; text-align: center;">嘉義市東區衛生所</td>
+			<td style="width: 154px; text-align: center;">05-2750423</td>
+			<td style="width: 634px;">&nbsp; 星期一至五早上08:30&ndash;11:30門診時段</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">13</td>
+			<td style="width: 289px; text-align: center;">何光哲小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2766878</td>
+			<td style="width: 634px;">&nbsp; 星期二、三、四上午門診<br />
+			&nbsp; *請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">14</td>
+			<td style="width: 289px; text-align: center;">許小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2280858</td>
+			<td style="width: 634px;">&nbsp; 星期二、三、四早上門診(請先電話預約)</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">15</td>
+			<td style="width: 289px; text-align: center;">華陽診所</td>
+			<td style="width: 154px; text-align: center;">05-2754038</td>
+			<td style="width: 634px;">&nbsp; 星期二、三、四早上門診(請先電話預約)</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">16</td>
+			<td style="width: 289px; text-align: center;">大心診所</td>
+			<td style="width: 154px; text-align: center;">05-2279237</td>
+			<td style="width: 634px;">&nbsp; 星期一~六早上、下午、晚上門診(星期六晚上沒有診)<br />
+			&nbsp; *請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">17</td>
+			<td style="width: 289px; text-align: center;">立文小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2779463</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早上、下午、晚上門診<br />
+			&nbsp; 2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">18</td>
+			<td style="width: 289px; text-align: center;">聖心診所</td>
+			<td style="width: 154px; text-align: center;">05-2224800</td>
+			<td style="width: 634px;">&nbsp; 門診時間都可以<br />
+			&nbsp; *請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">19</td>
+			<td style="width: 289px; text-align: center;">賴瑪莉診所</td>
+			<td style="width: 154px; text-align: center;">05-2741234</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早上、下午門診<br />
+			&nbsp; 2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">20</td>
+			<td style="width: 289px; text-align: center;">邱晉陽診所</td>
+			<td style="width: 154px; text-align: center;">05-2751973</td>
+			<td style="width: 634px;">&nbsp; 1.星期一、二、四、五、六早上門診8:30~12:00<br />
+			&nbsp; 2.星期一~五門診時間16:00~20:00<br />
+			&nbsp; (門診時間都可以，但因施作時間較長如要施作盡量於門診結束營業前1個小時)</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">21</td>
+			<td style="width: 289px; text-align: center;">葉弘貴小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2253863</td>
+			<td style="width: 634px;">&nbsp; 1.星期一、二、四、五早上、下午、晚上門診<br />
+			&nbsp; 2.星期三早上、下午門診<br />
+			&nbsp; 3.星期六早上、下午(15:00~17:00)門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">22</td>
+			<td style="width: 289px; text-align: center;">華山診所</td>
+			<td style="width: 154px; text-align: center;">05-2248777</td>
+			<td style="width: 634px;">&nbsp; 星期三、四上午及下午門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">23</td>
+			<td style="width: 289px; text-align: center;">黃世斌小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2710271</td>
+			<td style="width: 634px;">&nbsp; 1.星期一、二、三、五早上、晚上門診<br />
+			&nbsp; 2.星期六早上門診<br />
+			&nbsp; *請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">24</td>
+			<td style="width: 289px; text-align: center;">欣升診所</td>
+			<td style="width: 154px; text-align: center;">05-2765538</td>
+			<td style="width: 634px;">&nbsp; 1.星期一、三、四、五早上、下午、晚上門診<br />
+			&nbsp; 2.星期日門診(不施作)</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">25</td>
+			<td style="width: 289px; text-align: center;">孫小兒科診所</td>
+			<td style="width: 154px; text-align: center;">05-2222829</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早上、下午門診<br />
+			&nbsp; 2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">26</td>
+			<td style="width: 289px; text-align: center;">黃崇銘診所</td>
+			<td style="width: 154px; text-align: center;">05-2777686</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早上、下午、晚上門診<br />
+			&nbsp; 2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="width: 44px; text-align: center;">27</td>
+			<td style="width: 289px; text-align: center;">建興診所</td>
+			<td style="width: 154px; text-align: center;">05-2270302</td>
+			<td style="width: 634px;">&nbsp; 1.星期一~五早上門診<br />
+			&nbsp; 2.星期六下午門診(15:00~19:00)</td>
+		</tr>
+	</tbody>
+</table>
+
+<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>
+
+<h2><img alt="Art editor Img" src="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L2NrZmlsZS8wZTQwYjE0MC0xMmM5LTQyZGItOTM3My0zZWI5MWE4ZTg0N2UuanBn&amp;n=5ZiJ576p5biC6KGb55Sf5bGALeWkp%2ba9pOeZvOWFkuerpeeZvOWxleipleS8sERNX%2bW3peS9nOWNgOWfnyAxLmpwZw%3d%3d&amp;icon=.jpg" style="width: 100%;" /><br />
+&nbsp;</h2>
+
+<hr />
+<h2 style="text-align: center;">&nbsp;</h2>
+
+<p><img alt="家長指南" src="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L2NrZmlsZS9kMTJkM2JjYS01NDg5LTQ2NTgtOTNjNS00Mzc5ZTMzZjBhOTkuanBn&amp;n=5a626ZW35oyH5Y2XLmpwZw%3d%3d&amp;icon=.jpg" style="width: 100%;" title="家長指南" /></p>
+
+<p><br />
+📌<strong>兒童發展篩檢服務項目及補助時程?</strong><br />
+1.服務項目：針對動作、語言、認知、社會行為等進行篩檢評估。<br />
+2.補助對象:具健保身分之<u>6至10個月</u>、<u>10個月至1歲6個月</u>、<u>1歲6個月至2歲</u>、<u>2至3歲</u>、<u>3至5歲</u>、<u>5至未滿7歲</u>兒童，✔️亦可配合「兒童預防保健服務<strong>」</strong>執行。</p>
+
+<p>✨以上各補助1次篩檢服務，總共6次✨。</p>
+
+<p><br />
+📌<strong>家長們要準備什麼呢?</strong></p>
+
+<p>比照兒童預防保健服務，<u>家長須攜帶兒童的「健保卡」及「兒童健康手冊」</u>，由院所提供篩檢服務。</p>
+
+<ul>
+	<li>若持用新版兒童手冊，則會直接裝訂於手冊內。比照兒童預防保健服務。</li>
+	<li>若持用舊版兒童手冊，將於首次接受兒童發展篩檢時，由提供篩檢服務的醫院、診所或衛生所，提供兒童發展篩檢就醫憑證卡(綠色紀錄卡)，將此紀錄卡貼附在兒童健康手冊。</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>📌<strong>兒童發展篩檢工具介紹?</strong><br />
+利用<strong>兒童發展篩檢量表(PeDS)</strong>進行發展篩檢評估，每個年齡層將會有不同的篩檢量表，針對動作、語言、認知、社會行為等為孩子進行篩檢評估。</p>
+
+<p>&nbsp;</p>
+
+<p>📌<strong>兒童發展篩檢評估三階段</strong><br />
+要掌握兒童發展與及早發現異常，需醫護人員及家長通力合作，完成兒童發展監測、篩檢與評估這3道關卡。<br />
+1.<strong>發展監測</strong>（monitoring）:家長們運用兒童健康手冊的家長紀錄事項，觀察且紀錄兒童發展情形。<br />
+2.<strong>發展篩檢</strong>（screening）:由專業醫師提供篩檢，如發現有疑似發展遲緩問題，則透過衛教、追蹤或轉介至兒童發展聯合評估中心醫院，進行「評估」與診斷。<br />
+★<u>篩檢結果</u>:(一)、通過、衛教、追蹤:由醫生定期衛教及追蹤案時程進行篩檢。(二)、需轉介:將孩子轉介至聯合評估服務中心，進行後續評估及療育。</p>
+
+<p>3.<strong>發展評估</strong>（evaluation）:醫師評估後將有疑似發展遲緩兒童，轉介<u><strong>兒童發展聯合評估服務中心</strong></u>。</p>
+
+<p>&nbsp;</p>
+
+<p>📌何謂<u><strong>兒童發展聯合評估</strong></u>?</p>
+
+<p>兒童發展聯合評估是由專業人員，從不同面向了解零到六歲兒童的發展情況，並運用專業工具了解兒童目前發展較不足的部份，依據各自的專業共同為孩子進行全面性的發展評估。</p>
+
+<p>&nbsp;</p>
+
+<p>📌該去哪裡做<u><strong>兒童發展聯合評估</strong></u>?(詳情與下列醫療院所電話預約諮詢)</p>
+
+<p>1.戴德森醫療財團法人嘉義基督教醫院<br />
+地址:東區忠孝路539號<br />
+預約諮詢：05-2765041 # 6707&nbsp;</p>
+
+<p><br />
+2.衛生福利部嘉義醫院<br />
+地址:西區北港路312號<br />
+預約諮詢: :05-2319090 # 2649或2539&nbsp;</p>
+
+<p><br />
+3.天主教中華聖母修女會醫療財團法人天主教聖馬爾定醫院<br />
+地址:東區大雅路二段565號<br />
+預約諮詢：05-2756000 # 3805或3830</p>
+
+<p>&nbsp;</p>
+
+<p>📌<strong>兒童發展聯合評估中心提供之服務項目</strong><br />
+1、提供疑似發展遲緩兒童認知、語言、動作、情緒等的整體評估服務。<br />
+2、整合醫療評估結果，提供完整評估報告書，為後續療育及安置參考。<br />
+3、提供早期療育醫療及社會資源相關業務諮詢。<br />
+4、兒童身心障礙鑑定及發展遲緩兒童證明開立。</p>
+
+<p>&nbsp;</p>
+
+<p>📌<strong>及早發現，及早療育</strong>&nbsp;</p>
+
+<p>0歲至6歲是孩童發展最重要的關鍵期，當發現孩子有疑似發展落後的情形，建議可帶孩子到<u>兒童發展篩檢服務院所</u>進行篩檢評估，若篩檢有發現異常，會透過衛教、追蹤或轉介至<u>兒童發展聯合評估中心</u>，進一步評估與診斷，了解孩子的發展狀況及療育需求，減少孩子日後產生發展遲緩的機會，及早發現及早療育，更能給予孩子一個完善的成長<img alt="👶" height="16" referrerpolicy="origin-when-cross-origin" src="https://static.xx.fbcdn.net/images/emoji.php/v9/tab/1/16/1f476.png" width="16" /></p>
+
+<h3><br />
+<br />
+👉以下相關連結處附有衛生福利部國民健康署發佈相關資訊，內有更多資訊(完整資訊、兒童發展篩檢懶人包、就醫地圖、黃金療育期、及國健署官方ⓘⓝⓢⓣⓐⓖⓡⓐⓜ)可進行參閱~✨</h3>
+</div></div></div></div> <div class="group page-footer" data-type="3" data-child="4"><div class="in"><div class="ct"><div class="in"> <div class="group-list file-download-multiple" data-index="1" data-type="4" data-child="3"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a    title="相關檔案"   >相關檔案</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li data-index="1"> <div class="list-text file-download-multiple" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="0409嘉義市兒童發展篩檢服務合約院所(持續更新中)"   >0409嘉義市兒童發展篩檢服務合約院所(持續更新中)</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  class="pdf"  >	<span  ><a   href="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L3JlbGZpbGUvMTIxMjEvNDY5NC9mYzlkZDBkZS01YTU1LTQ2OGItYTY5Zi0xMjM5OTcyMDVmMzQucGRm&n=MDQwOeWYiee%2bqeW4guWFkuerpeeZvOWxleevqeaqouacjeWLmeWQiOe0hOmZouaJgCjmjIHnuozmm7TmlrDkuK0pLnBkZg%3d%3d"   data-ccms_hitcount_relfile='271580' title="[另開新視窗]0409嘉義市兒童發展篩檢服務合約院所(持續更新中).pdf"  rel="noopener noreferrer"  target="_blank"  >pdf</a> </span></li></ul>
+</div></div></div></div></li><li data-index="2"> <div class="list-text file-download-multiple" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="114年度衛生福利部國民健康署補助地方推動兒童發展聯合評估中心名單 (1)"   >114年度衛生福利部國民健康署補助地方推動兒童發展聯合評估中心名單 (1)</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  class="pdf"  >	<span  ><a   href="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L3JlbGZpbGUvMTIxMjEvNDY5NC9iNzMyMWFjYi04NzBlLTRmZTAtOTQyYS00MTlkZDQ5MWE2NTAucGRm&n=MTE05bm05bqm6KGb55Sf56aP5Yip6YOo5ZyL5rCR5YGl5bq3572y6KOc5Yqp5Zyw5pa55o6o5YuV5YWS56ul55m85bGV6IGv5ZCI6KmV5Lyw5Lit5b%2bD5ZCN5ZauICgxKS5wZGY%3d"   data-ccms_hitcount_relfile='262665' title="[另開新視窗]114年度衛生福利部國民健康署補助地方推動兒童發展聯合評估中心名單 (1).pdf"  rel="noopener noreferrer"  target="_blank"  >pdf</a> </span></li></ul>
+</div></div></div></div></li><li data-index="3"> <div class="list-text file-download-multiple" data-index="3" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="嘉義市政府衛生局Podcast音檔"   >嘉義市政府衛生局Podcast音檔</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  class="mp3"  >	<span  ><a   href="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L3JlbGZpbGUvMTIxMjEvNDY5NC9lMzYzOTE4MS05NWU3LTQzNDAtYWM3Yi0yMmJmZDZmNmEzZjcubXAz&n=5ZiJ576p5biC5pS%2f5bqc6KGb55Sf5bGAUG9kY2FzdOmfs%2baqlC5tcDM%3d"   data-ccms_hitcount_relfile='262666' title="[另開新視窗]嘉義市政府衛生局Podcast音檔.mp3"  rel="noopener noreferrer"  target="_blank"  >mp3</a> </span></li></ul>
+</div></div></div></div></li></ul></div></div></div></div> <div class="list-text file-download" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="相關連結"   >相關連結</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4"><li   data-index="1"  class="link"  >	<span  ><a   href="https://www.hpa.gov.tw/Pages/List.aspx?nodeid=4816"   title="[另開新視窗]國健署「兒童發展篩檢」資訊"  rel="noopener noreferrer"  target="_blank"  >國健署「兒童發展篩檢」資訊</a> </span></li><li   data-index="2"  class="link"  >	<span  ><a   href="https://youtube.com/shorts/L2SgebptfuE?si=1Zp7s6lv_1DsLbLD"   title="[另開新視窗]兒童發展篩檢短影音：專業醫師篇"  rel="noopener noreferrer"  target="_blank"  >兒童發展篩檢短影音：專業醫師篇</a> </span></li><li   data-index="3"  class="link"  >	<span  ><a   href="https://youtu.be/BsprTt6lD_c?si=wyFSc0HlkUIDNp4V"   title="[另開新視窗]兒童發展篩檢短影音：拼貼動畫篇"  rel="noopener noreferrer"  target="_blank"  >兒童發展篩檢短影音：拼貼動畫篇</a> </span></li><li   data-index="4"  class="link"  >	<span  ><a   href="https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=870&pid=19219"   title="[另開新視窗]從兒童發展篩檢到聯合評估-家長指南懶人包"  rel="noopener noreferrer"  target="_blank"  >從兒童發展篩檢到聯合評估-家長指南懶人包</a> </span></li></ul>
+</div></div></div></div> <div class="list-pic pic-download" data-func="{&#39;gallery&#39;:{},&#39;backgroundResize&#39;:{}}" data-index="3" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="相關圖片"   >相關圖片</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li data-src="https://icmp-ws.chiayi.gov.tw/001/Upload/434/relpic/12121/4694/2b7e6259-688d-4921-884e-405401b5326f.jpg"  data-index="1"  class="is-img"  >	<span style="background-image: url('https://icmp-ws.chiayi.gov.tw/001/Upload/434/relpic/12121/4694/2b7e6259-688d-4921-884e-405401b5326f@710x470.jpg');" ><a   href="https://icmp-ws.chiayi.gov.tw/001/Upload/434/relpic/12121/4694/2b7e6259-688d-4921-884e-405401b5326f.jpg"   title="兒童發展篩檢文宣單張[開啟彈跳視窗]" role='button' rel="noopener noreferrer"  target="_blank"  ><img src="https://icmp-ws.chiayi.gov.tw/001/Upload/434/relpic/12121/4694/2b7e6259-688d-4921-884e-405401b5326f@710x470.jpg" alt="兒童發展篩檢文宣單張" title="兒童發展篩檢文宣單張" /></a> </span></li></ul>
+</div></div></div></div> <div class="list-pic pic-download" data-func="{&#39;gallery&#39;:{}}" data-index="4" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="相關影音"   >相關影音</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li  data-src="https://www.youtube.com/embed/acOMC4PahTw"  data-index="1"  class="is-img"  >	<span style="background-image: url('https://img.youtube.com/vi/acOMC4PahTw/0.jpg');" ><a   href="https://www.youtube.com/embed/acOMC4PahTw"   title="[另開新視窗]兒童發展篩檢及聯合評估_替代文字" role='button' rel="noopener noreferrer"  target="_blank"  ><img src="https://img.youtube.com/vi/acOMC4PahTw/0.jpg" alt="兒童發展篩檢及聯合評估_替代文字" title="兒童發展篩檢及聯合評估_替代文字" /></a> </span></li></ul>
+</div></div><div class="ft"><div class="in"></div></div></div></div></div></div></div></div></div></div></div></div> <div tab-cp-target="5077" data-type="0" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="list-text detail" data-type="0"><div class="in"><div class="ct"><div class="in"></div></div></div></div> <div class="area-editor user-edit" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><p><img alt="Art editor Img" src="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L2NrZmlsZS84ZmQ4OTVhZi0yNTA4LTRhMzYtYjJlZS1iZGY0ZThiNmYyNDUucG5n&amp;n=MDcxNy3lmInnvqnluILlr7bosp3lmInlgI3lubjnpo%2flvp7nmbzlsZXnr6nmqqLplovlp4vmir3njY7mtLvli5UucG5n&amp;icon=.png" style="width: 100%;" /></p>
+
+<p>&nbsp;</p>
+
+<h2><strong><big>親愛的家長您好：<br />
+謝謝您一直以來對孩子健康成長的用心陪伴，這裡有一項關於孩子發展的新服務想跟您分享&mdash;&mdash;自113年7月起，衛福部國民健康署針對未滿7歲的兒童，新增了 6次免費的兒童發展篩檢。如您的孩子已符合篩檢資格，請攜帶孩子的健保卡和兒童健康手冊，到兒童發展醫療院所做篩檢，讓我們一起了解他在每個階段的發展狀況，及早發現、及早療育。</big></strong></h2>
+
+<p>&nbsp;</p>
+
+<p><big><strong>一、主辦單位：</strong>嘉義市政府衛生局</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>二、活動期間：</strong>115年4月1日至10月31日止。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>三、上傳資料期間：</strong>自即日起至115年11月6日(星期五)止。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>四、抽獎資格：</strong>設籍嘉義市具健保身分且於活動期間完成任一次兒童發展篩檢之未滿7歲兒童 。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>五、活動辦法：</strong><br />
+請符合抽獎資格之兒童家長於活動期間內攜帶「兒童健保卡」及「兒童健康手冊」，帶兒童至兒童發展篩檢服務院所完成任1次兒童發展篩檢，並於11月6日前至嘉義市政府衛生局網站＞服務專區＞活動報名＞115年嘉義市寶貝「嘉」倍幸福從發展篩檢開始抽獎活動，填寫資料，經審核符合活動資格者，可獲得抽獎機會1次。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>六、 活動獎項:</strong>500元禮券，共292名。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>七、抽獎機制及領獎方式：</strong><br />
+(一)抽獎機制：預訂於11月進行抽獎並公布於嘉義市政府衛生局官網。<br />
+(二)領獎方式：<br />
+1、得獎名單將於抽獎日後公告於嘉義市政府衛生局官網、發送中獎簡訊通知及郵寄中獎通知單。<br />
+2、請中獎兒童之家長於接獲本局簡訊或中獎通知單後，於指定期限內攜帶家長國民身分證、中獎兒童之兒童健康手冊及設籍嘉義市之戶口名簿，至嘉義市政府衛生局3樓國民健康科領獎。家長如無法親自領獎，得委託他人代領；受委託人除應攜帶前開相關證件外，並須出示本人國民身分證。本活動恕不提供郵寄獎品服務。<br />
+3、經本局審查，如發現得獎者資格不符（包含非設籍嘉義市等情形），將取消其獲獎資格，並不得提出異議。</big></p>
+
+<p>&nbsp;</p>
+
+<p><big><strong>八、注意事項 :</strong><br />
+(一)請參加兒童之家長需填寫正確資料，若因資料填寫錯誤導致無法通知或有其他無法核對中獎人資料及其他可歸責中獎人事由，則視同自動放棄中獎資格。<br />
+(二)參加者提供之個人資料僅供本活動使用，並依個人資料保護相關法令辦理，凡參加本活動即視為同意本活動辦法及相關規定。<br />
+(三) 得獎者經主辦單位發現或經第三人檢舉有偽造或不實者，經查證屬實，主辦單位有權利立即取消中獎資格，除追回獎品外，並對於任何破壞本活動之行為保留法律追訴權。<br />
+(四)本活動為機會中獎活動，依所得稅法規定，年度累積中獎價值超過 NT$1,000元整，將併入中獎人個人年度綜合所得稅申報；若年度累積中獎價值超過NT$20,010元整，中獎人須自行負擔10%之機會中獎所得稅（海外人士或不具中華民國身份者，不論中獎價值大小，一律自行負擔繳納20%所得稅）並配合嘉義市政府衛生局辦理扣繳相關事宜。<br />
+(五)本局保留對活動方式、辦法及獎項修改之權利。<br />
+(六)聯絡電話：05-2338066#519&nbsp;&nbsp; 鄭小姐， 請於平日9:00-12：00、13：30-17：30來電。</big></p>
+
+<p>&nbsp;</p>
+
+<h4><big><strong>九、兒童發展篩檢服務院所查詢:</strong></big></h4>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 908px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; width: 37px;">序號</td>
+			<td style="width: 151px; text-align: center;">院所名稱</td>
+			<td style="width: 128px; text-align: center;">電話</td>
+			<td style="width: 567px; text-align: center;">門診時間</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">1</td>
+			<td style="width: 151px; text-align: center;">嘉義市西區衛生所</td>
+			<td style="width: 128px; text-align: center;">05-2337355</td>
+			<td style="width: 567px;">星期一至五早上08:30&ndash;11:30門診時段</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">2</td>
+			<td style="width: 151px; text-align: center;">衛生福利部嘉義醫院<br />
+			<strong>(非聯合評估門診)</strong></td>
+			<td style="width: 128px; text-align: center;">05-2319090</td>
+			<td style="width: 567px;">星期二、四早上門診，需上醫院網站先預約</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">3</td>
+			<td style="width: 151px; text-align: center;">信合美診所</td>
+			<td style="width: 128px; text-align: center;">05-2867272</td>
+			<td style="width: 567px;">1.星期一~五早、晚門診(星期二晚上除外)<br />
+			2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">4</td>
+			<td style="width: 151px; text-align: center;">欣愛診所</td>
+			<td style="width: 128px; text-align: center;">05-2285980</td>
+			<td style="width: 567px;">1.星期一、二、三、五早上、下午、晚上門診<br />
+			2.星期六早上、晚上門診<br />
+			3.星期日早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">5</td>
+			<td style="width: 151px; text-align: center;">嘉安婦幼診所</td>
+			<td style="width: 128px; text-align: center;">05-2335515</td>
+			<td style="width: 567px;">1.星期一~五早、下、晚門診時段(星期二早上除外)<br />
+			2.星期六早上、下午門診<br />
+			*詳細參考院所網頁為主</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">6</td>
+			<td style="width: 151px; text-align: center;">佛教慈濟醫療財團法人<br />
+			嘉義慈濟診所</td>
+			<td style="width: 128px; text-align: center;">05-2167000</td>
+			<td style="width: 567px;">星期一:早上、晚上門診<br />
+			星期二:早上、中午門診<br />
+			星期三:早上門診<br />
+			星期四:早上、晚上門診<br />
+			星期五:下午、晚上門診<br />
+			星期六:早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">7</td>
+			<td style="width: 151px; text-align: center;">啟仁診所</td>
+			<td style="width: 128px; text-align: center;">05-2257959</td>
+			<td style="width: 567px;">請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">8</td>
+			<td style="width: 151px; text-align: center;">黃思超小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2163232</td>
+			<td style="width: 567px;">1.楊醫師:星期一早上門診、星期二晚上門診、星期四晚上門診&nbsp;<br />
+			*楊醫師時段都需視現場人潮情況決定。<br />
+			2.黃醫師:星期一晚上門診(20:30後)、星期三早上門診、星期四下午門診、星期五下午、晚上門診&nbsp;<br />
+			*黃醫師門診時段都可以施作。<br />
+			3.星期六請先電話詢問。</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">9</td>
+			<td style="width: 151px; text-align: center;">愛兒診所</td>
+			<td style="width: 128px; text-align: center;">05-2238233</td>
+			<td style="width: 567px;">星期一:下午門診<br />
+			星期二:晚上門診<br />
+			星期三:早上、中午門診<br />
+			星期四:下午門診<br />
+			星期五:晚上門診<br />
+			星期六:早上門診(請先電話詢問)<br />
+			星期日:每月第一、三週有(請先電話詢問)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">10</td>
+			<td style="width: 151px; text-align: center;">戴德森醫療財團法人<br />
+			嘉義基督教醫院<br />
+			<strong>(非聯合評估門診)</strong></td>
+			<td style="width: 128px; text-align: center;">05-2765041</td>
+			<td style="width: 567px;">1.星期三下午(14:00~17:00)門診 *請先電話預約<br />
+			2.星期四早上、下午門診 *可現場掛號或醫院網站線上掛號</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">11</td>
+			<td style="width: 151px; text-align: center;">天主教中華聖母修女會醫療財團法人<br />
+			天主教聖馬爾定醫院<br />
+			<strong>(非聯合評估門診)</strong></td>
+			<td style="width: 128px; text-align: center;">05-2756000</td>
+			<td style="width: 567px;">1.李欣蓉醫師星期二、四早上門診<br />
+			2.張育誠醫師星期四早上及星期五下午門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">12</td>
+			<td style="width: 151px; text-align: center;">嘉義市東區衛生所</td>
+			<td style="width: 128px; text-align: center;">05-2750423</td>
+			<td style="width: 567px;">星期一至五早上08:30&ndash;11:30門診時段</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">13</td>
+			<td style="width: 151px; text-align: center;">何光哲小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2766878</td>
+			<td style="width: 567px;">星期二、三、四上午門診<br />
+			*請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">14</td>
+			<td style="width: 151px; text-align: center;">許小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2280858</td>
+			<td style="width: 567px;">星期二、三、四早上門診(請先電話預約)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">15</td>
+			<td style="width: 151px; text-align: center;">華陽診所</td>
+			<td style="width: 128px; text-align: center;">05-2754038</td>
+			<td style="width: 567px;">星期二、三、四早上門診(請先電話預約)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">16</td>
+			<td style="width: 151px; text-align: center;">大心診所</td>
+			<td style="width: 128px; text-align: center;">05-2279237</td>
+			<td style="width: 567px;">星期一~六早上、下午、晚上門診(星期六晚上沒有診)<br />
+			*請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">17</td>
+			<td style="width: 151px; text-align: center;">立文小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2779463</td>
+			<td style="width: 567px;">1.星期一~五早上、下午、晚上門診<br />
+			2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">18</td>
+			<td style="width: 151px; text-align: center;">聖心診所</td>
+			<td style="width: 128px; text-align: center;">05-2224800</td>
+			<td style="width: 567px;">門診時間都可以<br />
+			*請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">19</td>
+			<td style="width: 151px; text-align: center;">賴瑪莉診所</td>
+			<td style="width: 128px; text-align: center;">05-2741234</td>
+			<td style="width: 567px;">1.星期一~五早上、下午門診<br />
+			2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">20</td>
+			<td style="width: 151px; text-align: center;">邱晉陽診所</td>
+			<td style="width: 128px; text-align: center;">05-2751973</td>
+			<td style="width: 567px;">1.星期一、二、四、五、六早上門診8:30~12:00<br />
+			2.星期一~五門診時間16:00~20:00<br />
+			(門診時間都可以，但因施作時間較長如要施作盡量於門診結束營業前1個小時)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">21</td>
+			<td style="width: 151px; text-align: center;">葉弘貴小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2253863</td>
+			<td style="width: 567px;">1.星期一、二、四、五早上、下午、晚上門診<br />
+			2.星期三早上、下午門診<br />
+			3.星期六早上、下午(15:00~17:00)門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">22</td>
+			<td style="width: 151px; text-align: center;">華山診所</td>
+			<td style="width: 128px; text-align: center;">05-2248777</td>
+			<td style="width: 567px;">星期三、四上午及下午門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">23</td>
+			<td style="width: 151px; text-align: center;">黃世斌小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2710271</td>
+			<td style="width: 567px;">1.星期一、二、三、五早上、晚上門診<br />
+			2.星期六早上門診<br />
+			*請先電話預約</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">24</td>
+			<td style="width: 151px; text-align: center;">欣升診所</td>
+			<td style="width: 128px; text-align: center;">05-2765538</td>
+			<td style="width: 567px;">1.星期一、三、四、五早上、下午、晚上門診<br />
+			2.星期日門診(不施作)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">25</td>
+			<td style="width: 151px; text-align: center;">孫小兒科診所</td>
+			<td style="width: 128px; text-align: center;">05-2222829</td>
+			<td style="width: 567px;">1.星期一~五早上、下午門診<br />
+			2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">26</td>
+			<td style="width: 151px; text-align: center;">黃崇銘診所</td>
+			<td style="width: 128px; text-align: center;">05-2777686</td>
+			<td style="width: 567px;">1.星期一~五早上、下午、晚上門診<br />
+			2.星期六早上門診</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 37px;">27</td>
+			<td style="width: 151px; text-align: center;">建興診所</td>
+			<td style="width: 128px; text-align: center;">05-2270302</td>
+			<td style="width: 567px;">1.星期一~五早上門診<br />
+			2.星期六下午門診(15:00~19:00)</td>
+		</tr>
+	</tbody>
+</table>
+</div></div></div></div> <div class="group page-footer" data-type="3" data-child="1"><div class="in"><div class="ct"><div class="in"> <div class="group-list file-download-multiple" data-index="1" data-type="4" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a    title="相關檔案"   >相關檔案</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li data-index="1"> <div class="list-text file-download-multiple" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="0409嘉義市兒童發展篩檢服務合約院所(持續更新中)"   >0409嘉義市兒童發展篩檢服務合約院所(持續更新中)</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="1"><li   data-index="1"  class="pdf"  >	<span  ><a   href="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L3JlbGZpbGUvMTIxMjEvNTA3Ny9mYzg3ZTc0ZS03NjMxLTQ2MWItYmY3My1jMDRhNzU3NGFjNjQucGRm&n=MDQwOeWYiee%2bqeW4guWFkuerpeeZvOWxleevqeaqouacjeWLmeWQiOe0hOmZouaJgCjmjIHnuozmm7TmlrDkuK0pLnBkZg%3d%3d"   data-ccms_hitcount_relfile='276846' title="[另開新視窗]0409嘉義市兒童發展篩檢服務合約院所(持續更新中).pdf"  rel="noopener noreferrer"  target="_blank"  >pdf</a> </span></li></ul>
+</div></div></div></div></li></ul></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div> <div class="group page-footer" data-index="3" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="area-editor system-info" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"></div></div></div></div> <div class="list-text detail" data-index="2" data-type="0"><div class="in"><div class="ct"><div class="in"></div></div></div></div>
+        </div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div> <div class="group base-footer is-active" data-func="{&#39;toggleBtn&#39;:{&#39;btnOrangeText&#39;:&#39;開啟&#39;,&#39;btnActiveText&#39;:&#39;關閉&#39;,&#39;focusActive&#39;:false}}" data-index="3" data-type="3" data-child="3"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a    title="選單" role='button'  >選單</a> </span></div></div></div><div class="ct"><div class="in"> <div class="simple-text accesskey" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><span><a href="#Accesskey_Z" id="Accesskey_Z" accesskey="Z" title="下方選單連結區，此區塊列有[意見信箱]、[資訊安全政策]、[隱私權政策]等連結">:::</a></span></div></div></div></div> <div class="group-list nav" data-func="{&#39;setNavLen&#39;:{}}" data-index="1" data-type="4" data-child="8"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li data-index="1"> <div class="group nav" data-index="1" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4591"      title="認識衛生局"   >認識衛生局</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=4592"      title="衛生局簡介"   >衛生局簡介</a> </span></li><li   data-index="2"  >	<span  ><a   href="cp.aspx?n=4593"      title="大事記"   >大事記</a> </span></li><li   data-index="3"  >	<span  ><a   href="cp.aspx?n=4594"      title="地理位置"   >地理位置</a> </span></li><li   data-index="4"  >	<span  ><a   href="cp.aspx?n=4595"      title="組織規程"   >組織規程</a> </span></li><li   data-index="5"  >	<span  ><a   href="cp.aspx?n=4596"      title="組織編制架構圖"   >組織編制架構圖</a> </span></li><li   data-index="6"  >	<span  ><a   href="cp.aspx?n=4597"      title="局長介紹"   >局長介紹</a> </span></li><li   data-index="7"  >	<span  ><a   href="cp.aspx?n=4598"      title="副局長介紹"   >副局長介紹</a> </span></li><li   data-index="8"  >	<span  ><a   href="cp.aspx?n=4599"      title="局長信箱"   >局長信箱</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="2"> <div class="group nav" data-index="2" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4600"      title="科室簡介"   >科室簡介</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="12"><li   data-index="1"  >	<span  ><a   href="cl.aspx?n=5932"      title="醫政科"   >醫政科</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=5953"      title="心理健康科"   >心理健康科</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=5956"      title="食品藥物管理科"   >食品藥物管理科</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=5993"      title="國民健康科"   >國民健康科</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=5994"      title="疾病管制科"   >疾病管制科</a> </span></li><li   data-index="6"  >	<span  ><a   href="cl.aspx?n=5995"      title="檢驗科"   >檢驗科</a> </span></li><li   data-index="7"  >	<span  ><a   href="cl.aspx?n=5996"      title="企劃科"   >企劃科</a> </span></li><li   data-index="8"  >	<span  ><a   href="cl.aspx?n=5997"      title="行政科"   >行政科</a> </span></li><li   data-index="9"  >	<span  ><a   href="cl.aspx?n=5004"      title="會計室"   >會計室</a> </span></li><li   data-index="10"  >	<span  ><a   href="cl.aspx?n=5998"      title="人事室"   >人事室</a> </span></li><li   data-index="11"  >	<span  ><a   href="cl.aspx?n=5999"      title="政風室"   >政風室</a> </span></li><li   data-index="12"  >	<span  ><a   href="cp.aspx?n=4612"      title="與我們聯絡"   >與我們聯絡</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="3"> <div class="group nav" data-index="3" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6075"      title="附屬單位"   >附屬單位</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  >	<span  ><a   href="https://healtheast.chiayi.gov.tw/"  data-ccms_hitcount_node='6077'    title="[另開新視窗]東區衛生所"  rel="noopener noreferrer"  target="_blank"  >東區衛生所</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://healthwest.chiayi.gov.tw/"  data-ccms_hitcount_node='6078'    title="[另開新視窗]西區衛生所"  rel="noopener noreferrer"  target="_blank"  >西區衛生所</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://longcare.chiayi.gov.tw/"  data-ccms_hitcount_node='6079'    title="[另開新視窗]長期照顧管理中心"  rel="noopener noreferrer"  target="_blank"  >長期照顧管理中心</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="4"> <div class="group nav" data-index="4" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6076"      title="公開資訊"   >公開資訊</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="cp.aspx?n=6080"      title="衛生統計資料發布"   >衛生統計資料發布</a> </span></li><li   data-index="2"  >	<span  ><a   href=" ./Health_StatPost.aspx"  data-ccms_hitcount_node='4811'    title="[另開新視窗]預告統計資料發布時間表-110年以前"  rel="noopener noreferrer"  target="_blank"  >預告統計資料發布時間表-110年以前</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://chiayi.dgbas.gov.tw/statweb/Page/stat01_1.aspx?Mid=5002"  data-ccms_hitcount_node='11495'    title="[另開新視窗]預告統計資料發布時間表-111年以後"  rel="noopener noreferrer"  target="_blank"  >預告統計資料發布時間表-111年以後</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=6082&sms=13081"      title="性別統計專區"   >性別統計專區</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=6931"      title="視覺化專區"   >視覺化專區</a> </span></li><li   data-index="6"  >	<span  ><a   href="News.aspx?n=6083&sms=13082"      title="內部控制暨內部稽核專區"   >內部控制暨內部稽核專區</a> </span></li><li   data-index="7"  >	<span  ><a   href="News.aspx?n=6084&sms=13083"      title="年度施政績效報告"   >年度施政績效報告</a> </span></li><li   data-index="8"  >	<span  ><a   href="News.aspx?n=6085&sms=13084"      title="[另開新視窗]其他公開資訊"  rel="noopener noreferrer"  target="_blank"  >其他公開資訊</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="5"> <div class="group nav" data-index="5" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4613"      title="公告訊息"   >公告訊息</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="8"><li   data-index="1"  >	<span  ><a   href="News.aspx?n=4614&sms=12199"      title="焦點新聞"   >焦點新聞</a> </span></li><li   data-index="2"  >	<span  ><a   href="News.aspx?n=4615&sms=12200"      title="最新消息"   >最新消息</a> </span></li><li   data-index="3"  >	<span  ><a   href="News.aspx?n=4616&sms=12201"      title="徵才公告"   >徵才公告</a> </span></li><li   data-index="4"  >	<span  ><a   href="News.aspx?n=4617&sms=12202"      title="招標公告"   >招標公告</a> </span></li><li   data-index="5"  >	<span  ><a   href="News.aspx?n=9240&sms=13868"      title="公示送達公告"   >公示送達公告</a> </span></li><li   data-index="6"  >	<span  ><a   href="News.aspx?n=9333&sms=13882"      title="補助資訊專區(身分揭露公開)"   >補助資訊專區(身分揭露公開)</a> </span></li><li   data-index="7"  >	<span  ><a   href="News.aspx?n=9867&sms=13928"      title="電子公告欄"   >電子公告欄</a> </span></li><li   data-index="8"  >	<span  ><a   href="News.aspx?n=6086&sms=13085"      title="法規查詢"   >法規查詢</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="6"> <div class="group nav" data-index="6" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=4624"      title="服務專區"   >服務專區</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="6"><li   data-index="1"  >	<span  ><a   href="News.aspx?n=4625&sms=12203"      title="書表下載"   >書表下載</a> </span></li><li   data-index="2"  >	<span  ><a   href="Questionnaire.aspx?n=4626&sms=12204"      title="申辦服務"   >申辦服務</a> </span></li><li   data-index="3"  >	<span  ><a   href="News_Link.aspx?n=4627&sms=12205"      title="快速連結"   >快速連結</a> </span></li><li   data-index="4"  >	<span  ><a   href="News_Video.aspx?n=4628&sms=12206"      title="影音專區"   >影音專區</a> </span></li><li   data-index="5"  >	<span  ><a   href="https://zh-tw.facebook.com/cichb100"  data-ccms_hitcount_node='4629'    title="[另開新視窗]粉絲專頁"  rel="noopener noreferrer"  target="_blank"  >粉絲專頁</a> </span></li><li   data-index="6"  >	<span  ><a   href="ActiveList.aspx?n=4630&sms=12207"      title="活動報名"   >活動報名</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="7"> <div class="group nav" data-index="7" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=6087"      title="主題專區"   >主題專區</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="19"><li   data-index="1"  >	<span  ><a   href="https://foodsafety.chiayi.gov.tw/"  data-ccms_hitcount_node='6088'    title="[另開新視窗]食安在嘉"  rel="noopener noreferrer"  target="_blank"  >食安在嘉</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://antidrug.chiayi.gov.tw"  data-ccms_hitcount_node='6089'    title="[另開新視窗]毒品危害防制中心"  rel="noopener noreferrer"  target="_blank"  >毒品危害防制中心</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://diabetes.chiayi.gov.tw"  data-ccms_hitcount_node='6090'    title="[另開新視窗]糖尿病共同照護網"  rel="noopener noreferrer"  target="_blank"  >糖尿病共同照護網</a> </span></li><li   data-index="4"  >	<span  ><a   href="https://mental.chiayi.gov.tw"  data-ccms_hitcount_node='6091'    title="[另開新視窗]社區心理衛生中心"  rel="noopener noreferrer"  target="_blank"  >社區心理衛生中心</a> </span></li><li   data-index="5"  >	<span  ><a   href="https://strong.chiayi.gov.tw/"  data-ccms_hitcount_node='9661'    title="[另開新視窗]樂齡勇壯城"  rel="noopener noreferrer"  target="_blank"  >樂齡勇壯城</a> </span></li><li   data-index="6"  >	<span  ><a   href="https://foodsafety.chiayi.gov.tw/cl.aspx?n=4643"  data-ccms_hitcount_node='6559'    title="[另開新視窗]美豬美牛進口議題專區"  rel="noopener noreferrer"  target="_blank"  >美豬美牛進口議題專區</a> </span></li><li   data-index="7"  >	<span  ><a   href="https://healthmap.cichb.gov.tw"  data-ccms_hitcount_node='11346'    title="[另開新視窗]健康飲食運動地圖"  rel="noopener noreferrer"  target="_blank"  >健康飲食運動地圖</a> </span></li><li   data-index="8"  >	<span  ><a   href="https://imsr.cichb.gov.tw/"  data-ccms_hitcount_node='7101'    title="[另開新視窗]嘉義市整合性健康篩檢系統"  rel="noopener noreferrer"  target="_blank"  >嘉義市整合性健康篩檢系統</a> </span></li><li   data-index="9"  >	<span  ><a   href="https://hpmpoint.cichb.gov.tw"  data-ccms_hitcount_node='10651'    title="[另開新視窗]健康點數系統-點點成金換獎金"  rel="noopener noreferrer"  target="_blank"  >健康點數系統-點點成金換獎金</a> </span></li><li   data-index="10"  >	<span  ><a   href="cp.aspx?n=7690"      title="疫苗專區"   >疫苗專區</a> </span></li><li   data-index="11"  >	<span  ><a   href="News.aspx?n=8215&sms=13576"      title="衛生教育主軸專區"   >衛生教育主軸專區</a> </span></li><li   data-index="12"  >	<span  ><a   href="cl.aspx?n=9652"      title="登革熱專區"   >登革熱專區</a> </span></li><li   data-index="13"  >	<span  ><a   href="cl.aspx?n=9746"      title="[另開新視窗]衛生保健志工專區"  rel="noopener noreferrer"  target="_blank"  >衛生保健志工專區</a> </span></li><li   data-index="14"  >	<span  ><a   href="cl.aspx?n=11156"      title="COVID-19專區"   >COVID-19專區</a> </span></li><li   data-index="15"  >	<span  ><a   href="News.aspx?n=6736&sms=13241"      title="成人預防保健B、C型肝炎篩檢服務合約醫療院所"   >成人預防保健B、C型肝炎篩檢服務合約醫療院所</a> </span></li><li   data-index="16"  >	<span  ><a   href="cp.aspx?n=11831"      title="嘉義市執行代謝症候群防治計畫之院所查詢"   >嘉義市執行代謝症候群防治計畫之院所查詢</a> </span></li><li   data-index="17"  >	<span  ><a   href="https://health.chiayi.gov.tw/cp.aspx?n=13160"  data-ccms_hitcount_node='13161'    title="青少年檳榔健康危害防制"   >青少年檳榔健康危害防制</a> </span></li><li   data-index="18"  >	<span  ><a   href="https://health.chiayi.gov.tw/cp.aspx?n=13221"  data-ccms_hitcount_node='13222'    title="預立醫療諮商照護"   >預立醫療諮商照護</a> </span></li><li   data-index="19"  >	<span  ><a   href="cp.aspx?n=13462"      title="嘉義市防偷拍醫事機構查核專區"   >嘉義市防偷拍醫事機構查核專區</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="8"> <div class="group nav" data-index="8" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >	<span  ><a   href="cl.aspx?n=11347"      title="English"   >English</a> </span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li   data-index="1"  >	<span  ><a   href="cl.aspx?n=11350"      title="Disease control 疾病管制"   >Disease control 疾病管制</a> </span></li><li   data-index="2"  >	<span  ><a   href="cl.aspx?n=11351"      title="Health promotion 健康促進"   >Health promotion 健康促進</a> </span></li><li   data-index="3"  >	<span  ><a   href="cl.aspx?n=11371"      title="Mental Health Promotion 心理健康促進"   >Mental Health Promotion 心理健康促進</a> </span></li><li   data-index="4"  >	<span  ><a   href="cl.aspx?n=11377"      title="Food and Drug Administration 食品藥物管理"   >Food and Drug Administration 食品藥物管理</a> </span></li><li   data-index="5"  >	<span  ><a   href="cl.aspx?n=11383"      title="Tobacco Control 菸害防制"   >Tobacco Control 菸害防制</a> </span></li></ul>
+</div></div></div></div></div></div></div></div></li></ul></div></div></div></div> <div class="list-text link" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="下方連結"   >下方連結</a> </span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3"><li   data-index="1"  >	<span  ><a   href="https://www.chiayi.gov.tw/cp.aspx?n=990"   title="[另開新視窗]資訊安全政策[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >資訊安全政策</a> </span></li><li   data-index="2"  >	<span  ><a   href="https://www.chiayi.gov.tw/cp.aspx?n=576"   title="[另開新視窗]隱私權政策[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >隱私權政策</a> </span></li><li   data-index="3"  >	<span  ><a   href="https://www.chiayi.gov.tw/cp.aspx?n=577"   title="[另開新視窗]資料開放宣告[另開新視窗]"  rel="noopener noreferrer"  target="_blank"  >資料開放宣告</a> </span></li></ul>
+</div></div></div></div> <div class="list-pic icon" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="2"><li   data-index="1"  class="wcag"  >	<span style="background-image: url('/images/aplus.png');" ><a   href="https://accessibility.moda.gov.tw/Applications/Detail?category=20210120151216"   title="[另開新視窗]通過A等級無障礙網頁檢測" role='button' rel="noopener noreferrer"  target="_blank"  ><img src="/images/aplus.png" alt="通過A等級無障礙網頁檢測" title="無障礙網站 [另開新視窗]" /></a> </span></li><li   data-index="2"  class="qrcode"  >	<span style="background-image: url('data:image/png;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCABQAFADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iivO/FfivxVa+Oj4f8AD58PwwRaP/alxcav5qqiiVkb5kOAANp5HrzQB6JRXj8njfx5/Z2oXlnrPw41D7BaSXk0NjdTyyeWgyxChvoOcDJHNdBqHxB+w+DdC1eXUdDt76e0t9QvrK5n2SSW7RlpBbpuyZCRhAxwTkE0AegUV5HB8Vde1/xVFb+H9Ckh0uLTBqlxHqdo63dzCHw32YI5VyyldmeC2eauaJ448Yap/wAJJPPpdjZ/ZbS6n0vSri3mj1KbbgxO8JY7oznaSvVxgUAeoUV5n4S+IGvaz8NPE3iDVLG0ttU0h7pFt1hdFDRQq+HVmLZ3EgjI6dqy4/G/jz+ztPvLzWfhxp/2+0jvIYb66nik8txlSVLfUcZGQeaAPYKK878KeK/FV146Hh/xAfD80Euj/wBqW9xpHmsrqZVRfmc4II3HgenNeiUAFeP+N5LP/haerWd5qVjp/wBv8FTWcM19OIo/MedgoLH8Txk4B4r2CvF/jBq+saX4hils/Amla5Yx6eJZr++0h7nycPJuUyAgKoADYPTcT3oA4jw14as/B2neKry88Y+Fbz7V4fu7OGGx1MSSNIwBUBSBnO0jjnJHFdh4l0bw3rvws8K2d4n/ABO/7KtGhmthH5lvH5BCy3DEFktFckuw4Bx3rHj1f+1P7Pls/Ang3Q7GTT45Zr/xJpH2a2muD95YJASGUghlB5IVj2rDM+peM9Z1u4v5Y9Og0/R59H0+TQGaG0v5o2zHaoTkShwxxGuCyhcCgDv59Hm8JfDSVPD+uabfeIl0c3Fxd3d2ZZ4rDyfmFm6AOIg6qY8/KCSetc5pV/4k1Twbe+KPtcFn4ptdEks/Lu5JI5JtKWMSfa4xy7TGQ8S52Eg8ZosPC/jDWvBtt4j+wz2Gt6HEum/2ZcRTRR6hp0MYfy3iwWlaRztK5CMBjANHjSP+y/D3h6zl03xHFfazLbSX01rBt8m3mRhJpkDcFVBGVt2yBxnNAEfhLxjr2oeFfE3h/VNGtLGBvC91qK3C2rxT3rbFTz3ZmxIXBJL4+YjrWX4l8NWfjHTvCt5Z+MfCtn9l8P2lnNDfamI5FkUEsCoBxjcBzzkHitRH8VeBLe7R7LRptLl0x57W78SxStOLUj5NOL/Kvm7Uz5A+XO4iuzmbwfD4N0i8/wCET8OPrepafDc+SmnQmO18yPP2iZfvJbK/DPzge9AFfwRJZ/8AC09Js7PUrHUPsHgqGzmmsZxLH5iTqGAYfgecHBHFewV5/wCDdV8H/wDCQw6RpFhof9t/2ULq8vdEhh+zffVXjV1O77+CFI6bSea9AoAK8I+Ouu2dj4h03TpdV8R2/nxRfbraxuAltJZs8qyYXPMxxj5vlIxmvd64Pxf4fh8T6zqOlvbeGJp5dCkFq10ga/imLMqOOCVgBbqBkNnFAHCR+AbO+/s+eLxbPcaJBoker2Ok69qQfy5F5jaaHbtFsEO1ivI+YA4qn4U1zwToGsi4uLXWZoJdT8mSQRwtodtfllJltySAgUD5G+8I619D8Falo2jXOieIJ5G1Syt2vrfVy7GwNqihFsLiZ1DeRuDO8IAXbzmsTxd4L/tTw9axXnibwbod9JKlzDYWN/8AZtNmtyjbbgRlSWmJJXeOCigdqAMfxv8AEHWL7UdW0jwXqOuXFjBdzahc3qzu8ke0sriJ4mwLQAoVBHB5z0ru9an1LX/CvgCwt5Y4dUiTTtXj1HV2ZbS5mCECDzBlnnZju2dSuTmvNPEejXmkfDyPXNn9l3yXY0DfpgMFtqVmIi/nk4Bm8wj7+drADjiti4utY0v/AIQLQ7O31XXLGOLT/E0yKj3NzDj5GjiAwFhAA2qRwW+9zQBqeNbPxta6NDpeqaPd+ItUOurrata2013YJDtZfsx3fMAGz+7xjaw55rbvNZ0eHUfCWpwPpT63qUVn4c1TQ8oY7W3kO6VPIB3Iyv8AJhiQBwVzUHi7xJrHhzUbXyo/Fb2OpbNWsdyuZF1GQt5dhLyALfA+aFcvnoaz9QsNHh07QtX0y0/tTxS/iC31rWrKxjSe9tcgtPEEX50jWTA2ueGIBOTQBt/DmCHQPi54j8P28Xh+aCVLnUI7iwUNPbKZ0QWrMMBAoGTHjg45r2SvF/hldeT8U9es/s+lP/aUVxrHnImb218ydB9lmb+Bl6tHzhu9e0UAFed+NbbTbrxVCmqeJ9N8OwCyUrd2t+tpqjtvb5C7cG3Iycf31B7V6JXj/jeOz/4Wnq15eabY6h9g8FTXkMN9AJY/MSdipKn8Rxg4J5oAzNc1TXtQt7bS7fx54DbS7K4Uxtc6u5nvYUBUJdYO2QOp/eDADGsuw0qz0vxlbf8ACUX/AIcvL66iW6T7fMJNJh0ppBiO18wArMCG2L9wITWP4a8S2fjHTvFVneeDvCtn9l8P3d5DNY6YI5FkUAKQxJxjcTxzkDmrHifSrP8AtH4XavqN/pX2H+z9JtbiyuJh5nl5ZmkdGGPJxkFicZ4oAp+K/E82s6yfDfg/TrvXtL07U/7SEE8BulDRs0flRLGSv2PaVCrgfe68itDXp/FWjeKvCHibVJdNsZ2SytV0HQmliuza7zJ5bW7YOMgoVzt3BVo1rwp4q1C417xh4bGm+GtL0xLiGA6b5tm17axkyrKuwbZA6lcMCFbaPTNaGp+GJtZ8K+F7W31G7XxFepaarH4g1uchQzoQLOG4AL7958xYuf4mzmgDnzq3ir4iazrfh+31CPToNP1OfXY7jV5pYZ7FY22CPcCwjCB87cDaQea6jSZ5tE8VWNh4gl0aGeLTI9Xt9R8OMVu9ZYOAsEkj4NwZiGYoPvttOav6b4Q8VNrLapommaNDPFpn9iaquu28qrqMwYNNcrtXMqSHGJGOW+bIrkNN1KHX/i4z+K1tLKfwtb+VZWmigRrczW048uGJJCS5YlgqLtJwAMUAeh/DLX/B994y16z0jSNVt9bnluL68m1O2hSSPdIgeEMp3BQ5B2Hoc5Oa9Yrx/wCE+oWf/CZeJbO88PX2n63f3d1qsM19ZCKT7G8iBULE7vv5OBlcg85r2CgArzvxX4U8VXXjo+IPD48PzQS6P/Zdxb6v5rK6mVnb5UGCCNo5PrxXolFAHj8ngjx5/Z2oWdno3w40/wC32klnNNY2s8UnluMMAwX6HnIyBxVfX/hT4kvv7L+xr4cuPI8NRaLN/aIkfy5FzulhwnDDI2seRzxXtFFAHm/irwP4k1T4WaL4X0jVILO+tYoILyT7RJHHNGsDRumVUllJI4IwQOap698P/FWs6N4Q8PpfabbaXpCWT3VxDNKl2JolKOYW2lcbTlSQDuHOK9UooA8XsPht8R7HxlbXn/Caz3GiQagsvk3Gq3DySW6yA7XXbtLFBgjoT7V6BpXw+8N6XqN7qP8AZ0F5fXWoSah9pu4I5JIZGIbEbbQVUEZA6gk811FFAHD+FfDniTS/GWtajq8mlXljdSzvZ3O6SS9hjaRWSDcwAWEAE7BwGPFdxRRQB//Z');" ><a    title="嘉義市政府衛生局QRCode" role='button'  ><img src="data:image/png;base64,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" alt="嘉義市政府衛生局QRCode" title="嘉義市政府衛生局QRCode" /></a> </span></li></ul>
+</div></div></div></div> <div class="group default info" data-index="2" data-type="3"><div class="in"><div class="ct"><div class="in"> <div class="simple-text update-time" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="更新日期"   >更新日期</a> </span></div></div></div><div class="ct"><div class="in"><span>2026-09-13</span></div></div></div></div> <div class="simple-text visit-count" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >	<span  ><a    title="瀏覽人次"   >瀏覽人次</a> </span></div></div></div><div class="ct"><div class="in"><span id="footer_visitcount_span">..</span></div></div></div></div> <div class="area-editor address" data-func="{&#39;linkToMap&#39;:{&#39;bindClass&#39;:&#39;.map&#39;,&#39;linkClass&#39;:&#39;is-map&#39;}}" data-index="3" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><p>地址:<a href="https://goo.gl/maps/dHAdPdzbPuWPfCT97" title="嘉義市政府衛生局">(600082)嘉義市西區德明路1號</a></p>
+
+<p>電話:(05)233-8066</p>
+
+<p>Email:service@mail.cichb.gov.tw</p>
+
+<p>服務時間:星期一至星期五早上08:00至12:00，下午01:30至05:30。(上班日以行政院人事行政總處公布為主)</p>
+
+<p>簡訊號碼:0911545909 (注意事項: 此簡訊號碼僅具發送簡訊功能，不具接收簡訊、撥打電話、接聽電話等功能，請勿發送簡訊或撥打電話至此簡訊號碼)</p>
+
+<p>&copy; 2019 嘉義市政府衛生局 All Rights Reserved.</p>
+
+<p>嘉義市政府英文版市政文宣(Activities and Policies of Chiayi City Government)：<br />
+<a href="https://www.chiayi.gov.tw/en/cl.aspx?n=11126" target="_blank" title="嘉義市政府英文版市政文宣"><img alt="嘉義市政府英文版市政文宣" src="https://icmp-ws.chiayi.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDM0L2NrZmlsZS9jYzg0YTE5OC1kZjdkLTRkMTMtYWY4YS05NmEyNDE5ZDkzMzcucG5n&amp;n=5ZiJ576p5biC5pS%2f5bqc6Iux5paH54mI5biC5pS%2f5paH5a6jLnBuZw%3d%3d&amp;icon=.png" style="width: 25%;" title="嘉義市政府英文版市政文宣" /></a></p>
+</div></div></div></div></div></div></div></div> <div data-func="{&#39;anchor&#39;:{},&#39;scrollToShow&#39;:{}}" class="simple-text btn" data-index="3" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><span><a href="#for_accessibility" title="回最上面[連結]">回最上面</a></span></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B0CBEB2A" />
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+</div></form>
+   
+<script  src='https://health.chiayi.gov.tw/js/require.js'></script>
+<script>
+        requirejs.config({  
+             baseUrl:'https://health.chiayi.gov.tw/js'
+        }); 
+        requirejs(['main'], function (func) {
+            func();
+        });
+</script>
+<a href="/0XQ9S4dquwZCCyHIGND0rAdXpMjtJ80"> </a></body>
+</html>
+

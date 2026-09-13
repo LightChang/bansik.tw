@@ -358,7 +358,7 @@
         {"url": "https://www.chcg.gov.tw/DTO/social/07other/other01_con.asp?topsn=1755&data_id=14526", "out": "subsidy/changhua.html"},
         {"url": "https://welfare.nantou.gov.tw/1486/ch006_1", "out": "subsidy/nantou.html"},
         {"url": "https://www.ccf.org.tw/85/downloads/MzY0/download", "out": "subsidy/yunlin.pdf"},
-        {"url": "http://sabcc.cyhg.gov.tw/cp.aspx?n=283E5E09B7E62655", "out": "subsidy/chiayi_county.html"},
+        {"url": "https://sabcc.cyhg.gov.tw/cp.aspx?n=283E5E09B7E62655", "out": "subsidy/chiayi_county.html"},
         {"url": "https://law.chiayi.gov.tw/LawContent.aspx?id=GL000092", "out": "subsidy/chiayi_city.html"},
         {"url": "https://socmap.pthg.gov.tw/pt1w/sa100/show/10132", "out": "subsidy/pingtung.html"},
         {"url": "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=qn0c8NC!0!fVY%3d", "out": "subsidy/taitung.html"},
@@ -371,14 +371,13 @@
     },
     {
       "id": "county_booking_more",
-      "title": "縣市衛生局 聯評中心聯絡資訊頁（桃園、嘉義市）",
+      "title": "縣市衛生局 聯評中心聯絡資訊頁（嘉義市）",
       "group": "B 動態",
       "cadence": "weekly",
       "archive": true,
-      "note": "新北與臺中已各有一支（ntpc_booking、tc_health_booking）。實際讀過的新北與臺中都只有電話與分機、沒有等候天數或名額，這兩個縣市補進來是為了確認是不是全國皆然。",
+      "note": "新北與臺中已各有一支（ntpc_booking、tc_health_booking），兩者都只有電話與分機。嘉義市這頁多了門診時間，是目前唯一有時段資訊的縣市彙整頁。桃園（dph.tycg.gov.tw）本來也在這裡，但 HiNetCDN 一律回 HTTP 428，帶 User-Agent 也一樣——那是防爬機制，不繞，已移除並記在 DATA-SOURCES E 區。",
       "method": "get",
       "files": [
-        {"url": "https://dph.tycg.gov.tw/News_Content.aspx?n=4293&s=555877", "out": "dyn/ty_health.html"},
         {"url": "https://health.chiayi.gov.tw/cp.aspx?n=12593", "out": "dyn/cy_health.html"}
       ]
     },

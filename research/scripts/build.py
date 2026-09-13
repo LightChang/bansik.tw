@@ -487,6 +487,50 @@ def build_observations():
                     obs.append({'entity_key': key, 'observed_at': mtime(f),
                                 'source': 'ntpc_booking', 'field': 'booking_method',
                                 'value': method, 'note': tds[0]})
+
+    # 臺中市衛生局：10 家聯評中心的電話。同樣沒有等候天數，但分機值得存——
+    # 這頁標了哪支分機是初評、哪支是複評，比總機號碼有用得多。
+    # 這頁比新北多一欄地址，所以 match 給地址而不是只給縣市，配得比較準。
+    f = W('dyn', 'tc_health.html')
+    if os.path.exists(f):
+        s = raw(f)
+        for tr in re.findall(r'<tr[^>]*>(.*?)</tr>', s, re.S):
+            tds = [strip_tags(td) for td in re.findall(r'<td[^>]*>(.*?)</td>', tr, re.S)]
+            if len(tds) >= 3 and ('醫院' in tds[0] or '診所' in tds[0]):
+                tel = re.sub(r'\s+', ' ', tds[2]).strip()[:120]
+                # 表頭第一欄就叫「醫院名稱」，含「醫院」二字會被當成資料列，
+                # 產生一筆叫「醫院名稱」的假機構。要求電話欄真的有數字就能擋掉
+                # （表頭那欄是「電話」兩個字），比寫死標題字串穩。
+                if not tel or not re.search(r'\d', tel):
+                    continue
+                name = re.sub(r'\s+', ' ', tds[0]).strip()
+                m, _ = match(name, tds[1])
+                key = m['HOSP_ID'] if m else 'x:臺中市:' + core(name)
+                obs.append({'entity_key': key, 'observed_at': mtime(f),
+                            'source': 'tc_health', 'field': 'booking_tel',
+                            'value': tel, 'note': name})
+
+    # 嘉義市衛生局：目前唯一有「門診時間」的縣市彙整頁（新北、臺中都只有電話）。
+    # 欄位是 序號 || 院所名稱 || 電話 || 門診時間，用序號是不是數字來認資料列——
+    # 這頁的院所包含「嘉義市西區衛生所」，用「醫院／診所」認會漏掉衛生所。
+    f = W('dyn', 'cy_health.html')
+    if os.path.exists(f):
+        s = raw(f)
+        for tr in re.findall(r'<tr[^>]*>(.*?)</tr>', s, re.S):
+            tds = [strip_tags(td) for td in re.findall(r'<td[^>]*>(.*?)</td>', tr, re.S)]
+            if len(tds) < 4 or not tds[0].strip().isdigit():
+                continue
+            # 機構名裡有換行與 tab（例如「衛生福利部嘉義醫院\n\t\t\t(非聯合評估門診)」），
+            # strip_tags 只去頭尾空白，中間的要自己壓掉，不然 note 會髒、也可能影響比對
+            name = re.sub(r'\s+', ' ', tds[1]).strip()
+            m, _ = match(name, '嘉義市')
+            key = m['HOSP_ID'] if m else 'x:嘉義市:' + core(name)
+            for field, raw_val in (('booking_tel', tds[2]), ('clinic_hours', tds[3])):
+                val = re.sub(r'\s+', ' ', raw_val).strip()[:200]
+                if val:
+                    obs.append({'entity_key': key, 'observed_at': mtime(f),
+                                'source': 'cy_health', 'field': field,
+                                'value': val, 'note': name})
     return obs
 
 
