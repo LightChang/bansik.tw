@@ -371,6 +371,7 @@
     ['checkups', '這個年齡的所有檢查'],
     ['steps', '完整流程五步'],
     ['places', '全部機構'],
+    ['map', '哪一區有幾家'],
     ['subsidy', '補助怎麼申請'],
     ['materials', '看懂發展的素材'],
   ];
@@ -470,6 +471,54 @@
         : '<tr><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>');
   }
 
+  // 分布圖只畫到行政區，不畫門牌：3,073 家裡只有 1,378 家有門牌座標，其餘是區中心點，
+  // 混在一起畫會讓同一區的機構全部疊在一個點上，看起來像「這區只有一家」。
+  // 底圖也不放——artifact 的 CSP 擋掉外部圖磚請求，硬要放只會得到一片空白，
+  // 所以直接用經緯度投影成 SVG，點的大小就是家數。
+  function pageMap() {
+    const geo = DATA.district_geo || {};
+    const names = Object.keys(geo);
+    if (!names.length) return `<h1>哪一區有幾家</h1><p class="sub-lead">這個縣市還沒有行政區座標。</p>`;
+    const cnt = n => (DATA.districts[n] || {}).located || 0;
+    const lat = n => geo[n].lat, lng = n => geo[n].lng;
+    const lats = names.map(lat), lngs = names.map(lng);
+    const [la0, la1] = [Math.min(...lats), Math.max(...lats)];
+    const [ln0, ln1] = [Math.min(...lngs), Math.max(...lngs)];
+    // 經度要乘 cos(緯度) 才不會把地圖橫向拉寬（臺灣約 0.91）
+    const k = Math.cos((la0 + la1) / 2 * Math.PI / 180);
+    const W = 640, H = 480, PAD = 46;
+    const spanX = Math.max((ln1 - ln0) * k, 1e-6), spanY = Math.max(la1 - la0, 1e-6);
+    const scale = Math.min((W - PAD * 2) / spanX, (H - PAD * 2) / spanY);
+    const cx = n => PAD + ((lng(n) - ln0) * k) * scale + ((W - PAD * 2) - spanX * scale) / 2;
+    const cy = n => PAD + (la1 - lat(n)) * scale + ((H - PAD * 2) - spanY * scale) / 2;
+    const max = Math.max(...names.map(cnt), 1);
+    const r = n => 4 + Math.sqrt(cnt(n) / max) * 26;
+    const sorted = [...names].sort((a, b) => cnt(b) - cnt(a));
+    return `<h1>哪一區有幾家</h1>
+      <p class="sub-lead">圓圈畫在行政區的中心，大小是那一區的機構家數。
+        這不是機構的實際位置——點一下圓圈會跳到那一區的清單。</p>
+      <svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px;height:auto"
+           role="img" aria-label="${esc(DATA.county)}各行政區機構家數分布">
+        ${sorted.map(n => `<g class="dot-g" data-d="${esc(n)}" style="cursor:pointer">
+            <title>${esc(n)} ${cnt(n)} 家</title>
+            <circle cx="${cx(n).toFixed(1)}" cy="${cy(n).toFixed(1)}" r="${r(n).toFixed(1)}"
+                    fill="var(--seal)" fill-opacity=".26" stroke="var(--seal)" stroke-width="1"/>
+            ${cnt(n) >= max * 0.18 ? `<text x="${cx(n).toFixed(1)}" y="${(cy(n) + 4).toFixed(1)}"
+                 text-anchor="middle" font-size="11" fill="var(--ink)">${esc(n.replace(/區$/, ''))} ${cnt(n)}</text>` : ''}
+          </g>`).join('')}
+      </svg>
+      <section><h2>各區家數</h2>
+        <table class="tbl"><tr><th>行政區</th><th class="num">位於這一區</th><th>看清單</th></tr>
+        ${sorted.map(n => `<tr><td>${esc(n)}</td><td class="num">${cnt(n)}</td>
+          <td><a href="#/places" data-d="${esc(n)}" class="to-d">看這一區</a></td></tr>`).join('')}
+        </table></section>
+      <p class="geo">全市 ${DATA.entities.length} 家。行政區中心點取自鄉鎮界圖資；
+        機構自己的座標只有 ${DATA.entities.filter(e => e.geo_level === 'address').length} 家是門牌精度。</p>`;
+  }
+
+  // 從分布圖點進清單時，要把篩選條件帶過去（先設好再 route，避免閃一下全市再跳）
+  let pendingDistrict = '';
+
   function pageSubsidy() {
     const s = DATA.subsidy;
     if (!s) return `<h1>補助怎麼申請</h1><p class="sub-lead">這個縣市的規則還沒整理。</p>`;
@@ -527,7 +576,7 @@
   }
 
   const VIEWS = {
-    checkups: pageCheckups, steps: pageSteps, places: pagePlaces,
+    checkups: pageCheckups, steps: pageSteps, places: pagePlaces, map: pageMap,
     subsidy: pageSubsidy, materials: pageMaterials,
   };
 
@@ -541,7 +590,16 @@
     if (key === 'places') {
       el('fd').addEventListener('change', fillPlaces);
       el('fc').addEventListener('change', fillPlaces);
+      // 從分布圖點進來時帶著行政區，套用後就清掉，不然之後回到清單還會被黏住
+      if (pendingDistrict) { el('fd').value = pendingDistrict; pendingDistrict = ''; }
       fillPlaces();
+    }
+    if (key === 'map') {
+      const go = d => { pendingDistrict = d; location.hash = '#/places'; };
+      el('page').querySelectorAll('.dot-g').forEach(g =>
+        g.addEventListener('click', () => go(g.dataset.d)));
+      el('page').querySelectorAll('.to-d').forEach(a =>
+        a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.d); }));
     }
     window.scrollTo(0, 0);
   }
