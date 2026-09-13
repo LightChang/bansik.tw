@@ -13,3 +13,7 @@ research/prototype/taichung.html
 # research/archive/ 與 research/state.json 要進版控：
 # archive 是來源端不留歷史、只能自己存的快照；state.json 是排程的下次到期時間，
 # 遺失會讓所有來源被判定到期而全部重抓。
+
+# Python 快取
+__pycache__/
+*.pyc

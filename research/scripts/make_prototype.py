@@ -45,9 +45,31 @@ for e in ent:
 for area, counter in serves.items():
     districts.setdefault(area, {'located': 0, 'serving': {}})['serving'] = dict(counter.most_common())
 
+# 補助規則與教育素材不在 build/ 而在 scripts/ 與 build/materials.json，
+# 頁面需要它們才有內頁可放（首頁放不下的東西都在這裡）。
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def subsidy_of(county):
+    path = os.path.join(HERE, 'subsidies.json')
+    if not os.path.exists(path):
+        return None
+    for c in json.load(open(path))['counties']:
+        if c['county'] == county:
+            return c
+    return None
+
+
+def materials():
+    path = os.path.join(BUILD, 'materials.json')
+    return json.load(open(path)) if os.path.exists(path) else {}
+
+
 data = {
     'county': COUNTY,
     'generated_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+    'subsidy': subsidy_of(COUNTY),
+    'materials': materials(),
     'timeline': rows('timeline.csv'),
     'entities': [{k: e.get(k, '') for k in ENTITY_FIELDS} for e in ent],
     'districts': districts,
