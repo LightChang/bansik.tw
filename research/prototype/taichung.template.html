@@ -42,7 +42,10 @@
   .app {
     height: 100%; max-width: 1100px; margin: 0 auto;
     padding: 20px 24px 12px;
-    display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; gap: 12px;
+    /* 1fr 給機構清單那一列，不給主角卡片：主角的內容量隨月齡差很多（滿 7 歲時只有
+       一段回顧），若讓它吃掉所有剩餘空間，內容少的月齡就會出現一大片留白。
+       改成主角高度隨內容，剩下的空間給機構清單，清單本來就有上百筆、捲動才合理。 */
+    display: grid; grid-template-rows: auto auto auto minmax(0, 1fr) auto; gap: 12px;
   }
   h1, h2, .lead { font-family: var(--serif); margin: 0; }
   h1 { font-size: 19px; }
@@ -84,8 +87,8 @@
   .stop.current .lbl { color: var(--seal); font-weight: 700; }
 
   /* 3 現在該做什麼（主角） */
+  /* 高度隨內容，不再吃掉剩餘空間——內容少的月齡（滿 7 歲只剩一段回顧）才不會留下一大片空白 */
   .now {
-    min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
     border: 1px solid var(--line); border-radius: 6px; background: var(--card);
     padding: 14px 16px;
   }
@@ -102,11 +105,28 @@
   .action .name { font-weight: 500; }
   .action .warn { color: var(--alert); font-weight: 700; }
   .also { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+  /* 滿 7 歲時的六次篩檢回顧。這個狀態原本只有三行字，其餘全是留白 */
+  .recap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .recap-item {
+    flex: 1 1 128px; border: 1px solid var(--line); border-radius: 3px;
+    padding: 5px 8px; font-size: 12px; background: var(--card); color: var(--ink-soft);
+  }
+  .recap-item b { display: block; font-weight: 500; font-size: 12.5px; color: var(--ink); }
+  .handover { margin: 12px 0 0; font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .handover b { color: var(--alert); font-weight: 700; }
+  .handover .src { font-size: 11.5px; opacity: .75; }
   .also b { font-weight: 500; color: var(--ink); }
 
   /* 4 去哪裡 */
   /* align-items:start：左卡內容少，不要被 grid 拉成跟右卡等高而多佔一截空白 */
-  .go { display: grid; grid-template-columns: 1fr 1.35fr; gap: 16px; align-items: start; }
+  /* 這一列吃 1fr：min-height:0 才讓得出高度給內部捲動，stretch 讓右邊的清單撐滿該列 */
+  .go { display: grid; grid-template-columns: 1fr 1.35fr; gap: 16px; align-items: stretch; min-height: 0; }
+  .go > .card { min-height: 0; }
+  .card.call { align-self: start; }          /* 左卡內容少，不要被拉長 */
+  /* 機構清單吸收剩餘空間並在內部捲動，它本來就有上百筆 */
+  #places { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  #places::-webkit-scrollbar { width: 8px; }
+  #places::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
   .card { border: 1px solid var(--line); border-radius: 4px; padding: 8px 12px; background: var(--card); }
   .card.call { border-color: var(--seal); background: var(--seal-weak); }
   .card h2 { font-size: 14px; margin: 0 0 5px; }
@@ -316,6 +336,24 @@
   }
 
   // 主角：這個月齡的發展檢查。沒有正在進行的就指向下一次，不要留白。
+  // 滿 7 歲那一格要說的事，資料自己就講得出來：特教統計裡「發展遲緩」這個類別，
+  // 學前四個年段合計兩萬多人，國小一年級之後是 0——那不是人消失了，是這個類別只用在
+  // 學前，入學後要改判其他障別才能繼續拿到特教資源。數字從 DATA.stats 現算，不寫死。
+  function handoverNote() {
+    const dd = (DATA.stats || []).filter(s => s.metric === '特教學生數' && s.dim1_value === '發展遲緩');
+    if (!dd.length) return '';
+    const sum = pick => dd.filter(s => pick(s.dim2_value))
+      .reduce((n, s) => n + (Number(s.value) || 0), 0);
+    const pre = sum(v => v.startsWith('學前'));
+    const after = sum(v => !v.startsWith('學前'));
+    if (!pre) return '';
+    return `<p class="handover"><b>入學後「發展遲緩」這個身分會消失</b>——全國學前有
+      <span class="num">${pre.toLocaleString()}</span> 名發展遲緩學生，國小一年級以後是
+      <span class="num">${after}</span> 人。這不是人不見了，是這個類別只用在學前；
+      要繼續拿到特教資源，得在入學前的鑑定改判其他障別。
+      <span class="src">教育部特殊教育通報統計</span></p>`;
+  }
+
   function renderNow() {
     const current = SCREENS.find(inBand);
     const next = SCREENS.find(t => num(t.month_min) > age);
@@ -334,9 +372,17 @@
         <div class="lead">下一次是第 ${idx} 次</div>
         <div class="when">${esc(next.age_label)}　在那之前仍可以自己觀察與紀錄。</div>`;
     } else {
-      head = `<div class="eyebrow">已滿 7 歲</div>
-        <div class="lead">兒童發展篩檢已全部完成</div>
-        <div class="when">後續由學校特教系統接手。</div>`;
+      // 84 個月是滑桿的最大值，也正好是所有 timeline 的 month_max。判斷式是左閉右開
+      // （age >= min && age < max），所以 83 命中 5 筆、84 命中 0 筆——拉到底必然全空，
+      // 而 .now 佔 grid 的 1fr，三行字就會配上一大片留白。這一段補回實質內容：
+      // 六次篩檢的回顧讓家長回頭確認有沒有漏做，這是超齡之後唯一還能補救的事。
+      head = `<div class="eyebrow">已滿 7 歲，超過早期療育的年齡範圍</div>
+        <div class="lead">六次兒童發展篩檢到這裡結束</div>
+        <div class="when">早期療育的對象是「未滿 7 歲」，滿 7 歲後由學校的特教系統接手。
+          但<b>漏做的篩檢不會自動補</b>——下面是六次的年齡區間，可以回頭對一次。</div>
+        <div class="recap">${SCREENS.map((t, i) =>
+          `<span class="recap-item"><b>第 ${i + 1} 次</b>${esc(t.age_label)}</span>`).join('')}</div>
+        ${handoverNote()}`;
     }
 
     const action = check
