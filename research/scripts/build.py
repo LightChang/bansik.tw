@@ -161,6 +161,25 @@ JOURNEY = {
     '療育-教育單位': 5, '服務-教育單位': 5,
 }
 
+# 官方分類名是給機關看的，家長看不懂「療育-醫療單位」跟「其他經許可辦理評估之醫院」差在哪。
+# plain_cat 是頁面上要顯示的說法，cat 保留原值不動（比對與追來源都靠它）。
+PLAIN_CAT = {
+    '兒童發展篩檢院所': '做發展篩檢的診所',
+    '新生兒聽力篩檢院所': '做新生兒聽力篩檢的院所',
+    '新生兒聽力確診醫院': '聽力有問題時做確診的醫院',
+    '通報轉介中心': '不知道從哪開始，先打這裡',
+    '個案管理中心': '有人陪你走完流程的地方',
+    '聯合評估中心': '做完整發展評估的醫院',
+    '評估醫院': '也能做評估的醫院',
+    '其他經許可辦理評估之醫院': '也能做評估的醫院',
+    '療育-醫療單位': '在醫院做治療',
+    '早療機構': '早療機構（整天或半天的課）',
+    '社區療育據點': '社區裡的療育據點',
+    '療育-教育單位': '幼兒園裡的療育',
+    '服務-教育單位': '學前特教資源',
+    '其他社福單位': '其他社福單位',
+}
+
 
 def parse_sfaa():
     out = []
@@ -180,6 +199,10 @@ def parse_sfaa():
                 pb = body[body.find('panel-body'):]
                 rec['links'] = sorted({html.unescape(u) for u in re.findall(r'href="(http[^"]+)"', pb)
                                        if 'google.com/maps' not in u})
+                # 機構自己的網址：動態層（放名額日、預約方式）唯一的入口。
+                # sfaa.gov.tw 的連結是名錄站自己的說明頁，不是機構官網，排掉。
+                own = [u for u in rec['links'] if 'sfaa.gov.tw' not in u]
+                rec['url'] = own[0] if own else ''
                 for p in re.findall(r'<p>(.*?)</p>', pb, re.S):
                     t2 = strip_tags(p)
                     mm = re.match(r'(郵遞區號|地址|電話|服務內容|服務區域|服務方式|更新日期|辦理單位)[：:](.*)', t2, re.S)
@@ -256,10 +279,11 @@ def parse_hfk(ods_name, page_name, cat):
 
 # --------------------------------------------------------------- entity 兩份輸出
 RAW_COLS = ['entity_key', 'source', 'cat', 'county', 'district', 'name', '地址', '電話',
-            'hosp_id', 'tier', 'match', 'lat', 'lng', '服務區域', '服務方式', '服務內容',
+            'hosp_id', 'tier', 'match', 'lat', 'lng', 'url', '服務區域', '服務方式', '服務內容',
             '辦理單位', '更新日期', 'note']
-ENTITY_COLS = ['entity_key', 'name', 'cat', 'cats', 'journey_step', 'county', 'district',
-               'address', 'tel', 'hosp_id', 'tier', 'lat', 'lng', 'sources', 'source_updated']
+ENTITY_COLS = ['entity_key', 'name', 'plain_cat', 'cat', 'cats', 'journey_step', 'county', 'district',
+               'address', 'tel', 'url', 'hosp_id', 'tier', 'lat', 'lng', 'geo_level',
+               'sources', 'source_updated']
 
 
 def collect_raw():
@@ -318,8 +342,10 @@ def merge_entities(raws):
         out.append({
             'entity_key': key,
             'name': first['name'],
+            'plain_cat': PLAIN_CAT.get(main_cat, main_cat),
             'cat': main_cat,
             'cats': ';'.join(cats),
+            'url': pick('url'),
             'journey_step': JOURNEY.get(main_cat, ''),
             'county': pick('county'),
             'district': pick('district'),
@@ -334,6 +360,44 @@ def merge_entities(raws):
         })
     out.sort(key=lambda r: (r['cat'], r['county'], r['name']))
     return out
+
+
+# --------------------------------------------------------------- 行政區與座標
+DIST_RE = re.compile(r'^(?:臺|台|新)?[^\s]{1,3}?[縣市](.{1,4}?[區鄉鎮市])')
+
+
+def fill_geo(entities):
+    """補行政區，並給沒有座標的機構一個區級座標。
+
+    社家署名錄只給地址不給行政區，3,073 家裡有 1,695 家的 district 是空的，
+    但地址開頭一定是「縣市＋區鄉鎮市」，抽得出來（實測 1,695 家全中）。
+
+    座標則是 1,378 家有（只有就醫地圖那個來源給），其餘沒有。逐筆地理編碼走不通
+    （Nominatim 對臺灣完整地址與街道查詢一律回空），所以退一步用行政區中心點，
+    並用 geo_level 標明哪些是門牌精度、哪些只是區級，頁面上不能混為一談。
+    """
+    import districts as D
+    idx = D.load()
+    filled = geo_exact = geo_dist = 0
+    for e in entities:
+        if not e.get('district'):
+            m = DIST_RE.match(e.get('address') or '')
+            if m:
+                e['district'] = m.group(1)
+                filled += 1
+        if e.get('lat'):
+            e['geo_level'] = 'address'
+            geo_exact += 1
+            continue
+        hit = D.find(idx, e.get('county'), e.get('district') or '')
+        if hit:
+            e['lat'], e['lng'] = hit
+            e['geo_level'] = 'district'
+            geo_dist += 1
+        else:
+            e['geo_level'] = ''
+    return {'district_filled': filled, 'geo_address': geo_exact, 'geo_district': geo_dist,
+            'geo_none': len(entities) - geo_exact - geo_dist}
 
 
 # --------------------------------------------------------------- relation
@@ -727,12 +791,17 @@ def build_manifest():
 if __name__ == '__main__':
     raws = collect_raw()
     ents = merge_entities(raws)
+    geo = fill_geo(ents)
+    print(f'行政區回填 {geo["district_filled"]} 家；座標：門牌 {geo["geo_address"]}、'
+          f'區級 {geo["geo_district"]}、無 {geo["geo_none"]}')
     write_csv('entity_raw.csv', raws, RAW_COLS)
     write_csv('entity.csv', ents, ENTITY_COLS)
     print(f'entity_raw: {len(raws)} 列（每個來源說的每家機構）')
+    # 座標要分兩種講：fill_geo 之後每家都有 lat，但其中大部分只是區中心點。
+    # 印成「3073 家有座標」會讓人以為都是門牌精度。
     print(f'entity:     {len(ents)} 列（合併後每家一列），'
           f'{sum(1 for e in ents if e["hosp_id"])} 家有醫事機構代碼，'
-          f'{sum(1 for e in ents if e["lat"])} 家有座標')
+          f'{geo["geo_address"]} 家門牌座標、{geo["geo_district"]} 家只有區級座標')
     for c, n in collections.Counter(e['cat'] for e in ents).most_common():
         print(f'    {n:5} {c}')
 

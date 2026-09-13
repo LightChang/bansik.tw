@@ -27,6 +27,9 @@ WITH_BIG_PDF=1 bash research/scripts/prepare.sh
 | `build.py` | 把 `work/` 的原始檔解析成 `build/` 的資料集 |
 | `aliases.json` | 人工維護的機構對照。名稱比對處理不了更名（陽明大學→陽明交通大學、臺大新竹分院→新竹臺大分院新竹醫院），這裡補上；另記錄「刻意不合併」的案例與理由（彰基本院 vs 彰基兒童醫院是兩個機構） |
 | `make_prototype.py` | 切出單一縣市的原型資料（預設臺中市）。`serves_area` 先聚合成「每個行政區有幾家、分別什麼類型」，不然光臺中就 7,787 列關係，頁面吃不下 |
+| `districts.py` | 從鄉鎮界圖資算出 369 個行政區的中心點，輸出 `build/district.csv`。`build.py` 靠它補沒有座標的那 1,695 家（區級精度） |
+| `renames.py` | 偵測社福單位更名。社家署名錄不給任何識別碼，`entity_key` 只能用名稱組，改名就會被當成「一家消失、一家新增」。用 `(縣市, 地址, 電話)` 當指紋比對上一版，輸出候選給人確認 |
+| `subsidies.json` | 22 縣市早療補助規則（19 個已讀過官方原文、3 個官方沒把金額上網）。人工維護，不自動解析 |
 
 頁面原型本身在 [`../prototype/`](../prototype/)：`make_prototype.py` 產資料、`prototype/build_page.py` 把資料注入模板，產出可直接發布的單檔頁面。
 | `../2026-09-11-sources/scripts/` | 機構名錄與統計的抓取與解析（`fetch.sh`、`parse_sfaa.py`、`parse_hpa.py`、`match.py`、`odsread.py`） |
@@ -65,10 +68,12 @@ python scripts/sync.py --due --with-big  # 連 25MB / 102MB 兩份手冊一起�
 
 | 檔案 | 內容 | 列數 |
 |---|---|---|
-| `entity.csv` | 一家機構一列。跨來源合併，欄位衝突取 hpa > healthforkids > sfaa；含 `cats`（全部身分）、`journey_step`（旅程第幾步）、`tier`、座標 | 3,075；1,177 有醫事機構代碼、1,378 有座標 |
+| `entity.csv` | 一家機構一列。跨來源合併，欄位衝突取 hpa > healthforkids > sfaa；含 `cats`（全部身分）、`plain_cat`（家長版說法）、`journey_step`（旅程第幾步）、`tier`、`url`、座標與 `geo_level` | 3,073；1,177 有醫事機構代碼、1,378 門牌座標＋1,695 區級座標、68 有官網 |
 | `entity_raw.csv` | 某個來源說的某家機構一列。同一機構同一分類可能重複，因為來源本身就重複登錄 | 3,835 |
 | `observation.csv` `.md` | 某時間點觀察到的值：放名額日、每月名額、預約方式。`entity_key` 可直接 join `entity.csv` | 16 |
-| `relation.csv` | `in_county` 3,075／`in_district` 1,378／`serves_area` 9,959／`operated_by` 64 | 14,476 |
+| `relation.csv` | `in_county` 3,073／`in_district` 3,073／`serves_area` 9,959／`operated_by` 64 | 16,169 |
+| `district.csv` | 一個行政區一列：中心點座標 | 369 |
+| `rename_candidates.csv` | 一組疑似更名，要人工確認後才寫進 `aliases.json` | 0（第一次跑只建基準） |
 | `stats.csv` `.md` | 四種統計併成一張長表：`metric, dim1, dim1_value, dim2, dim2_value, year, value, source` | 690 |
 | `timeline.csv` `.md` | **年齡時間軸**：幾個月大該做什麼。預防保健 9 次、發展篩檢 6 次、家長紀錄 9 段、分齡量表 9 份、線上檢核表 13 層、學前安置 4 階段，統一對到月齡軸 | 50 |
 | `materials.json` `.md` | 教育素材清單：檢核表 13 個年齡層（含題數與警訊題數）、宣導 27 筆、量表 10 份、融合教育 10 份、性平 73 筆（特教 57）、CRPD 繪本 | — |
@@ -82,5 +87,6 @@ python scripts/sync.py --due --with-big  # 連 25MB / 102MB 兩份手冊一起�
 
 - **聯評中心去重後 92 家，比國健署的 89 家多 3 家**：社家署與就醫地圖有三筆是更名未同步（陽明大學→陽明交通大學、臺大新竹分院→新竹臺大分院新竹醫院、彰基→彰基兒童醫院），對不到同一個代碼。要合併得靠人工 alias 檔。
 - **社福類單位（通報轉介、個管、早療機構、社區據點、教育單位）一律不比對健保名冊**：同址常登記別的機構，比對會誤配。
-- **座標只有就醫地圖那兩類有**（聯評 88、篩檢院所 1,393），社家署名錄沒有座標。
+- **門牌座標只有就醫地圖那兩類有**（聯評 88、篩檢院所 1,393），社家署名錄沒有座標。其餘 1,695 家補的是行政區中心點，`geo_level=district`——可以畫分布，不能拿來導航。逐筆地理編碼試過走不通：Nominatim 對臺灣的完整地址與街道查詢一律回空，只有行政區層級查得到。
+- **機構官網只有 68 家有**（聯合評估中心 9/90），來自社家署名錄的連結欄位，多數機構沒填。動態層（放名額日、預約方式）要逐站解析，但沒有網址就無從抓起——這是目前 §7 第 3 項「逐一開 89 家聯評頁」卡住的地方。
 - 動態層（放名額日、預約方式）還沒有解析器，因為只有少數醫院公布，且每家模板不同——詳見 `../2026-09-11-sources/README.md` §4。

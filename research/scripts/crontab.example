@@ -9,7 +9,11 @@ PY=/Users/lightman/miniforge3/bin/python
 30 7 * * * cd $REPO && $PY research/scripts/sync.py --due >> research/work/sync.log 2>&1
 
 # 每天 08:00 重新解析成資料集（原始檔沒變時輸出也不會變，成本很低）
-0 8 * * * cd $REPO && $PY research/scripts/build.py research/work research/build >> research/work/build.log 2>&1
+# 順序不能換：districts.py 先產出行政區中心點，build.py 才補得了沒有座標的那 1,695 家；
+# renames.py 要拿 build 出來的新版去跟上一版快照比，所以排最後。
+0 8 * * * cd $REPO && $PY research/scripts/districts.py research/work research/build >> research/work/build.log 2>&1
+5 8 * * * cd $REPO && $PY research/scripts/build.py research/work research/build >> research/work/build.log 2>&1
+20 8 * * * cd $REPO && $PY research/scripts/renames.py research/build research/entity_prev.csv >> research/work/build.log 2>&1
 
 # 每月 1 號把兩個大型素材 PDF 也檢查一次（平常跳過，各 25MB / 102MB）
 0 9 1 * * cd $REPO && $PY research/scripts/sync.py --due --with-big >> research/work/sync.log 2>&1

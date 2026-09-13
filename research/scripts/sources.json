@@ -335,6 +335,62 @@
       "archive": true,
       "method": "get",
       "files": [{"url": "https://www.gender.edu.tw/web/upload/SpecialResource/%E6%80%A7%E6%95%99%E8%82%B2%E6%95%99%E6%9D%90%E6%89%8B%E5%86%8A.pdf", "out": "sexedu_manual.pdf", "big": true}]
+    },
+    {
+      "id": "subsidy_rules",
+      "title": "22 縣市 早療費用補助規則（金額與申請期限）",
+      "group": "B 動態",
+      "cadence": "quarterly",
+      "archive": true,
+      "note": "金額年度調整、申請期限按季，所以是季更。入口是社家署法規彙整頁 system.sfaa.gov.tw/cecm/lawView/lawCnt，22 縣市的官方連結都在那一頁，換連結時回去對。解析結果人工維護在 subsidies.json，不自動解析——各縣市格式差太多，而且金額改動要有人看過才算數。臺東與金門的憑證驗證過不了、嘉義縣是 http，抓取時要留意。苗栗、澎湖、連江三個頁面目前查不到金額（見 subsidies.json 的 note），留在清單裡是為了盯它們何時上網。",
+      "method": "get",
+      "files": [
+        {"url": "https://dosw.gov.taipei/cp.aspx?n=8F97E5D532EE9C35", "out": "subsidy/taipei.html"},
+        {"url": "https://www.sw.ntpc.gov.tw/home.jsp?id=af6b347895e3de2c&act=be4f48068b2b0031&dataserno=490876a2ea5230f5ed8daaf4598cc80c", "out": "subsidy/new_taipei.html"},
+        {"url": "https://dowcd.tycg.gov.tw/News_Content.aspx?n=16390&s=1595024", "out": "subsidy/taoyuan.html"},
+        {"url": "https://www.society.taichung.gov.tw/461274/post", "out": "subsidy/taichung.html"},
+        {"url": "https://sab.tainan.gov.tw/News_Content.aspx?n=21235&s=4780982", "out": "subsidy/tainan.html"},
+        {"url": "https://outlaw.kcg.gov.tw/LawContent.aspx?id=GL000039", "out": "subsidy/kaohsiung.html"},
+        {"url": "https://www.lotong.gov.tw/News_Content.aspx?n=17708&sms=16260&s=387627", "out": "subsidy/yilan.html"},
+        {"url": "https://society.hccg.gov.tw/ch/home.jsp?id=101&parentpath=0,3,21&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201801240001&t=SocietyOnes&mserno=201603090015", "out": "subsidy/hsinchu_city.html"},
+        {"url": "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3726", "out": "subsidy/hsinchu_county.html"},
+        {"url": "https://www.miaoli.gov.tw/social_affairs/News.aspx?n=682&sms=9468", "out": "subsidy/miaoli.html"},
+        {"url": "https://www.chcg.gov.tw/DTO/social/07other/other01_con.asp?topsn=1755&data_id=14526", "out": "subsidy/changhua.html"},
+        {"url": "https://welfare.nantou.gov.tw/1486/ch006_1", "out": "subsidy/nantou.html"},
+        {"url": "https://www.ccf.org.tw/85/downloads/MzY0/download", "out": "subsidy/yunlin.pdf"},
+        {"url": "http://sabcc.cyhg.gov.tw/cp.aspx?n=283E5E09B7E62655", "out": "subsidy/chiayi_county.html"},
+        {"url": "https://law.chiayi.gov.tw/LawContent.aspx?id=GL000092", "out": "subsidy/chiayi_city.html"},
+        {"url": "https://socmap.pthg.gov.tw/pt1w/sa100/show/10132", "out": "subsidy/pingtung.html"},
+        {"url": "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=qn0c8NC!0!fVY%3d", "out": "subsidy/taitung.html"},
+        {"url": "https://sa.hl.gov.tw/Detail_sp/d0564bb2d83141688962ae789a8a96da", "out": "subsidy/hualien.html"},
+        {"url": "https://event.penghu.gov.tw/cydc/home.jsp?id=6&act=view&dataserno=202605190001&mserno=201311190009", "out": "subsidy/penghu.html"},
+        {"url": "https://www.klzz.klcg.gov.tw/tw/klzz/962-258669.html", "out": "subsidy/keelung.html"},
+        {"url": "https://social.kinmen.gov.tw/Content_List.aspx?n=4DD12514C88A3DA9", "out": "subsidy/kinmen.html"},
+        {"url": "https://www.matsu.gov.tw/Chhtml/news/371030000A0001/5975/", "out": "subsidy/lienchiang.html"}
+      ]
+    },
+    {
+      "id": "county_booking_more",
+      "title": "縣市衛生局 聯評中心聯絡資訊頁（桃園、嘉義市）",
+      "group": "B 動態",
+      "cadence": "weekly",
+      "archive": true,
+      "note": "新北與臺中已各有一支（ntpc_booking、tc_health_booking）。實際讀過的新北與臺中都只有電話與分機、沒有等候天數或名額，這兩個縣市補進來是為了確認是不是全國皆然。",
+      "method": "get",
+      "files": [
+        {"url": "https://dph.tycg.gov.tw/News_Content.aspx?n=4293&s=555877", "out": "dyn/ty_health.html"},
+        {"url": "https://health.chiayi.gov.tw/cp.aspx?n=12593", "out": "dyn/cy_health.html"}
+      ]
+    },
+    {
+      "id": "tw_town_geo",
+      "title": "g0v/twgeojson 鄉鎮界圖資（算行政區中心點用）",
+      "group": "A 名錄",
+      "cadence": "on_change",
+      "archive": false,
+      "note": "已停更的靜態檔，但 20MB，所以標 big：平常跳過、帶 --with-big 才檢查。內容是縣市改制前的版本（桃園縣、員林鎮），districts.py 會做名稱正規化。",
+      "method": "get",
+      "files": [{"url": "https://raw.githubusercontent.com/g0v/twgeojson/master/json/twTown1982.geo.json", "out": "geo/twTown.geo.json", "big": true}]
     }
   ]
 }

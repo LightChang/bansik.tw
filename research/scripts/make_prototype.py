@@ -18,8 +18,8 @@ COUNTY = sys.argv[1] if len(sys.argv) > 1 else '臺中市'
 BUILD = sys.argv[2] if len(sys.argv) > 2 else 'build'
 OUT = sys.argv[3] if len(sys.argv) > 3 else os.path.join(BUILD, 'prototype_taichung.json')
 
-ENTITY_FIELDS = ['entity_key', 'name', 'cat', 'cats', 'journey_step', 'district',
-                 'address', 'tel', 'tier', 'lat', 'lng', 'sources']
+ENTITY_FIELDS = ['entity_key', 'name', 'plain_cat', 'cat', 'cats', 'journey_step', 'district',
+                 'address', 'tel', 'url', 'tier', 'lat', 'lng', 'geo_level', 'sources']
 
 
 def rows(name):

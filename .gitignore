@@ -7,6 +7,9 @@ research/build/
 # 進版控的是 prototype/taichung.template.html 與 build_page.py
 research/prototype/taichung.html
 
+# research/entity_prev.csv 也要進版控：社福單位沒有任何穩定 ID（來源端就沒給），
+# 更名只能靠「上一版長什麼樣」比對出來。這份快照弄丟，就得再等一次更名才發現得了。
+#
 # research/archive/ 與 research/state.json 要進版控：
 # archive 是來源端不留歷史、只能自己存的快照；state.json 是排程的下次到期時間，
 # 遺失會讓所有來源被判定到期而全部重抓。
