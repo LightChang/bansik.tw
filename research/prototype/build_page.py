@@ -22,7 +22,10 @@ blob = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('</',
 
 if '__DATA__' not in tpl:
     sys.exit('模板裡找不到 __DATA__ 佔位符')
-html = tpl.replace('__DATA__', blob)
+# 縣市名在 <title> 與 <h1> 裡，這兩處是靜態 HTML（artifact 的標題是發布時從檔案
+# 掃出來的，改不了就會 22 個縣市共用同一個標題），所以在這裡換掉而不是交給 JS。
+# 頁面內文的縣市名一律用 DATA.county，不要再寫死。
+html = tpl.replace('__COUNTY__', data['county']).replace('__DATA__', blob)
 open(OUT, 'w', encoding='utf-8').write(html)
 
 print(f'{OUT}  {os.path.getsize(OUT) // 1024} KB')

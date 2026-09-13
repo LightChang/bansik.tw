@@ -1,4 +1,4 @@
-<title>臺中兒童發展地圖</title>
+<title>__COUNTY__兒童發展地圖</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap">
 <style>
   /* 首頁是一條問題鏈：孩子幾個月大 → 到哪一站 → 現在該做什麼 → 去哪裡。
@@ -202,12 +202,11 @@
     .row { flex-wrap: wrap; }
     .row .tel { white-space: normal; }
 
-    /* 手機第一屏只留：月齡、現在該做什麼、求助電話、一家評估中心。
-       時間軸的資訊主角已經寫了（第幾次、哪個年齡區間），重複佔 125px 不值得。 */
-    .track { display: none; }
-    .also { display: none; }
-    /* 整組隱藏，機構與它的名額不會被拆散 */
-    #places .item:nth-of-type(n+2) { display: none; }
+    /* 曾經為了省空間把時間軸與「同一時期還有」整個藏掉，只留一家評估中心。
+       實測 390×844 的內容只到 557px、底下空了 287px——省下來的空間根本沒人用，
+       藏掉反而讓手機看到的比桌機少。現在放回來，手機本來就可以捲。
+       （若要再藏，記得機構與它的名額必須整組 .item 一起藏，不然會變成
+       「列的是甲醫院、名額寫乙醫院」。） */
     .brand { display: flex; align-items: baseline; gap: 8px; }
     .brand h1 { font-size: 17px; }
     .brand span { margin: 0; }
@@ -232,7 +231,7 @@
 
 <div class="app">
   <div class="bar">
-    <div class="brand"><h1>臺中兒童發展地圖</h1><span>原型</span></div>
+    <div class="brand"><h1>__COUNTY__兒童發展地圖</h1><span>原型</span></div>
     <div class="field">
       <label for="birth">出生年月</label>
       <input type="date" id="birth">
@@ -326,7 +325,7 @@
     if (!first) return;
     el('call').innerHTML = `<h2>不知道從哪開始，先打這支</h2>
       <div class="row"><span>${esc(first.name)}</span><span class="tel">${esc(first.tel)}</span></div>
-      <p class="hint">通報轉介中心是單一窗口，臺中市共 ${centers.length} 區，打這支會幫你轉。</p>`;
+      <p class="hint">通報轉介中心是單一窗口，${esc(DATA.county)}共 ${centers.length} 區，打這支會幫你轉。</p>`;
   }
 
   function renderPlaces() {
@@ -347,7 +346,7 @@
         .map(o => o.value).sort();
       return dates.length ? `<p class="quota">下次開放名額 ${esc(dates[0])}（醫院公告，以院方為準）</p>` : '';
     };
-    el('places').innerHTML = `<h2>做評估的地方<span class="sub">臺中市 ${all.length} 家，重點中心優先</span></h2>
+    el('places').innerHTML = `<h2>做評估的地方<span class="sub">${esc(DATA.county)} ${all.length} 家，重點中心優先</span></h2>
       ${top.map(e => `<div class="item"><div class="row">
         <span>${e.tier ? `<span class="pill ${e.tier === '重點' ? 'key' : ''}">${esc(e.tier)}</span>` : ''}${esc(e.name)}</span>
         <span class="tel">${esc(e.tel)}</span></div>${quotaOf(e.entity_key)}</div>`).join('')}`;

@@ -14,7 +14,14 @@ cd research
 
 `taichung.html` 是產生物（約 300KB，資料直接內嵌），不進版控；進版控的是 `taichung.template.html` 與 `build_page.py`。
 
-要更新已經發布的頁面，就用同一個檔案路徑重新發布，網址不變。換縣市只要改 `make_prototype.py` 的第一個參數，模板不必動——但頁面文案目前寫死臺中，換縣市要一併改。
+要更新已經發布的頁面，就用同一個檔案路徑重新發布，網址不變。
+
+換縣市只要改 `make_prototype.py` 的第一個參數，模板不必動：頁面內文的縣市名一律取自 `DATA.county`，而 `<title>` 與 `<h1>` 這兩處靜態 HTML 由 `build_page.py` 替換 `__COUNTY__`（artifact 的標題是發布時從檔案掃出來的，交給 JS 改會變成 22 個縣市共用同一個標題）。實測產高雄市：標題「高雄市兒童發展地圖」、298 家機構、39 個行政區。
+
+```bash
+/Users/lightman/miniforge3/bin/python scripts/make_prototype.py 高雄市 build /tmp/proto_ks.json
+/Users/lightman/miniforge3/bin/python prototype/build_page.py prototype/taichung.template.html /tmp/proto_ks.json /tmp/kaohsiung.html
+```
 
 ## 首頁的規劃
 
@@ -86,4 +93,5 @@ cd research
 - **`serves_area` 沒有拿來當篩選條件**：臺中的療育單位普遍把 29 個行政區全部列為服務區域，每區聚合出來的數字幾乎一樣，對家長沒有鑑別度。頁面只用「實際位於該區」。
 - **座標分兩種精度**：門牌座標只有就醫地圖那批有，其餘是行政區中心點（`geo_level=district`）。做地圖時兩者不能混畫——區級座標會讓同一區的機構全部疊在一個點上，看起來像「這區只有一家」。
 - **分類名稱已有家長版**：`plain_cat` 欄位（「療育-醫療單位」→「在醫院做治療」），頁面上顯示這個。但頁面其他文案仍沿用官方用語（綜合報告書、通報轉介），還沒逐句改寫。
-- **頁面文案寫死臺中**：換縣市只要改 `make_prototype.py` 的參數，但標題與「臺中市 N 家」這類句子要一併改，模板還沒參數化。
+- **只有臺中發布成線上版**：模板已經參數化，其餘 21 縣市隨時可以產，但還沒決定要不要一個縣市一個網址。
+- **手機曾經看到的比桌機少**：為了省空間把時間軸與「同一時期還有」整個藏掉，實測才發現 390×844 的內容只到 557px、底下空了 287px——省下來的空間根本沒人用。放回來之後留白剩 67px，仍然不溢出。**先量再砍**，不要憑感覺省空間。
