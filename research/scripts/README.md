@@ -54,7 +54,7 @@ python scripts/sync.py --due --with-big  # 連 25MB / 102MB 兩份手冊一起�
 |---|---|
 | `sources.json` | 機器可讀的來源清單：URL、取得方式（get／post／api_paged）、`cadence`、是否 `archive`、是否 `big` |
 | `sync.py` | 排程抓取：算到期、抓、比對 sha256、內容變了就存快照、更新 `work/state.json` |
-| `crontab.example` | cron 範例，每天跑一次 `--due` 即可，不必為每種頻率各排一條 |
+| `crontab.example` | cron 範例，每天跑一次 `--due` 即可，不必為每種頻率各排一條。**給 server 用的，開發機不要掛**——本機只把腳本準備好，要手動更新就直接跑 `sync.py` |
 
 `prepare.sh` 與 `sync.py` **不共用狀態**：`prepare.sh` 是整批重抓、不寫 `state.json`，所以第一次改用 `sync.py` 時全部來源都會被判定到期而抓一輪，之後才會依頻率分流。要跳過這一輪就先跑 `sync.py --all` 建立基準。
 

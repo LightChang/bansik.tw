@@ -1,9 +1,11 @@
-# 定時更新範例。安裝：crontab -e，把下面幾行貼進去（路徑請改成實際位置）。
-# sync.py 自己會判斷哪些來源到期，所以這裡固定每天跑一次就好，
+# 定時更新範例。**這份是給 server 用的，開發機不要掛**——本機只負責把腳本準備好，
+# 等專案移到 server 再 crontab -e 貼進去，並把下面兩個路徑改成 server 上的實際位置。
+#
+# sync.py 自己會判斷哪些來源到期，所以固定每天跑一次就好，
 # 不需要為 daily / weekly / yearly 各排一條。
 
-REPO=/Users/lightman/weiqi.kids/bansik.tw
-PY=/Users/lightman/miniforge3/bin/python
+REPO=/Users/lightman/weiqi.kids/bansik.tw          # server 上要改
+PY=/Users/lightman/miniforge3/bin/python           # server 上要改
 
 # 每天 07:30 抓到期的來源（含中山醫的放名額公告，那是唯一需要每日盯的）
 30 7 * * * cd $REPO && $PY research/scripts/sync.py --due >> research/work/sync.log 2>&1
