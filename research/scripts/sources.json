@@ -370,6 +370,16 @@
       ]
     },
     {
+      "id": "hpa_center_contacts",
+      "title": "國健署 兒童發展聯合評估中心聯絡資訊（全國一頁，含分機）",
+      "group": "B 動態",
+      "cadence": "yearly",
+      "archive": true,
+      "note": "一頁 PDF 就涵蓋 22 縣市共 51 家的醫院名稱與聯絡電話（多數含分機），比逐縣市翻衛生局頁有效得多——衛生局那條路查了 5 個縣市才拿到 3 個可解析的頁面。仍然沒有等候天數。注意這份標的是 107 年補助的中心，家數少於 A2 的 115 年名單（89 家），兩者是不同用途：A2 是官方名單與重點／一般分級，這份是聯絡方式。",
+      "method": "get",
+      "files": [{"url": "https://mammy.hpa.gov.tw/upload_files/files/%E5%85%92%E7%AB%A5%E7%99%BC%E5%B1%95%E8%81%AF%E5%90%88%E8%A9%95%E4%BC%B0%E4%B8%AD%E5%BF%83%E8%81%AF%E7%B5%A1%E8%B3%87%E8%A8%8A.pdf", "out": "dyn/hpa_centers.pdf"}]
+    },
+    {
       "id": "county_booking_more",
       "title": "縣市衛生局 聯評中心聯絡資訊頁（嘉義市）",
       "group": "B 動態",

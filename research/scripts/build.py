@@ -108,7 +108,24 @@ def load_nhi():
     return active, by_core
 
 
+def load_alias():
+    """人工維護的更名對照（aliases.json）：名稱比對處理不了改制與院區重組。
+
+    以前這份只在 collect_raw 裡套用，所以動態層（各縣市衛生局頁）享受不到——
+    國健署全國聯絡資訊那 51 家裡，配不到代碼的 3 家有 2 家其實這裡早就記過了。
+    改成在 matcher 裡套，所有呼叫 match() 的地方一次受惠。
+    """
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'aliases.json')
+    if not os.path.exists(path):
+        return {}
+    return {(a['county'], core(a['name'])): a['hosp_id']
+            for a in json.load(open(path)).get('hosp_id_alias', [])}
+
+
 def make_matcher(active, by_core):
+    alias = load_alias()
+    by_id = {r['HOSP_ID']: r for r in active}
+
     def match(name, addr):
         c = core(name)
         if c in by_core and len(by_core[c]) == 1:
@@ -130,6 +147,11 @@ def make_matcher(active, by_core):
                and len(core(r['HOSP_NAME'])) >= 4]
         if len(sub) == 1:
             return sub[0], 'substr'
+        # 更名對照放最後：前面的規則都配不到才查，才不會蓋掉正常比對。
+        # county 取地址前三字（「宜蘭縣」「新竹市」都是三字）；addr 有時只給縣市，兩種都吃。
+        hit = alias.get((cty, c))
+        if hit and hit in by_id:
+            return by_id[hit], 'alias'
         return None, 'none'
     return match
 
@@ -440,7 +462,7 @@ def build_relations(raws, entities):
 
 
 # --------------------------------------------------------------- observation
-def build_observations():
+def build_observations(entities=None):
     """動態層：在某個時間點觀察到的值。
 
     目前只有少數中心公布這類資訊（13 家抽查中 1 家有放名額日），
@@ -451,6 +473,24 @@ def build_observations():
     """
     active, by_core = load_nhi()
     match = make_matcher(active, by_core)
+
+    # 比對優先用已經建好的 entity：它合併過多來源、套過 alias、有完整地址。
+    # 動態頁通常只給「機構名＋縣市」沒有門牌，而直接跟健保名冊比在兩種情況會失敗——
+    # 同名跨縣市的診所（「大心診所」全臺 5 家，name 規則要求唯一才算數），
+    # 以及非醫院層級（substr 規則限定 HOSP_CNT_TYPE in '123'）。
+    # 嘉義市有 4 家診所就是這樣配不到，明明 entity.csv 裡就有同名的那一家。
+    by_name = {}
+    for e in (entities or []):
+        by_name.setdefault((e.get('county'), core(e['name'])), e['entity_key'])
+
+    def key_for(name, county, addr=''):
+        """回傳 entity_key：先查 entity，再退回健保名冊，都沒有才用縣市＋名稱組。"""
+        hit = by_name.get((county, core(name)))
+        if hit:
+            return hit
+        m, _ = match(name, addr or county)
+        return m['HOSP_ID'] if m else 'x:' + (county or '') + ':' + core(name)
+
     obs = []
 
     def mtime(path):
@@ -482,8 +522,7 @@ def build_observations():
             if len(tds) >= 3 and ('醫院' in tds[0] or '診所' in tds[0]):
                 method = re.sub(r'\s+', ' ', tds[2])[:200]
                 if method:
-                    m, _ = match(tds[0], '新北市')
-                    key = m['HOSP_ID'] if m else 'x:新北市:' + core(tds[0])
+                    key = key_for(tds[0], '新北市')
                     obs.append({'entity_key': key, 'observed_at': mtime(f),
                                 'source': 'ntpc_booking', 'field': 'booking_method',
                                 'value': method, 'note': tds[0]})
@@ -504,11 +543,38 @@ def build_observations():
                 if not tel or not re.search(r'\d', tel):
                     continue
                 name = re.sub(r'\s+', ' ', tds[0]).strip()
-                m, _ = match(name, tds[1])
-                key = m['HOSP_ID'] if m else 'x:臺中市:' + core(name)
+                key = key_for(name, '臺中市', tds[1])
                 obs.append({'entity_key': key, 'observed_at': mtime(f),
                             'source': 'tc_health', 'field': 'booking_tel',
                             'value': tel, 'note': name})
+
+    # 國健署全國聯絡資訊：一頁 PDF 涵蓋 22 縣市共 51 家的電話（多數含分機）。
+    # 這份比逐縣市翻衛生局頁有效得多——衛生局那條路查了 5 個縣市才拿到 3 個可解析的頁面。
+    # 版面是左右兩欄併排的表格，所以一列裡有兩組「縣市／醫院／電話」，要每 3 欄切一次；
+    # 縣市欄只在該縣市第一列出現，其餘是空字串，要沿用上一個值。
+    f = W('dyn', 'hpa_centers.pdf')
+    if os.path.exists(f):
+        import pdfplumber
+        county = None
+        for page in pdfplumber.open(f).pages:
+            for t in page.extract_tables():
+                for r in t:
+                    cells = [(c or '').replace('\n', '') for c in r]
+                    if not cells or cells[0].strip() == '縣市':
+                        continue
+                    for i in range(0, len(cells), 3):
+                        chunk = cells[i:i + 3]
+                        if len(chunk) < 3:
+                            continue
+                        c, name, tel = [x.strip() for x in chunk]
+                        if c:
+                            county = c
+                        if not (name and tel) or '醫院名稱' in name:
+                            continue
+                        key = key_for(name, county or '')
+                        obs.append({'entity_key': key, 'observed_at': mtime(f),
+                                    'source': 'hpa_contacts', 'field': 'booking_tel',
+                                    'value': re.sub(r'\s+', ' ', tel)[:120], 'note': name})
 
     # 嘉義市衛生局：目前唯一有「門診時間」的縣市彙整頁（新北、臺中都只有電話）。
     # 欄位是 序號 || 院所名稱 || 電話 || 門診時間，用序號是不是數字來認資料列——
@@ -523,8 +589,7 @@ def build_observations():
             # 機構名裡有換行與 tab（例如「衛生福利部嘉義醫院\n\t\t\t(非聯合評估門診)」），
             # strip_tags 只去頭尾空白，中間的要自己壓掉，不然 note 會髒、也可能影響比對
             name = re.sub(r'\s+', ' ', tds[1]).strip()
-            m, _ = match(name, '嘉義市')
-            key = m['HOSP_ID'] if m else 'x:嘉義市:' + core(name)
+            key = key_for(name, '嘉義市')
             for field, raw_val in (('booking_tel', tds[2]), ('clinic_hours', tds[3])):
                 val = re.sub(r'\s+', ' ', raw_val).strip()[:200]
                 if val:
@@ -853,7 +918,7 @@ if __name__ == '__main__':
     write_csv('relation.csv', rels, ['from_key', 'rel', 'to', 'to_key'], also_md=True)
     print('relation:', len(rels), '列', dict(collections.Counter(r['rel'] for r in rels)))
 
-    obs = build_observations()
+    obs = build_observations(ents)
     write_csv('observation.csv', obs, ['entity_key', 'observed_at', 'source', 'field', 'value', 'note'],
               also_md=True)
     print('observation:', len(obs), '列', dict(collections.Counter(o['field'] for o in obs)))

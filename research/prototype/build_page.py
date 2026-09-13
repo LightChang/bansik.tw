@@ -3,8 +3,17 @@
     python build_page.py [template] [data] [out]
     預設：taichung.template.html ../build/prototype_taichung.json taichung.html
 
-資料直接內嵌而不是另外 fetch：artifact 的 CSP 對外部請求很嚴，內嵌最不會出事，
-283KB 對單頁來說也還好。
+換一個縣市（模板不必動，文案會跟著換）：
+
+    python ../scripts/make_prototype.py 高雄市 ../build /tmp/proto_ks.json
+    python build_page.py taichung.template.html /tmp/proto_ks.json /tmp/kaohsiung.html
+
+做兩件事：
+1. `__DATA__` → 整包資料。直接內嵌而不是另外 fetch，因為 artifact 的 CSP 對外部
+   請求很嚴，內嵌最不會出事。單頁目前約 400KB，對 16MB 的上限來說還很寬裕。
+2. `__COUNTY__` → 縣市名。只有 <title> 與 <h1> 這兩處靜態 HTML 需要替換——
+   artifact 的標題是發布時從檔案掃出來的，交給 JS 改會讓 22 個縣市共用同一個標題。
+   頁面內文的縣市名一律讀 DATA.county，不要再寫死。
 """
 import json
 import os
