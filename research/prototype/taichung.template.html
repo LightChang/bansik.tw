@@ -57,6 +57,14 @@
   .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; }
   .brand { margin-inline-end: auto; }
   .brand span { font-size: 12px; letter-spacing: .14em; color: var(--ink-soft); margin-inline-start: 8px; }
+  /* 跨縣市導覽：單頁應用也要有換縣市的入口，不然使用者只能自己改網址。
+     artifact 版沒有這個（只有臺中一頁），佔位符會被置換成空字串。 */
+  .switch { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: 10px; }
+  .switch span { font-size: 12px; color: var(--ink-soft); letter-spacing: 0; margin: 0; }
+  .switch select {
+    font: inherit; font-size: 12.5px; padding: 2px 4px; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 3px; background: var(--card);
+  }
   .field { display: flex; align-items: center; gap: 8px; }
   .field label { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
   input[type="range"] { width: 190px; accent-color: var(--seal); }
@@ -251,7 +259,7 @@
 
 <div class="app">
   <div class="bar">
-    <div class="brand"><h1>__COUNTY__兒童發展地圖</h1><span>原型</span></div>
+    <div class="brand"><h1>__COUNTY__兒童發展地圖</h1>__NAV__</div>
     <div class="field">
       <label for="birth">出生年月</label>
       <input type="date" id="birth">
@@ -470,6 +478,12 @@
   // 之間切換，長版在 390px 會把控制列撐破（實測撐到 440px）。只在載入時判斷一次不夠——
   // 手機轉向、桌機縮視窗都會跨過這條線。
   NARROW.addEventListener('change', () => setAge(age));
+
+  // 換縣市：跳到另一個縣市頁。artifact 版沒有這個元素，所以要先確認存在。
+  const switcher = el('countySwitch');
+  if (switcher) {
+    switcher.addEventListener('change', e => { location.href = e.target.value; });
+  }
 
   el('age').addEventListener('input', e => setAge(+e.target.value));
   el('birth').addEventListener('change', e => {

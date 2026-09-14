@@ -17,3 +17,7 @@ research/prototype/taichung.html
 # Python 快取
 __pycache__/
 *.pyc
+
+# 靜態站的產生物（4.9MB，22 個縣市頁）：跑 site/build_site.py 就能重建，不進版控。
+# 進版控的是 build_site.py、counties.json、CNAME 與模板。
+site/dist/

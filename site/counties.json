@@ -1,0 +1,28 @@
+{
+  "note": "縣市與網址代碼的對照。代碼沿用 scripts/subsidies.json 的抓取檔名，不另訂一套，免得同一個縣市在 repo 裡有兩種英文寫法。順序是機構數由多到少，全國首頁就照這個順序列。",
+  "url_shape": "每個縣市一頁：https://bansik.tw/<code>/ ，單頁應用（內頁用 hash 路由）。",
+  "counties": [
+    {"code": "taichung", "name": "臺中市"},
+    {"code": "new_taipei", "name": "新北市"},
+    {"code": "kaohsiung", "name": "高雄市"},
+    {"code": "taoyuan", "name": "桃園市"},
+    {"code": "tainan", "name": "臺南市"},
+    {"code": "taipei", "name": "臺北市"},
+    {"code": "changhua", "name": "彰化縣"},
+    {"code": "pingtung", "name": "屏東縣"},
+    {"code": "hsinchu_county", "name": "新竹縣"},
+    {"code": "miaoli", "name": "苗栗縣"},
+    {"code": "yunlin", "name": "雲林縣"},
+    {"code": "yilan", "name": "宜蘭縣"},
+    {"code": "nantou", "name": "南投縣"},
+    {"code": "hsinchu_city", "name": "新竹市"},
+    {"code": "chiayi_county", "name": "嘉義縣"},
+    {"code": "chiayi_city", "name": "嘉義市"},
+    {"code": "taitung", "name": "臺東縣"},
+    {"code": "hualien", "name": "花蓮縣"},
+    {"code": "keelung", "name": "基隆市"},
+    {"code": "penghu", "name": "澎湖縣"},
+    {"code": "kinmen", "name": "金門縣"},
+    {"code": "lienchiang", "name": "連江縣"}
+  ]
+}

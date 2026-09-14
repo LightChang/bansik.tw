@@ -34,7 +34,11 @@ if '__DATA__' not in tpl:
 # 縣市名在 <title> 與 <h1> 裡，這兩處是靜態 HTML（artifact 的標題是發布時從檔案
 # 掃出來的，改不了就會 22 個縣市共用同一個標題），所以在這裡換掉而不是交給 JS。
 # 頁面內文的縣市名一律用 DATA.county，不要再寫死。
-html = tpl.replace('__COUNTY__', data['county']).replace('__DATA__', blob)
+# __NAV__ 是靜態站的跨縣市導覽（site/build_site.py 會填）。artifact 版只有一個縣市，
+# 沒有地方可切換，所以置換成空字串——留著未置換的佔位符會直接印在畫面上。
+html = (tpl.replace('__COUNTY__', data['county'])
+           .replace('__NAV__', '')
+           .replace('__DATA__', blob))
 open(OUT, 'w', encoding='utf-8').write(html)
 
 print(f'{OUT}  {os.path.getsize(OUT) // 1024} KB')
