@@ -336,6 +336,30 @@
   }
 
   // 主角：這個月齡的發展檢查。沒有正在進行的就指向下一次，不要留白。
+  // 0-5 個月大該做的事。發展篩檢要滿 6 個月才開始，但這個階段不是沒事做——
+  // 新生兒聽力篩檢在出生後就該完成，預防保健第 1 次是出生後 2 週。
+  // 家數與項目都從 DATA 現算，不寫死。
+  function newbornNote(m) {
+    const ear = DATA.entities.filter(e => e.cat === '新生兒聽力篩檢院所').length;
+    const confirm = DATA.entities.filter(e => e.cat === '新生兒聽力確診醫院').length;
+    const first = DATA.timeline.filter(t => t.kind === '兒童預防保健')
+      .sort((a, b) => num(a.month_min) - num(b.month_min))[0];
+    const bits = [];
+    if (first) {
+      const done = m >= num(first.month_max);
+      bits.push(`<span class="recap-item"><b>${done ? '應該已經做過' : '現在這一項'}</b>
+        ${esc(first.title)}（${esc(first.age_label)}）</span>`);
+    }
+    if (ear) {
+      bits.push(`<span class="recap-item"><b>出生後就該做</b>新生兒聽力篩檢，
+        ${esc(DATA.county)}有 ${ear} 家篩檢院所${confirm ? `、${confirm} 家確診醫院` : ''}</span>`);
+    }
+    if (!bits.length) return '';
+    return `<div class="recap">${bits.join('')}</div>
+      <p class="handover">發展篩檢從滿 6 個月才開始，但這段期間不是沒事做——
+        <b>聽力問題越早發現，越不會拖到語言發展</b>。這兩項都在兒童健康手冊裡。</p>`;
+  }
+
   // 滿 7 歲那一格要說的事，資料自己就講得出來：特教統計裡「發展遲緩」這個類別，
   // 學前四個年段合計兩萬多人，國小一年級之後是 0——那不是人消失了，是這個類別只用在
   // 學前，入學後要改判其他障別才能繼續拿到特教資源。數字從 DATA.stats 現算，不寫死。
@@ -368,9 +392,14 @@
         <div class="lead">第 ${idx} 次兒童發展篩檢</div>
         <div class="when">${esc(current.age_label)}，由專科醫師就粗大動作、精細動作、語言認知、社會發展四面向檢查。</div>`;
     } else if (next) {
-      head = `<div class="eyebrow">這個月齡沒有排定的篩檢</div>
+      // 0 個月大會落在這裡而且完全沒東西：最早的項目 month_min 是 0.5（出生後 2 週），
+      // 滑桿卻從 0 開始，所以剛出生那一格 timeline 命中 0 筆——跟 84 是同一種邊界病，
+      // 只是在另一端。而 0-5 個月的家長最焦慮，畫面卻只說「等 6 個月再說」。
+      // 這一段補上這個階段真正該做的事：新生兒聽力篩檢與第 1 次預防保健。
+      head = `<div class="eyebrow">這個月齡還沒有排定的發展篩檢</div>
         <div class="lead">下一次是第 ${idx} 次</div>
-        <div class="when">${esc(next.age_label)}　在那之前仍可以自己觀察與紀錄。</div>`;
+        <div class="when">${esc(next.age_label)}　在那之前仍可以自己觀察與紀錄。</div>
+        ${newbornNote(age)}`;
     } else {
       // 84 個月是滑桿的最大值，也正好是所有 timeline 的 month_max。判斷式是左閉右開
       // （age >= min && age < max），所以 83 命中 5 筆、84 命中 0 筆——拉到底必然全空，
@@ -488,7 +517,10 @@
           .map(t => `<tr><td>${esc(t.age_label)}</td><td>${t.url
             ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.title)}</a>`
             : esc(t.title)}</td><td>${esc(t.detail || '')}</td></tr>`).join('')
-          || '<tr><td colspan="3">這個月齡沒有對應的項目</td></tr>'}</table></section>
+          || `<tr><td colspan="3">${age < 1
+            ? '剛出生這一格還沒有排定項目——最早的是出生後 2 週的第 1 次預防保健。'
+            : '已滿 7 歲，超過早期療育的年齡範圍；上面的格子是六次篩檢的完整年齡區間。'
+          }</td></tr>`}</table></section>
       ${scale.length ? `<section><h2>醫師篩檢用的分齡量表</h2>
         <p class="sub-lead">國健署公布的工具，家長可以先看過，知道醫師會問什麼。</p>
         ${band(scale, t => t.title.replace(/兒童發展篩檢量表/, ''))}</section>` : ''}`;
