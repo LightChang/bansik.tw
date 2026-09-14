@@ -1,6 +1,6 @@
 {
   "note": "縣市與網址代碼的對照。代碼沿用 scripts/subsidies.json 的抓取檔名，不另訂一套，免得同一個縣市在 repo 裡有兩種英文寫法。順序是機構數由多到少，全國首頁就照這個順序列。",
-  "url_shape": "每個縣市一頁：https://bansik.tw/<code>/ ，單頁應用（內頁用 hash 路由）。",
+  "url_shape": "每個縣市一頁：https://bansik.tw/<code>/ ，六個內頁是真實網址（/<code>/places/ 等），不用 hash 路由。",
   "counties": [
     {"code": "taichung", "name": "臺中市"},
     {"code": "new_taipei", "name": "新北市"},

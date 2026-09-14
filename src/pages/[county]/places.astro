@@ -1,0 +1,134 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { countyPaths, county } from '../../lib/data.mjs';
+
+export const getStaticPaths = countyPaths;
+
+const { county: code } = Astro.params;
+const c = county(code);
+
+const OBS_LABEL = {
+  clinic_hours: '門診',
+  booking_method: '預約',
+  booking_tel: '分機',
+};
+
+// 動態資訊（各縣市衛生局頁解析出來的門診時間、預約方式、分機）在建置期就組好字串，
+// 瀏覽器只要篩選與重畫，不必再帶一份 observation 過去。
+function obsLine(key, tel) {
+  const list = c.observations.filter((o) => o.entity_key === key);
+  const parts = [];
+  for (const f of ['clinic_hours', 'booking_method', 'booking_tel']) {
+    const hit = list.find((o) => o.field === f);
+    if (!hit) continue;
+    // 電話別重複顯示：entity 存「(04)3604-5483」、衛生局頁存「04-36045483」，
+    // 格式不同、字串比不出來，要比數字。但「分機12130(初評)」這種帶標註的要留著。
+    // 「分機」兩個字本身不算資訊，先拿掉再判斷。
+    if (f === 'booking_tel' && tel) {
+      const extra = hit.value.replace(/分機/g, '');
+      if (!/[一-鿿]/.test(extra) && extra.replace(/\D/g, '') === tel.replace(/\D/g, '')) continue;
+    }
+    parts.push(`${OBS_LABEL[f]}：${hit.value}`);
+  }
+  return parts.join('　');
+}
+
+const rows = c.entities
+  .slice()
+  .sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant'))
+  .map((e) => ({
+    name: e.name,
+    cat: e.plain_cat,
+    district: e.district,
+    address: e.address,
+    tel: e.tel,
+    url: e.url,
+    tier: e.tier,
+    // 區級座標是整區共用一個點，標出來才不會被當成門牌位置
+    approx: e.geo_level === 'district',
+    obs: obsLine(e.entity_key, e.tel),
+  }));
+
+const districts = Object.keys(c.districts).sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+---
+
+<Base
+  title={`全部機構｜${c.county}`}
+  description={`${c.county} ${c.counts.entities} 家兒童發展相關機構的名稱、類型、地址與電話，可依行政區與類型篩選。`}
+>
+  <Nav current={code} />
+  <main class="shell">
+    <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
+    <h1>全部機構</h1>
+    <p class="lead">
+      {c.county}共 <span class="num">{c.counts.entities}</span> 家。
+      這裡不做品質排名，只列出是什麼、在哪裡、怎麼打電話。
+    </p>
+
+    <div class="agebar">
+      <div class="field">
+        <label for="fd">行政區</label>
+        <select id="fd">
+          <option value="">全部</option>
+          {districts.map((d) => <option>{d}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="fc">類型</label>
+        <select id="fc">
+          <option value="">全部</option>
+          {cats.map((k) => <option>{k}</option>)}
+        </select>
+      </div>
+      <output class="num" id="fcount"></output>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>名稱</th><th>類型</th><th>地址</th><th>電話</th></tr></thead>
+        <tbody id="ftbody"></tbody>
+      </table>
+    </div>
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+
+  <script type="application/json" id="bansik-places" set:html={JSON.stringify(rows)} />
+
+  <script>
+    import { esc } from '../../lib/view.mjs';
+
+    const ROWS = JSON.parse(document.getElementById('bansik-places').textContent);
+    const fd = document.getElementById('fd');
+    const fc = document.getElementById('fc');
+    const tbody = document.getElementById('ftbody');
+    const count = document.getElementById('fcount');
+
+    function fill() {
+      const d = fd.value;
+      const k = fc.value;
+      const list = ROWS.filter((r) => (!d || r.district === d) && (!k || r.cat === k));
+      count.textContent = `${list.length} 家` + (d || k ? `（全縣市共 ${ROWS.length} 家）` : '');
+      tbody.innerHTML = list.length
+        ? list.map((r) => `<tr>
+            <td>${r.tier ? `<span class="pill ${r.tier === '重點' ? 'key' : ''}">${esc(r.tier)}</span>` : ''}${
+              r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}</td>
+            <td>${esc(r.cat)}</td>
+            <td>${esc(r.address)}${r.approx ? ' <span class="meta">（座標只到行政區）</span>' : ''}
+              ${r.obs ? `<div class="meta">${esc(r.obs)}</div>` : ''}</td>
+            <td class="num">${esc(r.tel)}</td></tr>`).join('')
+        : '<tr><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>';
+    }
+
+    fd.addEventListener('change', fill);
+    fc.addEventListener('change', fill);
+
+    // 從分布圖點過來時會帶 ?d=<行政區>
+    const pre = new URLSearchParams(location.search).get('d');
+    if (pre && [...fd.options].some((o) => o.value === pre || o.text === pre)) fd.value = pre;
+    fill();
+  </script>
+</Base>

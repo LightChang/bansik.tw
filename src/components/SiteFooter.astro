@@ -1,0 +1,22 @@
+---
+// 縣市頁的頁尾：六個內頁的入口 + 資料來源。
+// 首頁放不下的東西（預防保健 9 次、上百家機構、補助規則、教育素材）都從這裡進去。
+import { SUBPAGES } from '../lib/data.mjs';
+
+interface Props {
+  code: string;
+  generatedAt: string;
+}
+const { code, generatedAt } = Astro.props;
+---
+
+<footer class="site-ft">
+  <nav>
+    {SUBPAGES.map(([slug, title]) => <a href={`/${code}/${slug}/`}>{title}</a>)}
+  </nav>
+  <p>
+    資料產生於 {generatedAt.slice(0, 10)}
+    來源：衛福部社家署、國健署、教育部特教通報網、各縣市衛生局與社會局。
+  </p>
+  <p>這裡是路標不是掛號窗口，不做品質排名，也不代為預約或試算。以主管機關公告為準。</p>
+</footer>

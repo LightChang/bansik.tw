@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { countyPaths, county } from '../../lib/data.mjs';
+
+export const getStaticPaths = countyPaths;
+
+const { county: code } = Astro.params;
+const c = county(code);
+
+// 官方用語不換掉——家長打電話、拿報告時聽到的就是這幾個字，換成白話反而對不上。
+// 但第一次出現時要說清楚那是什麼。
+const STEPS = [
+  ['1', '篩檢', '在診所或衛生所做兒童發展篩檢，這是入口。帶兒童健康手冊去，醫師會照四個面向看。'],
+  ['2', '通報', '篩檢覺得有疑慮，由「通報轉介中心」接手。它是單一窗口，不知道下一步做什麼就打這支。'],
+  ['3', '評估', '到「聯合評估中心」做完整評估，拿到「綜合報告書」——之後申請補助、安排療育都要用這份。這一段最花時間。'],
+  ['4', '療育', '依報告書安排療育：醫院復健科、早療機構、社區據點或到宅。自費的部分可以申請補助。'],
+  ['5', '學前教育', '銜接幼兒園的學前特教資源與巡迴輔導，滿 6 歲後由學校系統接手。'],
+];
+
+const cnt = (s) => c.entities.filter((e) => e.journey_step === s).length;
+
+// 家長用語 → 官方分類 的對照與家數
+const byCat = Object.entries(
+  c.entities.reduce((m, e) => {
+    const k = `${e.plain_cat}|${e.cat}`;
+    m[k] = (m[k] || 0) + 1;
+    return m;
+  }, {})
+).sort((a, b) => b[1] - a[1]).map(([k, n]) => {
+  const [plain, cat] = k.split('|');
+  return { plain, cat, n };
+});
+---
+
+<Base
+  title={`完整流程五步｜${c.county}`}
+  description={`篩檢、通報、評估、療育、學前教育——${c.county}每一步分別有多少家機構，各由哪個單位負責。`}
+>
+  <Nav current={code} />
+  <main class="shell">
+    <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
+    <h1>完整流程五步</h1>
+    <p class="lead">
+      每一步由不同機關管，沒有任何一處把它們接起來——這也是這個站想補的那一段。
+      家數是{c.county}目前收錄的。
+    </p>
+
+    {STEPS.map(([s, name, desc]) => (
+      <div class={`step ${cnt(s) ? 'here' : ''}`}>
+        <h3>{s}　{name}　<span class="count">{cnt(s)} 家</span></h3>
+        <p>{desc}</p>
+      </div>
+    ))}
+
+    <section class="section">
+      <h2>各類型家數</h2>
+      <p class="lead">左邊是家長平常的說法，右邊是公文與網站上的正式分類，兩者常常對不起來。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>說法</th><th>官方分類</th><th class="num">家數</th></tr></thead>
+          <tbody>
+            {byCat.map((r) => (
+              <tr>
+                <td>{r.plain}</td>
+                <td>{r.cat}</td>
+                <td class="num">{r.n}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+</Base>

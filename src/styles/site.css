@@ -1,0 +1,284 @@
+/* bansik.tw 站台樣式
+   token 一律取自 tokens.css（統一設計系統），此檔只放排版與站台專用元件，
+   不得重新定義任何 --token，也不得直接寫顏色值或低於 --text-xs 的字級。
+
+   單一淺色主題：token 系統本身就是為列印與投影最佳化的 light theme，
+   沒有定義暗色版。要做暗色就得自己手寫一組顏色，那等於跳出 token 系統，
+   所以不做——背景與文字色一律明確畫出來，不借用瀏覽器的預設。 */
+
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --font-body: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", "PingFang TC", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 0.75rem;
+  --space-4: 1rem;     --space-5: 1.5rem;  --space-6: 2rem;
+  --space-7: 3rem;     --space-8: 4.5rem;
+
+  --measure: 34em;          /* 正文一行約 34 個中文字 */
+  --shell: 1100px;
+  --hairline: 1px;
+  --tracking-label: 0.08em;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.25;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-xl); }
+h3 { font-size: var(--text-lg); }
+
+p { margin: 0; max-width: var(--measure); }
+
+a { color: var(--color-link); text-underline-offset: 0.2em; }
+a:hover { text-decoration-color: var(--color-link); }
+:focus-visible { outline: 2px solid var(--color-link); outline-offset: 3px; }
+
+img, svg { max-width: 100%; height: auto; display: block; }
+hr { border: 0; border-top: var(--hairline) solid var(--border-subtle); margin: var(--space-6) 0; }
+
+/* 側邊留白只設在這一層，vertical 用 padding-block，不用會把左右歸零的 shorthand */
+.shell {
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+  padding-block: var(--space-5) var(--space-8);
+}
+
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+}
+
+.lead { color: var(--text-secondary); margin-top: var(--space-3); }
+
+.section { margin-top: var(--space-7); }
+.section > h2 { margin-bottom: var(--space-2); }
+.section > .lead { margin-bottom: var(--space-4); }
+
+/* ── 頁首與跨縣市導覽 ───────────────────────────── */
+.site-hd {
+  border-bottom: var(--hairline) solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+.site-hd .shell {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3) var(--space-5);
+  padding-block: var(--space-3);
+}
+.site-hd .brand { font-size: var(--text-lg); font-weight: 700; text-decoration: none; color: var(--text-primary); }
+.site-hd .switch { display: flex; align-items: baseline; gap: var(--space-2); margin-inline-start: auto; }
+.site-hd .switch span { font-size: var(--text-xs); color: var(--text-secondary); }
+
+select, input[type="date"] {
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: 0.3rem 0.5rem;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: 0.25rem;
+}
+
+/* ── 月齡控制列 ─────────────────────────────────── */
+.agebar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5);
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: 0.5rem;
+  padding: var(--space-4);
+  margin-top: var(--space-5);
+}
+.agebar .field { display: flex; align-items: center; gap: var(--space-2); flex: 1 1 16rem; min-width: 0; }
+.agebar label { font-size: var(--text-sm); color: var(--text-secondary); white-space: nowrap; }
+.agebar input[type="range"] { flex: 1 1 auto; min-width: 6rem; accent-color: var(--color-pass); }
+.agebar output { font-size: var(--text-lg); font-weight: 700; white-space: nowrap; }
+.agebar output small { font-size: var(--text-xs); color: var(--text-secondary); font-weight: 400; }
+
+/* ── 六次篩檢的時間軸 ───────────────────────────── */
+.track { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-2); margin-top: var(--space-5); }
+.stop {
+  border-top: 3px solid var(--border-subtle);
+  padding-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.stop b { display: block; font-size: var(--text-sm); color: var(--text-primary); font-weight: 500; }
+.stop.done { border-top-color: var(--text-muted); }
+.stop.current { border-top-color: var(--color-pass); color: var(--color-pass); }
+.stop.current b { color: var(--color-pass); font-weight: 700; }
+
+/* ── 主角卡片：現在該做什麼 ─────────────────────── */
+.now {
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border-subtle);
+  border-inline-start: 4px solid var(--color-pass);
+  border-radius: 0.5rem;
+  padding: var(--space-5);
+  margin-top: var(--space-5);
+}
+.now .eyebrow { font-size: var(--text-xs); letter-spacing: var(--tracking-label); color: var(--color-pass); }
+.now h2 { margin-top: var(--space-1); }
+.now .when { color: var(--text-secondary); margin-top: var(--space-2); }
+.now .action {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3);
+  background: var(--bg-overlay);
+  border-radius: 0.25rem;
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-4);
+}
+.now .action .tag { font-size: var(--text-xs); color: var(--text-secondary); }
+.now .warn { color: var(--color-critical); font-weight: 700; }
+.now .also { margin-top: var(--space-4); color: var(--text-secondary); font-size: var(--text-sm); }
+
+/* 六次篩檢回顧 / 新生兒階段的提醒：內容隨月齡變，格子數不固定 */
+.recap { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+.recap-item {
+  flex: 1 1 14rem;
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: 0.25rem;
+  background: var(--bg-base);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+.recap-item b { display: block; color: var(--text-primary); font-weight: 500; }
+.handover { margin-top: var(--space-4); font-size: var(--text-sm); color: var(--text-secondary); max-width: none; }
+.handover b { color: var(--color-critical); }
+.handover .src { font-size: var(--text-xs); color: var(--text-muted); }
+
+/* ── 卡片與清單 ─────────────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: var(--space-4); margin-top: var(--space-5); }
+.card {
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: 0.5rem;
+  padding: var(--space-4);
+}
+.card h3 { font-size: var(--text-lg); }
+.card .sub { display: block; font-size: var(--text-sm); color: var(--text-secondary); font-weight: 400; margin-top: var(--space-1); }
+.card.call { border-color: var(--color-pass); }
+.card.call h3 { color: var(--color-pass); }
+
+.entry { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-4); align-items: baseline; }
+.entry + .entry { margin-top: var(--space-3); border-top: var(--hairline) solid var(--border-subtle); padding-top: var(--space-3); }
+.entry .tel { color: var(--text-secondary); }
+.meta { font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--space-1); }
+
+.pill {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-inline-end: var(--space-2);
+  background: var(--bg-overlay);
+  color: var(--text-secondary);
+}
+.pill.key { background: oklch(0.92 0.06 25); color: var(--color-critical); }
+@supports not (color: oklch(0 0 0)) {
+  .pill.key { background: #fce8e8; }
+}
+
+/* ── 表格：窄螢幕放不下就讓表格自己橫捲，頁面本體不橫捲 ── */
+.table-wrap { overflow-x: auto; margin-top: var(--space-4); }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  text-align: start;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: var(--hairline) solid var(--border-subtle);
+  vertical-align: top;
+  font-size: var(--text-sm);
+}
+th { font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+td.num { white-space: nowrap; }
+
+/* ── 兒童健康手冊的年齡格 ───────────────────────── */
+.band { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+.band .cell {
+  flex: 1 1 10rem;
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: 0.25rem;
+  background: var(--bg-surface);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.band .cell b { display: block; font-size: var(--text-sm); color: var(--text-primary); font-weight: 500; }
+.band .cell.on { border-color: var(--color-pass); background: var(--bg-base); color: var(--color-pass); }
+.band .cell.on b { color: var(--color-pass); }
+
+/* ── 流程五步 ───────────────────────────────────── */
+.step { border-inline-start: 3px solid var(--border-subtle); padding: var(--space-1) 0 var(--space-1) var(--space-4); margin-top: var(--space-4); }
+.step.here { border-inline-start-color: var(--color-pass); }
+.step h3 { font-size: var(--text-lg); }
+.step .count { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted); }
+.step p { margin-top: var(--space-1); color: var(--text-secondary); font-size: var(--text-sm); }
+
+/* ── 補助 ───────────────────────────────────────── */
+.money { font-family: var(--font-mono); font-size: var(--text-2xl); font-weight: 700; }
+.warnbox {
+  border: var(--hairline) solid var(--color-medium);
+  background: oklch(0.92 0.04 80);
+  border-radius: 0.5rem;
+  padding: var(--space-4);
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+}
+@supports not (color: oklch(0 0 0)) {
+  .warnbox { background: #fcf5e8; }
+}
+.warnbox p { max-width: none; }
+
+/* ── 內頁導覽與頁尾 ─────────────────────────────── */
+.pagenav { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-6); }
+.pagenav a { font-size: var(--text-sm); }
+
+.crumb { font-size: var(--text-sm); margin-bottom: var(--space-3); }
+
+.site-ft {
+  border-top: var(--hairline) solid var(--border-subtle);
+  margin-top: var(--space-8);
+  padding-block: var(--space-5) var(--space-7);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.site-ft p { max-width: none; }
+.site-ft nav { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-bottom: var(--space-3); }
+.site-ft nav a { font-size: var(--text-sm); }
+
+/* ── 窄螢幕 ─────────────────────────────────────── */
+@media (max-width: 760px) {
+  .track { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3) var(--space-2); }
+  .site-hd .switch { margin-inline-start: 0; flex: 1 1 100%; }
+  .agebar .field { flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

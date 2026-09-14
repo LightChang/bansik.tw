@@ -1,0 +1,249 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { countyPaths, countyBundle, SUBPAGES } from '../../lib/data.mjs';
+
+export const getStaticPaths = countyPaths;
+
+const { county: code } = Astro.params;
+const { c, s } = countyBundle(code);
+
+// 通報轉介中心（journey_step 2）：不知道從哪開始就打這支
+const referrals = c.entities.filter((e) => e.journey_step === '2');
+const call = referrals[0];
+
+// 聯合評估中心，重點中心優先
+const centers = c.entities
+  .filter((e) => e.cat === '聯合評估中心')
+  .sort((a, b) => (a.tier === '重點' ? -1 : b.tier === '重點' ? 1 : 0)
+    || a.name.localeCompare(b.name, 'zh-Hant'));
+
+// 名額必須跟它所屬的機構一起輸出。先前把它獨立放在清單末尾，窄螢幕隱藏第 2 列後
+// 就變成「榜上是甲醫院、名額寫乙醫院」，會誤導家長。
+const quotaOf = (key) => c.observations
+  .filter((o) => o.entity_key === key && o.field === 'quota_release_date')
+  .map((o) => o.value).sort()[0] || null;
+
+// 0–5 個月大那一段要用的家數（發展篩檢要滿 6 個月才開始，但這段不是沒事做）
+const ear = c.entities.filter((e) => e.cat === '新生兒聽力篩檢院所').length;
+const earConfirm = c.entities.filter((e) => e.cat === '新生兒聽力確診醫院').length;
+
+// 滿 7 歲那一格要講的事，數字從全國統計現算
+const dd = s.stats.filter((r) => r.metric === '特教學生數' && r.dim1_value === '發展遲緩');
+const sumBy = (pick) => dd.filter((r) => pick(r.dim2_value)).reduce((n, r) => n + (Number(r.value) || 0), 0);
+
+// 瀏覽器只需要 timeline 與這幾個數字就能重畫「現在該做什麼」，
+// 不必把 555 家機構也送過去——那是 /places/ 那一頁的事。
+const payload = {
+  county: c.county,
+  timeline: s.timeline,
+  ear,
+  earConfirm,
+  pre: sumBy((v) => v.startsWith('學前')),
+  after: sumBy((v) => !v.startsWith('學前')),
+};
+
+const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.counts.entities} 家機構、`
+  + `${c.counts.centers} 家兒童發展聯合評估中心。輸入孩子的月齡就知道現在該做哪一次篩檢、`
+  + '去哪裡評估、補助怎麼申請。';
+---
+
+<Base title={`${c.county}兒童發展地圖`} description={desc}>
+  <Nav current={code} />
+  <main class="shell">
+    <h1>{c.county}兒童發展地圖</h1>
+    <p class="lead">
+      拉動月齡，下面就會顯示這個月齡該做的事。
+      {c.county}目前收錄 <span class="num">{c.counts.entities}</span> 家機構、
+      <span class="num">{c.counts.centers}</span> 家聯合評估中心。
+    </p>
+
+    <div class="agebar">
+      <div class="field">
+        <label for="birth">出生年月</label>
+        <input type="date" id="birth" />
+      </div>
+      <div class="field">
+        <label for="age">月齡</label>
+        <input type="range" id="age" min="0" max="84" step="1" value="27"
+               aria-describedby="ageOut" />
+        <output id="ageOut" for="age">
+          <span class="num" id="ageNum">27</span> <small id="ageText">個月大</small>
+        </output>
+      </div>
+    </div>
+
+    <div class="track" id="track"></div>
+
+    <div class="now" id="now"></div>
+
+    <div class="cards">
+      {call && (
+        <div class="card call">
+          <h3>不知道從哪開始，先打這支</h3>
+          <div class="entry">
+            <span>{call.name}</span>
+            <span class="tel num">{call.tel}</span>
+          </div>
+          <p class="meta">
+            通報轉介中心是單一窗口，{c.county}共 {referrals.length} 處，打這支會幫你轉。
+          </p>
+        </div>
+      )}
+      <div class="card">
+        <h3>做評估的地方<span class="sub">{c.county} {centers.length} 家，重點中心優先</span></h3>
+        {centers.slice(0, 3).map((e) => (
+          <div class="entry-group">
+            <div class="entry">
+              <span>
+                {e.tier && <span class={`pill ${e.tier === '重點' ? 'key' : ''}`}>{e.tier}</span>}
+                {e.name}
+              </span>
+              <span class="tel num">{e.tel}</span>
+            </div>
+            {quotaOf(e.entity_key) && (
+              <p class="meta">下次開放名額 {quotaOf(e.entity_key)}（醫院公告，以院方為準）</p>
+            )}
+          </div>
+        ))}
+        {centers.length === 0 && (
+          <p class="meta">
+            {c.county}沒有設立聯合評估中心，需要跨縣市就醫；先打上面的通報轉介中心問。
+          </p>
+        )}
+      </div>
+    </div>
+
+    <nav class="pagenav">
+      {SUBPAGES.map(([slug, title]) => <a href={`/${code}/${slug}/`}>{title} →</a>)}
+    </nav>
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+
+  <script type="application/json" id="bansik-data" set:html={JSON.stringify(payload)} />
+
+  <script>
+    import { num, inBand, screenings, ageText, esc } from '../../lib/view.mjs';
+
+    const DATA = JSON.parse(document.getElementById('bansik-data').textContent);
+    const el = (id) => document.getElementById(id);
+    const SCREENS = screenings(DATA.timeline);
+    const NARROW = window.matchMedia('(max-width: 760px)');
+    let age = 27;
+
+    // 0–5 個月大：發展篩檢還沒開始，但這個階段最焦慮的家長不該只看到「等 6 個月再說」。
+    function newbornNote(m) {
+      const first = DATA.timeline.filter((t) => t.kind === '兒童預防保健')
+        .sort((a, b) => num(a.month_min) - num(b.month_min))[0];
+      const bits = [];
+      if (first) {
+        const done = m >= num(first.month_max);
+        bits.push(`<span class="recap-item"><b>${done ? '應該已經做過' : '現在這一項'}</b>
+          ${esc(first.title)}（${esc(first.age_label)}）</span>`);
+      }
+      if (DATA.ear) {
+        bits.push(`<span class="recap-item"><b>出生後就該做</b>新生兒聽力篩檢，
+          ${esc(DATA.county)}有 ${DATA.ear} 家篩檢院所${
+            DATA.earConfirm ? `、${DATA.earConfirm} 家確診醫院` : ''}</span>`);
+      }
+      if (!bits.length) return '';
+      return `<div class="recap">${bits.join('')}</div>
+        <p class="handover">發展篩檢從滿 6 個月才開始，但這段期間不是沒事做——
+          <b>聽力問題越早發現，越不會拖到語言發展</b>。這兩項都在兒童健康手冊裡。</p>`;
+    }
+
+    function handoverNote() {
+      if (!DATA.pre) return '';
+      return `<p class="handover"><b>入學後「發展遲緩」這個身分會消失</b>——全國學前有
+        <span class="num">${DATA.pre.toLocaleString()}</span> 名發展遲緩學生，國小一年級以後是
+        <span class="num">${DATA.after}</span> 人。這不是人不見了，是這個類別只用在學前；
+        要繼續拿到特教資源，得在入學前的鑑定改判其他障別。
+        <span class="src">教育部特殊教育通報統計</span></p>`;
+    }
+
+    function renderTrack() {
+      el('track').innerHTML = SCREENS.map((t, i) => {
+        const cls = inBand(t, age) ? 'current' : (age >= num(t.month_max) ? 'done' : '');
+        return `<div class="stop ${cls}"><b>第 ${i + 1} 次</b>${esc(t.age_label)}</div>`;
+      }).join('');
+    }
+
+    function renderNow() {
+      const current = SCREENS.find((t) => inBand(t, age));
+      const next = SCREENS.find((t) => num(t.month_min) > age);
+      const idx = current ? SCREENS.indexOf(current) + 1 : (next ? SCREENS.indexOf(next) + 1 : null);
+      const check = DATA.timeline.find((t) => t.kind === '線上發展檢核表' && inBand(t, age));
+      const others = DATA.timeline.filter((t) => inBand(t, age)
+        && ['兒童預防保健', '家長紀錄事項', '學前特教安置'].includes(t.kind));
+
+      let head;
+      if (current) {
+        head = `<div class="eyebrow">現在就是這一次</div>
+          <h2>第 ${idx} 次兒童發展篩檢</h2>
+          <p class="when">${esc(current.age_label)}，由專科醫師就粗大動作、精細動作、
+            語言認知、社會發展四面向檢查。</p>`;
+      } else if (next) {
+        head = `<div class="eyebrow">這個月齡還沒有排定的發展篩檢</div>
+          <h2>下一次是第 ${idx} 次</h2>
+          <p class="when">${esc(next.age_label)}　在那之前仍可以自己觀察與紀錄。</p>
+          ${newbornNote(age)}`;
+      } else {
+        head = `<div class="eyebrow">已滿 7 歲，超過早期療育的年齡範圍</div>
+          <h2>六次兒童發展篩檢到這裡結束</h2>
+          <p class="when">早期療育的對象是「未滿 7 歲」，滿 7 歲後由學校的特教系統接手。
+            但<b>漏做的篩檢不會自動補</b>——下面是六次的年齡區間，可以回頭對一次。</p>
+          <div class="recap">${SCREENS.map((t, i) =>
+            `<span class="recap-item"><b>第 ${i + 1} 次</b>${esc(t.age_label)}</span>`).join('')}</div>
+          ${handoverNote()}`;
+      }
+
+      const action = check
+        ? `<div class="action"><span class="tag">先自己做</span>
+            <span><a href="${esc(check.url)}" target="_blank" rel="noopener">${esc(check.title)}</a></span>
+            <span>${esc(check.detail).replace(/(\d+ 題為警訊題)/, '<span class="warn">$1</span>')}</span></div>`
+        : '';
+      const also = others.length
+        ? `<p class="also">同一時期還有：${others.map((o) =>
+            '<b>' + esc(o.title.replace(/兒童健康手冊「|」/g, '')) + '</b>').join('、')}</p>`
+        : '';
+      el('now').innerHTML = head + action + also;
+    }
+
+    function setAge(m) {
+      age = Math.max(0, Math.min(84, Math.round(m)));
+      el('age').value = age;
+      el('ageNum').textContent = age;
+      el('ageText').textContent = ageText(age, NARROW.matches);
+      renderTrack();
+      renderNow();
+      try { localStorage.setItem('bansik:age', String(age)); } catch { /* 私密視窗會丟例外 */ }
+    }
+
+    // 視窗寬度跨過 760px 要重畫：ageText 會在「27 個月大」與
+    // 「27 個月大（2 歲 3 個月）」之間切換，只在載入時判斷一次不夠。
+    NARROW.addEventListener('change', () => setAge(age));
+
+    el('age').addEventListener('input', (e) => setAge(+e.target.value));
+    el('birth').addEventListener('change', (e) => {
+      if (!e.target.value) return;
+      const b = new Date(e.target.value);
+      const n = new Date();
+      setAge((n.getFullYear() - b.getFullYear()) * 12 + (n.getMonth() - b.getMonth()));
+    });
+
+    // 記住上次看的月齡，內頁也讀同一個 key
+    let start = 27;
+    const q = new URLSearchParams(location.search).get('m');
+    if (q !== null && q !== '' && Number.isFinite(+q)) {
+      start = +q;
+    } else {
+      try {
+        const saved = localStorage.getItem('bansik:age');
+        if (saved !== null) start = +saved;
+      } catch { /* 讀不到就用預設 */ }
+    }
+    setAge(start);
+  </script>
+</Base>

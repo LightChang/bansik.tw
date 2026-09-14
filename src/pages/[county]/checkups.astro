@@ -1,0 +1,119 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { countyPaths, countyBundle } from '../../lib/data.mjs';
+import { num, screenings } from '../../lib/view.mjs';
+
+export const getStaticPaths = countyPaths;
+
+const { county: code } = Astro.params;
+const { c, s } = countyBundle(code);
+
+const of = (k) => s.timeline.filter((t) => t.kind === k)
+  .sort((a, b) => num(a.month_min) - num(b.month_min));
+const SCREENS = screenings(s.timeline);
+const prevent = of('兒童預防保健');
+const scale = of('分齡篩檢量表');
+const selfCheck = s.timeline.filter((t) => ['線上發展檢核表', '家長紀錄事項'].includes(t.kind))
+  .sort((a, b) => num(a.month_min) - num(b.month_min));
+---
+
+<Base
+  title={`這個年齡的所有檢查｜${c.county}`}
+  description={`兒童發展篩檢 6 次、兒童預防保健 9 次，兩套不同的東西都印在兒童健康手冊上。${c.county}版本。`}
+>
+  <Nav current={code} />
+  <main class="shell">
+    <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
+    <h1>這個年齡的所有檢查</h1>
+    <p class="lead">
+      兒童預防保健和兒童發展篩檢是兩套不同的東西，都印在兒童健康手冊上，很容易混在一起。
+      亮起來的格子是目前的月齡。
+    </p>
+
+    <section class="section">
+      <h2>兒童發展篩檢（{SCREENS.length} 次）</h2>
+      <p class="lead">由專科醫師就粗大動作、精細動作、語言認知、社會發展四面向檢查。</p>
+      <div class="band" data-band>
+        {SCREENS.map((t, i) => (
+          <div class="cell" data-min={t.month_min} data-max={t.month_max}>
+            <b>{t.age_label}</b>第 {i + 1} 次
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>兒童預防保健（{prevent.length} 次）</h2>
+      <p class="lead">健保給付，含身體檢查與衛教指導。次數與發展篩檢不同，不要弄混。</p>
+      <div class="band" data-band>
+        {prevent.map((t, i) => (
+          <div class="cell" data-min={t.month_min} data-max={t.month_max}>
+            <b>{t.age_label}</b>第 {i + 1} 次
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>家長自己做的</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>年齡</th><th>項目</th><th>內容</th></tr></thead>
+          <tbody>
+            {selfCheck.map((t) => (
+              <tr data-min={t.month_min} data-max={t.month_max}>
+                <td>{t.age_label}</td>
+                <td>
+                  {t.url
+                    ? <a href={t.url} target="_blank" rel="noopener">{t.title}</a>
+                    : t.title}
+                </td>
+                <td>{t.detail || ''}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {scale.length > 0 && (
+      <section class="section">
+        <h2>醫師篩檢用的分齡量表</h2>
+        <p class="lead">國健署公布的工具，家長可以先看過，知道醫師會問什麼。</p>
+        <div class="band" data-band>
+          {scale.map((t) => (
+            <div class="cell" data-min={t.month_min} data-max={t.month_max}>
+              <b>{t.age_label}</b>{t.title.replace('兒童發展篩檢量表', '')}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+
+  <script>
+    // 整份清單一律完整顯示（那本來就是這一頁的用處），
+    // 只把目前月齡那一格標起來。月齡讀自縣市首頁存的值，沒有就不標。
+    let age = null;
+    const q = new URLSearchParams(location.search).get('m');
+    if (q !== null && q !== '' && Number.isFinite(+q)) {
+      age = +q;
+    } else {
+      try {
+        const saved = localStorage.getItem('bansik:age');
+        if (saved !== null) age = +saved;
+      } catch { /* 讀不到就不標 */ }
+    }
+    if (age !== null) {
+      // 左閉右開，跟首頁同一套判斷
+      const hit = (n) => age >= Number(n.dataset.min) && age < Number(n.dataset.max);
+      document.querySelectorAll('[data-band] .cell').forEach((n) => {
+        if (hit(n)) n.classList.add('on');
+      });
+    }
+  </script>
+</Base>

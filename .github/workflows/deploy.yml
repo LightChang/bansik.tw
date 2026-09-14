@@ -1,0 +1,52 @@
+# 把 Astro 站建置後部署到 GitHub Pages。
+#
+# 只做建置與部署，不抓資料——抓取與解析在 research/ 的 Python 管線，
+# 產出的 src/data/*.json 是進版控的，所以 CI 上只要有 node 就夠，
+# 不必在 CI 裝 Python、也不必重跑一次全國抓取。
+# 資料要更新時在本機跑 `npm run data` 再 commit。
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時只跑一個部署；排隊而不取消，免得推兩次之後線上停在舊版
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      # GA 與 Search Console 的值放 repository variables（vars，不是 secrets——
+      # 它們本來就會出現在每一頁的原始碼裡）。沒設就用 site.config.mjs 的預設值。
+      - name: 建置
+        env:
+          BANSIK_GA_ID: ${{ vars.BANSIK_GA_ID }}
+          BANSIK_GSC_TOKEN: ${{ vars.BANSIK_GSC_TOKEN }}
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - uses: actions/deploy-pages@v4
+        id: deploy

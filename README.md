@@ -12,7 +12,11 @@
 >
 > **性平、兒少保、特教三個相鄰領域見 [`research/2026-09-12-topics/README.md`](research/2026-09-12-topics/README.md)**。可用的是兒少保統計（學齡前占受虐 24.7%）與縣市特教年報（唯一有行政區級發展遲緩人數）；性平教材對象是學齡後學生。
 >
-> **靜態站的產生與部署見 [`site/README.md`](site/README.md)**。`site/build_site.py` 把 `research/build/` 的資料產成 22 個縣市頁與全國首頁，輸出到 `site/dist/`，準備放上 GitHub Pages（網域 bansik.tw）。網址結構是一個縣市一頁（`/taichung/`），內頁走 hash 路由。
+> **網站本體是 Astro**（與 seh.tw、hokhong.tw 等站同一套作法），原始碼在 `src/`。22 個縣市 × 7 頁 + 全國首頁 + 404，共 156 頁全部靜態產生，部署到 GitHub Pages（網域 bansik.tw）。網址結構是一個縣市一個目錄（`/taichung/`），六個內頁是**真實網址**（`/taichung/places/`），不用 hash 路由——這樣每個內頁才有自己的 title、canonical 與流量統計。
+>
+> 兩條指令：`npm run data` 把 `research/build/` 的五張表切成 `src/data/`（進版控，所以 CI 上只要有 node，不必重跑 Python 管線）；`npm run build` 產生 `dist/`。資料層與網站層的分界就在 `src/data/`。
+>
+> 視覺一律套用全域的 `~/.claude/skills/design-tokens`：OKLCH 配色加 hex fallback、**最小字級 18px**、正文 24px。token 由 `npm run sync:tokens` 從上游同步進 `src/styles/tokens.css`（該檔不直接編輯），站台自己的樣式寫在 `src/styles/site.css`。
 >
 > **臺中頁面原型見 [`research/prototype/README.md`](research/prototype/README.md)**（[線上版](https://claude.ai/code/artifact/8db1ddf5-d5a5-4c3e-8d1c-697389690695)）。用月齡當入口，把年齡軸與臺中 555 家機構接起來，驗證資料層撐不撐得起真正的頁面。首頁維持一屏只回答「現在該做什麼」，放不下的東西進五個內頁：這個年齡的所有檢查、完整流程五步、全部機構（可依行政區與類型篩選）、補助怎麼申請、教育素材。
 

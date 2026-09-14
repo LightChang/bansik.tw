@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { countyPaths, county } from '../../lib/data.mjs';
+
+export const getStaticPaths = countyPaths;
+
+const { county: code } = Astro.params;
+const c = county(code);
+
+// 分布圖只畫到行政區，不畫門牌：全國 3,073 家裡只有一部分有門牌座標，其餘是區中心點，
+// 混在一起畫會讓同一區的機構全部疊在一個點上，看起來像「這區只有一家」。
+// 底圖也不放，直接用經緯度投影成 SVG，圓圈大小就是家數。
+const geo = c.district_geo || {};
+const names = Object.keys(geo);
+const cnt = (n) => (c.districts[n] || {}).located || 0;
+
+let svg = null;
+if (names.length > 0) {
+  const lats = names.map((n) => geo[n].lat);
+  const lngs = names.map((n) => geo[n].lng);
+  const la0 = Math.min(...lats);
+  const la1 = Math.max(...lats);
+  const ln0 = Math.min(...lngs);
+  const ln1 = Math.max(...lngs);
+  // 經度要乘 cos(緯度) 才不會把地圖橫向拉寬（臺灣約 0.91）
+  const k = Math.cos(((la0 + la1) / 2) * Math.PI / 180);
+  const W = 640;
+  const H = 480;
+  const PAD = 56;
+  const spanX = Math.max((ln1 - ln0) * k, 1e-6);
+  const spanY = Math.max(la1 - la0, 1e-6);
+  const scale = Math.min((W - PAD * 2) / spanX, (H - PAD * 2) / spanY);
+  const cx = (n) => PAD + (geo[n].lng - ln0) * k * scale + ((W - PAD * 2) - spanX * scale) / 2;
+  const cy = (n) => PAD + (la1 - geo[n].lat) * scale + ((H - PAD * 2) - spanY * scale) / 2;
+  const max = Math.max(...names.map(cnt), 1);
+  const r = (n) => 5 + Math.sqrt(cnt(n) / max) * 28;
+  svg = {
+    W,
+    H,
+    dots: [...names].sort((a, b) => cnt(b) - cnt(a)).map((n) => ({
+      name: n,
+      n: cnt(n),
+      cx: +cx(n).toFixed(1),
+      cy: +cy(n).toFixed(1),
+      r: +r(n).toFixed(1),
+      // 家數太少的不標字，不然圓圈小、字疊在一起看不清
+      label: cnt(n) >= max * 0.18 ? n.replace(/[區鄉鎮市]$/, '') : null,
+    })),
+  };
+}
+
+const sorted = [...names].sort((a, b) => cnt(b) - cnt(a));
+const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
+---
+
+<Base
+  title={`哪一區有幾家｜${c.county}`}
+  description={`${c.county}各行政區的兒童發展相關機構家數分布。`}
+>
+  <Nav current={code} />
+  <main class="shell">
+    <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
+    <h1>哪一區有幾家</h1>
+
+    {svg ? (
+      <>
+        <p class="lead">
+          圓圈畫在行政區的中心，大小是那一區的機構家數。
+          這不是機構的實際位置——點一下圓圈會跳到那一區的清單。
+        </p>
+        <svg
+          viewBox={`0 0 ${svg.W} ${svg.H}`}
+          width="100%"
+          style={`max-width:${svg.W}px`}
+          role="img"
+          aria-label={`${c.county}各行政區機構家數分布`}
+        >
+          {svg.dots.map((d) => (
+            <a href={`/${code}/places/?d=${encodeURIComponent(d.name)}`}>
+              <title>{d.name} {d.n} 家</title>
+              <circle
+                cx={d.cx} cy={d.cy} r={d.r}
+                fill="var(--color-pass)" fill-opacity="0.22"
+                stroke="var(--color-pass)" stroke-width="1.5"
+              />
+              {d.label && (
+                <text
+                  x={d.cx} y={d.cy + 6}
+                  text-anchor="middle"
+                  font-size="18"
+                  fill="var(--text-primary)"
+                >{d.label} {d.n}</text>
+              )}
+            </a>
+          ))}
+        </svg>
+      </>
+    ) : (
+      <p class="lead">這個縣市還沒有行政區座標，只能看下面的清單。</p>
+    )}
+
+    <section class="section">
+      <h2>各區家數</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>行政區</th><th class="num">位於這一區</th><th>看清單</th></tr></thead>
+          <tbody>
+            {sorted.map((n) => (
+              <tr>
+                <td>{n}</td>
+                <td class="num">{cnt(n)}</td>
+                <td><a href={`/${code}/places/?d=${encodeURIComponent(n)}`}>看這一區</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">
+        全縣市 {c.counts.entities} 家。行政區中心點取自鄉鎮界圖資；
+        機構自己的座標只有 {addressLevel} 家是門牌精度。
+      </p>
+    </section>
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+</Base>

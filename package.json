@@ -1,0 +1,16 @@
+{
+  "name": "bansik-tw",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync:tokens": "node scripts/sync-tokens.mjs",
+    "data": "cd research && python3 ../scripts/make_site_data.py"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.2"
+  }
+}

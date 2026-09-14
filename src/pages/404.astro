@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import { counties } from '../lib/data.mjs';
+
+const list = counties();
+---
+
+<Base title="找不到這一頁｜bansik" description="找不到這一頁。">
+  <Nav />
+  <main class="shell">
+    <h1>找不到這一頁</h1>
+    <p class="lead">網址可能拼錯了，或那一頁已經改過位置。從縣市重新進去：</p>
+    <div class="cards">
+      {list.map((c) => (
+        <a class="card" href={`/${c.code}/`}><h3>{c.name}</h3></a>
+      ))}
+    </div>
+  </main>
+</Base>

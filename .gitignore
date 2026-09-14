@@ -18,6 +18,15 @@ research/prototype/taichung.html
 __pycache__/
 *.pyc
 
-# 靜態站的產生物（4.9MB，22 個縣市頁）：跑 site/build_site.py 就能重建，不進版控。
-# 進版控的是 build_site.py、counties.json、CNAME 與模板。
-site/dist/
+# Astro 的建置產物與相依
+dist/
+.astro/
+node_modules/
+
+# src/data/ 要進版控：那是 research/ 的 Python 管線算出來的成果，
+# 讓 Astro 的建置（CI 上只有 node，沒有 Python 與來源快照）不必重跑整條管線。
+# 重建方式：npm run data
+
+# 系統
+.DS_Store
+*.log

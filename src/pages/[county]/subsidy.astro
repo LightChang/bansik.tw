@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { countyPaths, county } from '../../lib/data.mjs';
+
+export const getStaticPaths = countyPaths;
+
+const { county: code } = Astro.params;
+const c = county(code);
+const s = c.subsidy;
+
+const rows = s && s.status !== 'pending'
+  ? [
+      ['補助項目', (s.items || []).join('、')],
+      ['交通費', s.transport],
+      ['申請期限', s.apply_window],
+      ['另有規定', s.extra],
+      ['不補助', s.exclusions],
+    ].filter(([, v]) => v)
+  : [];
+---
+
+<Base
+  title={`補助怎麼申請｜${c.county}`}
+  description={`${c.county}發展遲緩兒童早期療育補助的金額上限、補助項目與申請期限。`}
+>
+  <Nav current={code} />
+  <main class="shell">
+    <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
+    <h1>補助怎麼申請</h1>
+
+    {!s && <p class="lead">這個縣市的規則還沒整理。</p>}
+
+    {s && s.status === 'pending' && (
+      <div class="warnbox">
+        <p>
+          {s.county}的「{s.rule_name}」查得到計畫名稱，
+          但金額沒有公開在任何可以讀到的頁面上。{s.note || ''}
+        </p>
+      </div>
+    )}
+
+    {s && s.status !== 'pending' && (
+      <>
+        <p class="lead">{s.rule_name}</p>
+
+        <section class="section">
+          <h2>每人每月上限</h2>
+          <div class="cards">
+            <div class="card">
+              <h3 class="money">{s.monthly_max_general?.toLocaleString()} 元</h3>
+              <span class="sub">一般戶（多含中低收）</span>
+            </div>
+            <div class="card">
+              <h3 class="money">{s.monthly_max_low_income?.toLocaleString()} 元</h3>
+              <span class="sub">低收入戶</span>
+            </div>
+          </div>
+        </section>
+
+        {rows.length > 0 && (
+          <section class="section">
+            <h2>細節</h2>
+            <div class="table-wrap">
+              <table>
+                <tbody>
+                  {rows.map(([k, v]) => (
+                    <tr><th>{k}</th><td>{v}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        <p class="meta">
+          金額是療育費與交通費合計的上限，各縣市算法不同。
+          資料核對於 {s.verified_at}，以
+          <a href={s.source_url} target="_blank" rel="noopener">主管機關公告</a>為準；
+          這裡只列規則與連結，不代為試算。
+        </p>
+      </>
+    )}
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+</Base>

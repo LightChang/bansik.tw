@@ -1,0 +1,60 @@
+---
+import '../styles/site.css';
+import { GA_MEASUREMENT_ID, GA_HOSTS, GSC_VERIFICATION } from '../site.config.mjs';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+}
+const { title, description, canonical } = Astro.props;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const url = canonical ?? `${site}${Astro.url.pathname}`;
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={url} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:locale" content="zh_TW" />
+
+    {GSC_VERIFICATION && <meta name="google-site-verification" content={GSC_VERIFICATION} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    {GA_MEASUREMENT_ID && (
+      <script is:inline define:vars={{ gaId: GA_MEASUREMENT_ID, gaHosts: GA_HOSTS }}>
+        // 主機名對不上就什麼都不做——連 gtag.js 的請求都不發出去。
+        // 內頁是真實網址（/taichung/places/），每一頁都是一次正常的載入，
+        // 所以不需要為了 hash 路由補送 page_view。
+        if (gaHosts.indexOf(location.hostname) !== -1) {
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', gaId);
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+          document.head.appendChild(s);
+        }
+      </script>
+    )}
+  </body>
+</html>

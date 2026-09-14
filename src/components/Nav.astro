@@ -1,0 +1,31 @@
+---
+// 站台頁首：回首頁的連結 + 換縣市的下拉。
+// 縣市頁一定要有換縣市的入口，不然使用者只能自己改網址。
+import { counties } from '../lib/data.mjs';
+
+interface Props {
+  current?: string;
+}
+const { current } = Astro.props;
+const list = counties();
+---
+
+<header class="site-hd">
+  <div class="shell">
+    <a class="brand" href="/">bansik｜兒童發展地圖</a>
+    <label class="switch">
+      <span>看其他縣市</span>
+      <select id="countySwitch">
+        <option value="/">全國</option>
+        {list.map((c) => (
+          <option value={`/${c.code}/`} selected={c.code === current}>{c.name}</option>
+        ))}
+      </select>
+    </label>
+  </div>
+</header>
+
+<script>
+  const sw = document.getElementById('countySwitch');
+  if (sw) sw.addEventListener('change', (e) => { location.href = e.target.value; });
+</script>
