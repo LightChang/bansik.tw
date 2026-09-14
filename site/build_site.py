@@ -32,6 +32,7 @@ COUNTIES = json.load(open(os.path.join(HERE, 'counties.json')))['counties']
 PY = sys.executable
 
 SITE = 'https://bansik.tw'
+GA = 'G-L05CG61N7H'
 
 
 def skeleton(body, title, description, canonical):
@@ -52,6 +53,19 @@ def skeleton(body, title, description, canonical):
 <meta property="og:type" content="website">
 <meta property="og:url" content="{canonical}">
 <style>img{{max-width:100%}}</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){{dataLayer.push(arguments);}}
+gtag('js', new Date());
+gtag('config', '{GA}');
+// 這是 hash 路由的單頁應用：GA4 的自動 page_view 只在載入時送一次，之後切到
+// 篩檢／機構／補助／分布圖都不會再送。少了這一段，六個內頁裡有五個在報表上
+// 完全看不到，只會看到一個首頁流量。
+addEventListener('hashchange', function () {{
+  gtag('event', 'page_view', {{page_location: location.href}});
+}});
+</script>
 </head>
 <body>
 {body}
