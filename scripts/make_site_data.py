@@ -21,6 +21,7 @@ import csv
 import json
 import os
 import sys
+import unicodedata
 from datetime import datetime, timezone
 
 BUILD = sys.argv[1] if len(sys.argv) > 1 else 'build'
@@ -45,6 +46,35 @@ def dump(obj, *parts):
     json.dump(obj, open(path, 'w', encoding='utf-8'),
               ensure_ascii=False, separators=(',', ':'))
     return os.path.getsize(path)
+
+
+SUFFIX = '區鄉鎮市'
+
+
+def norm(s):
+    return unicodedata.normalize('NFKC', s or '').replace('台', '臺')
+
+
+def variants(name):
+    """行政區名可能的寫法，依可信度排序，取第一個命中。
+
+    不要用「去尾字再比對」那種寫法：`前鎮` 去尾字會變成 `前`，而 `前鎮區` 去尾字
+    是 `前鎮`，兩邊永遠對不上。地名本身就以區鄉鎮市結尾的（前鎮、新市、平鎮）
+    全會被多砍一個字。
+
+    這裡處理兩種真實落差：
+    - 改制前後：桃園 2014 年升格，圖資寫「中壢市」、機構資料寫「中壢區」
+    - 機構資料省略後綴：寫「前鎮」而圖資是「前鎮區」
+    """
+    n = norm(name)
+    yield n
+    if n and n[-1] in SUFFIX:
+        stem = n[:-1]
+        for s in SUFFIX:
+            yield stem + s
+    else:
+        for s in SUFFIX:
+            yield n + s
 
 
 def subsidy_table():
@@ -113,7 +143,22 @@ for c in counties:
         d = districts.setdefault(area, {'located': 0, 'serving': {}, 'keys': []})
         d['serving'] = dict(counter.most_common())
 
-    dist_geo = {d: g for d, g in geo_by_county.get(name, {}).items() if d in districts}
+    # 哪些鍵是真的行政區？權威來源是鄉鎮界圖資：對得到座標的就是真的。
+    # serves_area（服務區域）會塞進「全新北市」「基隆市全區」這種根本不是行政區的字串，
+    # 甚至混進解析殘渣（「全新北市(服務時間:週一至週五…)」）。這些留著會變成機構清單
+    # 篩選器裡的選項，家長選了得到 0 筆。
+    # 例外：對不到座標但有機構設籍的要留著，否則那些機構會從篩選器裡整個消失。
+    county_geo = {norm(k): v for k, v in geo_by_county.get(name, {}).items()}
+    dist_geo = {}
+    real = {}
+    for key, val in districts.items():
+        hit = next((county_geo[v] for v in variants(key) if v in county_geo), None)
+        if hit is not None:
+            dist_geo[key] = hit
+            real[key] = val
+        elif val['located'] > 0:
+            real[key] = val
+    districts = real
 
     n_centers = sum(1 for e in ent if e['cat'] == '聯合評估中心')
     data = {

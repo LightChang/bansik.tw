@@ -1,3 +1,0 @@
-{"hint":"Set ASVS_USE_OPENCRE=true to enable ISO 27001 mappings","level":"info","message":"OpenCRE integration disabled","timestamp":"2026-09-11T13:04:07.484Z"}
-{"config":{"maxFileSize":"25MB","maxQueryLength":2000,"maxSearchResults":250,"rateLimit":"100 requests per 60s"},"integrityCheckEnabled":false,"level":"info","logFile":"asvs-server.log","logLevel":"info","message":"ASVS MCP Server initialized","rateLimitEnabled":true,"securityTier":"BALANCED","timestamp":"2026-09-11T13:04:07.486Z"}
-{"integrityCheckEnabled":false,"level":"info","logLevel":"info","message":"OWASP ASVS MCP server started","timestamp":"2026-09-11T13:04:07.487Z","transport":"stdio","version":"0.4.0"}
