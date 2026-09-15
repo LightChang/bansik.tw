@@ -30,3 +30,7 @@ node_modules/
 # 系統
 .DS_Store
 *.log
+
+# Google 服務帳號金鑰是機密，預設放 ~/.config/bansik/，這裡再擋一次以防有人放進 repo
+*-key.json
+service-account*.json
