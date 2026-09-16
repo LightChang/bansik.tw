@@ -4,6 +4,7 @@
 //   node scripts/google-api.mjs check                 服務帳號看得到 GSC 資源與 GA 評估 ID 嗎
 //   node scripts/google-api.mjs submit                送 sitemap 給 GSC，並列出 GSC 目前的 sitemap 狀態
 //   node scripts/google-api.mjs inspect [網址…]       查網址的收錄狀態；不給網址就查 sitemap 裡全部
+//   node scripts/google-api.mjs queries [天數]         GSC 搜尋成效（預設 28 天）
 //   node scripts/google-api.mjs realtime              GA4 最近 30 分鐘有沒有收到資料
 //
 // 不用 Indexing API：它只接受 JobPosting 與 BroadcastEvent，拿來推一般頁面違反使用條款。
@@ -188,6 +189,26 @@ async function inspect(token, urls) {
   console.log(bad.length ? `\n要修的 ${bad.length} 頁：\n  ${bad.join('\n  ')}` : '\n沒有要修的問題。');
 }
 
+/** 搜尋成效。GSC 的資料有 2～3 天延遲，最後 3 天不要拿來判讀。 */
+async function queries(token, days) {
+  const end = new Date(Date.now() - 3 * 86400e3).toISOString().slice(0, 10);
+  const start = new Date(Date.now() - (3 + days - 1) * 86400e3).toISOString().slice(0, 10);
+  for (const dim of ['query', 'page']) {
+    const r = await call(token, `${GSC}/sites/${site}/searchAnalytics/query`, {
+      method: 'POST',
+      body: { startDate: start, endDate: end, dimensions: [dim], rowLimit: 25, type: 'web' },
+    });
+    if (!r.ok) fail(`查 ${dim} 成效`, r);
+    const rows = r.json.rows ?? [];
+    console.log(`\n${dim}　${start} ~ ${end}（避開最後 3 天的未定案資料）`);
+    if (!rows.length) { console.log('  沒有資料'); continue; }
+    for (const row of rows) {
+      console.log(`  ${row.keys[0]}\t點擊 ${row.clicks}\t曝光 ${row.impressions}`
+        + `\tCTR ${(row.ctr * 100).toFixed(1)}%\t平均排名 ${row.position.toFixed(1)}`);
+    }
+  }
+}
+
 async function realtime(token, property) {
   const r = await call(token, `https://analyticsdata.googleapis.com/v1beta/${property}:runRealtimeReport`, {
     method: 'POST',
@@ -216,11 +237,14 @@ if (cmd === 'check') {
 } else if (cmd === 'inspect') {
   if (!(await gscCheck(token, key.client_email))) process.exit(1);
   await inspect(token, rest);
+} else if (cmd === 'queries') {
+  if (!(await gscCheck(token, key.client_email))) process.exit(1);
+  await queries(token, Number(rest[0] ?? 28));
 } else if (cmd === 'realtime') {
   const property = await gaFind(token, key.client_email);
   if (!property) process.exit(1);
   await realtime(token, property);
 } else {
-  console.error(`不認得的指令 ${cmd}。可用：check、submit、inspect、realtime`);
+  console.error(`不認得的指令 ${cmd}。可用：check、submit、inspect、queries、realtime`);
   process.exit(2);
 }
