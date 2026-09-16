@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, countyBundle } from '../../lib/data.mjs';
 
 export const getStaticPaths = countyPaths;
@@ -24,22 +25,34 @@ const items = (arr, n, base) => (arr || []).slice(0, n).map((x) => {
 const scales = items(m['國健署兒童發展篩檢量表'], 12);
 const promo = items(m['社家署宣導資料'], 10, 'https://system.sfaa.gov.tw');
 const books = items(m['CRPD繪本'], 5);
+
+// 素材本身全國通用，22 個縣市頁原本一字不差——標題、內文、description 全都一樣。
+// 這種頁 Google 會判成重複、只留一頁，AI 引擎也不知道該抄哪一頁。
+// 解法不是改寫文案，是讓每一頁真的帶該縣市的資訊：填完檢核表之後要問誰。
+const referrals = c.entities.filter((e) => e.cat === '通報轉介中心');
+const centers = c.entities.filter((e) => e.cat === '聯合評估中心');
 ---
 
 <Base
   title={`看懂發展的素材｜${c.county}`}
-  description="官方與公益單位做的兒童發展檢核表、篩檢量表、宣導資料與繪本，可直接下載。"
+  description={`兒童發展檢核表、國健署篩檢量表、宣導資料與繪本，全部可直接下載；`
+    + `填完之後在${c.county}要問誰也寫在同一頁（通報轉介中心 ${referrals.length} 處、`
+    + `聯合評估中心 ${centers.length} 家）。`}
 >
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
     <h1>看懂發展的素材</h1>
-    <p class="lead">都是官方或公益單位做的，可以直接下載。全國通用，不分縣市。</p>
+    <p class="lead">
+      素材都是官方或公益單位做的，可以直接下載，全國通用。
+      填完覺得不對勁時，{c.county}要問誰寫在這一頁最後面。
+    </p>
 
     <section class="section">
       <h2>線上發展檢核表（{Object.keys(chk).length} 個年齡層）</h2>
       <div class="table-wrap">
         <table>
+          <caption>社家署線上兒童發展檢核表：各年齡層的題數與警訊題數。全國通用。</caption>
           <thead>
             <tr><th>年齡層</th><th class="num">題數</th><th class="num">警訊題</th><th>第一題長這樣</th></tr>
           </thead>
@@ -80,6 +93,43 @@ const books = items(m['CRPD繪本'], 5);
     )}
 
     <p class="meta">官方素材裡沒有任何一份是寫給孩子本人看的，手足的部分也只有民間單位有。</p>
+
+    <section class="section">
+      <h2>填完之後，在{c.county}問誰</h2>
+      {referrals.length > 0 ? (
+        <>
+          <p>
+            檢核表的結果不是診斷，不放心就打通報轉介中心——它是單一窗口，
+            {c.county}共 {referrals.length} 處，會幫你轉到評估或療育。
+          </p>
+          <div class="table-wrap">
+            <table>
+              <caption>{c.county}通報轉介中心（單一窗口）。資料產生於 {c.generated_at.slice(0, 10)}。</caption>
+              <thead><tr><th>名稱</th><th>行政區</th><th>電話</th></tr></thead>
+              <tbody>
+                {referrals.map((e) => (
+                  <tr><td>{e.name}</td><td>{e.district}</td><td class="num">{e.tel}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ) : (
+        <p>
+          {c.county}沒有單獨設立通報轉介中心，先問當地衛生局或社會局；
+          機構清單見<a href={`/${code}/places/`}>全部機構</a>。
+        </p>
+      )}
+      <p class="meta">
+        要做正式評估的話，{c.county}
+        {centers.length > 0
+          ? `有 ${centers.length} 家兒童發展聯合評估中心`
+          : '沒有設立聯合評估中心，需要跨縣市就醫'}，
+        名單與電話在<a href={`/${code}/places/`}>全部機構</a>，流程見<a href={`/${code}/steps/`}>完整流程五步</a>。
+      </p>
+    </section>
+
+    <Caveat kind="wait" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>

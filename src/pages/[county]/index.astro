@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, countyBundle, SUBPAGES } from '../../lib/data.mjs';
 
 export const getStaticPaths = countyPaths;
@@ -74,10 +75,14 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
       </div>
     </div>
 
+    {/* h2 不只是排版：搜尋與 AI 引擎靠標題判斷這一段在答什麼問題。
+        月齡軸與卡片原本都只有 h3，整頁除了 h1 沒有第二層。 */}
+    <h2 class="sr-band">這個月齡該做的事</h2>
     <div class="track" id="track"></div>
 
     <div class="now" id="now"></div>
 
+    <h2>在{c.county}先找誰</h2>
     <div class="cards">
       {call && (
         <div class="card call">
@@ -118,6 +123,8 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
     <nav class="pagenav">
       {SUBPAGES.map(([slug, title]) => <a href={`/${code}/${slug}/`}>{title} →</a>)}
     </nav>
+
+    <Caveat kind="list" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>

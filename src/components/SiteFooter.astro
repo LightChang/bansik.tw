@@ -14,8 +14,11 @@ const { code, generatedAt } = Astro.props;
   <nav>
     {SUBPAGES.map(([slug, title]) => <a href={`/${code}/${slug}/`}>{title}</a>)}
   </nav>
+  <!-- 日期與「來源：」之間一定要有句號：JSX 會把換行壓成一個空白，
+       之前長出「資料產生於 2026-09-14來源：…」這種黏在一起的句子，
+       被引擎抄走就是一團。 -->
   <p>
-    資料產生於 {generatedAt.slice(0, 10)}
+    資料產生於 {generatedAt.slice(0, 10)}。
     來源：衛福部社家署、國健署、教育部特教通報網、各縣市衛生局與社會局。
   </p>
   <p>這裡是路標不是掛號窗口，不做品質排名，也不代為預約或試算。以主管機關公告為準。</p>

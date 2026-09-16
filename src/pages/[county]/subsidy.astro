@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
 
 export const getStaticPaths = countyPaths;
@@ -30,15 +31,23 @@ const rows = s && s.status !== 'pending'
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
     <h1>補助怎麼申請</h1>
 
-    {!s && <p class="lead">這個縣市的規則還沒整理。</p>}
+    {!s && (
+      <section class="section">
+        <h2>{c.county}的補助規則還沒整理</h2>
+        <p class="lead">先看<a href={`/${code}/steps/`}>完整流程五步</a>，或打通報轉介中心問。</p>
+      </section>
+    )}
 
     {s && s.status === 'pending' && (
+      <section class="section">
+      <h2>{c.county}：查得到計畫，但金額沒有公開</h2>
       <div class="warnbox">
         <p>
           {s.county}的「{s.rule_name}」查得到計畫名稱，
           但金額沒有公開在任何可以讀到的頁面上。{s.note || ''}
         </p>
       </div>
+      </section>
     )}
 
     {s && s.status !== 'pending' && (
@@ -64,6 +73,7 @@ const rows = s && s.status !== 'pending'
             <h2>細節</h2>
             <div class="table-wrap">
               <table>
+                <caption>{c.county}早期療育費用補助的細節欄位。以主管機關最新公告為準。</caption>
                 <tbody>
                   {rows.map(([k, v]) => (
                     <tr><th>{k}</th><td>{v}</td></tr>
@@ -82,6 +92,8 @@ const rows = s && s.status !== 'pending'
         </p>
       </>
     )}
+
+    <Caveat kind="money" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>

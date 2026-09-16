@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
 
 export const getStaticPaths = countyPaths;
@@ -59,6 +60,7 @@ const byCat = Object.entries(
       <p class="lead">左邊是家長平常的說法，右邊是公文與網站上的正式分類，兩者常常對不起來。</p>
       <div class="table-wrap">
         <table>
+          <caption>{c.county}：家長的說法對到官方分類，以及各類型的家數。</caption>
           <thead><tr><th>說法</th><th>官方分類</th><th class="num">家數</th></tr></thead>
           <tbody>
             {byCat.map((r) => (
@@ -72,6 +74,8 @@ const byCat = Object.entries(
         </table>
       </div>
     </section>
+
+    <Caveat kind="wait" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>

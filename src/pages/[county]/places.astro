@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
 
 export const getStaticPaths = countyPaths;
@@ -86,41 +87,66 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
       <output class="num" id="fcount"></output>
     </div>
 
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>名稱</th><th>類型</th><th>地址</th><th>電話</th></tr></thead>
-        <tbody id="ftbody"></tbody>
-      </table>
-    </div>
+    <section class="section">
+      <h2>{c.county}全部機構一覽</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>
+            {c.county}兒童發展相關機構：名稱、類型、地址與電話。
+            資料產生於 {c.generated_at.slice(0, 10)}。
+          </caption>
+          <thead><tr><th>名稱</th><th>類型</th><th>地址</th><th>電話</th></tr></thead>
+          {/* 這些列在建置期就產生好，不是瀏覽器塞進來的。
+              篩選只是把不符合的列加上 hidden——AI 爬蟲不跑 JS，
+              之前的做法讓它們只拿得到一個空的 tbody。 */}
+          <tbody id="ftbody">
+            {rows.map((r) => (
+              <tr data-d={r.district} data-c={r.cat}>
+                <td>
+                  {r.tier && <span class={`pill ${r.tier === '重點' ? 'key' : ''}`}>{r.tier}</span>}
+                  {r.url
+                    ? <a href={r.url} target="_blank" rel="noopener">{r.name}</a>
+                    : r.name}
+                </td>
+                <td>{r.cat}</td>
+                <td>
+                  {r.address}
+                  {r.approx && <span class="meta">（座標只到行政區）</span>}
+                  {r.obs && <div class="meta">{r.obs}</div>}
+                </td>
+                <td class="num">{r.tel}</td>
+              </tr>
+            ))}
+            <tr id="fempty" hidden><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <Caveat kind="list" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>
 
-  <script type="application/json" id="bansik-places" set:html={JSON.stringify(rows)} />
-
   <script>
-    import { esc } from '../../lib/view.mjs';
-
-    const ROWS = JSON.parse(document.getElementById('bansik-places').textContent);
+    // 列已經在 HTML 裡了，這裡只負責顯示與隱藏，不再重畫表格。
     const fd = document.getElementById('fd');
     const fc = document.getElementById('fc');
-    const tbody = document.getElementById('ftbody');
     const count = document.getElementById('fcount');
+    const empty = document.getElementById('fempty');
+    const rows = [...document.querySelectorAll('#ftbody tr[data-d]')];
 
     function fill() {
       const d = fd.value;
       const k = fc.value;
-      const list = ROWS.filter((r) => (!d || r.district === d) && (!k || r.cat === k));
-      count.textContent = `${list.length} 家` + (d || k ? `（全縣市共 ${ROWS.length} 家）` : '');
-      tbody.innerHTML = list.length
-        ? list.map((r) => `<tr>
-            <td>${r.tier ? `<span class="pill ${r.tier === '重點' ? 'key' : ''}">${esc(r.tier)}</span>` : ''}${
-              r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}</td>
-            <td>${esc(r.cat)}</td>
-            <td>${esc(r.address)}${r.approx ? ' <span class="meta">（座標只到行政區）</span>' : ''}
-              ${r.obs ? `<div class="meta">${esc(r.obs)}</div>` : ''}</td>
-            <td class="num">${esc(r.tel)}</td></tr>`).join('')
-        : '<tr><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>';
+      let shown = 0;
+      for (const tr of rows) {
+        const ok = (!d || tr.dataset.d === d) && (!k || tr.dataset.c === k);
+        tr.hidden = !ok;
+        if (ok) shown++;
+      }
+      empty.hidden = shown > 0;
+      count.textContent = `${shown} 家` + (d || k ? `（全縣市共 ${rows.length} 家）` : '');
     }
 
     fd.addEventListener('change', fill);

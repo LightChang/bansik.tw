@@ -1,6 +1,7 @@
 ---
 import '../styles/site.css';
 import { GA_MEASUREMENT_ID, GA_HOSTS, GSC_VERIFICATION } from '../site.config.mjs';
+import { counties, county, siteIndex, SUBPAGES } from '../lib/data.mjs';
 
 interface Props {
   title: string;
@@ -10,6 +11,44 @@ interface Props {
 const { title, description, canonical } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const url = canonical ?? `${site}${Astro.url.pathname}`;
+
+// 結構化資料。每頁都給 WebPage 與麵包屑——搜尋與 AI 引擎靠它知道
+// 這一頁在整個站的哪個位置、資料多新，不必自己從網址猜。
+//
+// 路徑自己推得出來，不必每個頁面各傳一次：/taichung/places/ 的兩段
+// 分別查 counties.json 與 SUBPAGES 就有中文名稱。查不到就不放那一層，
+// 寧可少一層麵包屑，也不要放一個編出來的名稱。
+const seg = Astro.url.pathname.split('/').filter(Boolean);
+const countyMeta = seg[0] ? counties().find((x) => x.code === seg[0]) : null;
+const subTitle = seg[1] ? (SUBPAGES.find(([slug]) => slug === seg[1]) || [])[1] : null;
+
+const crumbs = [{ name: '全國', url: `${site}/` }];
+if (countyMeta) crumbs.push({ name: countyMeta.name, url: `${site}/${countyMeta.code}/` });
+if (countyMeta && subTitle) crumbs.push({ name: subTitle, url });
+
+// dateModified 用資料產生日，不用建置時間：重新建置不代表資料變新了，
+// 拿建置時間當更新時間就是對引擎謊報新鮮度。
+const dataDate = countyMeta ? county(countyMeta.code).generated_at : siteIndex().generated_at;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    url,
+    inLanguage: 'zh-Hant-TW',
+    isPartOf: { '@type': 'WebSite', name: 'bansik｜兒童發展地圖', url: `${site}/` },
+    ...(description ? { description } : {}),
+    ...(dataDate ? { dateModified: dataDate.slice(0, 10) } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem', position: i + 1, name: c.name, item: c.url,
+    })),
+  },
+];
 ---
 
 <!doctype html>
@@ -41,6 +80,10 @@ const url = canonical ?? `${site}${Astro.url.pathname}`;
     <meta property="og:locale" content="zh_TW" />
 
     {GSC_VERIFICATION && <meta name="google-site-verification" content={GSC_VERIFICATION} />}
+
+    {jsonld.map((b) => (
+      <script type="application/ld+json" set:html={JSON.stringify(b)} />
+    ))}
     <slot name="head" />
   </head>
   <body>

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
+import Caveat from '../components/Caveat.astro';
 import { siteIndex, shared } from '../lib/data.mjs';
 
 const idx = siteIndex();
@@ -70,9 +71,11 @@ const desc = `全臺 ${totalEnt} 家兒童發展相關機構、${totalCtr} 家�
       </div>
     </section>
 
+    <Caveat kind="list" />
+
     <footer class="site-ft">
       <p>
-        資料產生於 {idx.generated_at.slice(0, 10)}
+        資料產生於 {idx.generated_at.slice(0, 10)}。
         來源：衛福部社家署、國健署、教育部特教通報網、各縣市衛生局與社會局。
       </p>
       <p>這裡是路標不是掛號窗口，不做品質排名，也不代為預約或試算。以主管機關公告為準。</p>

@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
 
 export const getStaticPaths = countyPaths;
@@ -105,6 +106,7 @@ const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
       <h2>各區家數</h2>
       <div class="table-wrap">
         <table>
+          <caption>{c.county}各行政區的兒童發展相關機構家數。資料產生於 {c.generated_at.slice(0, 10)}。</caption>
           <thead><tr><th>行政區</th><th class="num">位於這一區</th><th>看清單</th></tr></thead>
           <tbody>
             {sorted.map((n) => (
@@ -122,6 +124,8 @@ const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
         機構自己的座標只有 {addressLevel} 家是門牌精度。
       </p>
     </section>
+
+    <Caveat kind="list" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>

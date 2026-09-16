@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import Caveat from '../../components/Caveat.astro';
 import { countyPaths, countyBundle } from '../../lib/data.mjs';
 import { num, screenings } from '../../lib/view.mjs';
 
@@ -60,6 +61,7 @@ const selfCheck = s.timeline.filter((t) => ['線上發展檢核表', '家長紀�
       <h2>家長自己做的</h2>
       <div class="table-wrap">
         <table>
+          <caption>{c.county}：家長自己可以做的發展檢核，依年齡分。</caption>
           <thead><tr><th>年齡</th><th>項目</th><th>內容</th></tr></thead>
           <tbody>
             {selfCheck.map((t) => (
@@ -91,6 +93,8 @@ const selfCheck = s.timeline.filter((t) => ['線上發展檢核表', '家長紀�
         </div>
       </section>
     )}
+
+    <Caveat kind="wait" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>
