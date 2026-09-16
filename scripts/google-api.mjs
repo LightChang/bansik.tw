@@ -145,9 +145,33 @@ async function sitemapUrls() {
   return urls;
 }
 
+/** 只挑真的要修的：抓不到、被擋、Google 選了別的標準網址、判定不是 PASS。
+ *
+ * 還沒被檢索的頁面不算問題：Google 沒抓過就沒有東西可報，API 會回 verdict NEUTRAL
+ * 加上一整排 *_UNSPECIFIED。新站剛送 sitemap 時大半頁面都長這樣，把它們列成
+ * 「要修」只會淹掉真正的問題。
+ */
+function problems(url, idx) {
+  const out = [];
+  const uncrawled = !idx.lastCrawlTime
+    && (!idx.pageFetchState || idx.pageFetchState === 'PAGE_FETCH_STATE_UNSPECIFIED');
+  if (uncrawled) return out;
+  if (idx.verdict && idx.verdict !== 'PASS') out.push(`判定 ${idx.verdict}`);
+  if (idx.robotsTxtState && idx.robotsTxtState !== 'ALLOWED') out.push(`robots ${idx.robotsTxtState}`);
+  if (idx.pageFetchState && idx.pageFetchState !== 'SUCCESSFUL') out.push(`抓取 ${idx.pageFetchState}`);
+  if (idx.indexingState && idx.indexingState !== 'INDEXING_ALLOWED'
+      && idx.indexingState !== 'INDEXING_STATE_UNSPECIFIED') out.push(`索引 ${idx.indexingState}`);
+  // userCanonical 是頁面自己寫的，googleCanonical 是 Google 實際採用的。
+  // 兩者不同代表 Google 把這頁併到別的網址去了，流量統計與排名都會記到那一頁。
+  if (idx.googleCanonical && idx.googleCanonical !== url) out.push(`Google 採用的標準網址是 ${idx.googleCanonical}`);
+  if (idx.userCanonical && idx.userCanonical !== url) out.push(`頁面自己宣告的標準網址是 ${idx.userCanonical}`);
+  return out;
+}
+
 async function inspect(token, urls) {
   if (!urls.length) urls = await sitemapUrls();
   const tally = {};
+  const bad = [];
   for (const u of urls) {
     const r = await call(token, 'https://searchconsole.googleapis.com/v1/urlInspection/index:inspect',
       { method: 'POST', body: { inspectionUrl: u, siteUrl: SITE, languageCode: 'zh-TW' } });
@@ -155,10 +179,13 @@ async function inspect(token, urls) {
     const idx = r.json.inspectionResult?.indexStatusResult ?? {};
     const state = idx.coverageState ?? idx.verdict ?? '未知';
     tally[state] = (tally[state] ?? 0) + 1;
+    const issues = problems(u, idx);
+    if (issues.length) bad.push(`${u}\n    ${issues.join('\n    ')}`);
     console.log(`${u}\t${state}\t上次檢索 ${idx.lastCrawlTime ?? '-'}`);
     await new Promise((ok) => setTimeout(ok, INSPECT_GAP_MS));
   }
   console.log(`\n共 ${urls.length} 頁：${Object.entries(tally).map(([k, v]) => `${k} ${v}`).join('、')}`);
+  console.log(bad.length ? `\n要修的 ${bad.length} 頁：\n  ${bad.join('\n  ')}` : '\n沒有要修的問題。');
 }
 
 async function realtime(token, property) {
