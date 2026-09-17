@@ -1,7 +1,7 @@
 ---
 import '../styles/site.css';
 import { GA_MEASUREMENT_ID, GA_HOSTS, GSC_VERIFICATION } from '../site.config.mjs';
-import { counties, county, siteIndex, SUBPAGES } from '../lib/data.mjs';
+import { counties, county, siteIndex, shared, SUBPAGES } from '../lib/data.mjs';
 
 interface Props {
   title: string;
@@ -29,6 +29,12 @@ if (countyMeta && subTitle) crumbs.push({ name: subTitle, url });
 // dateModified 用資料產生日，不用建置時間：重新建置不代表資料變新了，
 // 拿建置時間當更新時間就是對引擎謊報新鮮度。
 const dataDate = countyMeta ? county(countyMeta.code).generated_at : siteIndex().generated_at;
+
+// citation：站上時程／篩檢工具的資料底稿本來就逐筆記了官方網址（src/data/shared.json 的
+// timeline[].url），這裡去重取出，原樣列成來源引用——不得新增或改寫這裡沒有的網址。
+const citationUrls = [...new Map(
+  shared().timeline.filter((t) => t.url).map((t) => [t.url, t.source])
+).entries()];
 
 // Organization：站台身分的最小可驗證版本。只寫得出來、查得到的欄位——
 // 沒有登記在案的統編、地址、電話或對外聯絡窗口，那些欄位不編，寧可少寫一項，
@@ -64,6 +70,9 @@ const jsonld = [
     },
     ...(description ? { description } : {}),
     ...(dataDate ? { dateModified: dataDate.slice(0, 10) } : {}),
+    ...(citationUrls.length
+      ? { citation: citationUrls.map(([url, name]) => ({ '@type': 'CreativeWork', name, url })) }
+      : {}),
   },
   {
     '@context': 'https://schema.org',
