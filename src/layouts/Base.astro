@@ -30,6 +30,24 @@ if (countyMeta && subTitle) crumbs.push({ name: subTitle, url });
 // 拿建置時間當更新時間就是對引擎謊報新鮮度。
 const dataDate = countyMeta ? county(countyMeta.code).generated_at : siteIndex().generated_at;
 
+// Organization：站台身分的最小可驗證版本。只寫得出來、查得到的欄位——
+// 沒有登記在案的統編、地址、電話或對外聯絡窗口，那些欄位不編，寧可少寫一項，
+// 也不要交出殘缺欄位（半吊子的結構化資料在 Google 眼裡是「無效項目」，比沒有更糟）。
+// 只在首頁輸出：Organization 是站台層級的單一實體，不必每一頁重複宣告；
+// 其他頁面用 `{'@id': ...}` 參照同一個節點即可（見下方 isPartOf.publisher）。
+const orgId = `${site}/#organization`;
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': orgId,
+  name: 'bansik｜兒童發展地圖',
+  url: `${site}/`,
+  description:
+    '臺灣兒童發展篩檢與早期療育的資源地圖。以孩子的月齡為入口，回答三件事：'
+    + '現在該做哪一次檢查、附近哪裡可以評估與療育、補助怎麼申請。',
+  logo: `${site}/apple-touch-icon.png`,
+};
+
 const jsonld = [
   {
     '@context': 'https://schema.org',
@@ -37,7 +55,13 @@ const jsonld = [
     name: title,
     url,
     inLanguage: 'zh-Hant-TW',
-    isPartOf: { '@type': 'WebSite', name: 'bansik｜兒童發展地圖', url: `${site}/` },
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': `${site}/#website`,
+      name: 'bansik｜兒童發展地圖',
+      url: `${site}/`,
+      publisher: { '@id': orgId },
+    },
     ...(description ? { description } : {}),
     ...(dataDate ? { dateModified: dataDate.slice(0, 10) } : {}),
   },
@@ -48,6 +72,7 @@ const jsonld = [
       '@type': 'ListItem', position: i + 1, name: c.name, item: c.url,
     })),
   },
+  ...(Astro.url.pathname === '/' ? [org] : []),
 ];
 ---
 
