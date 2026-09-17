@@ -30,11 +30,23 @@ if (countyMeta && subTitle) crumbs.push({ name: subTitle, url });
 // 拿建置時間當更新時間就是對引擎謊報新鮮度。
 const dataDate = countyMeta ? county(countyMeta.code).generated_at : siteIndex().generated_at;
 
-// citation：站上時程／篩檢工具的資料底稿本來就逐筆記了官方網址（src/data/shared.json 的
-// timeline[].url），這裡去重取出，原樣列成來源引用——不得新增或改寫這裡沒有的網址。
-const citationUrls = [...new Map(
-  shared().timeline.filter((t) => t.url).map((t) => [t.url, t.source])
-).entries()];
+// citation：預設用站上時程／篩檢工具的資料底稿（src/data/shared.json 的 timeline[].url），
+// 這裡去重取出，原樣列成來源引用——不得新增或改寫這裡沒有的網址。
+// 補助頁例外：那一頁引用的是該縣市自己的補助法規（counties/<code>.json 的 subsidy），
+// 不是篩檢時程，掛時程來源等於告訴引擎「這頁引用了它沒講的東西」，故改用 subsidy 自己的
+// source_url／rule_name／verified_at。沒有 url 的整筆丟棄，陣列為空就整個屬性不輸出。
+const subsidyRecord = (seg[1] === 'subsidy' && countyMeta) ? county(countyMeta.code).subsidy : null;
+const citationEntries = subsidyRecord
+  ? (subsidyRecord.source_url
+      ? [{
+          name: subsidyRecord.rule_name || subsidyRecord.county,
+          url: subsidyRecord.source_url,
+          dateModified: subsidyRecord.verified_at,
+        }]
+      : [])
+  : [...new Map(
+      shared().timeline.filter((t) => t.url).map((t) => [t.url, t.source])
+    ).entries()].map(([url, name]) => ({ name, url }));
 
 // Organization：站台身分的最小可驗證版本。只寫得出來、查得到的欄位——
 // 沒有登記在案的統編、地址、電話或對外聯絡窗口，那些欄位不編，寧可少寫一項，
@@ -70,8 +82,17 @@ const jsonld = [
     },
     ...(description ? { description } : {}),
     ...(dataDate ? { dateModified: dataDate.slice(0, 10) } : {}),
-    ...(citationUrls.length
-      ? { citation: citationUrls.map(([url, name]) => ({ '@type': 'CreativeWork', name, url })) }
+    ...(citationEntries.filter((e) => e.url).length
+      ? {
+          citation: citationEntries
+            .filter((e) => e.url)
+            .map((e) => ({
+              '@type': 'CreativeWork',
+              name: e.name,
+              url: e.url,
+              ...(e.dateModified ? { dateModified: e.dateModified } : {}),
+            })),
+        }
       : {}),
   },
   {
