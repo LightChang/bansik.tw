@@ -3,7 +3,7 @@
 # 只做建置與部署，不抓資料——抓取與解析在 research/ 的 Python 管線，
 # 產出的 src/data/*.json 是進版控的，所以 CI 上只要有 node 就夠，
 # 不必在 CI 裝 Python、也不必重跑一次全國抓取。
-# 資料要更新時在本機跑 `npm run data` 再 commit。
+# 資料要更新時在本機跑 `pnpm run data` 再 commit。
 name: deploy
 
 on:
@@ -30,11 +30,16 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+      # pnpm/action-setup 必須在 setup-node 之前：setup-node 的 cache: pnpm
+      # 要先找到 pnpm 執行檔才算得出 store 路徑。
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - uses: actions/setup-node@v7
         with:
           node-version: '26'
-          cache: npm
-      - run: npm ci
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
 
       # GA 與 Search Console 的值放 repository variables（vars，不是 secrets——
       # 它們本來就會出現在每一頁的原始碼裡）。沒設就用 site.config.mjs 的預設值。
@@ -42,7 +47,7 @@ jobs:
         env:
           BANSIK_GA_ID: ${{ vars.BANSIK_GA_ID }}
           BANSIK_GSC_TOKEN: ${{ vars.BANSIK_GSC_TOKEN }}
-        run: npm run build
+        run: pnpm run build
 
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
