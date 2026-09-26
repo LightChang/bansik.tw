@@ -3,15 +3,19 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
-import { countyPaths, county } from '../../lib/data.mjs';
+import { countyPaths, county, counties } from '../../lib/data.mjs';
+import { shortCounty, typePages, typeUrl } from '../../lib/facets.mjs';
 
 export const getStaticPaths = countyPaths;
 
 const { county: code } = Astro.params;
 const c = county(code);
 const s = c.subsidy;
+const S = shortCounty(c.county);
+const ok = s && s.status !== 'pending';
+const fmt = (v) => (v == null ? null : v.toLocaleString());
 
-const rows = s && s.status !== 'pending'
+const rows = ok
   ? [
       ['補助項目', (s.items || []).join('、')],
       ['交通費', s.transport],
@@ -20,16 +24,50 @@ const rows = s && s.status !== 'pending'
       ['不補助', s.exclusions],
     ].filter(([, v]) => v)
   : [];
+
+// 標題與 description 照家長的搜尋寫法（「台中早療補助」），數字只用資料裡有的。
+// 金額沒公開的縣市不寫數字，改寫「金額未公開」，免得標題看起來像有答案。
+const title = ok
+  ? `${S}早療補助｜每月最高 ${fmt(s.monthly_max_general)} 元、低收入戶 ${fmt(s.monthly_max_low_income)} 元`
+  : `${S}早療補助｜金額未公開，申請窗口與電話`;
+const answer = ok
+  ? `${c.county}的早期療育補助，一般戶每人每月最高 ${fmt(s.monthly_max_general)} 元、`
+    + `低收入戶最高 ${fmt(s.monthly_max_low_income)} 元`
+    + ((s.items || []).length ? `，補助項目包括${s.items.join('、')}。` : '。')
+  : s
+    ? `${c.county}有早期療育補助計畫（${s.rule_name}），但金額沒有公開在可以讀到的頁面上。`
+    : `${c.county}的早期療育補助規則這個站還沒整理。`;
+const description = ok
+  ? `${answer}依${s.rule_name}整理（核對於 ${s.verified_at}），附申請期限與問補助的電話。`
+  : `${answer}要問金額與申請方式，打${c.county}的通報轉介或個案管理中心。`;
+
+// 問補助打哪支：通報轉介中心與個案管理中心（journey_step 2）
+const referrals = c.entities.filter((e) => e.journey_step === '2');
+
+// 補助用在療育上：這個縣市各類療育單位的名單頁
+const therapy = typePages(c).filter(({ type }) =>
+  ['speech-therapy', 'occupational-therapy', 'physical-therapy', 'psychotherapy',
+    'rehabilitation', 'early-intervention'].includes(type.slug));
+const evalPage = typePages(c).find(({ type }) => type.slug === 'evaluation');
+
+// 22 縣市比較：只放資料裡有的兩個上限，沒公開就寫沒公開
+const compare = counties().map(({ code: k, name }) => {
+  const x = county(k).subsidy;
+  const has = x && x.status !== 'pending';
+  return {
+    code: k, name, self: k === code,
+    general: has ? fmt(x.monthly_max_general) : null,
+    low: has ? fmt(x.monthly_max_low_income) : null,
+  };
+});
 ---
 
-<Base
-  title={`補助怎麼申請｜${c.county}`}
-  description={`${c.county}發展遲緩兒童早期療育補助的金額上限、補助項目與申請期限。`}
->
+<Base title={title} description={description}>
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
-    <h1>補助怎麼申請</h1>
+    <h1>{c.county}早療補助怎麼申請</h1>
+    <p class="lead">{answer}</p>
 
     {!s && (
       <section class="section">
@@ -40,37 +78,37 @@ const rows = s && s.status !== 'pending'
 
     {s && s.status === 'pending' && (
       <section class="section">
-      <h2>{c.county}：查得到計畫，但金額沒有公開</h2>
-      <div class="warnbox">
-        <p>
-          {s.county}的「{s.rule_name}」查得到計畫名稱，
-          但金額沒有公開在任何可以讀到的頁面上。{s.note || ''}
-        </p>
-      </div>
+        <h2>{c.county}：查得到計畫，但金額沒有公開</h2>
+        <div class="warnbox">
+          <p>
+            {s.county}的「{s.rule_name}」查得到計畫名稱，
+            但金額沒有公開在任何可以讀到的頁面上。{s.note || ''}
+          </p>
+        </div>
+        {s.apply_window && <p class="lead">申請窗口：{s.apply_window}。</p>}
       </section>
     )}
 
-    {s && s.status !== 'pending' && (
+    {ok && (
       <>
-        <p class="lead">{s.rule_name}</p>
-
         <section class="section">
-          <h2>每人每月上限</h2>
+          <h2>{c.county}早療補助每人每月最多多少</h2>
           <div class="cards">
             <div class="card">
-              <h3 class="money">{s.monthly_max_general?.toLocaleString()} 元</h3>
+              <h3 class="money">{fmt(s.monthly_max_general)} 元</h3>
               <span class="sub">一般戶（多含中低收）</span>
             </div>
             <div class="card">
-              <h3 class="money">{s.monthly_max_low_income?.toLocaleString()} 元</h3>
+              <h3 class="money">{fmt(s.monthly_max_low_income)} 元</h3>
               <span class="sub">低收入戶</span>
             </div>
           </div>
+          <p class="meta">依「{s.rule_name}」。</p>
         </section>
 
         {rows.length > 0 && (
           <section class="section">
-            <h2>細節</h2>
+            <h2>{c.county}早療補助的項目與申請期限</h2>
             <div class="table-wrap">
               <table>
                 <caption>{c.county}早期療育費用補助的細節欄位。以主管機關最新公告為準。</caption>
@@ -92,6 +130,72 @@ const rows = s && s.status !== 'pending'
         </p>
       </>
     )}
+
+    <section class="section">
+      <h2>申請補助前要先做完評估</h2>
+      <p>
+        到聯合評估中心做完整評估，拿到「綜合報告書」。之後申請補助、安排療育都要用這份。
+        {evalPage
+          ? <>{c.county}可以做評估的醫院見<a href={typeUrl(code, 'evaluation')}>{S}兒童發展評估（{evalPage.list.length} 家）</a>。</>
+          : <>整個流程見<a href={`/${code}/steps/`}>完整流程五步</a>。</>}
+      </p>
+    </section>
+
+    {referrals.length > 0 && (
+      <section class="section">
+        <h2>{c.county}問早療補助打哪支</h2>
+        <p class="lead">
+          申請方式、要準備的文件、自己的情況補不補得到，打通報轉介中心或個案管理中心問。
+          {c.county}共 {referrals.length} 處。
+        </p>
+        <div class="table-wrap">
+          <table>
+            <caption>{c.county}的通報轉介中心與個案管理中心電話。資料產生於 {c.generated_at.slice(0, 10)}。</caption>
+            <thead><tr><th>名稱</th><th>類型</th><th>電話</th></tr></thead>
+            <tbody>
+              {referrals.map((e) => (
+                <tr><td>{e.name}</td><td>{e.cat}</td><td class="num">{e.tel}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )}
+
+    {therapy.length > 0 && (
+      <section class="section">
+        <h2>在{c.county}哪裡做療育</h2>
+        <p>哪些單位的費用可以申請，以補助公告與通報轉介中心的說明為準。</p>
+        <nav class="pagenav">
+          {therapy.map(({ type, list }) => (
+            <a href={typeUrl(code, type.slug)}>{S}{type.label} {list.length} 家</a>
+          ))}
+          <a href={`/${code}/places/`}>{c.county}全部機構</a>
+        </nav>
+      </section>
+    )}
+
+    <section class="section">
+      <h2>各縣市早療補助上限比較</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>22 縣市早期療育補助的每人每月上限（元）。金額沒公開的縣市照實標示。</caption>
+          <thead><tr><th>縣市</th><th class="num">一般戶</th><th class="num">低收入戶</th></tr></thead>
+          <tbody>
+            {compare.map((r) => (
+              <tr>
+                <td>{r.self ? <b>{r.name}</b> : <a href={`/${r.code}/subsidy/`}>{r.name}</a>}</td>
+                <td class="num">{r.general ?? '未公開'}</td>
+                <td class="num">{r.low ?? '未公開'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">
+        這是各縣市計畫寫的每月上限。交通費算不算在內、離島機票怎麼補，各縣市不同，細節點進各縣市的頁面看。
+      </p>
+    </section>
 
     <Caveat kind="money" />
 
