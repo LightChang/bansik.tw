@@ -4,6 +4,7 @@ import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
+import { districtPages, typePages, districtUrl, shortCounty, MIN_DISTRICT } from '../../lib/facets.mjs';
 
 export const getStaticPaths = countyPaths;
 
@@ -52,24 +53,47 @@ if (names.length > 0) {
   };
 }
 
-const sorted = [...names].sort((a, b) => cnt(b) - cnt(a));
+// 表格列出所有有機構設籍的行政區，加上圖資裡有、但目前 0 家的區（照實列 0）
+const all = [...new Set([...names, ...Object.keys(c.districts).filter((n) => cnt(n) > 0)])];
+const sorted = all.sort((a, b) => cnt(b) - cnt(a) || a.localeCompare(b, 'zh-Hant'));
+const withPlaces = sorted.filter((n) => cnt(n) > 0);
+
+// 達到門檻的行政區有自己的靜態頁，其餘仍連到全表的 ?d= 篩選
+const dpages = new Set(districtPages(c).map((p) => p.district));
+const hrefOf = (n) => (dpages.has(n) ? districtUrl(code, n) : `/${code}/places/?d=${encodeURIComponent(n)}`);
+
+// 每一區各服務類型幾家，只列有的
+const types = typePages(c).map((p) => p.type);
+const mixOf = (n) => {
+  const here = c.entities.filter((e) => e.district === n);
+  return types.map((t) => [t.label, here.filter(t.match).length]).filter(([, k]) => k > 0)
+    .map(([l, k]) => `${l} ${k}`).join('・');
+};
+
+const S = shortCounty(c.county);
+const top = withPlaces.slice(0, 3).map((n) => `${n}（${cnt(n)} 家）`).join('、');
 const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
 ---
 
 <Base
-  title={`哪一區有幾家｜${c.county}`}
-  description={`${c.county}各行政區的兒童發展相關機構家數分布。`}
+  title={`${S}各區兒童發展與早療機構家數｜哪一區有幾家`}
+  description={`${c.county}各行政區的兒童發展相關機構家數：${withPlaces.length} 個行政區共 ${c.counts.entities} 家，`
+    + `最多的是${top}。每一區可再看篩檢、評估、治療各類的名單。`}
 >
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
-    <h1>哪一區有幾家</h1>
+    <h1>{c.county}各區有幾家兒童發展機構</h1>
+    <p class="lead">
+      {c.county}的 <span class="num">{c.counts.entities}</span> 家兒童發展相關機構分布在
+      <span class="num">{withPlaces.length}</span> 個行政區，最多的是{top}。
+    </p>
 
     {svg ? (
       <>
-        <p class="lead">
+        <p class="meta">
           圓圈畫在行政區的中心，大小是那一區的機構家數。
-          這不是機構的實際位置——點一下圓圈會跳到那一區的清單。
+          這不是機構的實際位置，點一下圓圈會跳到那一區的名單。
         </p>
         <svg
           viewBox={`0 0 ${svg.W} ${svg.H}`}
@@ -79,7 +103,7 @@ const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
           aria-label={`${c.county}各行政區機構家數分布`}
         >
           {svg.dots.map((d) => (
-            <a href={`/${code}/places/?d=${encodeURIComponent(d.name)}`}>
+            <a href={hrefOf(d.name)}>
               <title>{d.name} {d.n} 家</title>
               <circle
                 cx={d.cx} cy={d.cy} r={d.r}
@@ -99,21 +123,21 @@ const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
         </svg>
       </>
     ) : (
-      <p class="lead">這個縣市還沒有行政區座標，只能看下面的清單。</p>
+      <p class="meta">這個縣市還沒有行政區座標，只能看下面的清單。</p>
     )}
 
     <section class="section">
-      <h2>各區家數</h2>
+      <h2>{S}各區家數</h2>
       <div class="table-wrap">
         <table>
           <caption>{c.county}各行政區的兒童發展相關機構家數。資料產生於 {c.generated_at.slice(0, 10)}。</caption>
-          <thead><tr><th>行政區</th><th class="num">位於這一區</th><th>看清單</th></tr></thead>
+          <thead><tr><th>行政區</th><th class="num">位於這一區</th><th>服務類型（一家可能算進兩類）</th></tr></thead>
           <tbody>
             {sorted.map((n) => (
               <tr>
-                <td>{n}</td>
+                <td>{cnt(n) > 0 ? <a href={hrefOf(n)}>{n}</a> : n}</td>
                 <td class="num">{cnt(n)}</td>
-                <td><a href={`/${code}/places/?d=${encodeURIComponent(n)}`}>看這一區</a></td>
+                <td>{mixOf(n)}</td>
               </tr>
             ))}
           </tbody>
@@ -122,6 +146,7 @@ const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
       <p class="meta">
         全縣市 {c.counts.entities} 家。行政區中心點取自鄉鎮界圖資；
         機構自己的座標只有 {addressLevel} 家是門牌精度。
+        {MIN_DISTRICT} 家以上的行政區有自己的名單頁，其餘連到全部機構的篩選。
       </p>
     </section>
 
