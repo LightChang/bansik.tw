@@ -7,8 +7,10 @@ interface Props {
   title: string;
   description?: string;
   canonical?: string;
+  /** 內頁底下再往下一層的麵包屑（/taichung/places/speech-therapy/），path 省略＝目前這一頁 */
+  trail?: { name: string; path?: string }[];
 }
-const { title, description, canonical } = Astro.props;
+const { title, description, canonical, trail } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const url = canonical ?? `${site}${Astro.url.pathname}`;
 
@@ -24,7 +26,10 @@ const subTitle = seg[1] ? (SUBPAGES.find(([slug]) => slug === seg[1]) || [])[1] 
 
 const crumbs = [{ name: '全國', url: `${site}/` }];
 if (countyMeta) crumbs.push({ name: countyMeta.name, url: `${site}/${countyMeta.code}/` });
-if (countyMeta && subTitle) crumbs.push({ name: subTitle, url });
+if (countyMeta && subTitle) {
+  crumbs.push({ name: subTitle, url: trail?.length ? `${site}/${seg[0]}/${seg[1]}/` : url });
+  for (const t of trail || []) crumbs.push({ name: t.name, url: t.path ? `${site}${t.path}` : url });
+}
 
 // dateModified 用資料產生日，不用建置時間：重新建置不代表資料變新了，
 // 拿建置時間當更新時間就是對引擎謊報新鮮度。

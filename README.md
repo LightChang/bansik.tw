@@ -12,7 +12,7 @@
 >
 > **性平、兒少保、特教三個相鄰領域見 [`research/2026-09-12-topics/README.md`](research/2026-09-12-topics/README.md)**。可用的是兒少保統計（學齡前占受虐 24.7%）與縣市特教年報（唯一有行政區級發展遲緩人數）；性平教材對象是學齡後學生。
 >
-> **網站本體是 Astro**（與 seh.tw、hokhong.tw 等站同一套作法），原始碼在 `src/`。22 個縣市 × 7 頁 + 全國首頁 + 404，共 156 頁全部靜態產生，部署到 GitHub Pages（網域 bansik.tw）。網址結構是一個縣市一個目錄（`/taichung/`），六個內頁是**真實網址**（`/taichung/places/`），不用 hash 路由——這樣每個內頁才有自己的 title、canonical 與流量統計。
+> **網站本體是 Astro**（與 seh.tw、hokhong.tw 等站同一套作法），原始碼在 `src/`。22 個縣市 × 7 頁 + 全國首頁 + 404，共 156 頁全部靜態產生；另有「服務類型 × 縣市 × 行政區」的名單頁（`/taichung/places/speech-therapy/`、`/taoyuan/places/平鎮區/`），分類規則與出頁門檻在 `src/lib/facets.mjs`，部署到 GitHub Pages（網域 bansik.tw）。網址結構是一個縣市一個目錄（`/taichung/`），六個內頁是**真實網址**（`/taichung/places/`），不用 hash 路由——這樣每個內頁才有自己的 title、canonical 與流量統計。
 >
 > 兩條指令：`npm run data` 把 `research/build/` 的五張表切成 `src/data/`（進版控，所以 CI 上只要有 node，不必重跑 Python 管線）；`npm run build` 產生 `dist/`。資料層與網站層的分界就在 `src/data/`。
 >

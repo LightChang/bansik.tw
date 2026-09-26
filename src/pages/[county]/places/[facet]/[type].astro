@@ -1,0 +1,19 @@
+---
+// /taoyuan/places/平鎮區/screening/：行政區 × 服務類型。門檻與去重規則在 lib/facets.mjs。
+import FacetPage from '../../../../components/FacetPage.astro';
+import { counties, county } from '../../../../lib/data.mjs';
+import { typeDistrictPages } from '../../../../lib/facets.mjs';
+
+export function getStaticPaths() {
+  return counties().flatMap(({ code }) =>
+    typeDistrictPages(county(code)).map(({ district, type, list }) => ({
+      params: { county: code, facet: district, type: type.slug },
+      props: { district, type, list },
+    })));
+}
+
+const { county: code } = Astro.params;
+const { type, district, list } = Astro.props;
+---
+
+<FacetPage code={code} c={county(code)} list={list} type={type} district={district} />

@@ -4,37 +4,13 @@ import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
+import { obsLine } from '../../lib/view.mjs';
+import { typePages, districtPages, typeUrl, districtUrl, shortCounty } from '../../lib/facets.mjs';
 
 export const getStaticPaths = countyPaths;
 
 const { county: code } = Astro.params;
 const c = county(code);
-
-const OBS_LABEL = {
-  clinic_hours: '門診',
-  booking_method: '預約',
-  booking_tel: '分機',
-};
-
-// 動態資訊（各縣市衛生局頁解析出來的門診時間、預約方式、分機）在建置期就組好字串，
-// 瀏覽器只要篩選與重畫，不必再帶一份 observation 過去。
-function obsLine(key, tel) {
-  const list = c.observations.filter((o) => o.entity_key === key);
-  const parts = [];
-  for (const f of ['clinic_hours', 'booking_method', 'booking_tel']) {
-    const hit = list.find((o) => o.field === f);
-    if (!hit) continue;
-    // 電話別重複顯示：entity 存「(04)3604-5483」、衛生局頁存「04-36045483」，
-    // 格式不同、字串比不出來，要比數字。但「分機12130(初評)」這種帶標註的要留著。
-    // 「分機」兩個字本身不算資訊，先拿掉再判斷。
-    if (f === 'booking_tel' && tel) {
-      const extra = hit.value.replace(/分機/g, '');
-      if (!/[一-鿿]/.test(extra) && extra.replace(/\D/g, '') === tel.replace(/\D/g, '')) continue;
-    }
-    parts.push(`${OBS_LABEL[f]}：${hit.value}`);
-  }
-  return parts.join('　');
-}
 
 const rows = c.entities
   .slice()
@@ -49,8 +25,12 @@ const rows = c.entities
     tier: e.tier,
     // 區級座標是整區共用一個點，標出來才不會被當成門牌位置
     approx: e.geo_level === 'district',
-    obs: obsLine(e.entity_key, e.tel),
+    obs: obsLine(c.observations, e.entity_key, e.tel),
   }));
+
+const types = typePages(c);
+const dpages = districtPages(c);
+const S = shortCounty(c.county);
 
 const districts = Object.keys(c.districts).sort((a, b) => a.localeCompare(b, 'zh-Hant'));
 const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
@@ -68,6 +48,24 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
       {c.county}共 <span class="num">{c.counts.entities}</span> 家。
       這裡不做品質排名，只列出是什麼、在哪裡、怎麼打電話。
     </p>
+
+    {types.length > 0 && (
+      <nav class="pagenav" aria-label="依服務類型找">
+        <span>依服務類型找：</span>
+        {types.map(({ type, list }) => (
+          <a href={typeUrl(code, type.slug)}>{S}{type.label} {list.length} 家</a>
+        ))}
+      </nav>
+    )}
+    {dpages.length > 0 && (
+      <nav class="pagenav" aria-label="依行政區找">
+        <span>依行政區找：</span>
+        {dpages.map(({ district, list }) => (
+          <a href={districtUrl(code, district)}>{district} {list.length} 家</a>
+        ))}
+        <a href={`/${code}/map/`}>各區家數分布</a>
+      </nav>
+    )}
 
     <div class="agebar">
       <div class="field">

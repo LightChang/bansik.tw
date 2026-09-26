@@ -30,3 +30,31 @@ export function ageText(m, narrow) {
 /** 只給瀏覽器端組 innerHTML 用；Astro 模板裡的 {expr} 本來就會自動跳脫 */
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+const OBS_LABEL = {
+  clinic_hours: '門診',
+  booking_method: '預約',
+  booking_tel: '分機',
+};
+
+/**
+ * 動態資訊（各縣市衛生局頁解析出來的門診時間、預約方式、分機）組成一行字。
+ * 機構全表與類型／行政區頁共用，在建置期就組好，瀏覽器不必再帶一份 observation。
+ */
+export function obsLine(observations, key, tel) {
+  const list = observations.filter((o) => o.entity_key === key);
+  const parts = [];
+  for (const f of ['clinic_hours', 'booking_method', 'booking_tel']) {
+    const hit = list.find((o) => o.field === f);
+    if (!hit) continue;
+    // 電話別重複顯示：entity 存「(04)3604-5483」、衛生局頁存「04-36045483」，
+    // 格式不同、字串比不出來，要比數字。但「分機12130(初評)」這種帶標註的要留著。
+    // 「分機」兩個字本身不算資訊，先拿掉再判斷。
+    if (f === 'booking_tel' && tel) {
+      const extra = hit.value.replace(/分機/g, '');
+      if (!/[一-鿿]/.test(extra) && extra.replace(/\D/g, '') === tel.replace(/\D/g, '')) continue;
+    }
+    parts.push(`${OBS_LABEL[f]}：${hit.value}`);
+  }
+  return parts.join('　');
+}

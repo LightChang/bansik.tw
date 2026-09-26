@@ -1,0 +1,28 @@
+---
+// /taichung/places/speech-therapy/（服務類型）與 /taoyuan/places/平鎮區/（行政區）。
+// 類型代碼是英文、行政區是中文，兩者不會撞名，所以共用同一層網址。
+import FacetPage from '../../../components/FacetPage.astro';
+import { counties, county } from '../../../lib/data.mjs';
+import { typePages, districtPages } from '../../../lib/facets.mjs';
+
+export function getStaticPaths() {
+  return counties().flatMap(({ code }) => {
+    const c = county(code);
+    return [
+      ...typePages(c).map(({ type, list }) => ({
+        params: { county: code, facet: type.slug },
+        props: { type, list },
+      })),
+      ...districtPages(c).map(({ district, list }) => ({
+        params: { county: code, facet: district },
+        props: { district, list },
+      })),
+    ];
+  });
+}
+
+const { county: code } = Astro.params;
+const { type, district, list } = Astro.props;
+---
+
+<FacetPage code={code} c={county(code)} list={list} type={type} district={district} />
