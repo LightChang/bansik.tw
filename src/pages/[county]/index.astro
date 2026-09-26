@@ -253,8 +253,17 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
       const b = new Date(e.target.value);
       const n = new Date();
       setAge((n.getFullYear() - b.getFullYear()) * 12 + (n.getMonth() - b.getMonth()));
+      trackAge('birthdate');
     });
 
+    // 家長選了幾個月大送進 GA4，看得出哪個年齡段的人最多、內頁該先補哪一段。
+    // 只送月齡，不送出生日期。input 事件拖曳時每一格都會觸發，改聽放開時的 change。
+    // gtag 只在正式網域才存在（見 Base.astro）。
+    function trackAge(method) {
+      if (typeof window.gtag !== 'function') return;
+      window.gtag('event', 'age_select', { age_months: age, method, county: DATA.county });
+    }
+    el('age').addEventListener('change', () => trackAge('slider'));
 
     // 記住上次看的月齡，內頁也讀同一個 key
     let start = 27;

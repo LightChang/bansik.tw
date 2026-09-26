@@ -67,7 +67,7 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
       </nav>
     )}
 
-    <div class="agebar">
+    <div class="agebar" id="fbar" data-county={c.county}>
       <div class="field">
         <label for="fd">行政區</label>
         <select id="fd">
@@ -132,6 +132,7 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
     const fc = document.getElementById('fc');
     const count = document.getElementById('fcount');
     const empty = document.getElementById('fempty');
+    const countyName = document.getElementById('fbar').dataset.county;
     const rows = [...document.querySelectorAll('#ftbody tr[data-d]')];
 
     function fill() {
@@ -147,12 +148,32 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
       count.textContent = `${shown} 家` + (d || k ? `（全縣市共 ${rows.length} 家）` : '');
     }
 
-    fd.addEventListener('change', fill);
-    fc.addEventListener('change', fill);
+    // 篩選用量送進 GA4：家長在這一頁挑了哪一區、哪一類，就是站上缺什麼頁的直接訊號。
+    // 用 GA4 內建的 view_search_results，search_term 會出現在內建的「搜尋字詞」維度；
+    // 另外帶拆開的欄位，要在 GA 後台註冊成自訂維度才看得到。
+    // gtag 只在正式網域才存在（見 Base.astro），本機與預覽不送。
+    function track(trigger) {
+      if (typeof window.gtag !== 'function') return;
+      const d = fd.value;
+      const k = fc.value;
+      if (!d && !k) return;
+      window.gtag('event', 'view_search_results', {
+        search_term: [countyName, d, k].filter(Boolean).join(' '),
+        county: countyName,
+        filter_district: d || '(全部)',
+        filter_type: k || '(全部)',
+        results_count: rows.filter((tr) => !tr.hidden).length,
+        trigger,
+      });
+    }
+
+    fd.addEventListener('change', () => { fill(); track('select'); });
+    fc.addEventListener('change', () => { fill(); track('select'); });
 
     // 從分布圖點過來時會帶 ?d=<行政區>
     const pre = new URLSearchParams(location.search).get('d');
     if (pre && [...fd.options].some((o) => o.value === pre || o.text === pre)) fd.value = pre;
     fill();
+    if (pre) track('url');
   </script>
 </Base>
