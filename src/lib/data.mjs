@@ -22,7 +22,40 @@ function read(rel) {
 export const counties = () => read('counties.json').counties;
 export const siteIndex = () => read('index.json');
 export const shared = () => read('shared.json');
-export const county = (code) => read(`counties/${code}.json`);
+export const county = (code) => canonDistricts(read(`counties/${code}.json`));
+
+/**
+ * 行政區名稱歸一。資料層有少數機構的行政區少了後綴（桃園「平鎮」、高雄「前鎮」、
+ * 臺南「新市」），跟圖資的「平鎮區」被當成兩個區：篩選器出現兩個選項、分布圖只算到一半。
+ * 地名本身以區鄉鎮市結尾，make_site_data.py 的 variants() 去尾字比對不到，
+ * 所以在讀檔時補一次：對不到座標、但補上後綴對得到的，就併進那一區。
+ * 就地改寫並做記號，快取裡的同一份物件只處理一次。
+ */
+function canonDistricts(c) {
+  if (c._canon) return c;
+  const geo = c.district_geo || {};
+  const fix = (d) => {
+    if (!d || geo[d]) return d;
+    const hit = [...'區鄉鎮市'].map((s) => d + s).find((v) => geo[v]);
+    return hit || d;
+  };
+  for (const e of c.entities) e.district = fix(e.district);
+  const merged = {};
+  for (const [k, v] of Object.entries(c.districts)) {
+    const to = fix(k);
+    if (!merged[to]) {
+      merged[to] = { ...v, keys: [...v.keys] };
+    } else {
+      merged[to].located += v.located;
+      merged[to].keys.push(...v.keys);
+      // serving 是「服務範圍含這一區」的家數，兩個寫法各算一次會重複，留原本有座標那一筆的
+      if (to === k) merged[to].serving = v.serving;
+    }
+  }
+  c.districts = merged;
+  Object.defineProperty(c, '_canon', { value: true });
+  return c;
+}
 
 /** 每個縣市頁都要的那一組：縣市資料 + 共用資料 */
 export function countyBundle(code) {
