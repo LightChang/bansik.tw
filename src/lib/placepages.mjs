@@ -27,8 +27,12 @@ export const CAT_TEXT = {
 
 export const catList = (e) => (e.cats || e.cat || '').split(';').filter(Boolean);
 
-/** 名稱裡網址不能用的字換掉、空白拿掉。同縣市同名的機構另外加行政區，見 placeSlugs() */
-const clean = (s) => s.replace(/[/?#%\\]/g, '-').replace(/\s+/g, '');
+/**
+ * 名稱裡網址不能用的字換掉、空白拿掉。同縣市同名的機構另外加行政區，見 placeSlugs()。
+ * 先轉 NFC：名錄有 CJK 相容字（「樂」U+F914 等），Astro 寫出的頁面目錄是 NFC，
+ * 連結、sitemap 排除清單若用原字就會指到不存在的網址。
+ */
+const clean = (s) => s.normalize('NFC').replace(/[/?#%\\]/g, '-').replace(/\s+/g, '');
 
 /**
  * 這個縣市每一家的網址片段：Map(entity_key → slug)。

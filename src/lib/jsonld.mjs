@@ -12,15 +12,8 @@ export const CONTEXT = 'https://schema.org';
 /** 站名：導覽列顯示的與結構化資料用的是同一個字串 */
 export const SITE_NAME = 'bansik｜兒童發展地圖';
 
-/**
- * 物件 → 可直接放進 <script type="application/ld+json"> 的字串。
- * HTML 規範：script 內容遇到 `</script` 就結束，`<!--`、`<script` 也會改變解析狀態；
- * JSON 字串裡的 `<` 一律寫成 <，JSON.parse 後值不變。
- * https://html.spec.whatwg.org/multipage/scripting.html#restrictions-for-contents-of-script-elements
- */
-export function serializeJsonLd(obj) {
-  return JSON.stringify(obj).replace(/</g, '\\u003c');
-}
+/** 物件 → <script type="application/ld+json"> 的內容，`<` 跳脫規則見 scriptjson.mjs */
+export { scriptJson as serializeJsonLd } from './scriptjson.mjs';
 
 export const orgId = (site) => `${site}/#organization`;
 export const websiteId = (site) => `${site}/#website`;
@@ -72,7 +65,7 @@ export function webPage({ site, url, title, description, dataDate, citations = [
     '@context': CONTEXT,
     '@type': 'WebPage',
     name: title,
-    url,
+    ...(url ? { url } : {}),
     inLanguage: 'zh-Hant-TW',
     isPartOf: home
       ? { '@id': websiteId(site) }

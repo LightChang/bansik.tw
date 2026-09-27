@@ -6,6 +6,7 @@ import Caveat from '../../components/Caveat.astro';
 import RecentPlaces from '../../components/RecentPlaces.astro';
 import { countyPaths, countyBundle, SUBPAGES } from '../../lib/data.mjs';
 import { typePages, typeUrl, shortCounty } from '../../lib/facets.mjs';
+import { scriptJson } from '../../lib/scriptjson.mjs';
 
 export const getStaticPaths = countyPaths;
 
@@ -147,7 +148,7 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>
 
-  <script type="application/json" id="bansik-data" set:html={JSON.stringify(payload)} />
+  <script type="application/json" id="bansik-data" set:html={scriptJson(payload)} />
 
   <script>
     import { num, inBand, screenings, ageText, esc } from '../../lib/view.mjs';

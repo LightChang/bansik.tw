@@ -18,14 +18,9 @@ import { placeSlugs, schemaType } from '../src/lib/placepages.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 
-/**
- * dataPages：{ 頁面路徑: 應有的類型[] }。
- * 路徑轉 NFC：名錄有 CJK 相容字（樂 U+F914 等），Astro 寫檔時會正規化成 NFC，不轉會對不到 dist。
- */
+/** dataPages：{ 頁面路徑: 應有的類型[] } */
 export function dataPageTypes() {
   const out = new Map();
-  const set = out.set.bind(out);
-  out.set = (k, v) => set(k.normalize('NFC'), v);
   for (const { code } of counties()) {
     const c = county(code);
     for (const { type } of typePages(c)) out.set(`/${code}/places/${type.slug}/`, ['ItemList']);

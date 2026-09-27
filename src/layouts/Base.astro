@@ -8,7 +8,8 @@ import JsonLd from '../components/JsonLd.astro';
 interface Props {
   title: string;
   description?: string;
-  canonical?: string;
+  /** false＝這一頁沒有自己的網址（404：GitHub Pages 對任何不存在的路徑回它），不輸出 canonical／og:url */
+  canonical?: string | false;
   /** 內頁底下再往下一層的麵包屑（/taichung/places/speech-therapy/），path 省略＝目前這一頁 */
   trail?: { name: string; path?: string }[];
   /** 資料太少、不值得被搜尋引擎收錄的頁（單一機構頁的一部分）。同時要從 sitemap 排除，見 astro.config.mjs */
@@ -18,7 +19,7 @@ interface Props {
 }
 const { title, description, canonical, trail, noindex, jsonld: extraJsonLd } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
-const url = canonical ?? `${site}${Astro.url.pathname}`;
+const url = canonical === false ? undefined : (canonical ?? `${site}${Astro.url.pathname}`);
 
 // 結構化資料。每頁都給 WebPage，兩層以上的頁給麵包屑——搜尋與 AI 引擎靠它知道
 // 這一頁在整個站的哪個位置、資料多新，不必自己從網址猜。節點在 src/lib/jsonld.mjs 組，
@@ -77,7 +78,7 @@ const jsonld = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    <link rel="canonical" href={url} />
+    {url && <link rel="canonical" href={url} />}
     {noindex && <meta name="robots" content="noindex,follow" />}
 
     {/* SVG 給桌機瀏覽器，ico 給舊瀏覽器與那些直接去要 /favicon.ico 的工具，
@@ -96,7 +97,7 @@ const jsonld = [
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={url} />
+    {url && <meta property="og:url" content={url} />}
     <meta property="og:locale" content="zh_TW" />
 
     {GSC_VERIFICATION && <meta name="google-site-verification" content={GSC_VERIFICATION} />}
