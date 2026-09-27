@@ -100,3 +100,34 @@ curl -s https://bansik.tw/taichung/ | grep -c 'G-L05CG61N7H'
 - **不要把 `inspect` 排進高頻排程。** URL Inspection 每個資源每天 2000 次、每分鐘 600 次。
   全站掃一次的量看 §1 第一條指令自己算。
 - **不要為了「還沒收錄」反覆重送 sitemap。** 重送不會讓 Google 早一點來。
+
+---
+
+## 5. 結構化資料（JSON-LD）
+
+規則以 Google Search Central 與 schema.org 官方文件為準（站主 2026-09-27 拍板），查證紀錄在 seo-ops：
+`/mnt/yao-care/seo-ops/jsonld/README.md`（每條結論附來源網址與查證日期，含「查不到或衝突」清單）、`rules.json`。
+
+| 在哪 | 管什麼 |
+|---|---|
+| `src/lib/jsonld.mjs` | 唯一產生處。頁面把畫面上用的同一份資料傳進來，只填資料有的欄位，醫療機構資訊不補不猜 |
+| `src/components/JsonLd.astro` | 唯一輸出處（`Base.astro` 的 `<head>`），字串化後把 `<` 跳脫成 `<` |
+| `jsonld-pages.json` | 頁型 → 必須／禁止的類型，每條附依據 |
+| `vendor/seo-ops-jsonld/` | 共用驗證器與規則檔的原樣複本（CI 拿不到 /mnt），來源 commit 與同步方法見該目錄 README |
+| `scripts/jsonld-check.mjs` | `astro:build:done` 驗整個 dist，有錯誤 build 就失敗、不部署 |
+
+| 指標 | 怎麼查 | 什麼算問題 |
+|---|---|---|
+| 建置驗證 | `pnpm run build` 輸出的 `[jsonld-check] JSON-LD：N 頁，錯誤 N，警告 N` | 錯誤不是 0（build 會失敗）；警告不是 0 要看原因 |
+| 單元測試 | `pnpm test` | 非 0 結束 |
+| 線上實際輸出 | `curl -s https://bansik.tw/taichung/subsidy/ \| grep -o '"@type":"[A-Za-z]*"' \| sort \| uniq -c` | 出現 `FAQPage`，或少了 `jsonld-pages.json` 要求的類型 |
+
+已定案、不要改回去：補助頁不輸出 `FAQPage`（Google 2026-05-07 起停止顯示，問答留在頁面上）；
+首頁與 404 不輸出 `BreadcrumbList`（只有一層，Google 規定至少 2 項）。
+
+**每季複查**（1、4、7、10 月，或 Search Central 更新紀錄出現結構化資料相關項目時）：
+
+1. 在 seo-ops 照 `jsonld/README.md`「重做查證」六步重查，更新 `rules.json` 與查證紀錄。
+2. 回到本 repo 照 `vendor/seo-ops-jsonld/README.md` 同步複本、改來源 commit。
+3. 規則有變（新淘汰類型、必填欄位、臺灣適用性）就改 `jsonld-pages.json` 與 `src/lib/jsonld.mjs`，每條依據一起改。
+4. `pnpm test`、`pnpm run build`（錯誤 0）後 commit，連同 `src/lastmod.json`。

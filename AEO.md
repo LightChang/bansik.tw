@@ -28,7 +28,7 @@
 
 | 指標 | 怎麼查 | 什麼算問題 |
 |---|---|---|
-| 結構化資料（JSON-LD） | `grep -rl 'application/ld+json' dist --include='index.html' \| wc -l` | 小於可收錄頁數（`find dist -name index.html \| wc -l`） |
+| 結構化資料（JSON-LD） | `pnpm run build` 的 `[jsonld-check]` 那一行；規則與每季複查見 §5 | 錯誤不是 0（build 會失敗） |
 | 每頁第一段是不是自足的答案 | `grep -o 'class="lead">[^<]*' dist/<縣市>/index.html` | 句子裡有「下面」「上面」「這裡」這種指代，或不含縣市名與具體數量 |
 | 有沒有小標可供擷取 | `grep -rL '<h2' dist --include='index.html' \| wc -l` | 不是 0（每頁至少要有一個 `h2`） |
 | 表格有沒有 caption | `grep -rho '<table[^>]*>' dist --include='index.html' \| wc -l` 對照 `grep -rho '<caption' dist --include='index.html' \| wc -l` | 兩者差距大＝多數表格沒有說明，引擎不知道那張表在講什麼 |
@@ -54,9 +54,6 @@
 
 不寫「目前有幾頁」，只寫要補什麼、補完怎麼驗：
 
-- **JSON-LD**：目前沒有任何結構化資料（跑 §2 第一條確認）。這個站合適的型別是
-  `MedicalClinic`／`GovernmentOffice`（機構）、`FAQPage`（常見問題）、
-  `BreadcrumbList`（麵包屑）。補完後第一條指令的數字要等於可收錄頁數。
 - **素材頁在每個縣市底下都有一份，內容與 description 完全相同**（驗法見 SEO.md §2）。
   對 AEO 的影響是引擎不知道該抄哪一頁。
 - **頁尾「資料產生於」後面缺一個分隔符**，日期會直接黏住下一句的「來源：」，抄出去連成一團：
@@ -64,3 +61,14 @@
   ```bash
   grep -o '資料產生於[^<]*' dist/taichung/index.html
   ```
+
+---
+
+## 5. 結構化資料（JSON-LD）
+
+類型、欄位、頁型要求與每季複查步驟都寫在 [SEO.md §5](SEO.md)，依據是 seo-ops 的官方文件查證紀錄
+（`/mnt/yao-care/seo-ops/jsonld/README.md`、`rules.json`）。對 AEO 要記得的只有兩件事：
+
+- Google 已不顯示 FAQ 強化結果（2026-05-07 起），補助頁的問答只留在頁面上，AI 引擎抄的是那段可見文字，
+  所以每一題的答案仍要自己答得完整（§1）。
+- 結構化資料只能描述頁面上看得到的內容，不能拿來補頁面沒寫的事（Google 結構化資料通用規範）。

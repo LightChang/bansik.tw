@@ -12,6 +12,7 @@ import {
 import {
   CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType,
 } from '../lib/placepages.mjs';
+import { place } from '../lib/jsonld.mjs';
 
 interface Props {
   code: string;
@@ -61,28 +62,11 @@ const nearby = c.entities
 const referrals = c.entities.filter((x) => x.journey_step === '2' && x.entity_key !== e.entity_key);
 const referral = referrals.find((x) => x.district === e.district) || referrals[0];
 
-// 結構化資料：只填名錄裡真的有的欄位。座標只到行政區的不放 geo——那是整區共用的點，不是門牌。
-const ld = {
-  '@context': 'https://schema.org',
-  '@type': schemaType(e),
-  name: e.name,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: e.address,
-    ...(e.district ? { addressLocality: e.district } : {}),
-    addressRegion: C,
-    addressCountry: 'TW',
-  },
-  telephone: e.tel,
-  ...(e.url ? { url: e.url } : {}),
-  ...(e.geo_level === 'address' && e.lat && e.lng
-    ? { geo: { '@type': 'GeoCoordinates', latitude: Number(e.lat), longitude: Number(e.lng) } }
-    : {}),
-};
+// 結構化資料：與上方表格同一筆 e，欄位規則見 src/lib/jsonld.mjs 的 place()
+const ld = place(e, { type: schemaType(e), county: C });
 ---
 
-<Base title={title} description={description} trail={[{ name: e.name }]} noindex={!!noindex}>
-  <script type="application/ld+json" slot="head" set:html={JSON.stringify(ld)} />
+<Base title={title} description={description} trail={[{ name: e.name }]} noindex={!!noindex} jsonld={[ld]}>
   <Nav current={code} />
   <main class="shell">
     <p class="crumb">

@@ -3,6 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { placeSlugs, noindexReason } from './src/lib/placepages.mjs';
 import { lastmodFor } from './src/lib/lastmod.mjs';
+import jsonldCheck from './scripts/jsonld-check.mjs';
 
 // 單一機構頁裡資料太少的那些（見 noindexReason）頁面上是 noindex，
 // sitemap 也要一起排除：送進 sitemap 又叫 Google 不要收，是自相矛盾的訊號。
@@ -34,7 +35,9 @@ export default defineConfig({
       const date = lastmodFor(path, existsSync(file) ? readFileSync(file, 'utf-8') : null);
       return date ? { ...item, lastmod: date } : item;
     },
-  })],
+  }),
+  // 建置完驗 JSON-LD，有錯誤 build 就失敗、不部署。規則見 scripts/jsonld-check.mjs、jsonld-pages.json
+  jsonldCheck()],
   build: {
     // 產出 /taichung/index.html 而不是 /taichung.html，
     // 網址才會是 bansik.tw/taichung/（結尾有斜線，跟 CNAME 那版一致）

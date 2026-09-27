@@ -139,7 +139,8 @@ GSC 還沒有任何問題型查詢（2026-09-10..09-25，2026-09-27 量測）。
 | `/llms-full.txt` 資料驅動產生核心事實全文 | ✅ | `bf4b831`，`src/pages/llms-full.txt.js` |
 | 首頁 Organization JSON-LD、WebSite 補 `@id`／`publisher` | ✅ | `ce7a76f` |
 | 補助頁 citation 改引該縣市自己的補助法規 | ✅ | `82fcf37` |
-| 補助頁 FAQPage JSON-LD（15 縣市） | ✅ | `bf20748` |
+| 補助頁 FAQPage JSON-LD（15 縣市） | 已移除 | Google 2026-05-07 起停止顯示 FAQ 強化結果；問答保留在頁面上。見 SEO.md §5 |
+| JSON-LD 集中產生、跳脫 `<`、建置時驗證（錯誤就不部署） | ✅ | `src/lib/jsonld.mjs`、`jsonld-pages.json`、`scripts/jsonld-check.mjs`；SEO.md §5 |
 | 單一機構頁的機構 JSON-LD（名稱、地址、座標） | ✅ | `bf20748`，`src/components/PlacePage.astro` |
 | `llms.txt` 的網址結構補上單一機構頁（`/{縣市代碼}/places/{機構名稱}/`）與 noindex 規則 | ⏳ | 目前只列到名單頁（2026-09-27 查 `curl -s https://bansik.tw/llms.txt`） |
 

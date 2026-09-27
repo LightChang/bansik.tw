@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "sync:tokens": "node scripts/sync-tokens.mjs",
     "data": "cd research && python3 ../scripts/make_site_data.py",
-    "check:lastmod": "node scripts/lastmod.mjs check"
+    "check:lastmod": "node scripts/lastmod.mjs check",
+    "test": "node --test 'test/*.test.mjs' 'vendor/seo-ops-jsonld/*.test.mjs'"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

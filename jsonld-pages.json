@@ -1,0 +1,66 @@
+{
+  "$comment": "bansik.tw 頁型 → 必須／禁止的 JSON-LD 類型。build 時由 astro.config.mjs 的 jsonld-check 讀取，交給 vendor/seo-ops-jsonld/validate.mjs 驗證（pages／exclude／severity 是驗證器格式；why 是本站依據，驗證器不讀）。dataPages 是網址無法用萬用字元區分的頁型（機構頁與行政區頁共用 /<縣市>/places/<中文>/），由 jsonld-check 依 src/data 算出每一頁的網址後檢查。build.format 是 directory，頁面路徑以 / 結尾；404 是 /404.html。",
+  "pages": [
+    {
+      "match": "/**",
+      "require": ["WebPage"],
+      "forbid": ["FAQPage", "HowTo", "SpecialAnnouncement"],
+      "why": "WebPage：全站頁面識別（名稱、網址、資料日期、引用來源），Google 無對應功能，屬站內決定。FAQPage：Google 2026-05-07 起全面停止顯示（https://developers.google.com/search/updates#removing-faq-rich-result）；HowTo：2023-09 移除（https://developers.google.com/search/updates#how-to-deprecation）；SpecialAnnouncement：2025-09-09 文件移除（https://developers.google.com/search/updates#simplification）。問答內容保留在頁面上。"
+    },
+    {
+      "match": "/",
+      "require": ["WebSite", "Organization"],
+      "forbid": ["BreadcrumbList"],
+      "why": "WebSite：Google 網站名稱要在首頁放 WebSite 的 name、url（https://developers.google.com/search/docs/appearance/site-names）。Organization：站台身分，無必填欄位（https://developers.google.com/search/docs/appearance/structured-data/organization）。BreadcrumbList：首頁只有一層，Google 規定至少 2 項（https://developers.google.com/search/docs/appearance/structured-data/breadcrumb）。"
+    },
+    {
+      "match": "/404.html",
+      "forbid": ["BreadcrumbList"],
+      "why": "404 不是站內結構中的一個位置，只有一層；Google 規定麵包屑至少 2 項（https://developers.google.com/search/docs/appearance/structured-data/breadcrumb）。"
+    },
+    {
+      "match": "/*/",
+      "require": ["BreadcrumbList"],
+      "why": "縣市首頁：全國 › 縣市。Breadcrumb 在臺灣、中文可顯示（桌機），https://developers.google.com/search/docs/appearance/structured-data/breadcrumb"
+    },
+    {
+      "match": "/*/*/",
+      "require": ["BreadcrumbList"],
+      "why": "縣市子頁（checkups、steps、places、map、materials、subsidy）：全國 › 縣市 › 子頁。同上。"
+    },
+    {
+      "match": "/*/places/*/",
+      "require": ["BreadcrumbList"],
+      "why": "類型頁、行政區頁、單一機構頁：全國 › 縣市 › 機構一覽 › 本頁。同上。"
+    },
+    {
+      "match": "/*/places/*/*/",
+      "require": ["BreadcrumbList", "ItemList"],
+      "why": "行政區×類型名單頁。BreadcrumbList 同上。ItemList（Place）：Google 不產生強化結果（carousel 只搭 Course、Movie、Recipe、Restaurant，https://developers.google.com/search/docs/appearance/structured-data/carousel），保留是讓引擎讀出這張表是機構清單（GEO.md），屬站內決定；不套用 carousel 規則（不寫 apply）。"
+    }
+  ],
+  "dataPages": [
+    {
+      "kind": "type",
+      "path": "/<縣市>/places/<類型代碼>/",
+      "require": ["ItemList"],
+      "why": "類型名單頁，同上 ItemList 說明。"
+    },
+    {
+      "kind": "district",
+      "path": "/<縣市>/places/<行政區>/",
+      "require": ["ItemList"],
+      "why": "行政區名單頁，同上 ItemList 說明。"
+    },
+    {
+      "kind": "place",
+      "path": "/<縣市>/places/<機構>/",
+      "require": ["schemaType(e)"],
+      "why": "單一機構頁：src/lib/placepages.mjs 的 schemaType(e)（Hospital／MedicalClinic／LocalBusiness，皆屬 schema.org LocalBusiness）。Google Local business 必填 name、address（https://developers.google.com/search/docs/appearance/structured-data/local-business），由驗證器依 rules.json 檢查；臺灣是否採用查不到（rules.json：taiwan unknown）。其餘欄位只放名錄有的，不補。"
+    }
+  ],
+  "exclude": [],
+  "severity": {
+    "deprecated-type": "error"
+  }
+}

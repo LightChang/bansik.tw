@@ -40,6 +40,8 @@ jobs:
           node-version: '26'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # JSON-LD 輸出與共用驗證器的單元測試；建置時另有 jsonld-check 驗整個 dist（錯誤就不部署）
+      - run: pnpm test
 
       # GA 與 Search Console 的值放 repository variables（vars，不是 secrets——
       # 它們本來就會出現在每一頁的原始碼裡）。沒設就用 site.config.mjs 的預設值。

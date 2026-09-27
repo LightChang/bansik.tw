@@ -2,6 +2,8 @@
 import '../styles/site.css';
 import { GA_MEASUREMENT_ID, GA_HOSTS, GSC_VERIFICATION } from '../site.config.mjs';
 import { counties, county, siteIndex, shared, SUBPAGES } from '../lib/data.mjs';
+import { webPage, webSite, breadcrumbList, organization } from '../lib/jsonld.mjs';
+import JsonLd from '../components/JsonLd.astro';
 
 interface Props {
   title: string;
@@ -11,13 +13,16 @@ interface Props {
   trail?: { name: string; path?: string }[];
   /** 資料太少、不值得被搜尋引擎收錄的頁（單一機構頁的一部分）。同時要從 sitemap 排除，見 astro.config.mjs */
   noindex?: boolean;
+  /** 這一頁自己的結構化資料節點（由 src/lib/jsonld.mjs 組），接在 WebPage／麵包屑後面輸出 */
+  jsonld?: unknown[];
 }
-const { title, description, canonical, trail, noindex } = Astro.props;
+const { title, description, canonical, trail, noindex, jsonld: extraJsonLd } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const url = canonical ?? `${site}${Astro.url.pathname}`;
 
-// 結構化資料。每頁都給 WebPage 與麵包屑——搜尋與 AI 引擎靠它知道
-// 這一頁在整個站的哪個位置、資料多新，不必自己從網址猜。
+// 結構化資料。每頁都給 WebPage，兩層以上的頁給麵包屑——搜尋與 AI 引擎靠它知道
+// 這一頁在整個站的哪個位置、資料多新，不必自己從網址猜。節點在 src/lib/jsonld.mjs 組，
+// 由 <JsonLd> 在 <head> 統一輸出；頁面自己的節點用 jsonld prop 傳進來。
 //
 // 路徑自己推得出來，不必每個頁面各傳一次：/taichung/places/ 的兩段
 // 分別查 counties.json 與 SUBPAGES 就有中文名稱。查不到就不放那一層，
@@ -55,61 +60,13 @@ const citationEntries = subsidyRecord
       shared().timeline.filter((t) => t.url).map((t) => [t.url, t.source])
     ).entries()].map(([url, name]) => ({ name, url }));
 
-// Organization：站台身分的最小可驗證版本。只寫得出來、查得到的欄位——
-// 沒有登記在案的統編、地址、電話或對外聯絡窗口，那些欄位不編，寧可少寫一項，
-// 也不要交出殘缺欄位（半吊子的結構化資料在 Google 眼裡是「無效項目」，比沒有更糟）。
-// 只在首頁輸出：Organization 是站台層級的單一實體，不必每一頁重複宣告；
-// 其他頁面用 `{'@id': ...}` 參照同一個節點即可（見下方 isPartOf.publisher）。
-const orgId = `${site}/#organization`;
-const org = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  '@id': orgId,
-  name: 'bansik｜兒童發展地圖',
-  url: `${site}/`,
-  description:
-    '臺灣兒童發展篩檢與早期療育的資源地圖。以孩子的月齡為入口，回答三件事：'
-    + '現在該做哪一次檢查、附近哪裡可以評估與療育、補助怎麼申請。',
-  logo: `${site}/apple-touch-icon.png`,
-};
-
+const home = Astro.url.pathname === '/';
 const jsonld = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: title,
-    url,
-    inLanguage: 'zh-Hant-TW',
-    isPartOf: {
-      '@type': 'WebSite',
-      '@id': `${site}/#website`,
-      name: 'bansik｜兒童發展地圖',
-      url: `${site}/`,
-      publisher: { '@id': orgId },
-    },
-    ...(description ? { description } : {}),
-    ...(dataDate ? { dateModified: dataDate.slice(0, 10) } : {}),
-    ...(citationEntries.filter((e) => e.url).length
-      ? {
-          citation: citationEntries
-            .filter((e) => e.url)
-            .map((e) => ({
-              '@type': 'CreativeWork',
-              name: e.name,
-              url: e.url,
-              ...(e.dateModified ? { dateModified: e.dateModified } : {}),
-            })),
-        }
-      : {}),
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: crumbs.map((c, i) => ({
-      '@type': 'ListItem', position: i + 1, name: c.name, item: c.url,
-    })),
-  },
-  ...(Astro.url.pathname === '/' ? [org] : []),
+  webPage({ site, url, title, description, dataDate, citations: citationEntries, home }),
+  breadcrumbList(crumbs),
+  home && webSite(site),
+  home && organization(site),
+  ...(extraJsonLd || []),
 ];
 ---
 
@@ -144,9 +101,7 @@ const jsonld = [
 
     {GSC_VERIFICATION && <meta name="google-site-verification" content={GSC_VERIFICATION} />}
 
-    {jsonld.map((b) => (
-      <script type="application/ld+json" set:html={JSON.stringify(b)} />
-    ))}
+    <JsonLd items={jsonld} />
     <slot name="head" />
   </head>
   <body>

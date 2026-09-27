@@ -1,0 +1,12 @@
+---
+// 全站唯一輸出 JSON-LD 的地方（Base.astro 的 <head>）。節點由 src/lib/jsonld.mjs 組好傳進來，
+// null／false 略過。字串化一律走 serializeJsonLd()：跳脫 `<`，避免資料裡的 </script> 截斷區塊。
+import { serializeJsonLd } from '../lib/jsonld.mjs';
+
+interface Props {
+  items: unknown[];
+}
+const items = (Astro.props.items || []).filter(Boolean);
+---
+
+{items.map((b) => <script type="application/ld+json" set:html={serializeJsonLd(b)} />)}

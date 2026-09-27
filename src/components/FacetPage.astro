@@ -14,6 +14,7 @@ import {
   typeUrl, districtUrl, typeDistrictUrl,
 } from '../lib/facets.mjs';
 import { placeSlugs, placeUrl } from '../lib/placepages.mjs';
+import { placeItemList } from '../lib/jsonld.mjs';
 
 interface Props {
   code: string;
@@ -76,29 +77,11 @@ const trail = district && type
   ? [{ name: district, path: districtUrl(code, district) }, { name: type.label }]
   : [{ name: district || type.label }];
 
-// ItemList：讓引擎知道這張表是一份機構清單，每一筆是一個地點。
-// 只放名錄裡真的有的欄位，沒有的就不寫。
-const itemList = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: h1,
-  numberOfItems: n,
-  itemListElement: list.map((e, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    item: {
-      '@type': 'Place',
-      name: e.name,
-      ...(e.address ? { address: e.address } : {}),
-      ...(e.tel ? { telephone: e.tel } : {}),
-      ...(e.url ? { url: e.url } : {}),
-    },
-  })),
-};
+// ItemList：讓引擎知道這張表是一份機構清單，每一筆是一個地點。與下方表格同一份 list。
+const itemList = placeItemList(h1, list);
 ---
 
-<Base title={title} description={description} trail={trail}>
-  <script type="application/ld+json" slot="head" set:html={JSON.stringify(itemList)} />
+<Base title={title} description={description} trail={trail} jsonld={[itemList]}>
   <Nav current={code} />
   <main class="shell">
     <p class="crumb">
