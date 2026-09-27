@@ -1,0 +1,53 @@
+---
+// 「最近新增或更新的機構」：首頁與縣市首頁都放，讓新上架的機構頁從站上最常被爬的頁連得到。
+// 日期取 sitemap 同一本帳（src/lastmod.json，見 src/lib/lastmod.mjs），只列可收錄的機構頁。
+// 這一區標 data-lastmod-skip：它本身就是從帳算出來的，不算進頁面內容雜湊。
+import { counties, county } from '../lib/data.mjs';
+import { placeSlugs, placeUrl, noindexReason, catList, CAT_TEXT } from '../lib/placepages.mjs';
+import { ledger } from '../lib/lastmod.mjs';
+
+interface Props {
+  /** 縣市代碼；省略＝全國，各縣市輪流取 */
+  code?: string;
+  n?: number;
+}
+const { code, n = code ? 8 : 12 } = Astro.props;
+const book = ledger();
+
+const rows = [];
+for (const { code: k, name } of counties()) {
+  if (code && k !== code) continue;
+  const c = county(k);
+  const slugs = placeSlugs(c);
+  c.entities
+    .filter((e) => !noindexReason(e))
+    .map((e) => {
+      const url = placeUrl(k, slugs.get(e.entity_key));
+      const hit = book[decodeURIComponent(url)];
+      return { e, url, county: name, date: hit ? hit[1] : '' };
+    })
+    .filter((r) => r.date)
+    .sort((a, b) => b.date.localeCompare(a.date) || a.e.name.localeCompare(b.e.name, 'zh-Hant'))
+    .forEach((r, i) => rows.push({ ...r, rank: i }));
+}
+// 同一天的，全國版各縣市輪流排，免得前 12 筆全是同一縣市
+const list = rows
+  .sort((a, b) => b.date.localeCompare(a.date) || a.rank - b.rank)
+  .slice(0, n);
+const latest = list[0]?.date;
+---
+
+{list.length > 0 && (
+  <section class="section" data-lastmod-skip>
+    <h2>最近新增或更新的機構</h2>
+    <p class="meta">依機構頁內容最後變更的日期排列{latest && `，最新一批在 ${latest}`}。</p>
+    <ul>
+      {list.map((r) => (
+        <li>
+          <a href={r.url}>{r.e.name}</a>
+          <span class="meta">（{code ? r.e.district : `${r.county}${r.e.district || ''}`}・{CAT_TEXT[catList(r.e)[0]] || r.e.cat}・{r.date}）</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

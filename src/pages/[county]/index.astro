@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
+import RecentPlaces from '../../components/RecentPlaces.astro';
 import { countyPaths, countyBundle, SUBPAGES } from '../../lib/data.mjs';
 import { typePages, typeUrl, shortCounty } from '../../lib/facets.mjs';
 
@@ -138,6 +139,8 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
         </nav>
       </section>
     )}
+
+    <RecentPlaces code={code} />
 
     <Caveat kind="list" />
 

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Caveat from '../components/Caveat.astro';
+import RecentPlaces from '../components/RecentPlaces.astro';
 import { siteIndex, shared } from '../lib/data.mjs';
 
 const idx = siteIndex();
@@ -70,6 +71,8 @@ const desc = `全臺 ${totalEnt} 家兒童發展相關機構、${totalCtr} 家�
         ))}
       </div>
     </section>
+
+    <RecentPlaces />
 
     <Caveat kind="list" />
 

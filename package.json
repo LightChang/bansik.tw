@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/lastmod.mjs update",
     "preview": "astro preview",
     "sync:tokens": "node scripts/sync-tokens.mjs",
-    "data": "cd research && python3 ../scripts/make_site_data.py"
+    "data": "cd research && python3 ../scripts/make_site_data.py",
+    "check:lastmod": "node scripts/lastmod.mjs check"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

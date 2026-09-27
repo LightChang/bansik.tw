@@ -26,6 +26,7 @@ AI 引擎那兩軸另外寫在 [AEO.md](AEO.md)、[GEO.md](GEO.md)。
 | 搜尋成效 | `node scripts/google-api.mjs queries [天數]` | 有曝光但 CTR 明顯低於同站其他頁 → title／description 要改 |
 | 有沒有人真的進來 | `node scripts/google-api.mjs realtime` | 自己開了站卻查不到 → GA 沒載入，見 §3 |
 | sitemap 網址數 vs 實際頁數 | `curl -s https://bansik.tw/sitemap-0.xml \| grep -o '<loc>' \| wc -l`<br>`find dist -name index.html \| wc -l` | 兩者相減不等於 noindex 頁數（`grep -rl 'content="noindex' dist --include=index.html \| wc -l`）。單一機構頁裡資料太少的刻意 noindex 並排除在 sitemap 外，規則見 `src/lib/placepages.mjs` 的 `noindexReason()`。404 頁不算在內：它是 `dist/404.html`，不是 `index.html` |
+| sitemap 的 lastmod 準不準 | `pnpm run check:lastmod`（連建兩次比對） | 非 0 結束：有網址沒有 lastmod、日期晚於今天，或兩次建置日期不同。日期是頁面內容真正變更的日子，帳在 `src/lastmod.json`，規則見 `src/lib/lastmod.mjs`；改了頁面內容要用 `pnpm run build`（會更新帳）再 commit 帳 |
 | 重複的 title／description | 見 §2 的指令 | 有任何一組完全重複 |
 | 重複的 canonical | `grep -rho 'rel="canonical" href="[^"]*' dist --include='index.html' \| sort \| uniq -d \| wc -l` | 不是 0 |
 

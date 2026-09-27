@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { placeSlugs, noindexReason } from './src/lib/placepages.mjs';
+import { lastmodFor } from './src/lib/lastmod.mjs';
 
 // 單一機構頁裡資料太少的那些（見 noindexReason）頁面上是 noindex，
 // sitemap 也要一起排除：送進 sitemap 又叫 Google 不要收，是自相矛盾的訊號。
@@ -26,6 +27,13 @@ export default defineConfig({
   site: 'https://bansik.tw',
   integrations: [sitemap({
     filter: (page) => !NOINDEX.has(decodeURIComponent(new URL(page).pathname)),
+    // lastmod 是頁面內容真正變更的日期，不是建置日期，規則見 src/lib/lastmod.mjs
+    serialize(item) {
+      const path = decodeURIComponent(new URL(item.url).pathname);
+      const file = `./dist${path}index.html`;
+      const date = lastmodFor(path, existsSync(file) ? readFileSync(file, 'utf-8') : null);
+      return date ? { ...item, lastmod: date } : item;
+    },
   })],
   build: {
     // 產出 /taichung/index.html 而不是 /taichung.html，
