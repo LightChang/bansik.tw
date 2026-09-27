@@ -78,7 +78,11 @@ export function noindexReason(e) {
   const cats = catList(e);
   if (!/\d+號/.test(e.address || '')) return '地址沒有門牌號碼';
   if ((e.tel || '').replace(/\D/g, '').length < 7) return '沒有可用的電話';
-  if (cats.every((k) => SCREEN_ONLY.has(k)) && !/兒科|小兒|兒童/.test(e.name)) {
+  // 名稱看得出兒童服務的例外（小兒科、兒童、愛兒、婦兒、親子、婦幼、幼安…），家長會拿名稱直接搜；
+  // 家醫科本身看不出，但列在兒童發展篩檢名單上就是有做兒童服務，也收錄。
+  const childNamed = /兒|親子|幼/.test(e.name)
+    || (/家醫|家庭醫學/.test(e.name) && cats.includes('兒童發展篩檢院所'));
+  if (cats.every((k) => SCREEN_ONLY.has(k)) && !childNamed) {
     return '只列在篩檢名單上的一般診所';
   }
   if (cats.every((k) => k === '療育-教育單位')) return '學校或幼兒園的療育時段';
