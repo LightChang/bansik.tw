@@ -1,5 +1,7 @@
 # GEO：被 AI 聊天工具引用時，前提不要被講錯
 
+> 往哪裡長、下一步做什麼：見 [GROWTH.md](GROWTH.md)。這份只管監看。
+
 管的是 ChatGPT、Claude、Perplexity 這類工具抓這個站的內容去回答家長時，
 拿不拿得到、會不會把前提講錯。Google 收錄看 [SEO.md](SEO.md)，搜尋結果上那段直接答案看 [AEO.md](AEO.md)。
 

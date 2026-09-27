@@ -1,5 +1,7 @@
 # AEO：成為搜尋結果上面那段直接答案
 
+> 往哪裡長、下一步做什麼：見 [GROWTH.md](GROWTH.md)。這份只管監看。
+
 管的是 Google 的 AI Overviews 與精選摘要——使用者問「臺中哪裡可以做兒童發展評估」，
 上面那段話是不是抄自這個站。收錄本身看 [SEO.md](SEO.md)，被 AI 聊天工具引用看 [GEO.md](GEO.md)。
 

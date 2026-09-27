@@ -1,5 +1,7 @@
 # SEO：被 Google 收錄、排得到
 
+> 往哪裡長、下一步做什麼：見 [GROWTH.md](GROWTH.md)。這份只管監看。
+
 管的是「Google 抓不抓得到、收不收錄、有沒有人從搜尋進來」。
 AI 引擎那兩軸另外寫在 [AEO.md](AEO.md)、[GEO.md](GEO.md)。
 
