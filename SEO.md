@@ -10,7 +10,7 @@ AI 引擎那兩軸另外寫在 [AEO.md](AEO.md)、[GEO.md](GEO.md)。
 > 而讀的人會拿過期數字當現況判斷。所以每一項指標只留「怎麼查」與「什麼算問題」，
 > 數字請自己跑指令拿。要留紀錄就把指令輸出原樣貼進當次的工作紀錄，不要回填到這裡。
 
-前置：所有 `google-api.mjs` 指令都需要金鑰（預設 `~/.config/bansik/gsc-key.json`），
+前置：所有 `google-api.mjs` 指令都需要金鑰（預設 `~/.config/bansik/gsc-key.json`；本機實際金鑰在 `~/.config/bansik/ga4-sa.json`，執行前設 `BANSIK_GOOGLE_KEY=~/.config/bansik/ga4-sa.json`），
 申請與權限設定見該腳本開頭的註解。`dist/` 的檢查要先 `npm run build`。
 
 ---
