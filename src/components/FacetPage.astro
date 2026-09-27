@@ -13,6 +13,7 @@ import {
   typePages, districtPages, typeDistrictPages, shortCounty,
   typeUrl, districtUrl, typeDistrictUrl,
 } from '../lib/facets.mjs';
+import { placeSlugs, placeUrl } from '../lib/placepages.mjs';
 
 interface Props {
   code: string;
@@ -24,6 +25,7 @@ interface Props {
 const { code, c, list, type, district } = Astro.props;
 
 const S = shortCounty(c.county);
+const slugs = placeSlugs(c);
 const C = c.county;
 const where = district ? `${C}${district}` : C;
 const n = list.length;
@@ -152,7 +154,8 @@ const itemList = {
                 <tr>
                   <td>
                     {e.tier && <span class={`pill ${e.tier === '重點' ? 'key' : ''}`}>{e.tier}</span>}
-                    {e.url ? <a href={e.url} target="_blank" rel="noopener">{e.name}</a> : e.name}
+                    <a href={placeUrl(code, slugs.get(e.entity_key))}>{e.name}</a>
+                    {e.url && <> <a class="meta" href={e.url} target="_blank" rel="noopener">官網</a></>}
                   </td>
                   <td>{e.plain_cat}</td>
                   <td>

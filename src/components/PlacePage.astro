@@ -1,0 +1,182 @@
+---
+// 單一機構頁。內容只用名錄裡已有的欄位（名稱、類別、地址、電話、網址、國健署層級、
+// 衛生局頁解析出的門診與預約方式），沒有的欄位就不出現，不替機構補它沒登記的服務。
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import SiteFooter from './SiteFooter.astro';
+import Caveat from './Caveat.astro';
+import { obsLine } from '../lib/view.mjs';
+import {
+  SERVICE_TYPES, typePages, districtPages, typeUrl, districtUrl, shortCounty,
+} from '../lib/facets.mjs';
+import {
+  CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType,
+} from '../lib/placepages.mjs';
+
+interface Props {
+  code: string;
+  c: any;
+  e: any;
+}
+const { code, c, e } = Astro.props;
+
+const C = c.county;
+const S = shortCounty(C);
+const where = `${C}${e.district || ''}`;
+const cats = catList(e);
+const words = serviceWords(e);
+const noindex = noindexReason(e);
+const slugs = placeSlugs(c);
+const obs = obsLine(c.observations, e.entity_key, e.tel);
+
+const title = `${e.name}｜${where} ${words.join('・') || '兒童發展'}`;
+const catText = cats.map((k) => CAT_TEXT[k] || k);
+const description = `${e.name}（${where}）：${catText.join('、')}。`
+  + `地址 ${e.address}，電話 ${e.tel}。附${S}評估與早療補助的申請流程。`;
+
+const SOURCE_NAME = {
+  sfaa: '衛福部社家署發展遲緩兒童早期療育資源名錄',
+  healthforkids: '國健署兒童發展篩檢院所名單',
+  hpa: '國健署兒童發展聯合評估中心名單',
+};
+const sources = (e.sources || '').split(';').filter(Boolean).map((s) => SOURCE_NAME[s] || s);
+
+const lead = `${e.name}位於${where}，列在主管機關名錄的類別是${catText.join('、')}。`
+  + `地址是${e.address}，電話 ${e.tel}。`;
+
+// 這一家符合的服務類型頁（有出頁的才連）
+const myTypes = typePages(c).filter(({ type }) => type.match(e));
+const dpage = districtPages(c).find((p) => p.district === e.district);
+const evalPage = typePages(c).find(({ type }) => type.slug === 'evaluation');
+
+// 同區其他機構：同類型的排前面，最多 12 家
+const matchTypes = SERVICE_TYPES.filter((t) => t.match(e));
+const score = (x) => matchTypes.filter((t) => t.match(x)).length;
+const nearby = c.entities
+  .filter((x) => x.entity_key !== e.entity_key && e.district && x.district === e.district)
+  .sort((a, b) => score(b) - score(a) || a.name.localeCompare(b.name, 'zh-Hant'))
+  .slice(0, 12);
+
+// 不確定先打哪支：同區的通報轉介／個管中心優先
+const referrals = c.entities.filter((x) => x.journey_step === '2' && x.entity_key !== e.entity_key);
+const referral = referrals.find((x) => x.district === e.district) || referrals[0];
+
+// 結構化資料：只填名錄裡真的有的欄位。座標只到行政區的不放 geo——那是整區共用的點，不是門牌。
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': schemaType(e),
+  name: e.name,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: e.address,
+    ...(e.district ? { addressLocality: e.district } : {}),
+    addressRegion: C,
+    addressCountry: 'TW',
+  },
+  telephone: e.tel,
+  ...(e.url ? { url: e.url } : {}),
+  ...(e.geo_level === 'address' && e.lat && e.lng
+    ? { geo: { '@type': 'GeoCoordinates', latitude: Number(e.lat), longitude: Number(e.lng) } }
+    : {}),
+};
+---
+
+<Base title={title} description={description} trail={[{ name: e.name }]} noindex={!!noindex}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(ld)} />
+  <Nav current={code} />
+  <main class="shell">
+    <p class="crumb">
+      {dpage
+        ? <a href={districtUrl(code, e.district)}>← {e.district}全部機構</a>
+        : <a href={`/${code}/places/`}>← {S}早療機構一覽</a>}
+    </p>
+    <h1>{e.name}</h1>
+    <p class="lead">{lead}</p>
+
+    <section class="section">
+      <h2>{e.name}的基本資料</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>{e.name}的名錄資料。資料產生於 {c.generated_at.slice(0, 10)}。</caption>
+          <tbody>
+            <tr><th>名稱</th><td>{e.tier && <span class={`pill ${e.tier === '重點' ? 'key' : ''}`}>{e.tier}</span>}{e.name}</td></tr>
+            <tr><th>類型</th><td>{catText.join('、')}</td></tr>
+            <tr><th>所在地</th><td>{where}</td></tr>
+            <tr>
+              <th>地址</th>
+              <td>{e.address}{e.geo_level === 'district' && <span class="meta">（地圖座標只到行政區）</span>}</td>
+            </tr>
+            <tr><th>電話</th><td class="num">{e.tel}</td></tr>
+            {obs && <tr><th>門診與預約</th><td>{obs}</td></tr>}
+            {e.url && <tr><th>網址</th><td><a href={e.url} target="_blank" rel="noopener">{e.url}</a></td></tr>}
+            {e.tier && <tr><th>評估中心層級</th><td>國健署補助的兒童發展聯合評估中心（{e.tier}中心）</td></tr>}
+            <tr><th>資料來源</th><td>{sources.join('、')}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>{e.name}列在哪些服務名單</h2>
+      <ul>
+        {cats.map((k) => <li>{CAT_TEXT[k] || k}</li>)}
+      </ul>
+      <p class="meta">
+        這是主管機關名錄登記的類別，實際開放的療育項目、時段與收費，以機構自己的說明為準。
+      </p>
+      {myTypes.length > 0 && (
+        <nav class="pagenav">
+          {myTypes.map(({ type, list }) => (
+            <a href={typeUrl(code, type.slug)}>{S}{type.label} {list.length} 家</a>
+          ))}
+        </nav>
+      )}
+    </section>
+
+    <Caveat kind="list" />
+
+    <section class="section">
+      <h2>在{C}：評估、療育到補助的下一步</h2>
+      <ul>
+        <li><a href={`/${code}/steps/`}>{S}早療怎麼開始：從篩檢、通報到療育的五步</a></li>
+        {evalPage
+          ? <li><a href={typeUrl(code, 'evaluation')}>{S}兒童發展評估：聯合評估中心與評估醫院 {evalPage.list.length} 家</a></li>
+          : <li><a href={`/${code}/checkups/`}>{S}兒童發展篩檢與評估時程</a></li>}
+        <li><a href={`/${code}/subsidy/`}>{S}早療補助怎麼申請：資格、文件與窗口</a></li>
+      </ul>
+    </section>
+
+    {referral && (
+      <div class="cards">
+        <div class="card call">
+          <h3>不確定該找哪一類，先打這支</h3>
+          <div class="entry">
+            <span>{referral.name}</span>
+            <span class="tel num">{referral.tel}</span>
+          </div>
+          <p class="meta">{referral.cat}。評估、療育、補助該從哪裡開始，可以先打這支問。</p>
+        </div>
+      </div>
+    )}
+
+    {nearby.length > 0 && (
+      <section class="section">
+        <h2>{e.district}其他兒童發展與早療機構</h2>
+        <ul>
+          {nearby.map((x) => (
+            <li>
+              <a href={placeUrl(code, slugs.get(x.entity_key))}>{x.name}</a>
+              <span class="meta">（{CAT_TEXT[catList(x)[0]] || x.cat}）</span>
+            </li>
+          ))}
+        </ul>
+        <nav class="pagenav">
+          {dpage && <a href={districtUrl(code, e.district)}>{e.district}全部 {dpage.list.length} 家</a>}
+          <a href={`/${code}/places/`}>{S}早療機構一覽</a>
+        </nav>
+      </section>
+    )}
+
+    <SiteFooter code={code} generatedAt={c.generated_at} />
+  </main>
+</Base>

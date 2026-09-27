@@ -9,8 +9,10 @@ interface Props {
   canonical?: string;
   /** 內頁底下再往下一層的麵包屑（/taichung/places/speech-therapy/），path 省略＝目前這一頁 */
   trail?: { name: string; path?: string }[];
+  /** 資料太少、不值得被搜尋引擎收錄的頁（單一機構頁的一部分）。同時要從 sitemap 排除，見 astro.config.mjs */
+  noindex?: boolean;
 }
-const { title, description, canonical, trail } = Astro.props;
+const { title, description, canonical, trail, noindex } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const url = canonical ?? `${site}${Astro.url.pathname}`;
 
@@ -119,6 +121,7 @@ const jsonld = [
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={url} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
 
     {/* SVG 給桌機瀏覽器，ico 給舊瀏覽器與那些直接去要 /favicon.ico 的工具，
         apple-touch-icon 給 iOS 加到主畫面 */}

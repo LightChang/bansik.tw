@@ -66,7 +66,7 @@ export function countyBundle(code) {
 export const SUBPAGES = [
   ['checkups', '這個年齡的所有檢查'],
   ['steps', '完整流程五步'],
-  ['places', '全部機構'],
+  ['places', '早療機構一覽'],
   ['map', '哪一區有幾家'],
   ['subsidy', '補助怎麼申請'],
   ['materials', '看懂發展的素材'],

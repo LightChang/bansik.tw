@@ -1,7 +1,11 @@
 ---
 // /taichung/places/speech-therapy/（服務類型）與 /taoyuan/places/平鎮區/（行政區）。
 // 類型代碼是英文、行政區是中文，兩者不會撞名，所以共用同一層網址。
+// 單一機構頁（/changhua/places/上巧語言治療所/）也在這一層：網址用機構名稱，
+// 撞到區名或類型代碼的由 placeSlugs() 加上行政區錯開。
 import FacetPage from '../../../components/FacetPage.astro';
+import PlacePage from '../../../components/PlacePage.astro';
+import { placeSlugs } from '../../../lib/placepages.mjs';
 import { counties, county } from '../../../lib/data.mjs';
 import { typePages, districtPages } from '../../../lib/facets.mjs';
 
@@ -17,12 +21,21 @@ export function getStaticPaths() {
         params: { county: code, facet: district },
         props: { district, list },
       })),
+      ...(() => {
+        const slugs = placeSlugs(c);
+        return c.entities.map((e) => ({
+          params: { county: code, facet: slugs.get(e.entity_key) },
+          props: { place: e },
+        }));
+      })(),
     ];
   });
 }
 
 const { county: code } = Astro.params;
-const { type, district, list } = Astro.props;
+const { type, district, list, place } = Astro.props;
 ---
 
-<FacetPage code={code} c={county(code)} list={list} type={type} district={district} />
+{place
+  ? <PlacePage code={code} c={county(code)} e={place} />
+  : <FacetPage code={code} c={county(code)} list={list} type={type} district={district} />}

@@ -6,17 +6,20 @@ import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
 import { obsLine } from '../../lib/view.mjs';
 import { typePages, districtPages, typeUrl, districtUrl, shortCounty } from '../../lib/facets.mjs';
+import { placeSlugs, placeUrl } from '../../lib/placepages.mjs';
 
 export const getStaticPaths = countyPaths;
 
 const { county: code } = Astro.params;
 const c = county(code);
 
+const slugs = placeSlugs(c);
 const rows = c.entities
   .slice()
   .sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant'))
   .map((e) => ({
     name: e.name,
+    page: placeUrl(code, slugs.get(e.entity_key)),
     cat: e.plain_cat,
     district: e.district,
     address: e.address,
@@ -37,16 +40,16 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
 ---
 
 <Base
-  title={`全部機構｜${c.county}`}
-  description={`${c.county} ${c.counts.entities} 家兒童發展相關機構的名稱、類型、地址與電話，可依行政區與類型篩選。`}
+  title={`${S}早療機構一覽｜語言・職能・物理治療所與評估醫院 ${c.counts.entities} 家`}
+  description={`${c.county} ${c.counts.entities} 家早期療育與兒童發展相關機構：語言、職能、物理治療所、聯合評估中心、篩檢院所的地址與電話，每家都有自己的頁面，可依行政區與類型篩選。`}
 >
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
-    <h1>全部機構</h1>
+    <h1>{c.county}早療機構一覽</h1>
     <p class="lead">
       {c.county}共 <span class="num">{c.counts.entities}</span> 家。
-      這裡不做品質排名，只列出是什麼、在哪裡、怎麼打電話。
+      這裡不做品質排名，只列出是什麼、在哪裡、怎麼打電話；點機構名稱看單一機構的資料與同區其他機構。
     </p>
 
     {types.length > 0 && (
@@ -102,9 +105,8 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
               <tr data-d={r.district} data-c={r.cat}>
                 <td>
                   {r.tier && <span class={`pill ${r.tier === '重點' ? 'key' : ''}`}>{r.tier}</span>}
-                  {r.url
-                    ? <a href={r.url} target="_blank" rel="noopener">{r.name}</a>
-                    : r.name}
+                  <a href={r.page}>{r.name}</a>
+                  {r.url && <> <a class="meta" href={r.url} target="_blank" rel="noopener">官網</a></>}
                 </td>
                 <td>{r.cat}</td>
                 <td>

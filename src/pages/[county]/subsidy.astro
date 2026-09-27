@@ -41,6 +41,35 @@ const description = ok
   ? `${answer}依${s.rule_name}整理（核對於 ${s.verified_at}），附申請期限與問補助的電話。`
   : `${answer}要問金額與申請方式，打${c.county}的通報轉介或個案管理中心。`;
 
+// 申請資格、文件、窗口：research/scripts/subsidies.json 的 apply，逐條依官方公告存檔整理。
+// 原文沒有的欄位就沒有；整個縣市沒有 apply 的，這幾段都不出現，不用別縣市的規則補。
+const ap = s && s.apply;
+// 條文每條自己帶句號，併成一段答案前先拿掉，免得出現「。；」「。。」
+const tidy = (x) => x.replace(/[。；，、\s]+$/, '');
+const join = (xs) => xs.map(tidy).join('；');
+const faq = ap
+  ? [
+      ok && [`${S}早療補助每月最多補助多少？`, answer],
+      ap.eligibility && [`誰可以申請${S}早療補助？`, join(ap.eligibility)],
+      ap.documents && [`申請${S}早療補助要準備哪些文件？`, join(ap.documents)],
+      (ap.how_to_apply || ap.office) && [
+        `${S}早療補助要去哪裡申請？`,
+        [ap.how_to_apply, ap.office && `受理單位：${ap.office}`].filter(Boolean).map(tidy).join('。'),
+      ],
+      ok && s.apply_window && [`${S}早療補助什麼時候申請？`, s.apply_window],
+      ap.no_double && [`${S}早療補助可以跟其他補助一起領嗎？`, ap.no_double],
+    ].filter(Boolean).map(([q, a]) => [q, `${tidy(a)}。`])
+  : [];
+const faqLd = faq.length >= 2 && {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map(([q, a]) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+};
+
 // 問補助打哪支：通報轉介中心與個案管理中心（journey_step 2）
 const referrals = c.entities.filter((e) => e.journey_step === '2');
 
@@ -63,6 +92,7 @@ const compare = counties().map(({ code: k, name }) => {
 ---
 
 <Base title={title} description={description}>
+  {faqLd && <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqLd)} />}
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
@@ -127,6 +157,56 @@ const compare = counties().map(({ code: k, name }) => {
           資料核對於 {s.verified_at}，以
           <a href={s.source_url} target="_blank" rel="noopener">主管機關公告</a>為準；
           這裡只列規則與連結，不代為試算。
+        </p>
+      </>
+    )}
+
+    {ap && (
+      <>
+        {ap.eligibility && (
+          <section class="section">
+            <h2>{c.county}早療補助的申請資格</h2>
+            <ul>{ap.eligibility.map((x) => <li>{x}</li>)}</ul>
+          </section>
+        )}
+        {ap.documents && (
+          <section class="section">
+            <h2>申請{S}早療補助要準備的文件</h2>
+            <ol>{ap.documents.map((x) => <li>{x}</li>)}</ol>
+          </section>
+        )}
+        {(ap.how_to_apply || ap.office || ap.contact) && (
+          <section class="section">
+            <h2>{S}早療補助去哪裡申請</h2>
+            <div class="table-wrap">
+              <table>
+                <caption>{c.county}早期療育費用補助的申請方式與受理窗口。</caption>
+                <tbody>
+                  {ap.how_to_apply && <tr><th>申請方式</th><td>{ap.how_to_apply}</td></tr>}
+                  {ap.office && <tr><th>受理單位</th><td>{ap.office}</td></tr>}
+                  {ap.contact && <tr><th>承辦電話</th><td>{ap.contact}</td></tr>}
+                  {ok && s.apply_window && <tr><th>申請期限</th><td>{s.apply_window}</td></tr>}
+                </tbody>
+              </table>
+            </div>
+            {ap.no_double && <p class="meta">不能重複領：{ap.no_double}</p>}
+          </section>
+        )}
+        {faq.length >= 2 && (
+          <section class="section">
+            <h2>{S}早療補助常見問題</h2>
+            {faq.map(([q, a]) => (
+              <>
+                <h3>{q}</h3>
+                <p>{a}</p>
+              </>
+            ))}
+          </section>
+        )}
+        <p class="meta">
+          申請資格、文件與窗口依「{s.rule_name}」的
+          <a href={s.source_url} target="_blank" rel="noopener">官方公告</a>整理（{s.verified_at} 存檔）。
+          表單與最新規定以主管機關公告為準。
         </p>
       </>
     )}
