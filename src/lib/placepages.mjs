@@ -96,6 +96,13 @@ export function serviceWords(e) {
     if (['screening', 'pediatrics', 'early-intervention'].includes(t.slug)) continue;
     if (t.match(e)) words.push(t.label);
   }
+  // 「予泰心理暨職能聯合治療所」這種合寫的名稱，類型頁的比對（要連著寫「職能治療」）抓不到，
+  // 標題另外從名稱裡的治療類別字補上。只看名稱裡寫出來的字。
+  if (cats.some((k) => /療育/.test(k)) && /治療/.test(e.name)) {
+    for (const [re, w] of [[/語言/, '語言治療'], [/職能/, '職能治療'], [/物理/, '物理治療'], [/心理/, '心理治療']]) {
+      if (re.test(e.name)) words.push(w);
+    }
+  }
   if (cats.some((k) => /療育|早療機構/.test(k))) words.push('早療');
   if (cats.some((k) => /通報轉介|個案管理/.test(k))) words.push('早療通報與個案管理');
   if (cats.includes('兒童發展篩檢院所')) words.push('兒童發展篩檢');
