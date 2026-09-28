@@ -36,18 +36,22 @@ const withDocs = rows.filter((r) => docsOf(r)).length;
 const needReport = rows.filter((r) => /報告書|診斷證明|遲緩證明|障礙證明|障礙手冊/.test(docsOf(r))).length;
 const lastVerified = rows.map((r) => r.s && r.s.verified_at).filter(Boolean).sort().pop();
 
-const title = '早療補助怎麼申請：各縣市補助金額、交通補助、申請時間與線上申請｜bansik';
-const lead = `發展遲緩兒童的早期療育補助由各縣市自己訂，22 縣市有 22 套規則。`
-  + `本站讀到官方原文的有 ${nOk} 縣市，每人每月上限多在一般戶 3,000 至 4,000 元、低收入戶 5,000 至 6,000 元之間；`
-  + `${pending.map((r) => r.name).join('、')}的金額沒有公開。`;
-const description = `${lead}表列各縣市交通費、申請期限與能否線上申請。`;
-
-// 上限的實際範圍，從資料算，lead 那句要跟資料一致（見下方 check）
-const gen = rows.filter((r) => r.ok).map((r) => r.s.monthly_max_general);
-const low = rows.filter((r) => r.ok).map((r) => r.s.monthly_max_low_income);
-if (Math.min(...gen) < 3000 || Math.max(...gen) > 4000 || Math.min(...low) < 5000 || Math.max(...low) > 6000) {
+// 上限的常見範圍寫在導言裡；超出範圍的縣市必須是「每月上限只算療育費、交通費另計」的，逐一點名
+const inRange = (r) => r.s.monthly_max_general >= 3000 && r.s.monthly_max_general <= 4000
+  && r.s.monthly_max_low_income >= 5000 && r.s.monthly_max_low_income <= 6000;
+const outliers = rows.filter((r) => r.ok && !inRange(r));
+if (outliers.some((r) => !/與療育費分開計/.test(r.transport || '')) || outliers.length * 2 > nOk) {
   throw new Error('/subsidy/ 導言寫的金額範圍跟資料對不上，改導言');
 }
+
+const title = '早療補助怎麼申請：各縣市補助金額、交通補助、申請時間與線上申請｜bansik';
+const lead = `發展遲緩兒童的早期療育補助由各縣市自己訂，22 縣市有 22 套規則。`
+  + `本站讀到官方原文的有 ${nOk} 縣市，每人每月上限多在一般戶 3,000 至 4,000 元、低收入戶 5,000 至 6,000 元之間`
+  + (outliers.length
+    ? `；${outliers.map((r) => `${r.name}只算療育費，一般戶 ${r.general} 元、低收入戶 ${r.low} 元，交通費另計`).join('；')}`
+    : '')
+  + (pending.length ? `；${pending.map((r) => r.name).join('、')}的金額沒有公開。` : '。');
+const description = `${lead}表列各縣市交通費、申請期限與能否線上申請。`;
 ---
 
 <Base
@@ -102,7 +106,7 @@ if (Math.min(...gen) < 3000 || Math.max(...gen) > 4000 || Math.min(...low) < 500
       <h2>早療交通補助</h2>
       <p>
         交通費多半跟療育費一起申請。有的縣市按次數補（例如每次 200 元、每月有次數上限），
-        有的跟療育費合併算在同一個每月上限裡，金門另有臺金來回機票的規定。上表「交通費」欄是各縣市原文。
+        有的跟療育費合併算在同一個每月上限裡；離島的金門、連江、澎湖另有往返臺灣本島的機票或船票補助。上表「交通費」欄是各縣市原文。
       </p>
     </section>
 
@@ -123,6 +127,7 @@ if (Math.min(...gen) < 3000 || Math.max(...gen) > 4000 || Math.min(...low) < 500
       </p>
     </section>
 
+    {(pending.length > 0 || noApply.length > 0) && (
     <section class="section">
       <h2>還沒整理到官方原文的縣市</h2>
       <ul>
@@ -140,6 +145,7 @@ if (Math.min(...gen) < 3000 || Math.max(...gen) > 4000 || Math.min(...low) < 500
         )}
       </ul>
     </section>
+    )}
 
     <section class="section">
       <h2>申請前要先做什麼</h2>

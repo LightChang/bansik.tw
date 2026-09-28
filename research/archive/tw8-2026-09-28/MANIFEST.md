@@ -1,0 +1,290 @@
+# tw8 代抓存檔 2026-09-29
+
+由台灣主機（tw8）代抓，交給 bansik.tw。抓取日 **2026-09-29（Asia/Taipei）**。
+UA `tw8-research/0.1 (+https://yao.care; archival fetch on behalf of bansik.tw, low rate)`，
+請求間隔 1–2 秒，全程只照站內連結走，**未繞過任何防護**。
+
+## 🔴 工單三個網址都要修正（都是少參數，不是失效）
+
+| 工單寫的 | 實際要的 |
+|---|---|
+| `system.sfaa.gov.tw/cecm/screenView/form`（GET）| **POST**，欄位 `birthDt=yyyy/mm/dd`；GET 會 302 轉回首頁 |
+| `event.penghu.gov.tw/uploaddowndoc?file=down/…pdf` | 要加 **`&filedisplay=<檔名>&flag=doc`**；少參數時回 97 bytes 的 `alert("您的瀏覽器未送出Cookie")`——**那句訊息是誤導，真正原因是參數不全，不是 cookie** |
+| `www-ws.e-land.gov.tw/Download.ashx?u=…` | 要加 **`&n=<base64 檔名>`**；少了它回 HTTP 404 / 0 bytes |
+
+## 1. 社家署 兒童發展檢核表 — 12 個年齡層（不是 13）
+
+入口 <https://system.sfaa.gov.tw/cecm/>。年齡層由 `birthDt` 推得，沒有 API、沒有切換參數。
+
+**「12 不是 13」是驗過的**：出生 20/50/80 天大三個日期全部落回 4個月那層（下方到頂）；
+84 個月大與 72 個月大回傳 **bytes 完全相同**的同一份（上方到頂）。
+
+| 檔案 | 年齡層 | bytes | sha256 |
+|---|---|---|---|
+| `sfaa/band-4m.html` | 4個月(3個月16天~5個月15天) | 94,814 | `fb0e3bf74ff33d99…` |
+| `sfaa/band-6m.html` | 6個月(5個月16天~8個月15天) | 95,030 | `241f5cdd15d46f1e…` |
+| `sfaa/band-9m.html` | 9個月(8個月16天~11個月15天) | 94,671 | `ab565967c98787be…` |
+| `sfaa/band-12m.html` | 1歲(11個月16天~1歲2個月15天) | 94,015 | `26d82b09c5b5424f…` |
+| `sfaa/band-18m.html` | 1歲半(1歲5個月16天~1歲11個月15天) | 96,682 | `10dbdd76eec98150…` |
+| `sfaa/band-24m.html` | 2歲(1歲11個月16天~2歲5個月15天) | 95,226 | `aefcc9109cf5ebf6…` |
+| `sfaa/band-30m.html` | 2歲半(2歲5個月16天~2歲11個月15天) | 95,915 | `6b018d80787cef43…` |
+| `sfaa/band-36m.html` | 3歲(2歲11個月16天~3歲5個月15天) | 97,974 | `e21e2f583597345c…` |
+| `sfaa/band-42m.html` | 3歲半(3歲5個月16天~3歲11個月15天) | 98,158 | `e93a4be1fa93860a…` |
+| `sfaa/band-48m.html` | 4歲(3歲11個月16天~4歲11個月15天) | 98,567 | `6556ecf8d4f03409…` |
+| `sfaa/band-60m.html` | 5歲(4歲11個月16天~5歲11個月15天) | 98,325 | `b5da0213fc93caa8…` |
+| `sfaa/band-72m.html` | 6歲(5歲11個月16天~6歲11個月15天) | 100,592 | `696624994f8cd5cd…` |
+
+| `sfaa/cecm-index.html` | 28,577 | `f28d16365dd7d2e9…` | ← 入口頁
+
+**題目圖片 188 張**在 `sfaa/images/`（零失敗），來源 `/cecm/assets/images/screenView/`，清單見 `sfaa/images/list.txt`。
+
+## 2. 澎湖縣 — PDF 取得；法規頁未取得
+
+**怎麼找到的**：www.penghu.gov.tw → 社會處 → 該站自己的 `uploaddowndoc` 連結一律帶 `&filedisplay=…&flag=…`，
+照同一形式補上參數即取得。**沒有猜路徑**，`file=down/202605191143110.pdf` 用的是工單原值。
+
+| 檔案 | bytes | sha256 |
+|---|---|---|
+| `penghu/202605191143110.pdf` | 134,052 | `5278b8cabe618dd1…` |
+
+PDF 1.7、4 頁，內嵌 `CreationDate D:20260519111747+08'00'`，與檔名 `202605191143110` 相符。
+
+**`law.penghu.gov.tw/NewsContent.aspx?id=232` 未取得**：HTTP 404，錯誤頁寫「要求的 URL: **/NewsContent.aspx**」
+——路徑本身不存在（站台根目錄回 302，站是活的）。站內導覽（社會處／兒少福利 id=42／身障福利 id=24／身障經濟補助 id=225）
+全部 0 次「早期療育」字樣，站內搜尋是 Google CSE 不走。依指示「站內找不到就算了」。
+
+導覽過程的頁面一併存檔供查核：`penghu/www-index.html`、`society.html`、`child.html`、`sec-24.html`、`sec-225.html`、`law-NewsContent-232.html`。
+
+## 3. 宜蘭縣 — 取得
+
+| 檔案 | bytes | sha256 |
+|---|---|---|
+| `yilan/115年度早期療育費用計畫.pdf` | 174,276 | `2edef89ee609c4f7…` |
+| `yilan/115年度宜蘭縣早期療育訓練單位一覽表-11508.pdf` | 62,182 | `0b22a8c8cc87638a…` |
+| `yilan/source-cp-10389.html` | 130,523 | `c4b737c76209ca7b…` |
+
+兩份都是 PDF 1.6、4 頁。第二份是同頁順帶取得。來源頁 <https://sntroot.e-land.gov.tw/cp.aspx?n=10389>（共 31 個下載連結）。
+
+## 全部檔案 sha256
+
+```
+26d82b09c5b5424fc2cd7f9dadb325a9f6a3c825678e3e5f0f19b8cd5524e085      94015  sfaa/band-12m.html
+10dbdd76eec98150dd0c6a5a36581673502e288dca9d4acc85f16ce3ecbc9cac      96682  sfaa/band-18m.html
+aefcc9109cf5ebf6b549076a15e548ac47e0cd2c4b43dbc5d3cf5f5ec8fd06bb      95226  sfaa/band-24m.html
+6b018d80787cef43f4e647f68c537ba3c372eb4be166dcef112356814986c463      95915  sfaa/band-30m.html
+e21e2f583597345cb01d281809ba110ff05f0d34680efc3d7d404930335534cb      97974  sfaa/band-36m.html
+e93a4be1fa93860afd9847a779738c2448132ef85327890884e891920283b0e1      98158  sfaa/band-42m.html
+6556ecf8d4f034091389df24446e3afc68b905426b2e290e4644d889704b6634      98567  sfaa/band-48m.html
+fb0e3bf74ff33d99bee967012537fdbca738defb680ce96ecaf2dbf9fe234b98      94814  sfaa/band-4m.html
+b5da0213fc93caa822fc5a4d0bdbb326a6a788e8563d5bc72f89097dcb721fa5      98325  sfaa/band-60m.html
+241f5cdd15d46f1e22158afca3c15cce50e2a80f4ebbae81b8b6dfe8df9bbc04      95030  sfaa/band-6m.html
+696624994f8cd5cd81243436a7b9697275078d112be61d514daecde3ceb03df2     100592  sfaa/band-72m.html
+ab565967c98787be35867349c375085faa7a2101f5dc6c4666d6ea314ea29c15      94671  sfaa/band-9m.html
+1c5be2555bd839c80323760ca5890e0dc650e9897259e1579af0bb245ce554fe       2001  sfaa/cecm-index.hdr
+f28d16365dd7d2e93970998ae0cf735139d453c7c58fb15634ca4a00c31741d3      28577  sfaa/cecm-index.html
+cb4c1448b6c8ab368231aa79b09cef9634d392a946f305023365043de01a5f5a       5961  sfaa/screenView-form.hdr
+7b72a3abc24a66ed6ea61b7dd334890b5b1223a3044745f9e38d6c708e773230      35953  sfaa/images/cf100_10_10_1.png
+9441a97e524dd760b5d304db46ee36924dac0c0e9d59cba2546c7027d142998c      25335  sfaa/images/cf100_10_11_1.png
+2c4af76e15f7d9084aa100afff2d2b97e04a9fb3d49d5effb44b32bf395ad4a8      35034  sfaa/images/cf100_10_1_1.png
+d8f9062e24d6a3b024364a2e1a13584b8f3b57d9c43159fbbe2dda829b60be67      37626  sfaa/images/cf100_10_2_1.png
+633f08b5278c136e6386210516a076e5233501d87799faf394dd51a22f0eb7db      33319  sfaa/images/cf100_10_3_1.png
+43ac44ccec6f588ea3c612ae33292d80b3129d6e89331085f725212b8af53d62      26167  sfaa/images/cf100_10_4_1.png
+2168ecc4213cb18b877b089a2a4b53fbb493bebe23839f5f64ce19996b324255      22964  sfaa/images/cf100_10_5_1.png
+83d68d6a768d7f12e42498497dc31caca0b091e52d40160709dff5e010211de6      31990  sfaa/images/cf100_10_6_1.png
+2e7235b019131d2d7082d65b267740d182daceffc0afcd6532e6277ff3aea861      46651  sfaa/images/cf100_10_7_1.png
+7974782088e395286d936dc51d51c18ab06f114e79ce0582ea94afd80f404598      27238  sfaa/images/cf100_10_8_1.png
+b47ffe990fbbad3c3409e5ff33e2ec31783b5dce49be474058ef1930720b5334      34498  sfaa/images/cf100_10_9_1.png
+1e9adff7f43a8e8a685ca241e0df0abd9cd605f93e22d8421dea108a371d055d      38948  sfaa/images/cf100_15_10_1.png
+0090c5947aef99b852fb818e16f9566a0861d9bcf8ed521c7bd2df2e72c32252      47372  sfaa/images/cf100_15_11_1.png
+6bdf431a3a64309e8821b36939cfdebefef5e67c33d792667b923e014e98f18d      21790  sfaa/images/cf100_15_12_1.png
+c4754676c8f8503047456909416bfd541de19b3b925c772bde3c99bd4d9fc36d      34272  sfaa/images/cf100_15_13_1.png
+dcd2cb941beece7ffa9a7412137886a8d45242ebcb2a8c31f9c40d8d46108bbc      38189  sfaa/images/cf100_15_1_1.png
+793f96d5e4f3f30958a8b0ad31cade3180d3d215e4a9c8f0a05a9d7cac6ea7b8      23109  sfaa/images/cf100_15_2_1.png
+dcf65443ad1c691870f1ea4df6c12225fc0f5f18fec73fb1946dd56cd88d6246      37275  sfaa/images/cf100_15_3_1.png
+d08b5e705a7ce9e1085ae98f81d165a832bc13aac5557ab32617a04d12d5e52c      27354  sfaa/images/cf100_15_4_1.png
+cbcd122ace8ef2e7cec2fc9df99a28f9db671b597808383ade8f64e30c553f90      34445  sfaa/images/cf100_15_5_1.png
+7d3ab0b19022516cd926089d7387b356ad11a22e0fcba30eb4a5f8127f16daab      43189  sfaa/images/cf100_15_6_1.png
+4ba7b315f2ff30fcb09cc1406e3e6746a8341a0225ecfb604a453eb982a3726d      48954  sfaa/images/cf100_15_7_1.png
+aca67f64ab5698b2d1e6e1297fc59705ba20fb07a2ae1033e53cda0ae14b50ae      26859  sfaa/images/cf100_15_8_1.png
+aedc9f1fa8b27091cfd38a94a17568b23c871ae6eb681eedc3b94cc60d894ceb      50213  sfaa/images/cf100_15_9_1.png
+ee6f76f93bf3870a84e5f2ee4049bd988b92aba16091aeb1301e388b3feb96f3      37317  sfaa/images/cf100_20_10_1.png
+bccbc5cd80e9766909681d8a7b283ef7ed991fdf353eee6def86467adf4afe30      33609  sfaa/images/cf100_20_11_1.png
+1a4e78ec209d53ad964677d3ec6bbdabe1969d53794ed97df9163de6f5b31147      38759  sfaa/images/cf100_20_11_2.png
+8101545983926d9d36d06a2693d08c7c5d98b64216ac804f5bb2cb3d336bf525      38709  sfaa/images/cf100_20_11_3.png
+08bbf4769c9cba89e1c7fad378ed410d27cf840db607b47586e205a5df63c270      33637  sfaa/images/cf100_20_1_1.png
+e4c61aab812c25928fb492dded7b80826be0e364aa3b9ed6cc8360d6a8a57173      34709  sfaa/images/cf100_20_2_1.png
+c29ef1c409a0c8b4232194fd7e687d6c67796257f9a2a949d9fb40af3fc8ad7d      47287  sfaa/images/cf100_20_3_1.png
+5c9908430e8daf4812af4391c87f06ca16bc3b4aaec070c12e1c69153a81e772      28160  sfaa/images/cf100_20_4_1.png
+db3e02e788516896208fe038ce0746a510c276e4b9a0bfa4de2b3decfd6830be      14491  sfaa/images/cf100_20_4_2.png
+b43b16087fc7ad3c240973527b061b0b95047a5d352c7effe2e02e3346f47df4      27864  sfaa/images/cf100_20_5_1.png
+52daf1d30f6b330c92f66bd9ba5fa969b54d30f24dc18410ee8a1ebbd93c8879      33553  sfaa/images/cf100_20_6_1.png
+fa0660a9f45e5c60eeaf96e0e318c7f85b2f2a67ab0850da2d7dda4af844cbf6      31835  sfaa/images/cf100_20_7_1.png
+0b2ba2f21939274176351198b08a646aa5c5e90695758186227ec8cd23123351      40264  sfaa/images/cf100_20_8_1.png
+517cb4654f85f7d4ae9ddcd1c5dde2afdd86e42daed2fe75b96dd12cab6c1712      44764  sfaa/images/cf100_20_9_1.png
+c32e2f11e4cff575183b104b51c9ceb75fd577cbc6ce759e49a2f5766991f15b      51406  sfaa/images/cf100_20_9_2.png
+1c90e4f97f0cc442859a5bb03e4c6c687156dd5f36971d24c7e09ea4429c72fd      41663  sfaa/images/cf100_25_10_1.png
+04444881fbb62daf672568ebec1144200b161b437eff165027cd0166c2995acb      36178  sfaa/images/cf100_25_11_1.png
+0c0b8a866e90befaf291a209867edf8c3dbfda54990da72dcd2dadb23ab5b053      33483  sfaa/images/cf100_25_12_1.png
+9be46aaa54187437b56da69c4f0522da675a7e81db17a994c525dc97546678bf      39778  sfaa/images/cf100_25_12_2.png
+208efe8aca2ac8f9a7bf91564f19c14cfbf79f8b02e112e1b44ddd500b725286      38615  sfaa/images/cf100_25_12_3.png
+19aa88af73bf9ad1f14e425e1a2e5ed4ba15f95033021948e1341f946e9c5c1f      33533  sfaa/images/cf100_25_1_1.png
+ceb55cf5b7b658ceebb69ac644c8b90c1b096e05d43106ca524025864bfcce77      24470  sfaa/images/cf100_25_2_1.png
+807e6c4dfbd075b287e300d32ea733b32bef448d3fc407231b9bdddae88955de      20423  sfaa/images/cf100_25_3_1.png
+0d48102d8de9067b2fd15bbdbbf714bcad537a83b1b484d575cc57616a3b91c6      39494  sfaa/images/cf100_25_4_1.png
+55784b22c99d1bee236419ab8d22864e161a235afbaa88737ab77e288fc9058a      34215  sfaa/images/cf100_25_5_1.png
+874fca6ae654ea2c9e9ab7c369bd83e9c0c73cf716438af990f3f10f3999a044      40958  sfaa/images/cf100_25_6_1.png
+2ae46eac912bef68ad9c7de02730aea628a21997ee3688038a565d547b3c8b86      28930  sfaa/images/cf100_25_7_1.png
+0adde7232023660e6055515f2a14c0aab7348359e69ff2ef58ff4f05ba16a2be      36170  sfaa/images/cf100_25_8_1.png
+db3e02e788516896208fe038ce0746a510c276e4b9a0bfa4de2b3decfd6830be      14491  sfaa/images/cf100_25_8_2.png
+83d253cb5d9ae1cedaee04b5cfd7485369279920c1249380c110a941714f16ec      28009  sfaa/images/cf100_25_9_1.png
+39e3c6c8456c5f3870eccfa2b90f27f61e6d1a9bb232fcee7337a9343b13ec32      40167  sfaa/images/cf100_30_10_1.png
+5cc6ac20c3652b3c6feec00a752d6896ff62d0b8faf54289cb5cc224cecf4b77      20626  sfaa/images/cf100_30_10_2.png
+98745ad45a3c0608a607be768eb808a4e5d234f13d692aa519e776d28d41f058      45437  sfaa/images/cf100_30_11_1.png
+c85cc0c0be646144414879ad3d958515c6559904a587174f638c44a95887d2b7      37332  sfaa/images/cf100_30_12_1.png
+4321f7eee560e948ed4624402e9af433ad585c813d6083f70e6f4df36d03ba53      33594  sfaa/images/cf100_30_13_1.png
+164c215afb4db5583d98f017dcdcc17e3e00abed8e28369c66b673e05ead04a6      39471  sfaa/images/cf100_30_13_2.png
+9aa2298c0b9de9f157fffa94271d932f967ca5627c3effc913caa204d960f82a      40169  sfaa/images/cf100_30_13_3.png
+c395b6515e225f01d6190ba8284a4b37eaa14dfd77a1248a6ea57d035694452f      34771  sfaa/images/cf100_30_1_1.png
+ce5245b7c368a9ae86f641e8170fe2de59ec5b694cbceb453fbbd38a02328a78      24054  sfaa/images/cf100_30_2_1.png
+20a68c792d3f9e56ae818b4c133e035884d658e4a06554b8cf5861048527f9e5      19605  sfaa/images/cf100_30_3_1.png
+bc93a74728554fc6afaa7bb53847922c33a978f0a01d511f2e37c8ec01fc09cd      32362  sfaa/images/cf100_30_4_1.png
+43d8dd47e9d0621052924f98b6d6e45b043884018c519cdf917c10e8717052a7      28619  sfaa/images/cf100_30_5_1.png
+5543ac1e743e09b2ab042d667dc6a619dd540dc72088b055948eb3d8c95f6c8d      26595  sfaa/images/cf100_30_5_2.png
+e0e612159d6205e6237bbc0a1a18da5fe59c3c11075f362530ed6379c86770aa      48198  sfaa/images/cf100_30_6_1.png
+e7fa78709bf0dce59f2ade9163087c85a71b4783444e311d34a70a4ab08a66af      43377  sfaa/images/cf100_30_7_1.png
+863352752a0a29c803df47698b5c719475344f9a0bb9ea9d9d8d35863bd33ce6      36041  sfaa/images/cf100_30_8_1.png
+db3e02e788516896208fe038ce0746a510c276e4b9a0bfa4de2b3decfd6830be      14491  sfaa/images/cf100_30_8_2.png
+056f449b38fd406f66071c076cf548d26227344e035793e86df288076a5cf5ff      35395  sfaa/images/cf100_30_9_1.png
+db3e02e788516896208fe038ce0746a510c276e4b9a0bfa4de2b3decfd6830be      14491  sfaa/images/cf100_30_9_2.png
+d3a23cb1bab72558695fb9c23507f2d78545e0d3b33ac4b0a978f5b3717792f0      32900  sfaa/images/cf100_35_10_1.png
+768aed3de537738b7aa9531d5b1be4609451735427080ccad4e878360c1706a5       6254  sfaa/images/cf100_35_10_2.png
+ea3ade5907c1f77248840b7a5d8f2468116948a938636e32f8cfd023c816866e      43648  sfaa/images/cf100_35_11_1.png
+de4a487a756364e88066ee9b7bcf72a8ca98c882280e1a3c229119ebca84f4cc      40171  sfaa/images/cf100_35_12_1.png
+bdce232a65ea7205ed3795a4e66f23190c495c4655c1ef2e5ef5ec808d2cfc39      33397  sfaa/images/cf100_35_13_1.png
+de32f50cce659e271932ab319b6745921165de1cef624ea4c4b6fc69e5ee1739      39045  sfaa/images/cf100_35_13_2.png
+3c737ceb15602916cb88e84c7cc4694945e6c7f428653b5c4ec3af637183a045      39775  sfaa/images/cf100_35_13_3.png
+d4bbf639a15e980ecd4d2179df2dacbd43c3469c06a2dde9a57a1dd449dc499b      34691  sfaa/images/cf100_35_1_1.png
+28f0bbc88c0e2dbffd66c98a772b424748ac5eac07d346b743e8df5a1165ab71      24041  sfaa/images/cf100_35_2_1.png
+20a68c792d3f9e56ae818b4c133e035884d658e4a06554b8cf5861048527f9e5      19605  sfaa/images/cf100_35_3_1.png
+3911e433b127a0b6ad3cb7a314511679edad3852c8e2cc05d2c0002600e3c9b8      32247  sfaa/images/cf100_35_4_1.png
+3efc36cd8b2920fb6ea7576b6a088d6804f949c1536eed50e35af77386d65aef      26945  sfaa/images/cf100_35_5_1.png
+20b36b1a5f3a5e71eab78d6fe330f1c9fd0c8ed7ca3008169b8439d8895de6ed      30634  sfaa/images/cf100_35_5_2.png
+658cc57824a566c40eb49920dd9dfa50fc598a00202ac1dae69d3b40312f7f97      52472  sfaa/images/cf100_35_6_1.png
+c02a5602b8833bc7ba2fbec6c308e84298fa4ba18f293902995b358e2e4a20c8      43831  sfaa/images/cf100_35_7_1.png
+c5debc7eda3b9eca5cd23d414562cbd6b5082ba4eb029106d9ab5faee4591561      34447  sfaa/images/cf100_35_8_1.png
+db3e02e788516896208fe038ce0746a510c276e4b9a0bfa4de2b3decfd6830be      14491  sfaa/images/cf100_35_8_2.png
+6de8179fa126458cfeff1c846ca347deff1913c14ce7319e11264bc0205abacd      40814  sfaa/images/cf100_35_9_1.png
+6c8dd3e7ab07189d3d1f4685cc952fbb89367ee649dd9b50f908a802d86c9231       8277  sfaa/images/cf100_35_9_2.png
+e52f39076d3dbdc9b1dad06ff92196d3d72278d89d04539f13098de96eb56f24      35102  sfaa/images/cf100_40_10_1.png
+5829cb77f63930bdc570c4af30d198ff61690b1e323e06290267ac6346c6bf69       5873  sfaa/images/cf100_40_10_2.png
+8962b3b97b0f9b97816ead89ef752fbe6612bd61a493b2ef6a72686bd6578773      49301  sfaa/images/cf100_40_11_1.png
+d2b83e994fe13aa7b9f4fc005c2614ef48fd26afa9ace80342f084f437f8fe32      36056  sfaa/images/cf100_40_12_1.png
+6f02da26ee2c36381bea41453d0fd9f99b255244ef7e757328ce0670f936b25a      35668  sfaa/images/cf100_40_13_1.png
+e1d60c6094843cd9db36edf5367a94cb2d73db740d1397ec4fb5593412b7c46a      36541  sfaa/images/cf100_40_13_2.png
+185d952f6f388180e9c08e51c9dbb3fe0d00096d2efaef50cf1c8f3c6ff039ed      26912  sfaa/images/cf100_40_13_3.png
+fbfef28e7cf2e2f5b1ff449afd28c05b524430100755dc00715960e7b7df1884      28953  sfaa/images/cf100_40_13_4.png
+539439b81d6961c251df9f10a4b7a4428a3c5981ed4361f83c21a2530cfe5211      34735  sfaa/images/cf100_40_1_1.png
+f62ca8ec257378e26c8a71a3d89a47fec5751478211e3bcd1e4b0c6e0e248039      19344  sfaa/images/cf100_40_2_1.png
+1918751411cc8a5b34b30c0870f9fefb0662404f451698989e08c5b7ed3acc2c      37539  sfaa/images/cf100_40_3_1.png
+c36fddf7a2253657911805a6337a75ae1e315f6a102cffc212f7b0e7a1fde190      16746  sfaa/images/cf100_40_4_1.png
+166c617f986737feabb719c8b79ee14ae25bd2cc1d335eb00dbbced952d23fe2      49866  sfaa/images/cf100_40_5_1.png
+252949c60fbd55adc5db2ad49940649c6709912cd06d8d06daf8d9e72d8702f6      31694  sfaa/images/cf100_40_6_1.png
+d7edcfbefb7f5b48ffa3820bca094c97f443626106c846037077505295245ada       6370  sfaa/images/cf100_40_6_2.png
+ef31a09e79304853bd2f20ce62a59611c4159c6697d3100ce8f581fc89e80551      36129  sfaa/images/cf100_40_7_1.png
+ef375be4505df6cf4551d7bd1405bf0277e2bce68fc8ea95a775b7a776dea6da       7280  sfaa/images/cf100_40_7_2.png
+8ec83a83c2da13e121a01f000a71405411bdd8cfa919e521fac1a4c88f6bf7be      40128  sfaa/images/cf100_40_8_1.png
+208dcc715049b95dabef2609d27b1cb6ba66c4990c20fd4639278c7915a48b55      34925  sfaa/images/cf100_40_9_1.png
+db3e02e788516896208fe038ce0746a510c276e4b9a0bfa4de2b3decfd6830be      14491  sfaa/images/cf100_40_9_2.png
+d099a2bead2fd2d19bbfa82b411d75306f090d9ca2740d44bb18f01545adb503      17005  sfaa/images/cf100_4_10_1.png
+2d587074ba5df649b9f78e48f13d772a04d33a6b15abf52893417706a09f87a1      28221  sfaa/images/cf100_4_11_1.png
+7caaf59eab8cdff6df79dc4f5c5f1dc8279d7e004b57401b54518ec48fab704b      30273  sfaa/images/cf100_4_12_1.png
+e310a299d4fc06202a6226b3a6468b98cd14a448ce71ffb3b5b32716583d3302      40495  sfaa/images/cf100_4_1_1.png
+9adce410d3d26965a4ac88c488fb188bc487178d1edc96a0ab9f5706fb68fa59      28882  sfaa/images/cf100_4_2_1.png
+f70dd855f0876070d457aebbd57147c1ef843e78565fe0d5da194c1379f3c822      23270  sfaa/images/cf100_4_3_1.png
+a9562827ea9723c896baca46fca83b9600eb116c62bc557c5214a81c8b7a9b20      31242  sfaa/images/cf100_4_4_1.png
+29a07b671cd0e452f18bb51fbe7114266b6450dc1c25f5bb33c7ad0daebf66cf      37164  sfaa/images/cf100_4_5_1.png
+b50c920cef51117302993d335fad3fc314e7a627d6ce117593a8ba2de782459d      30673  sfaa/images/cf100_4_6_1.png
+5bede36513920079315735db75e4b4de0f0ad149a674929fc41a8fd7f5cd8335      37216  sfaa/images/cf100_4_7_1.png
+e35724369b08d52a3e35bc68da237c89b1211f0c9e6ffc982e98c3e38d1edc34      36004  sfaa/images/cf100_4_8_1.png
+4158c935aa4ff5222a7e540dbb2ddb046f1e4b9f21a710eba55d1e0fe926f239      35407  sfaa/images/cf100_4_9_1.png
+9df2d6e15e7eea0f4243ac7d818bb219c15d8d153933c9378b6ce0da39d50757      46766  sfaa/images/cf100_50_10_1.png
+0af7dff0eed7100aa8edc353637b9fdabc911a379497c9faf2c4151bbf1c7922      48839  sfaa/images/cf100_50_11_1.png
+ef9b64055f7429dbf2e13f1a1f7bb1830c461e77be69f5ec551fbbc554a76edf      35057  sfaa/images/cf100_50_12_1.png
+d5ddeaf48b13c5eb572f68d27c8ed94a1452f0c486ef4c43db4958cec185db85      36328  sfaa/images/cf100_50_13_1.png
+379fc0f1b4d3faf0b35a2e9859824e95797e3ca4b11d2c999a0f69cfd2a81a52      35240  sfaa/images/cf100_50_13_2.png
+765b3c1840f0084765f25bcc7ee2fff2b26e1fc8e8f9290f26430fd4d2fb3640      26653  sfaa/images/cf100_50_13_3.png
+6e4f0e1680e6f4e6ade0641726c0e1d1073ef484199888b28740c10d76b3d720      28986  sfaa/images/cf100_50_13_4.png
+3c5d0d3529765e4dd72053bd7d9ba1a0b286e5f19073563633b04a71e68c6a0a      34485  sfaa/images/cf100_50_1_1.png
+9ab6f7b23ece5d6ced957da421e56b294394f809fc78c86ff82fd6f861fc1f49      19421  sfaa/images/cf100_50_2_1.png
+3d47c1a0b9647ada3e70f1e5eca17be00be952f46741e8149fa4bd2dea8244d1      36538  sfaa/images/cf100_50_3_1.png
+d4cec9106ca9d3d6145283e941c92785d5a6fa62c832e42481083d7047baea28      16740  sfaa/images/cf100_50_4_1.png
+23b632724751f165fcc26a8acf5975209da875be9b480d5bf5bdbf1410355200      28789  sfaa/images/cf100_50_5_1.png
+f42ccdaf5cfa5fff28990a0eb4088a5e37e731605e5809c27ddecb643537c919       5474  sfaa/images/cf100_50_5_2.png
+6a2dae60e7be564e33f8f0343f385cc83e3c52b477b38e13b93ac161fb5c5b0a      44183  sfaa/images/cf100_50_6_1.png
+252949c60fbd55adc5db2ad49940649c6709912cd06d8d06daf8d9e72d8702f6      31694  sfaa/images/cf100_50_7_1.png
+39b1d5ad0165f77f5eb34485fba8268cbf43c2505a7d9ba8f0bbb17ec22c40f7       6423  sfaa/images/cf100_50_7_2.png
+14ee8c280ae32bd52e8f8fc8d34dc1be3a31d4160784648f06fea1cd1c9a01e2      37282  sfaa/images/cf100_50_8_1.png
+9dc96f62684b69132e910fccfe71b0501e53007fec862c085da4423b383938f1       5990  sfaa/images/cf100_50_8_2.png
+15895d15c415a90433e5f9acb44fc3ca98a6b07f2bc6cdc9c532a3d2484956cb      30017  sfaa/images/cf100_50_9_1.png
+58fa504325eb84c60f4bda6b53a75ded8fe80b079ef9528f4766d9cacbcc3183      10432  sfaa/images/cf100_50_9_2.png
+89b4bdd86b8d6268d892876da08f169012bde387d79af37cc5fcdf53847ff1f1      46801  sfaa/images/cf100_60_10_1.png
+5387bf7da7e794d5395b1d31b03e54bbbcabab399e8dccad832a92f10d7d7c49      48817  sfaa/images/cf100_60_11_1.png
+16f39dee71b98f744d82781ae16e284cee09bf568bf83a7418393031757bf8bb      35854  sfaa/images/cf100_60_12_1.png
+bd0e26393371176707c90f88eeeeb69af7892265edf21053361be39a8eadb18d      36124  sfaa/images/cf100_60_13_1.png
+44a96a8de6564c60b105542e0106c123dc5cca3c7af4acc833250f5a3201ab1a      35832  sfaa/images/cf100_60_13_2.png
+f77a21109e11a8583aa95b3d13b79ffa5f9fe4c674a68c94900e2092a85a0b1a      26935  sfaa/images/cf100_60_13_3.png
+f4ed3e0af619d7abdc8c8b2397fd693c62b708fe940f2c6f7650d512054aea02      28917  sfaa/images/cf100_60_13_4.png
+fe59841033f226a044f820170bee0b4b66a1f929368f5f299ae2182e531a6b93      33591  sfaa/images/cf100_60_1_1.png
+0937fd42cb7b8ce668bdab5f159c5f0726bf2328564b01d1fbbd7610dffe29a5      40529  sfaa/images/cf100_60_2_1.png
+7d8442d87cbe3f489fcc90fe29bdfbdc7b86bfa663376877b8acfbee168c53f5      37329  sfaa/images/cf100_60_3_1.png
+db07a1bfac403794673a7e661706de681834d9de3a0e04a933b962e6c3af5282       4196  sfaa/images/cf100_60_3_2.png
+af82bf8a448a0bf7d21b1f6ba911c4e4e4d6d0a0199547a94df9bf60344ac5cd      37382  sfaa/images/cf100_60_4_1.png
+bcd4af1ce016f10fd691c38b934d0f68e9a8109b95050fd5abf4f8becd364732      59517  sfaa/images/cf100_60_4_2.png
+a40ff1d84749c6129980de01c71a6064812d9e37ceb252b1f86afa71d3aa051c      43139  sfaa/images/cf100_60_5_1.png
+a12b6ac78c3207573c185d7cd928387774869f45d9cd01a31ddfb0d2ae27c39c      40968  sfaa/images/cf100_60_6_1.png
+bd99cfa7c5c88fcbf5c881b2fec112a9448d659d3d53b4160be103d9470779c5       5995  sfaa/images/cf100_60_6_2.png
+6e5fa137adf9079fc4bbf54d867626f1cc19e8701c2bbc56c50626906c32d117      35093  sfaa/images/cf100_60_7_1.png
+c73e9337979042ec5386e8fdcbc71c7eaf43dc62ebfbf25d8ac83a1897593032       8715  sfaa/images/cf100_60_7_2.png
+c809424fc3a61a41b73a32a4263c9e9f3b631764d16472b6ccd51d538936e00a      40668  sfaa/images/cf100_60_8_1.png
+d9956c86251e3d331743465769bdb7b622e73fcf59850a16a72bf93379ce1fe6      43513  sfaa/images/cf100_60_9_1.png
+d08d817960571dd2f6f5c41943bbc0d077783fe7a3812e54eab031744818a6ae      35866  sfaa/images/cf100_6_10_1.png
+51a3742ddef71fa5a635318efae2b83735132f8c2bc3ffc07cb08583d5879602      29138  sfaa/images/cf100_6_11_1.png
+36ab6e3f8e1f10247c04679bf20ab1187dcad51f5fc19ae2f9564b3223cdceec      37141  sfaa/images/cf100_6_12_1.png
+13061c8e5e28a6cf9a8f82a6c215a4cbe5a62362fe49aac13a2f36698cd5f41b      36989  sfaa/images/cf100_6_1_1.png
+f70dd855f0876070d457aebbd57147c1ef843e78565fe0d5da194c1379f3c822      23270  sfaa/images/cf100_6_2_1.png
+f1fb6cc3be7746699ce27ff897f1bfdf73040112fa0c2630487c20ecae8f9624      32954  sfaa/images/cf100_6_3_1.png
+d5cc86db6c96c372048c27b218b04a72486304eef0929274c698113676eee6b7      41140  sfaa/images/cf100_6_4_1.png
+10999ff070c7c7fea359c67d13056e37d25fe8850e0f39f02305e85326e3cc61      40785  sfaa/images/cf100_6_5_1.png
+94a8be3bd4532c1f7a55829ad376f053568a15d57bdad96a184c736c41ba88f4      43604  sfaa/images/cf100_6_6_1.png
+71d8dca027bfaf6d75a1db02e9925a216d7e782f074d400dcd10842700ab0b5d      35310  sfaa/images/cf100_6_7_1.png
+2769d0c702c24b73152aad0a4cb489b7c3343c80a1891f8f4fa33d5b196f74cf      31224  sfaa/images/cf100_6_8_1.png
+48db064d602ecec095329f25d8d0aa03a971f0a155b2bde2105ecc99cd994ed3      40373  sfaa/images/cf100_6_9_1.png
+4eac0f33b501fe16daa8b8ad4cb653c7b0013c7e5a15246aeb4ed1cc33922a63      34608  sfaa/images/cf100_9_10_1.png
+08a09ee089bec25295ff2e0dc987f428fa2097c31c80e2047c0458a9312aed4e      31892  sfaa/images/cf100_9_11_1.png
+3d00d8b80db89ca1a6aa514fcbe2edce2e7d20ca6896613eb89df7d684882b89      30256  sfaa/images/cf100_9_12_1.png
+7c01a143060e7aad2f95fcb60f83736f23bab57d42cb66ee0e6ed3ef83ef66f5      26371  sfaa/images/cf100_9_1_1.png
+d1fe7df28f63ed65173ca8f646d92a20274b4dd76cd797f298c9fd53a3b56e45      34937  sfaa/images/cf100_9_2_1.png
+a47fc11589a3cce4549e6f9538a3c18141d7fa4f23e00c4824202df254dbab59      25174  sfaa/images/cf100_9_3_1.png
+c4def75cae8cab59f659d540654481c5cc18836df6ab66c3d9e046be741b031e      25230  sfaa/images/cf100_9_4_1.png
+613d2a0ba4db91929a1a231600e76068650ad5f2793a6fb1aa3ac416c4ae3cd1      28762  sfaa/images/cf100_9_5_1.png
+707e31c0e536a77e45fe09a8f0de852d4695c5ed25688c3a76a09a9d5dc5d0f7      39526  sfaa/images/cf100_9_6_1.png
+b67c8afda4bb6a37633f3d9d3d3c4503d1e0872d61153ce3c5bf4182f2bda492      28552  sfaa/images/cf100_9_7_1.png
+5aca5c470201e2d0850b5572ef753973a0cb64d9badb641838c7ec5e4afe4ac7      32408  sfaa/images/cf100_9_8_1.png
+cb3e6f745ae162ef9fd2e5e54952bcf8719aada586421b0f24151c322aa5cd53      47281  sfaa/images/cf100_9_9_1.png
+268a732d9af6eb8569dacc6306cbcb324348edb9bdd9db9a28250b1fd730d63b       9048  sfaa/images/list.txt
+5278b8cabe618dd1f2713fa7cc897726bda49fab9b25e41ee440a06cb95c941e     134052  penghu/202605191143110.pdf
+7dfe6ace3a249d75226d3ddc92b528594a22cf3485563abab40016d1b58eba67      78622  penghu/child.html
+577df90835ed5fa0989c0d8014621d6530df737277c0fa792c2eb7a5cbec037c       1866  penghu/law-NewsContent-232.html
+cadd128bd5b35c408ca0f4a1b5eab578e416d9c8e73f74b40ec007af6f67ec88        317  penghu/law232.hdr
+c8ac1dd084d8197b55123f02660221477c02509fa041e9a02e28b1bebed6192c        331  penghu/pdf.hdr
+a13545e7df80638884aef070a79c464a5fb72882dbe3e78cbd53f0051ad5c844        331  penghu/pdf2.hdr
+efd1bed5e2e0e6cfdeb5f099d7a63aba93222b058e12a92ce87b4a5378eb1ef1      88730  penghu/sec-225.html
+cd88bbcb415bb2cec14e0a2bc04737515f6a2d665d66191b17cbdd3c2c5e7ce1      79199  penghu/sec-24.html
+0bd946d69961ef722a29a486cdcdb28a56977703b7cc9de8cf8a8ea4f9175107     142868  penghu/society.html
+a208c4c39bfaf236817500e15908f2e4257c0c036824c5d5bd9e167e43e705e7     213393  penghu/www-index.html
+0b22a8c8cc87638aa7e3018e6c65dba0b8199b5bd9e2fb56465d252fcd4d1219      62182  yilan/115年度宜蘭縣早期療育訓練單位一覽表-11508.pdf
+2edef89ee609c4f7cfef6148c2febba73fd9a8dc099b19646be715b431be55db     174276  yilan/115年度早期療育費用計畫.pdf
+1ed603de20b51c35e1217dc70c11e8c291efdfc163327a4f5d9a7eb5ba820019        179  yilan/pdf.hdr
+c4b737c76209ca7bc3aa94269536208503ea465d38b180cf44183a7ddde37943     130523  yilan/source-cp-10389.html
+f7d72ba64f253520218c22ee1c886d9b11830ae6f64718f4d2fb7e7efff4f18c       1810  yilan/src.hdr
+```

@@ -101,3 +101,51 @@ test('量表出處：清單頁網址、更新日期、下載日期、授權聲�
   assert.match(S.fetched, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal(S.rights, '本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權');
 });
+
+test('社家署線上檢核表題目：12 層 148 題、★ 62 題，題數與 2026-09-12 的紀錄相同，缺的只有 1 歲 3 個月', () => {
+  const S = A.sfaa;
+  const prev = shared().materials['社家署線上兒童發展檢核表'];
+  assert.equal(S.length, 12);
+  assert.equal(S.reduce((n, s) => n + s.items.length, 0), 148);
+  assert.equal(S.flatMap((s) => s.items).filter((x) => x.mark === '★').length, 62);
+  const levels = tl.filter((t) => t.kind === '線上發展檢核表').map((t) => t.age_label);
+  assert.equal(levels.length, 13, '社家署線上檢核表是 13 層（tw8 只抓到 12 層）');
+  assert.deepEqual(levels.filter((l) => !S.some((s) => s.label === l)), A.sources.checklist.missing);
+  assert.deepEqual(A.sources.checklist.missing, ['1歲3個月(1歲2個月16天~1歲5個月15天)']);
+  for (const s of S) {
+    assert.ok(levels.includes(s.label), s.label);
+    assert.equal(prev[s.label].items, s.items.length, s.label);
+    assert.equal(prev[s.label].alerts, s.items.filter((x) => x.mark === '★').length, s.label);
+    assert.ok(s.month_min < s.month && s.month < s.month_max, s.label);
+    assert.deepEqual(s.items.map((x) => x.no), s.items.map((_, i) => i + 1), s.label);
+    for (const x of s.items) {
+      assert.ok(x.text.length >= 5, `${s.key} ${x.no}`);
+      assert.doesNotMatch(x.text + x.note, /[<>★]|&[a-z]+;/, `${s.key} ${x.no}`);
+      assert.ok(['', '★'].includes(x.mark));
+    }
+  }
+});
+
+test('社家署檢核表題目每層只放一頁：依名目月齡落在哪個時段', async () => {
+  const { sfaaFor } = await import('../src/lib/age.mjs');
+  const keys = (slug) => sfaaFor(A.bands.find((b) => b.slug === slug), A.sfaa).map((s) => s.key);
+  assert.deepEqual(keys('0-2-months'), []);
+  assert.deepEqual(keys('2-4-months'), []);
+  assert.deepEqual(keys('4-6-months'), ['4m']);
+  assert.deepEqual(keys('6-9-months'), ['6m']);
+  assert.deepEqual(keys('9-12-months'), ['9m']);
+  assert.deepEqual(keys('12-18-months'), ['12m']);
+  assert.deepEqual(keys('18-24-months'), ['18m']);
+  assert.deepEqual(keys('2-3-years'), ['24m', '30m']);
+  assert.deepEqual(keys('3-5-years'), ['36m', '42m', '48m']);
+  assert.deepEqual(keys('5-7-years'), ['60m', '72m']);
+  assert.equal(A.bands.flatMap((b) => sfaaFor(b, A.sfaa)).length, A.sfaa.length);
+});
+
+test('社家署檢核表出處：網址、表單端點、取得日期、頁尾版權原文', () => {
+  const C = A.sources.checklist;
+  assert.equal(C.url, 'https://system.sfaa.gov.tw/cecm/');
+  assert.equal(C.form, 'https://system.sfaa.gov.tw/cecm/screenView/form');
+  assert.match(C.fetched, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(C.rights, '©2015衛生福利部社會及家庭署 版權所有');
+});

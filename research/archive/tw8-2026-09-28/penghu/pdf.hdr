@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+Content-Length: 97
+Connection: keep-alive
+Date: Mon, 28 Sep 2026 23:22:56 GMT
+Server: Apache
+Frame-Options: SAMEORIGIN
+X-Frame-Options: SAMEORIGIN
+STRICT-TRANSPORT-SECURITY: max-age=16070400; includeSubDomains
+X-XSS-Protection: 1;mode=block
+Vary: Accept-Encoding
+

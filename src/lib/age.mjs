@@ -31,6 +31,14 @@ export function checksFor(band, timeline) {
 export const scalesFor = (band, scales) => scales
   .filter((s) => overlaps(band.month_min, band.month_max, s.month_min, s.month_max));
 
+/**
+ * 某個時段放哪幾層社家署線上檢核表的題目（age.json 的 sfaa）。
+ * 每層只放一頁：用名目月齡（4 個月、1 歲半＝18…）落在哪個時段的左閉右開區間，
+ * 不用適用日齡範圍重疊，免得同一份題目在相鄰兩頁各出現一次。
+ */
+export const sfaaFor = (band, sfaa) => sfaa
+  .filter((s) => s.month >= band.month_min && s.month < band.month_max);
+
 /** 一份量表的題數 */
 export const scaleCount = (s) => s.domains.reduce((n, d) => n + d.items.length, 0);
 

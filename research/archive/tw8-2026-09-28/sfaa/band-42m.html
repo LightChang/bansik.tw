@@ -1,0 +1,1550 @@
+<!--
+  To change this license header, choose License Headers in Project Properties.
+  To change this template file, choose Tools | Templates
+  and open the template in the editor.
+-->
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:og="http://ogp.me/ns#"
+ xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+        
+
+    <!-- Meta -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Favicon -->
+        <link rel="shortcut icon" href="/cecm/images/favicon.ico" type="image/x-icon"/>
+
+        <link href="/cecm/assets/css/bootstrap.css" rel="stylesheet">
+        <link href="/cecm/assets/css/main.css" rel="stylesheet" type="text/css">
+        <link href="/cecm/assets/css/same-height.css" rel="stylesheet" type="text/css">
+        <!-- HTML5 shim and Respond.js 讓 IE8 支援 HTML5 元素與媒體查詢 -->
+        <!--[if lt IE 9]>
+            <script src="/cecm/assets/js/html5shiv.js"></script>
+            <script src="/cecm/assets/js/respond.min.js"></script>
+
+        <![endif]-->
+        <script src="/cecm/assets/js/jquery-3.6.0.min.js"></script>
+        <script src="/cecm/bootstrap/5.0.2/js/bootstrap.min.js"></script>
+        <script src="/cecm/assets/js/web.js"></script>
+
+
+        <title>衛生福利部社會及家庭署發展遲緩兒童通報暨個案管理服務網</title>
+                        
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-H9TVQ9HFV0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-H9TVQ9HFV0',{
+                cookie_flags: 'secure;samesite=none'
+            });
+        </script>
+
+
+        
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="layout" content="main3"/>
+        
+
+        
+
+        
+        <link rel="stylesheet" type="text/css" href="/cecm/css/cmxform.css"/>
+
+
+        
+
+        <script type="text/javascript">
+            $(function() {
+                $("#datepicker06").datepicker({
+                    autoclose: true,
+                    todayHighlight: true
+                });
+                // $("#datepicker07").datepicker({
+                //     autoclose: true,
+                //     todayHighlight: true
+                // });
+                $("#datepicker08").datepicker({
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+            });
+        </script>
+        
+        <script>
+            // 複製地址
+            function copyAddr(){
+                jQuery("#informCntcode").val(document.getElementsByName('cntcode')[0].value).change();
+                setTimeout(function(){
+                    document.getElementsByName('informTwnspcode')[0].value = document.getElementsByName('twnspcode')[0].value;
+                    document.getElementsByName('informTwnspcode')[0].onchange();
+                }, 250);
+                setTimeout(function(){
+                    document.getElementsByName('informVilgcode')[0].value = document.getElementsByName('vilgcode')[0].value;
+                }, 750);
+                jQuery('#informPostcode').val(jQuery('#postcode').val());
+                jQuery('#informAddr').val(jQuery('#addr').val());
+            }
+        </script>
+
+        <script src="/cecm/js/jquery.validate.js"></script>
+
+        <link rel="stylesheet" href="/cecm/assets/js/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+        <script type="text/javascript" src="/cecm/assets/js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+        <script type="text/javascript" src="/cecm/assets/js/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+        <script>
+            // ajax 提交
+            function submitForm(){
+                $.fancybox.showLoading();
+
+                $.ajax({
+                    url: '/cecm/screenView/reportSubmit',
+                    data: new FormData($('#createdForm')[0]),
+                    type: "POST",
+                    processData:false,
+                    contentType:false,
+                    success: function (json) {
+                        applyElementUpdates(json);
+                    },
+                    // error: defaultAjaxError,
+                    // beforeSend: startLoad,
+                    complete: function () {
+                        $.fancybox.hideLoading();
+                        //$('#submit').prop('disabled', false)
+                    }
+                });
+            }
+        </script>
+
+        
+
+        <style>
+            .graybtm{
+                border-bottom: 2px solid #848484 !important;
+            }
+            .graylft{
+                border-left:2px solid #848484 !important;
+            }
+        </style>
+    
+        <script src="/cecm/assets/js/bootstrap-datepicker.js"></script>
+        <link href="/cecm/assets/css/datepicker.css" rel="stylesheet" type="text/css" />
+        <script src="/cecm/js/common.js"></script>
+        <script>
+            // 從生日推算檢核種類
+            function getModel(birthDt) {
+                let result = ''
+                if(!birthDt || !new Date(birthDt)) return '請填寫有效的生日'
+
+                let dt1 = new Date(birthDt), dt2 = new Date(), age
+                // let age = datediff(birthDt, new Date(),'months') // TODO: 月份不同，日數未滿整月 減去1
+                age = ( dt2.getFullYear() * 12 + dt2.getMonth() ) - ( dt1.getFullYear() * 12 + dt1.getMonth() )
+
+                if(dt2.getDate() < dt1.getDate()) { // 不滿月
+                    age -= 1
+                }
+
+                if(age<0) return '請填寫有效的生日'
+
+                result = String.prototype.concat('兒童年齡: ',Math.floor(age/12),'歲',age%12,'月')
+
+                return result
+            }
+        </script>
+    </head>
+    <body>
+        
+        <header>
+        <div class="container topMenu">
+        <div class="row">
+            <div class="col-xs-12 col-md-7 logo">
+                <a href="/cecm/"> <img src="/cecm/assets/images/logo.png" width="572" height="77" alt="衛生福利部社會及家庭署發展遲緩兒童通報暨個案管理整合系統"> </a>
+            </div>
+            <div class="hidden-xs col-md-5">
+                <nav class="navbar" role="navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/cecm/">回首頁</a></li>
+                        <li><a href="/cecm/webmap/index">網站導覽</a></li>
+                        <li><a href="/cecm/contactUs/index">聯絡我們</a></li>
+                        <li><a href="/cecm/auth/login"><span style="color:#f25822"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 通報個管系統</span></a></li>
+                    </ul>
+                        <div class="form-group" style="margin-left:5px;padding-top:0;float:right !important;margin-right:0;margin-top:15px;">
+                            
+                            <style>
+                                #gsc-i-id1{
+                                    margin-top:4px!important;
+                                }
+                                
+                                #gs_tti50{
+                                    padding: 0px 15px 0;
+                                    width:95%!important;
+                                }
+                                
+                                .gsc-input-box {
+                                    height:30px!important;
+                                }
+                                
+                                .gsc-search-button{
+                                    width:50px!important;
+                                }
+                                
+                                .gsc-search-button > input{
+                                    width:30px!important;
+                                    height:30px!important;
+                                    padding:5px!important;
+                                }
+                                
+                                .gsc-control-cse {
+                                    padding:0;
+                                }
+                            </style>
+                        
+                            
+                                <script>
+                                (function() {
+                                  var cx = '017400474913334649105:tysx_gprylm';
+                                  var gcse = document.createElement('script');
+                                  gcse.type = 'text/javascript';
+                                  gcse.async = true;
+                                  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                                      '//cse.google.com/cse.js?cx=' + cx;
+                                  var s = document.getElementsByTagName('script')[0];
+                                  s.parentNode.insertBefore(gcse, s);
+                                })();
+                              </script>
+                              <gcse:search/>
+                              
+                        </div>
+                            <script>var fburl = window.location.toString().substr(0,window.location.toString().indexOf('cecm')+5)+'homepage/index';</script>
+                            <div class="fbIcon"><a href="javascript:void(0);" onclick="window.open('http://www.facebook.com/sharer/sharer.php?u='+fburl);"><img src="/cecm/assets/images/fbIcon.png" width="55" height="47"></a></div>
+                </nav>
+            </div>
+        </div>
+        </div>
+        
+        
+        
+        
+        </header>
+        
+        
+        <nav class="navbar navbar-default mainMenu" role="navigation">
+        <div class="container">
+            <!-- mobile menu -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">網站主選單</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/cecm/about/index">認識早療 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#onlineForm">線上通報</a></li>
+                    
+                        <li><a href="#" data-toggle="modal" data-target="#onlineForm1">線上篩檢</a></li>
+                    
+                    <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 相關資源<span class="caret"></span> </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/cecm/resourceView/index">依所在地尋找</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/cecm/resourceView/index2">依資源類別尋找</a></li>
+                            
+                        </ul>
+                    </li>
+                    <li><a href="/cecm/lawView/index">法規資訊</a></li>
+                    <li><a href="/cecm/newsView/index">活動訊息</a></li>
+                    <li><a href="/cecm/videoView/index">宣導資料</a></li>
+                    <li><a href="/cecm/materialView/index">教材專區</a></li>
+                    <li><a href="https://dep.mohw.gov.tw/DOS/cp-5337-62357-113.html" target="blank">統計資料</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+        </nav>
+
+        
+        
+        <!-- Modal 線上通報 -->
+        <div class="modal fade" id="onlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            線上通報
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li>
+                                <a href="/cecm/reportView/form?frUserType=1" class="people">
+                                    <h5><span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>我是一般民眾</h5>
+                                    <p>(如家長、監護人、主要照顧者、其他...)</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/cecm/reportView/form?frUserType=2" class="legal">
+                                    <h5><span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>法定通報單位</h5>
+                                    <p>(各類社會福利、教育及醫療機構)</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 線上檢核 -->
+        <div class="modal fade" id="onlineForm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">兒童發展檢核表</h4>
+                </div>
+                <form action="/cecm/screenView/form" method="post" class="form form-group" >
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group text-center">
+                                <div class="row">
+                                    <label for="birthDt" class="control-label" style="color: black">
+                                        請填寫小孩的出生日期
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row formDetail">
+                                    <div class="center-block" style="width: 50%">
+                                        <div id="datepicker09" class="input-group date" data-date-format="yyyy/mm/dd">
+                                            <input class="form-control required" type="text" name="birthDt" id="birthDt"
+                                                   value="" maxlength="10"/>
+                                            <span class="input-group-addon">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $("#datepicker09").datepicker({
+                                        autoclose: true,
+                                        todayHighlight: true
+                                    })
+                                    $('#birthDt').change(function () {
+                                        // 計算年齡到月
+                                        let birthDt = $(this).val()
+                                        let $confirm = $("#ageResult")
+                                        let $submitBtn = $("#toScreen")
+                                        let message = ''
+
+                                        if(!new Date(birthDt)){
+                                            $(this).val('')
+                                            $confirm.html('請填寫有效的生日')
+                                            $submitBtn.attr('disabled', 'disabled')
+                                            return
+                                        }
+
+                                        message = getModel(birthDt)
+                                        $confirm.html(message)
+
+                                        if(message == '請填寫有效的生日') {
+                                            $submitBtn.attr('disabled', 'disabled')
+                                            return
+                                        }
+
+                                        $submitBtn.removeAttr('disabled')
+                                    })
+                                </script>
+                            </div>
+                            <div class="form-group text-center">
+                                <div class="row formDetail text-center">
+                                    <span id="ageResult" style="color: black">請先填寫生日</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn-group" role="group">
+                            <input type="submit" class="btn btn-primary" id="toScreen" name="開始檢核" value="開始檢核" disabled="disabled" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
+        <script>
+            // 連動可選填寫欄位
+            $(function () {
+                swFrIdentity('')
+                sw1Nat('')
+                sw2Nat('')
+            })
+
+            $(document).on('change','#filerIdentity',function () {
+                swFrIdentity($(this).val())
+            })
+
+            $(document).on('change','#par1Nat',function () {
+                sw1Nat($(this).val())
+            })
+
+            $(document).on('change','#par2Nat',function () {
+                sw2Nat($(this).val())
+            })
+
+            // 連動「以上皆無」
+            $(document).on('click', "input[name='risk1c']", function () {
+                if(!$(this)[0].checked) return // 不動作
+
+                if($(this).attr('id') == 'risk1c3'){ // 取消勾選其他選項
+                    $('#risk1c1').removeAttr('checked')
+                    $('#risk1c2').removeAttr('checked')
+                    return;
+                }
+
+                // 不勾選「以上皆無」
+                $('#risk1c3').removeAttr('checked')
+
+            })
+            $(document).on('click', "input[name='risk2c']", function () {
+                if(!$(this)[0].checked) return
+
+                if($(this).attr('id') == 'risk2c9'){
+                    $('#risk2c1').removeAttr('checked')
+                    $('#risk2c2').removeAttr('checked')
+                    $('#risk2c3').removeAttr('checked')
+                    $('#risk2c4').removeAttr('checked')
+                    $('#risk2c5').removeAttr('checked')
+                    $('#risk2c6').removeAttr('checked')
+                    $('#risk2c7').removeAttr('checked')
+                    $('#risk2c8').removeAttr('checked')
+                    $('#risk2c8Desc').val('')
+                    return;
+                }
+
+                if($(this).attr('id') == 'risk2c8'){
+                    $('#risk2c8Desc').focus()
+                }
+
+                $('#risk2c9').removeAttr('checked')
+
+            })
+            $(document).on('click', "input[name='risk3c']", function () {
+                if(!$(this)[0].checked) return
+
+                if($(this).attr('id') == 'risk3c8'){
+                    $('#risk3c1').removeAttr('checked')
+                    $('#risk3c2').removeAttr('checked')
+                    $('#risk3c3').removeAttr('checked')
+                    $('#risk3c3Else').val('')
+                    $('#risk3c4').removeAttr('checked')
+                    $('#risk3c5').removeAttr('checked')
+                    $('#risk3c6').removeAttr('checked')
+                    $('#risk3c7').removeAttr('checked')
+                    $('#risk3c7Desc').val('')
+                    return;
+                }
+
+                if($(this).attr('id') == 'risk3c3'){
+                    $('#risk3c3Else').focus()
+                }
+                if($(this).attr('id') == 'risk3c7'){
+                    $('#risk3c7Desc').focus()
+                }
+
+                $('#risk3c8').removeAttr('checked')
+            })
+            $(document).on('click', "input[name='risk4c']", function () {
+                if(!$(this)[0].checked) return
+
+                if($(this).attr('id') == 'risk4c7'){
+                    $('#risk4c1').removeAttr('checked')
+                    $('#risk4c2').removeAttr('checked')
+                    $('#risk4c3').removeAttr('checked')
+                    $('#risk4c4').removeAttr('checked')
+                    $('#risk4c5').removeAttr('checked')
+                    $('#risk4c6').removeAttr('checked')
+                    $('#risk4c6Desc').val('')
+                    return;
+                }
+
+                if($(this).attr('id') == 'risk4c6'){
+                    $('#risk4c6Desc').focus()
+                }
+
+                $('#risk4c7').removeAttr('checked')
+
+            })
+            $(document).on('click', "input[name='risk5c']", function () {
+                if(!$(this)[0].checked) return
+
+                if($(this).attr('id') == 'risk5c4'){
+                    $('#risk5c1').removeAttr('checked')
+                    $('#risk5c2').removeAttr('checked')
+                    $('#risk5c3').removeAttr('checked')
+                    return;
+                }
+
+                $('#risk5c4').removeAttr('checked')
+
+            })
+
+            function swFrIdentity(idt) {
+                let $textField = $('#filerIdentityOther')
+                if(idt == '99'){
+                    $textField.show()
+                    return
+                }
+
+                $textField.val('')
+                $textField.hide()
+            }
+
+            function sw1Nat(nat) {
+                let $textField = $('#par1NatOther')
+                if(nat == '99'){
+                    $textField.show()
+                    return
+                }
+
+                $textField.val('')
+                $textField.hide()
+            }
+
+            function sw2Nat(nat) {
+                let $textField = $('#par2NatOther')
+                if(nat == '99'){
+                    $textField.show()
+                    return
+                }
+
+                $textField.val('')
+                $textField.hide()
+            }
+        </script>
+        <script>
+            $.validator.addMethod(
+                "regex",
+                function(value, element, regexp) {
+                    const re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "格式不符"
+            );
+
+            $(function () {
+                const validator = $('#createdForm').validate({
+                    rules :{ idno: { regex: "^[A-Z][12]\\d{8}"}},
+                });
+            })
+
+            $(document).on('click','#submit', function (event) {
+                // 鎖住5s 防止連點
+                event.preventDefault()
+                let $element = $(this)
+                $element.prop('disabled', true)
+
+                if (!$('#createdForm').valid()) {
+                    $('html, body').animate({scrollTop: 0}, 'fast')
+                    $('#message').html("<div class='alert alert-danger alert-dismissible' role='alert'>" +
+                        "<button type='button' class='close' data-dismiss='alert' style='right: 0'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>" +
+                        "<strong>失敗！</strong>學齡前兒童發展檢核表  新增失敗。請檢查是否有欄位未填寫" +
+                        "</div>")
+                    $element.prop('disabled', false)
+                    return false
+                }
+
+                submitForm()
+
+            })
+
+        </script>
+
+    
+        <div id="wrapper">
+            <div id="contentInside">
+
+                <!--麵包屑-->
+                <div class="container">
+                    <div class="row">
+                        <div class="hidden-xs col-sm-12 col-md-12">
+                            <ol class="breadcrumb">
+                                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                                <li><a href="/cecm/">首頁</a></li>
+                                <li class="active">線上兒童發展檢核</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!--錯誤訊息-->
+                <div class="container" id="message"></div>
+
+                <div class="container insidePage">
+                    <div class="row insideMain">
+                        <!-- 主要內容 -->
+                        <h1>
+                            <span>
+                                <img src="/cecm/assets/images/titleIcon02.png" width="42" height="36" alt="線上兒童發展檢核">
+                            </span>
+                            線上兒童發展檢核
+                        </h1>
+                        <div class="insideContent form">
+
+                            <form action="/cecm/screenView/reportSubmit/createdForm" method="post" name="createdForm" type="post" id="createdForm" >
+<input type="hidden" name="SYNCHRONIZER_TOKEN" value="9c048843-79f7-4bcc-8521-6220278d46ae" id="SYNCHRONIZER_TOKEN" />
+<input type="hidden" name="SYNCHRONIZER_URI" value="/cecm/screenView/form" id="SYNCHRONIZER_URI" />
+                                <div class="row formDetail">
+
+                                    <div class="col-md-12">
+                                        <h2 class="pull-left">
+                                            學齡前兒童發展檢核表
+                                        </h2>
+                                        <span class="warning" style="border-bottom:0;">
+                                            ※本檢核表灰底部分為非必填項目
+                                        </span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h4>3歲半(3歲5個月16天~3歲11個月15天)</h4>
+                                        <input type="hidden" name="model" value="35" id="model" />
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-md-12">
+                                        <div class="row notice pink">
+                                            <div class="col-md-1 title">
+                                                <strong>填表人</strong>
+                                            </div>
+                                            <div class="col-md-11 list lightPink">
+                                                <div class="row">
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="frUnit" class="col-sm-4 control-label">
+                                                                        檢查單位
+
+                                                                    </label>
+                                                                    <div class="">
+                                                                        <input type="text" class="required" name="frUnit" maxlength="50" value="" id="frUnit" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-group">
+                                                                    <label for="frTel" class="col-sm-4 control-label">
+                                                                        檢查單位電話
+
+                                                                    </label>
+                                                                    <input type="text" class="required" name="frTel" maxlength="20" required="" value="" id="frTel" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="filerName" class="col-sm-4 control-label">
+                                                                        填表人姓名
+
+                                                                    </label>
+                                                                    <input type="text" class="required" name="filerName" maxlength="200" value="" id="filerName" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-inline form-group">
+                                                                    <label for="filerIdentity" class="col-md-4 control-label">
+                                                                        填表人身分
+
+                                                                    </label>
+                                                                    <div class="col-md-8">
+                                                                        <select class="form-control required" name="filerIdentity" id="filerIdentity" >
+<option value="">---</option>
+<option value="1" >醫療人員</option>
+<option value="2" >老師</option>
+<option value="3" >社政人員</option>
+<option value="4" >家長</option>
+<option value="99" >其他</option>
+</select>
+                                                                        <input type="text" name="filerIdentityOther" maxlength="200" value="" placeholder="請輸入其他選項之說明" id="filerIdentityOther" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 gray graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="par1Name" class="col-sm-4 control-label">
+                                                                        家長1-稱謂
+                                                                    </label>
+                                                                    <input type="text" name="par1Name" maxlength="200" value="" id="par1Name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-group">
+                                                                    <label for="par1Nat" class="col-sm-4 control-label">
+                                                                        國籍
+                                                                    </label>
+                                                                    <div class="col-sm-8">
+                                                                        <select class="form-control" name="par1Nat" id="par1Nat" >
+<option value="">---</option>
+<option value="1" >台灣</option>
+<option value="2" >大陸</option>
+<option value="3" >泰國</option>
+<option value="4" >印尼</option>
+<option value="5" >越南</option>
+<option value="6" >柬埔寨</option>
+<option value="99" >其他</option>
+</select>
+                                                                        <input type="text" name="par1NatOther" maxlength="200" value="" placeholder="請註明" id="par1NatOther" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 gray graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="par2Name" class="col-sm-4 control-label">
+                                                                        家長2-稱謂
+
+                                                                    </label>
+                                                                    <input type="text" name="par2Name" maxlength="200" value="" id="par2Name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-group">
+                                                                    <label for="par2Nat" class="col-sm-4 control-label">
+                                                                        國籍
+
+                                                                    </label>
+                                                                    <div class="col-md-8">
+                                                                        <select class="form-control" name="par2Nat" id="par2Nat" >
+<option value="">---</option>
+<option value="1" >台灣</option>
+<option value="2" >大陸</option>
+<option value="3" >泰國</option>
+<option value="4" >印尼</option>
+<option value="5" >越南</option>
+<option value="6" >柬埔寨</option>
+<option value="99" >其他</option>
+</select>
+                                                                        <input type="text" name="par2NatOther" maxlength="200" value="" placeholder="請註明" id="par2NatOther" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row notice yellow">
+                                            <div class="col-md-1 title">
+                                                <strong>兒 童 基 本 資 料</strong>
+                                            </div>
+                                            <div class="col-md-11 list lightYellow">
+                                                <div class="row">
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="checkDt" class="col-sm-4 control-label">
+                                                                        檢核日期
+                                                                    </label>
+                                                                    <div class="">
+                                                                        <div id="datepicker06" class="input-group date" data-date-format="yyyy/mm/dd">
+                                                                            <input class="form-control required" type="text" name="checkDt" id="checkDt" value="2026/09/29" maxlength="10"/>
+                                                                            <span class="input-group-addon">
+                                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-group">
+                                                                    <label for="name" class="col-sm-4 control-label">
+                                                                        姓名
+                                                                        <br>
+                                                                        性別
+                                                                    </label>
+                                                                    <input type="text" class="required" name="name" maxlength="200" value="" id="name" />
+                                                                    <div class="required">
+                                                                        
+                                                                            <label class="radio-inline"><input type="radio" name="sextype" value="1" class="required" />男</label>
+                                                                        
+
+                                                                            <label class="radio-inline"><input type="radio" name="sextype" value="2" class="required" />女</label>
+                                                                        
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <div class="col-md-4 control-label">
+                                                                        <label for="idno">
+                                                                            身分證號
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="">
+                                                                        <input type="text" name="idno" maxlength="10" value="" pattern="[A-Z][12]&#92;d{8}" class="required" id="idno" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-group">
+                                                                    <label for="birthDt" class="col-sm-4 control-label">
+                                                                        出生日期
+                                                                    </label>
+                                                                    <div class="">
+                                                                        <div id="datepicker07" class="input-group date" data-date-format="yyyy/mm/dd">
+                                                                            <input class="form-control required" type="text" name="birthDt" id="birthDt" value="2023/04/08" maxlength="10" readonly="readonly"/>
+                                                                            <span class="input-group-addon">
+                                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6 gray">
+                                                                <div class="form-group">
+                                                                    <label for="preDt" class="col-sm-4 control-label">
+                                                                        (早產)
+                                                                        預產日期
+                                                                    </label>
+                                                                    <div class="">
+                                                                        <div id="datepicker08" class="input-group date" data-date-format="yyyy/mm/dd">
+                                                                            <input class="form-control" type="text" name="preDt" id="preDt" value="" maxlength="10"/>
+                                                                            <span class="input-group-addon">
+                                                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 graylft">
+                                                                <div class="form-group">
+                                                                    <label for="ageYear" class="col-md-4 control-label">
+                                                                        實足年齡
+
+                                                                    </label>
+                                                                    <div>
+                                                                        <input type="number" class="required" name="ageYear" value="3" min="0" max="99" readonly="readonly" id="ageYear" />
+                                                                        年
+                                                                        <input type="number" class="required" name="ageMonth" value="5" min="0" max="99" readonly="readonly" id="ageMonth" />
+                                                                        月
+                                                                        <input type="number" class="required" name="ageDay" value="21" min="0" max="99" readonly="readonly" id="ageDay" />
+                                                                        日
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 padding gray graybtm">
+                                                        <div class="form-group">
+                                                            <label for="addr" class="col-sm-2 control-label">
+                                                                戶籍地址
+                                                            </label>
+                                                            <div class="col-sm-10 listBlock">
+
+                                                                <div class="col-sm-2"><select id="58CBYNWEuvrw2R3M" name="cntcode" onchange="commonjs_selectbox_refresh_by_json({ type: &#39;twnsp&#39;, id1: &#39;58CBYNWEuvrw2R3M&#39;, id2: &#39;GNrFf97hEAfLe2a3&#39;})" class="form-control" >
+<option value="">請選擇</option>
+<option value="09007" >連江縣</option>
+<option value="09020" >金門縣</option>
+<option value="10002" >宜蘭縣</option>
+<option value="10004" >新竹縣</option>
+<option value="10005" >苗栗縣</option>
+<option value="10007" >彰化縣</option>
+<option value="10008" >南投縣</option>
+<option value="10009" >雲林縣</option>
+<option value="10010" >嘉義縣</option>
+<option value="10013" >屏東縣</option>
+<option value="10014" >臺東縣</option>
+<option value="10015" >花蓮縣</option>
+<option value="10016" >澎湖縣</option>
+<option value="10017" >基隆市</option>
+<option value="10018" >新竹市</option>
+<option value="10020" >嘉義市</option>
+<option value="63000" >臺北市</option>
+<option value="64000" >高雄市</option>
+<option value="65000" >新北市</option>
+<option value="66000" >臺中市</option>
+<option value="67000" >臺南市</option>
+<option value="68000" >桃園市</option>
+</select></div><div class="col-sm-2">縣(市)</div><div class="col-sm-2"><select id="GNrFf97hEAfLe2a3" name="twnspcode" onchange="commonjs_selectbox_refresh_by_json({ type: &#39;vilg&#39;, id1: &#39;GNrFf97hEAfLe2a3&#39;, id2: &#39;c7lt34uwLWHCLtc4&#39;});commonjs_postcode_json(&#39;GNrFf97hEAfLe2a3&#39;);" class="form-control" >
+<option value="">請選擇</option>
+</select><script>jQuery(eid("#GNrFf97hEAfLe2a3 option")).first().attr("default", "true");</script></div><div class="col-sm-2">區(鄉鎮市) </div><div class="col-sm-2"><select id="c7lt34uwLWHCLtc4" name="vilgcode" class="form-control" >
+<option value="">請選擇</option>
+</select><script>jQuery(eid("#c7lt34uwLWHCLtc4 option")).first().attr("default", "true");</script></div><div class="col-sm-1">里 </div><script>commonjs_cnt_vilg_link("58CBYNWEuvrw2R3M", "c7lt34uwLWHCLtc4");</script>
+
+                                                                <div class="col-sm-9">
+                                                                    <input type="text" class="form-control " placeholder="請輸入詳細地址" name="addr" id="addr" value="" maxlength="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 padding gray graybtm">
+                                                        <div class="form-group">
+                                                            <label for="informAddr" class="col-sm-2 control-label">
+                                                                聯絡地址
+                                                            </label>
+                                                            <div class="col-sm-10 listBlock">
+
+                                                                <div class="col-sm-2"><select id="informCntcode" name="informCntcode" onchange="commonjs_selectbox_refresh_by_json({ type: &#39;twnsp&#39;, id1: &#39;informCntcode&#39;, id2: &#39;g5qon0JJS1UTNgEW&#39;})" class="form-control" >
+<option value="">請選擇</option>
+<option value="09007" >連江縣</option>
+<option value="09020" >金門縣</option>
+<option value="10002" >宜蘭縣</option>
+<option value="10004" >新竹縣</option>
+<option value="10005" >苗栗縣</option>
+<option value="10007" >彰化縣</option>
+<option value="10008" >南投縣</option>
+<option value="10009" >雲林縣</option>
+<option value="10010" >嘉義縣</option>
+<option value="10013" >屏東縣</option>
+<option value="10014" >臺東縣</option>
+<option value="10015" >花蓮縣</option>
+<option value="10016" >澎湖縣</option>
+<option value="10017" >基隆市</option>
+<option value="10018" >新竹市</option>
+<option value="10020" >嘉義市</option>
+<option value="63000" >臺北市</option>
+<option value="64000" >高雄市</option>
+<option value="65000" >新北市</option>
+<option value="66000" >臺中市</option>
+<option value="67000" >臺南市</option>
+<option value="68000" >桃園市</option>
+</select></div><div class="col-sm-2">縣(市)</div><div class="col-sm-2"><select id="g5qon0JJS1UTNgEW" name="informTwnspcode" onchange="commonjs_selectbox_refresh_by_json({ type: &#39;vilg&#39;, id1: &#39;g5qon0JJS1UTNgEW&#39;, id2: &#39;yv6eJ7LU80zo1690&#39;});commonjs_postcode_json(&#39;g5qon0JJS1UTNgEW&#39;);" class="form-control" >
+<option value="">請選擇</option>
+</select><script>jQuery(eid("#g5qon0JJS1UTNgEW option")).first().attr("default", "true");</script></div><div class="col-sm-2">區(鄉鎮市) </div><div class="col-sm-2"><select id="yv6eJ7LU80zo1690" name="informVilgcode" class="form-control" >
+<option value="">請選擇</option>
+</select><script>jQuery(eid("#yv6eJ7LU80zo1690 option")).first().attr("default", "true");</script></div><div class="col-sm-1">里 </div><script>commonjs_cnt_vilg_link("informCntcode", "yv6eJ7LU80zo1690");</script>
+
+                                                                <div class="col-sm-6">
+                                                                    <input type="text" class="form-control" placeholder="請輸入詳細地址" name="informAddr" id="informAddr" value="" maxlength="200"/>
+                                                                </div>
+
+                                                                <div class="col-sm-2">
+                                                                    <button type="button" class="btn btn-primary" onclick="copyAddr()">同戶籍地址</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="phone1" class="col-sm-4 control-label">
+                                                                        電話(日)
+
+                                                                    </label>
+                                                                    <input class="required" type="tel" id="phone1" name="phone1" maxlength="50" value=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 gray graylft">
+                                                                <div class="form-group">
+                                                                    <label for="phone2" class="col-sm-4 control-label">
+                                                                        電話(夜)
+
+                                                                    </label>
+                                                                    <input type="tel" id="phone2" name="phone2" maxlength="50" value=""/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row notice green">
+                                            <div class="col-md-1 title">
+                                                <strong>發展遲緩高危險因子</strong>
+                                            </div>
+                                            <div class="col-md-11 list lightGreen">
+                                                <div class="row">
+                                                    <div class="col-md-12 grayBtm">
+                                                        <div class="row">
+                                                            <div class="form-inline form-group">
+                                                                <label class="control-label">1.</label>
+                                                                <div class="listBlock">
+                                                                <label for="risk1c1" class="checkbox-inline" style="margin-left: 10px">
+                                                                    <input type="hidden" name="_risk1c" /><input type="checkbox" name="risk1c" value="1" class="required" id="risk1c1"  />
+                                                                    早產(懷孕期未滿37週)
+                                                                </label>
+                                                                <label for="risk1c2" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk1c" /><input type="checkbox" name="risk1c" value="2" class="required" id="risk1c2"  />
+                                                                    出生體重未滿2500克
+                                                                </label>
+                                                                <label for="risk1c3" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk1c" /><input type="checkbox" name="risk1c" value="3" class="required" id="risk1c3"  />
+                                                                    以上皆無
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="form-inline form-group">
+                                                                <label class="control-label">2.先天性異常:</label>
+                                                                <div class="listBlock" style="display: inline-block">
+                                                                <label for="risk2c1" class="checkbox-inline" style="margin-left: 10px">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="1" class="required" id="risk2c1"  />
+                                                                    染色體異常(如唐氏症、透納氏症等)
+                                                                </label>
+                                                                <label for="risk2c2" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="2" class="required" id="risk2c2"  />
+                                                                    頭顱顏面異常(如唇顎裂、外耳異常等)
+                                                                </label>
+                                                                <label for="risk2c3" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="3" class="required" id="risk2c3"  />
+                                                                    先天性新陳代謝異常(如苯酮尿症、甲狀腺功能低下等)
+                                                                </label>
+                                                                <label for="risk2c4" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="4" class="required" id="risk2c4"  />
+                                                                    水腦脊柱裂
+                                                                </label>
+                                                                <label for="risk2c5" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="5" class="required" id="risk2c5"  />
+                                                                    頭骨提早癒合
+                                                                </label>
+                                                                <label for="risk2c6" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="6" class="required" id="risk2c6"  />
+                                                                    先天性心臟病
+                                                                </label>
+                                                                <label for="risk2c7" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="7" class="required" id="risk2c7"  />
+                                                                    手足缺損畸形
+                                                                </label>
+                                                                <label for="risk2c8" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="8" class="required" id="risk2c8"  />
+                                                                    其他
+                                                                </label>
+                                                                <div class="checkbox-inline">
+                                                                    <input type="text" style="width: content-box" name="risk2c8Desc" maxlength="500" value="" placeholder="請敘明" id="risk2c8Desc" />
+                                                                </div>
+                                                                <label for="risk2c9" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk2c" /><input type="checkbox" name="risk2c" value="9" class="required" id="risk2c9"  />
+                                                                    以上皆無
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="form-inline form-group">
+                                                                <label class="control-label">3.產前、產程或產後問題:</label>
+                                                                <div class="listBlock">
+                                                                <label for="risk3c1" class="checkbox-inline" style="margin-left: 10px">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="1" class="required" id="risk3c1"  />
+                                                                    孕期前3個月感染德國麻疹
+                                                                </label>
+                                                                <label for="risk3c2" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="2" class="required" id="risk3c2"  />
+                                                                    母親姙娠期有不正常出血安胎、糖尿病、姙娠毒血、梅毒、酗酒、抽煙
+                                                                </label>
+                                                                <label for="risk3c3" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="3" class="required" id="risk3c3"  />
+                                                                    產程有胎心音下降、吸入胎便、呼吸窘迫、窒息缺氧需急救、住保溫箱
+                                                                </label>
+                                                                <div class="checkbox-inline">
+                                                                    <input type="number" name="risk3c3Else" value="" min="0" max="999" id="risk3c3Else" />
+                                                                    天
+                                                                </div>
+                                                                <label for="risk3c4" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="4" class="required" id="risk3c4"  />
+                                                                    Apgar分數過低：5分鐘後<7(或小於等於6)；請參考兒童健康手冊的出生狀況記錄表
+                                                                </label>
+                                                                <label for="risk3c5" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="5" class="required" id="risk3c5"  />
+                                                                    出生後有痙攣、無呼吸、反覆嘔吐、低體溫或哺乳不良等
+                                                                </label>
+                                                                <label for="risk3c6" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="6" class="required" id="risk3c6"  />
+                                                                    重度黃疸需換血者
+                                                                </label>
+                                                                <label for="risk3c7" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="7" class="required" id="risk3c7"  />
+                                                                    其他
+                                                                </label>
+                                                                <div class="checkbox-inline">
+                                                                    <input type="text" name="risk3c7Desc" style="width: content-box" maxlength="500" value="" id="risk3c7Desc" />
+                                                                </div>
+                                                                <label for="risk3c8" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk3c" /><input type="checkbox" name="risk3c" value="8" class="required" id="risk3c8"  />
+                                                                    以上皆無
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="form-inline form-group">
+                                                                <label class="control-label">4.腦部疾病或受傷:</label>
+                                                                <div class="listBlock" style="display: inline-block">
+                                                                <label for="risk4c1" class="checkbox-inline" style="margin-left: 10px">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="1" class="required" id="risk4c1"  />
+                                                                    水腦
+                                                                </label>
+                                                                <label for="risk4c2" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="2" class="required" id="risk4c2"  />
+                                                                    出血或缺氧
+                                                                </label>
+                                                                <label for="risk4c3" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="3" class="required" id="risk4c3"  />
+                                                                    腦部感染
+                                                                </label>
+                                                                <label for="risk4c4" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="4" class="required" id="risk4c4"  />
+                                                                    癲癇
+                                                                </label>
+                                                                <label for="risk4c5" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="5" class="required" id="risk4c5"  />
+                                                                    腦瘤
+                                                                </label>
+                                                                <label for="risk4c6" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="6" class="required" id="risk4c6"  />
+                                                                    其他
+                                                                </label>
+                                                                <div class="checkbox-inline">
+                                                                    <input type="text" name="risk4c6Desc" style="width: content-box" maxlength="500" value="" id="risk4c6Desc" />
+                                                                </div>
+                                                                <label for="risk4c7" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk4c" /><input type="checkbox" name="risk4c" value="7" class="required" id="risk4c7"  />
+                                                                    以上皆無
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 graybtm">
+                                                        <div class="row">
+                                                            <div class="form-inline form-group">
+                                                                <label class="control-label">5.家族史或環境因素:</label>
+                                                                <div class="listBlock" style="display: inline-block">
+                                                                <label for="risk5c1" class="checkbox-inline" style="margin-left: 10px">
+                                                                    <input type="hidden" name="_risk5c" /><input type="checkbox" name="risk5c" value="1" class="required" id="risk5c1"  />
+                                                                    近親有視聽障礙、智能不足、精神疾病
+                                                                </label>
+                                                                <label for="risk5c2" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk5c" /><input type="checkbox" name="risk5c" value="2" class="required" id="risk5c2"  />
+                                                                    社經不利狀況
+                                                                </label>
+                                                                <label for="risk5c3" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk5c" /><input type="checkbox" name="risk5c" value="3" class="required" id="risk5c3"  />
+                                                                    孤兒或受虐兒
+                                                                </label>
+                                                                <label for="risk5c4" class="checkbox-inline">
+                                                                    <input type="hidden" name="_risk5c" /><input type="checkbox" name="risk5c" value="4" class="required" id="risk5c4"  />
+                                                                    以上皆無
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        
+<div class="col-md-12 col-sm-12 questionaire img-bg-white-fix">
+    <div class="row notice green">
+        <div class="col-md-1 col-sm-1 title">
+            <strong>發展里程檢核</strong>
+        </div>
+        <div class="col-md-11 col-sm-11 list lightGreen">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 greenMid graybtm">
+                    <div class="row text-center gray">
+                        <h4>
+                            <strong>兒童符合該項目描述的現象圈選「是」，若不符合或沒有該項目描述的現象圈選「否」。註記(實作)的題項表示附有圖形，請實地測試，再紀錄兒童反應。</strong>
+                        </h4>&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            ★1. 能不須扶東西輕易地蹲下玩玩具然後恢復站的姿勢
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_1_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check1Y" class="radio-inline">
+                                <input type="radio" name="check1" value="1" class="required" id="check1Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify1">
+                            <label for="check1N" class="radio-inline">
+                                <input type="radio" name="check1" value="0" class="required" id="check1N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            2. 稍微扶欄杆或牆壁就能走上樓梯
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_2_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check2Y" class="radio-inline">
+                                <input type="radio" name="check2" value="1" class="required" id="check2Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check2N" class="radio-inline">
+                                <input type="radio" name="check2" value="0" class="required" id="check2N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            3. 能跑(姿勢怪異或常跌倒均不算通過)
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_3_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check3Y" class="radio-inline">
+                                <input type="radio" name="check3" value="1" class="required" id="check3Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check3N" class="radio-inline">
+                                <input type="radio" name="check3" value="0" class="required" id="check3N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            4. 能雙腳離地<span style="text-decoration-line: underline">連續</span>跳躍(雙腳必須能同時離地然後同時著地，若明顯的力量不對稱而造成兩腳高低不一，則不算通過)
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_4_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check4Y" class="radio-inline">
+                                <input type="radio" name="check4" value="1" class="required" id="check4Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check4N" class="radio-inline">
+                                <input type="radio" name="check4" value="0" class="required" id="check4N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            5. (實作)可以模仿畫一條平穩的橫線(圖1：大人先作示範，在蜜峰和花盆間畫一橫線，然後讓兒童模仿畫；線條兩端連接蜜峰和花盆，大體為不斷裂橫線就算通過)
+                            <br>
+                            <span>
+                                <img src="/cecm/assets/images/screenView/cf100_35_5_1.png" style="height: 200px" alt="圖1"/>
+                                <img src="/cecm/assets/images/screenView/cf100_35_5_2.png" style="height: 200px" alt="圖示"/>
+                            </span>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check5Y" class="radio-inline">
+                                <input type="radio" name="check5" value="1" class="required" id="check5Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check5N" class="radio-inline">
+                                <input type="radio" name="check5" value="0" class="required" id="check5N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            ★6. 通常可以和人一問一答持續對話，使用2至3個單詞的短句，且回答內容切題
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_6_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check6Y" class="radio-inline">
+                                <input type="radio" name="check6" value="1" class="required" id="check6Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify1">
+                            <label for="check6N" class="radio-inline">
+                                <input type="radio" name="check6" value="0" class="required" id="check6N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            7. 能主動用至少一種句子問問題(例如：為什麼...?...在哪裡?)
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_7_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check7Y" class="radio-inline">
+                                <input type="radio" name="check7" value="1" class="required" id="check7Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check7N" class="radio-inline">
+                                <input type="radio" name="check7" value="0" class="required" id="check7N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            8. (實作)能說出至少三種東西的用途(圖4：大人用手依序指著杯子、鞋子、鑰匙、鉛筆的圖形，並問「這個是做什麼用的？」如果兒童第一題答不出，可以給提示「杯子是用來喝水的」。之後就不再給提示)
+                            <br>
+                            <span>
+                                <img src="/cecm/assets/images/screenView/cf100_35_8_1.png" style="height: 200px" alt="圖4"/>
+                                <img src="/cecm/assets/images/screenView/cf100_35_8_2.png" style="height: 200px" alt="圖示"/>
+                            </span>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check8Y" class="radio-inline">
+                                <input type="radio" name="check8" value="1" class="required" id="check8Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check8N" class="radio-inline">
+                                <input type="radio" name="check8" value="0" class="required" id="check8N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            9. (實作)能理解「大」(圖2：問「哪個比較<span style="text-decoration-line: underline">大</span>？」必須詢問兩次均正確才通過。評估表必須轉到不同的方向詢問，避免兒童隨便選一個固定位置的答案而猜對)
+                            <br>
+                            <span>
+                                <img src="/cecm/assets/images/screenView/cf100_35_9_1.png" style="height: 200px" alt="圖2"/>
+                                <img src="/cecm/assets/images/screenView/cf100_35_9_2.png" style="height: 200px" alt="圖示"/>
+                            </span>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check9Y" class="radio-inline">
+                                <input type="radio" name="check9" value="1" class="required" id="check9Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check9N" class="radio-inline">
+                                <input type="radio" name="check9" value="0" class="required" id="check9N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            10. (實作)能正確指認一個顏色(圖3：依序問「哪一個是紅色？黃色？藍色？綠色？」亦可替換為「哪一個是蘋果的紅色？香蕉的黃色？天空的藍色？樹葉的綠色？」全部問完再從頭問一輪，必須兩次均指對的顏色才算對，以避免兒童因亂指而猜對)
+                            <br>
+                            <span>
+                                <img src="/cecm/assets/images/screenView/cf100_35_10_1.png" style="height: 200px" alt="圖3"/>
+                                <img src="/cecm/assets/images/screenView/cf100_35_10_2.png" style="height: 200px" alt="圖示"/>
+                            </span>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check10Y" class="radio-inline">
+                                <input type="radio" name="check10" value="1" class="required" id="check10Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check10N" class="radio-inline">
+                                <input type="radio" name="check10" value="0" class="required" id="check10N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            11. 口齒不清，說話連<span style="text-decoration-line: underline">最親近的大人</span>也聽不懂
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_11_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify1">
+                            <label for="check11Y" class="radio-inline">
+                                <input type="radio" name="check11" value="1" class="required" id="check11Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check11N" class="radio-inline">
+                                <input type="radio" name="check11" value="0" class="required" id="check11N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            ★12. 經常自言自語說出一些固定的話，和當時情境無關、也不具溝通功能
+                            <br>
+                            <img src="/cecm/assets/images/screenView/cf100_35_12_1.png" style="height: 200px" alt="圖示"/>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify1">
+                            <label for="check12Y" class="radio-inline">
+                                <input type="radio" name="check12" value="1" class="required" id="check12Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check12N" class="radio-inline">
+                                <input type="radio" name="check12" value="0" class="required" id="check12N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 padding graybtm">
+                    <div class="form-group">
+                        <label class="col-md-8 col-sm-10 control-label">
+                            13. 檢核過程中非常不合作，出現下列<span style="text-decoration-line: underline">任一行為</span>如(1)不聽說明、不看示範(2)眼睛不跟隨大人手指方向(3)不肯指給大人看(4)把大人的東西搶過去自己玩(5)跑來跑去抓不住(6)似乎聽不懂指令
+                            <br>
+                            <span>
+                                <img src="/cecm/assets/images/screenView/cf100_35_13_1.png" style="height: 150px" alt="圖示1"/>
+                                <img src="/cecm/assets/images/screenView/cf100_35_13_2.png" style="height: 150px" alt="圖示2"/>
+                                <img src="/cecm/assets/images/screenView/cf100_35_13_3.png" style="height: 150px" alt="圖示3"/>
+                                
+                            </span>
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-1 notify">
+                            <label for="check13Y" class="radio-inline">
+                                <input type="radio" name="check13" value="1" class="required" id="check13Y"  />
+                                是
+                            </label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-1">
+                            <label for="check13N" class="radio-inline">
+                                <input type="radio" name="check13" value="0" class="required" id="check13N"  />
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+                                    <div class="col-md-12">
+                                        <div class="row text-center" style="margin: 15px;">
+                                            請提交檢核表單，確認檢核結果。
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <button type="button" id="submit" name="submit" class="btn btn-brown btn-lg">送出檢核表</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            <footer>
+    <div class="container-fluid coryright">
+        <div class="container" style="width:900px;float:left;">
+            <p><a href="https://www.sfaa.gov.tw/SFAA/Pages/VDetail.aspx?nodeid=541&pid=3584" target="blank">隱私權保護政策</a> | <a href="https://www.sfaa.gov.tw/SFAA/Pages/VDetail.aspx?nodeid=541&pid=3405" target="blank">網站安全政策</a></p>
+            <p> 署本部：11558 臺北市南港區忠孝東路六段488號12樓 ｜ 連絡電話：02-8692-0923 ｜ <a href="https://www.google.com.tw/maps/place/115%E5%8F%B0%E5%8C%97%E5%B8%82%E5%8D%97%E6%B8%AF%E5%8D%80%E5%BF%A0%E5%AD%9D%E6%9D%B1%E8%B7%AF%E5%85%AD%E6%AE%B5488%E8%99%9F/@25.0507684,121.5952696,17z/data=!3m1!4b1!4m2!3m1!1s0x3442ab6ff6856389:0xbb633f2814a545a1?hl=zh-TW" target="blank">署本部位置圖</a>
+                <br /> 客服專線：02-7742-2812 ｜ 客服信箱：cecm@wezoomtek.com.tw
+                <br /> ©2015衛生福利部社會及家庭署 版權所有 
+                <br /> 公益彩券回饋金補助
+            </p>
+        </div>
+        <div style="width:320px;float:left;">
+            <br><br>
+            <a href="https://www.sfaa.gov.tw/SFAA/Default.aspx" target="_blank">
+                <img src="/cecm/images/SFAA_LOGO.jpg" style="width:320px;"/>
+            </a>
+        </div>
+    </div>
+</footer>
+
+
+    
+
+    </body>
+
+
+</html>

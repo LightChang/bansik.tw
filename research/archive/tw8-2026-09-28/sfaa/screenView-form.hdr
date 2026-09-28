@@ -1,0 +1,46 @@
+HTTP/1.1 302 
+Date: Mon, 28 Sep 2026 23:15:14 GMT
+Content-Length: 0
+Connection: keep-alive
+Set-Cookie: route=3951afde296efc7c8c8e507dcd17a1a0; Path=/; Secure
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: JSESSIONID=0E73A2D2865AE0FFF9F24237274D1C97; Path=/cecm; Secure; HttpOnly
+Location: https://system.sfaa.gov.tw/cecm/screenView/index
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.googletagmanager.com https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com http://cse.google.com https://cse.google.com https://www.google.com; img-src 'self' data: https://www.google-analytics.com http://www.google.com https://www.google.com https://encrypted-tbn0.gstatic.com https://www.gstatic.com http://clients1.google.com https://clients1.google.com https://*.adtrafficquality.google https://i.ytimg.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com http://www.youtube.com https://www.youtube.com http://www.youtube-nocookie.com https://www.youtube-nocookie.com https://*.adtrafficquality.google; object-src 'self'; base-uri 'self';
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=63072000; includeSubdomains; preload
+Set-Cookie: TS0158a6a7=0112d90a3af947e3c5e3b031a1309dc0065b8be170f4574d487c445e7a1638dc4bc9b60ca43a3807259f551be9e059d5857e661929fb63ad95bf141bb2b85915b31d893b35; Path=/
+Set-Cookie: TS019fd8f0=0112d90a3adbf7eb5b73ed1a364abb581be68f398ff4574d487c445e7a1638dc4bc9b60ca42f86b7f582dbe3e1fd39f230b7eda3dd2d33046f19713871a11bed53dc2234a3; path=/cecm
+
+HTTP/1.1 302 
+Date: Mon, 28 Sep 2026 23:15:14 GMT
+Content-Length: 0
+Connection: keep-alive
+Set-Cookie: route=faf7cca259fe7e5b0570c7eeb13e292a; Path=/; Secure
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: JSESSIONID=B19DEC85ED097A31F29ADC89B4847706; Path=/cecm; Secure; HttpOnly
+Location: https://system.sfaa.gov.tw/cecm/
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.googletagmanager.com https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com http://cse.google.com https://cse.google.com https://www.google.com; img-src 'self' data: https://www.google-analytics.com http://www.google.com https://www.google.com https://encrypted-tbn0.gstatic.com https://www.gstatic.com http://clients1.google.com https://clients1.google.com https://*.adtrafficquality.google https://i.ytimg.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com http://www.youtube.com https://www.youtube.com http://www.youtube-nocookie.com https://www.youtube-nocookie.com https://*.adtrafficquality.google; object-src 'self'; base-uri 'self';
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=63072000; includeSubdomains; preload
+Set-Cookie: TS0158a6a7=0112d90a3a59f7ebce4a03e6e1679d320c081e75636c66882c713f0b49821062ee126ece0bdff819d9b3a3bc85b9b5df2a2004e67a03720ecd6c7ab9813af40f26bd777885; Path=/
+Set-Cookie: TS019fd8f0=0112d90a3aa7fdb516a3bf98314b83456069da77756c66882c713f0b49821062ee126ece0bba09b9f3f631bf9c9b1815822cde78865016f171678090deb46b28be260b624e; path=/cecm
+
+HTTP/1.1 200 
+Date: Mon, 28 Sep 2026 23:15:14 GMT
+Content-Type: text/html;charset=utf-8
+Connection: keep-alive
+Set-Cookie: route=3951afde296efc7c8c8e507dcd17a1a0; Path=/; Secure
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: JSESSIONID=116F2223B394EBA9D4206D1C1DAD983D; Path=/cecm; Secure; HttpOnly
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.googletagmanager.com https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com http://cse.google.com https://cse.google.com https://www.google.com; img-src 'self' data: https://www.google-analytics.com http://www.google.com https://www.google.com https://encrypted-tbn0.gstatic.com https://www.gstatic.com http://clients1.google.com https://clients1.google.com https://*.adtrafficquality.google https://i.ytimg.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com http://www.youtube.com https://www.youtube.com http://www.youtube-nocookie.com https://www.youtube-nocookie.com https://*.adtrafficquality.google; object-src 'self'; base-uri 'self';
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Language: zh-TW
+Strict-Transport-Security: max-age=63072000; includeSubdomains; preload
+Set-Cookie: TS0158a6a7=0112d90a3ae5d9effd70205396b80dc0507fed173174d46d2e5904a52597459ab20cbc3448dac4dece189c65d62be26da6c61a83ef973c0a7afbba3c3e9dc1f2e8c61738ee; Path=/
+Set-Cookie: TS019fd8f0=0112d90a3a92a011e3a8bcbef556f099d221847c8674d46d2e5904a52597459ab20cbc3448400a1530b42fe7074a03494dc29392031030d3bd18e39683c44050f2e427998c; path=/cecm
+Transfer-Encoding: chunked
+

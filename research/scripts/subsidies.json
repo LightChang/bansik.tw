@@ -1,20 +1,29 @@
 {
   "note": "22 縣市早療費用補助規則。這是人工維護的 override 檔，不做自動解析——每個縣市的計畫是 PDF 或 ASP 頁面，格式各不相同，而且金額改動要有人看過才算數。頁面上呈現時一律附 source_url 與 verified_at，不要只顯示數字。",
-  "caveat": "monthly_max 是『療育費與交通費合計』的上限，但不是每個縣市都這樣算：高雄的合併上限低於它自己的療育訓練費上限，臺南分成『一般療育』與『簽約機構時段療育』兩套，桃園另有 7-18 歲級距，金門的交通費是機票實報實銷、與療育費分開計。所以除了金額，規則的形狀也要照抄，不要壓成同一個欄位。",
+  "caveat": "monthly_max 是『療育費與交通費合計』的上限，但不是每個縣市都這樣算：高雄的合併上限低於它自己的療育訓練費上限，臺南分成『一般療育』與『簽約機構時段療育』兩套，桃園另有 7-18 歲級距，金門的交通費是機票實報實銷、與療育費分開計，澎湖的每月上限只算療育費、交通費按趟另計。所以除了金額，規則的形狀也要照抄，不要壓成同一個欄位。",
   "fields": {
     "monthly_max_general": "一般戶（多數縣市含中低收入戶）每人每月上限，新臺幣元",
     "monthly_max_low_income": "列冊低收入戶每人每月上限，新臺幣元",
     "transport": "交通費的算法（每次金額、每月次數上限）",
-    "apply": "申請資格、要準備的文件、申請方式與受理窗口，逐字依 archived 指向的官方頁面存檔整理（2026-09-13 抓取；臺南、宜蘭、苗栗、南投、金門、連江為 2026-09-28）。原文沒有的欄位不寫；原文只有附件連結而附件沒存到的縣市整個不給 apply",
+    "apply": "申請資格、要準備的文件、申請方式與受理窗口，逐字依 archived 指向的官方頁面存檔整理（2026-09-13 抓取；臺南、苗栗、南投、金門、連江為 2026-09-28；宜蘭、澎湖為 2026-09-29 臺灣主機 tw8 代抓）。原文沒有的欄位不寫；原文只有附件連結而附件沒存到的縣市整個不給 apply",
     "status": "verified＝已讀過官方原文；pending＝官方頁面查得到計畫名稱但金額未公開在可解析的頁面上",
-    "apply.source_url": "申請資訊與金額不在同一頁時，申請資訊的出處；沒有就是 source_url"
+    "apply.source_url": "申請資訊與金額不在同一頁時，申請資訊的出處；沒有就是 source_url",
+    "file_url": "計畫原文 PDF 的下載網址（和 source_url 公告頁不同時才有）",
+    "archived": "計畫原文的存檔路徑",
+    "providers_list": "縣市在補助公告頁附的療育訓練單位名單（名稱、下載網址、存檔），頁面只連過去，不轉成機構資料"
   },
   "counties": [
     {
-      "county": "臺北市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "臺北市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "臺北市政府社會局發展遲緩兒童療育補助計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["交通補助費", "療育訓練費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "交通補助費",
+        "療育訓練費"
+      ],
       "transport": "與療育訓練費合併計算",
       "apply_window": "當月完成療育後，至遲於次月起算三個月內",
       "source_url": "https://dosw.gov.taipei/cp.aspx?n=8F97E5D532EE9C35",
@@ -39,10 +48,16 @@
       }
     },
     {
-      "county": "新北市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "新北市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "新北市政府辦理發展遲緩兒童療育補助實施計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育訓練費（健保不給付之全額自費項目）", "交通補助費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育訓練費（健保不給付之全額自費項目）",
+        "交通補助費"
+      ],
       "transport": "健保給付項目之交通費每次 200 元",
       "apply_window": "同一月份僅受理申請 1 次；補件 15 日內",
       "source_url": "https://www.sw.ntpc.gov.tw/home.jsp?id=af6b347895e3de2c&act=be4f48068b2b0031&dataserno=490876a2ea5230f5ed8daaf4598cc80c",
@@ -59,10 +74,17 @@
       }
     },
     {
-      "county": "桃園市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "桃園市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "桃園市發展遲緩兒童及少年療育補助計畫（115 年 1 月 1 日起施行）",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["交通補助費用", "療育訓練費用", "到宅服務或外展療育"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "交通補助費用",
+        "療育訓練費用",
+        "到宅服務或外展療育"
+      ],
       "transport": "規定療育單位每次 200 元；兒童發展復健站或婦幼衛生所每次 100 元、每月最高 400 元",
       "apply_window": "按季，1-3 月於 4/1-4/15、4-6 月於 7/1-7/15、7-9 月於 10/1-10/15、10-12 月於次年 1/1-1/15；提前或逾期不受理",
       "extra": "7 歲以上未滿 18 歲另有級距：一般戶 3,000 元、低收入戶 5,000 元",
@@ -92,10 +114,17 @@
       }
     },
     {
-      "county": "臺中市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "臺中市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "臺中市政府社會局辦理發展遲緩兒童早期療育補助執行計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["交通費", "療育訓練費", "到宅服務費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "交通費",
+        "療育訓練費",
+        "到宅服務費"
+      ],
       "transport": "每次最高 200 元，每月 12 次；低收入戶不限次數",
       "apply_window": "按季，1-3 月至 4/9、4-6 月至 7/7、7-9 月至 10/7、10-11 月至 12/7、12 月併次年第一季",
       "extra": "到宅服務每次最高 1,000 元，另計專業人員交通費",
@@ -123,10 +152,17 @@
       }
     },
     {
-      "county": "臺南市", "status": "verified", "verified_at": "2026-09-28",
+      "county": "臺南市",
+      "status": "verified",
+      "verified_at": "2026-09-28",
       "rule_name": "臺南市政府社會局發展遲緩兒童早期療育費用補助實施計畫（110 年 8 月 24 日修正）",
-      "monthly_max_general": 3000, "monthly_max_low_income": 5000,
-      "items": ["一般療育費", "一般交通費", "簽約機構時段療育費"],
+      "monthly_max_general": 3000,
+      "monthly_max_low_income": 5000,
+      "items": [
+        "一般療育費",
+        "一般交通費",
+        "簽約機構時段療育費"
+      ],
       "transport": "低收入戶每次 500 元、非低收入戶每次 200 元，每月最多 10 次；同日同院所兩項療育以一次計",
       "apply_window": "就診日起四個月內，每月以申請一次為限；同月份交通費與療育費須同時請領",
       "extra": "一般療育費每人每次最高 675 元。至本局簽約機構並由機構代申請者另一套標準：時段療育費每小時 450 元（每次不超過 1.5 小時、每月最高 5 次），交通費未滿 20 公里每次 300 元（月上限 1,200 元）、20 公里以上每次 375 元（月上限 1,500 元）",
@@ -154,10 +190,16 @@
       }
     },
     {
-      "county": "高雄市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "高雄市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "高雄市發展遲緩兒童早期療育費用補助辦法",
-      "monthly_max_general": 3000, "monthly_max_low_income": 5000,
-      "items": ["療育訓練費用（含到宅服務與音樂治療）", "療育交通費用"],
+      "monthly_max_general": 3000,
+      "monthly_max_low_income": 5000,
+      "items": [
+        "療育訓練費用（含到宅服務與音樂治療）",
+        "療育交通費用"
+      ],
       "transport": "低收入戶每月最高 1,000 元、一般戶每月最高 500 元",
       "apply_window": "接受療育訓練後之次月起三個月內",
       "extra": "療育訓練費單項上限與合併上限同額（低收 5,000／一般 3,000），交通費另計但合併計算後仍受此上限拘束",
@@ -182,39 +224,62 @@
       }
     },
     {
-      "county": "宜蘭縣", "status": "verified", "verified_at": "2026-09-28",
+      "county": "宜蘭縣",
+      "status": "verified",
+      "verified_at": "2026-09-29",
       "rule_name": "宜蘭縣 115 年發展遲緩兒童早期療育費用補助實施計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育費用", "交通費用"],
-      "transport": "與療育費用得同時申請，核實撥給",
-      "apply_window": "每季申請一次：3 月 1–10 日（前一年 12 月至當年 2 月）、6 月 1–10 日（3–5 月）、9 月 1–10 日（6–8 月）、12 月 1–10 日（9–11 月）；當年 12 月併入隔年第 1 季",
-      "source_url": "https://www.lotong.gov.tw/News_Content.aspx?n=17708&sms=16260&s=387627",
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育費",
+        "交通費"
+      ],
+      "transport": "療育訓練單位與補助對象實際居住同一縣市者，每月核定 1,000 元；不同縣市者每月 2,000 元；當月同時接受縣內及縣外療育訓練者 2,500 元。與療育費用得同時申請，合併計入每月上限。申請縣府復康巴士（含長照交通補助）或搭乘交通車接送療育者，不得再申領交通補助",
+      "apply_window": "資格審查核定後按季送件，共分 4 次：114 年 12 月至 115 年 2 月於 3 月 10 日前、3–5 月於 6 月 10 日前、6–8 月於 9 月 10 日前、9–11 月於 12 月 10 日前；115 年 12 月併於 116 年第 1 季申請，逾期不予受理",
+      "extra": "療育費每人 30 分鐘一節最高 500 元，每節收費低於 500 元者依收據正本核實報支；未滿 20 分鐘不計。中央健保給付之療育只補自付部分（不含掛號費、藥費、特殊材料費及其他非療育科診）",
+      "source_url": "https://sntroot.e-land.gov.tw/cp.aspx?n=10389",
+      "file_url": "https://www-ws.e-land.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDQ1L3JlbGZpbGUvMTI3OTIvMTc3NC82YmE2OTcxYy0zYTU1LTQ5MjktOGEyMS02M2Y5ZDY5MTBlMDMucGRm&n=MTE15bm05bqm5pep5pyf55mC6IKy6LK755So6KiI55WrLnBkZg%3d%3d",
+      "archived": "research/archive/tw8-2026-09-28/yilan/115年度早期療育費用計畫.pdf",
+      "providers_list": {
+        "name": "115年度宜蘭縣早期療育訓練單位一覽表（11508）",
+        "url": "https://www-ws.e-land.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNDQ1L3JlbGZpbGUvMTI3OTIvMTc3NC8wMjgzNmY3Zi1jNzdmLTQ5YzUtOTRlZi0xYTcwNGNlZTYxOGUucGRm&n=MTE15bm05bqm5a6c6Jit57ij5pep5pyf55mC6IKy6KiT57e05Zau5L2N5LiA6Ka96KGoLTExNTA4LnBkZg%3d%3d",
+        "archived": "research/archive/tw8-2026-09-28/yilan/115年度宜蘭縣早期療育訓練單位一覽表-11508.pdf"
+      },
       "apply": {
         "eligibility": [
-          "須先通報至宜蘭縣政府通報轉介中心。",
-          "申請人為兒童法定監護人、寄養父母或法定監護人委託照顧人。"
+          "已通報地方政府通報轉介中心。",
+          "設籍本縣之未達就學年齡之疑似發展遲緩、發展遲緩或身心障礙兒童（已達就學年齡但未持有緩讀證明者，申請至入學前之 8 月份）。",
+          "設籍本縣之已達就學年齡，經鑑定安置輔導委員會同意暫緩入學之身心障礙或發展遲緩兒童（至多以緩讀 1 年為限）。",
+          "疑似發展遲緩、發展遲緩兒童須持聯合評估中心、評估醫院或區域級以上醫院開具之綜合報告書，或（疑似）發展遲緩證明書（開立日起 1 年內有效，醫囑欄須加註「有發展遲緩或臨界或疑似發展遲緩情形」及「宜接受早期療育治療或醫療復健」），並實際接受療育復健。",
+          "由法定監護人、寄養父母或法定監護人委託照顧人提出申請。"
         ],
         "documents": [
-          "資格審查表（初次申請、戶籍遷移、轉學及原附佐證資料更換時）。",
-          "有效期限內之發展遲緩聯評報告書或發展遲緩診斷證明影本（身心障礙者證明免附）。",
-          "低收入戶證明（無則免附）。",
-          "其他相關證明文件（寄養合約書、委託同意書、緩讀證明影本）。",
-          "療育紀錄單正本（逾期不受理）。",
-          "療育費用憑證正本。",
-          "郵局存簿影本。"
+          "資格審查表（115 年首次申請及原附相關佐證資料更換時，例如評估報告或匯款資料變更）。",
+          "申請表－療育紀錄單（逾期／季不予受理）。",
+          "有效期限內之身心障礙證明、發展遲緩診斷證明書（含效期內疑似遲緩證明）或聯合評估報告書其一影本。",
+          "兒童、法定監護人、寄養父母或法定監護人委託照顧人之郵局存摺封面影本（須含帳號、戶名；申請人無法親自申請者，得出具委任書委任他人辦理）。",
+          "其他相關證明文件（寄養合約書、委託同意書，無則免附）。",
+          "申請療育、交通費用：療育紀錄單，並黏貼療育收據正本（含影本）。"
         ],
-        "how_to_apply": "按季繳送申請表件，經資格審查、核定補助期限及金額後，於受理月份之隔月月底前撥入郵局帳戶。",
-        "office": "宜蘭縣政府委託之通報轉介中心、個案管理中心，或設籍（或實際居住）鄉鎮市公所社會課",
-        "contact": "宜蘭縣政府社會處老人及身障福利科 (03)9328822 分機 222",
+        "how_to_apply": "按季將表件送縣內各鄉鎮市公所或縣府當年度早期療育委託之相關單位申辦，經資格審查、核定補助期限後，於申請隔月月底前撥入申請人指定的郵局帳戶；符合者以簡訊通知，不符合者函文告知。表件可從縣府社會處網站下載，或向本縣療育醫療院所、各鄉鎮公所、通報轉介中心、個案管理中心、縣府社會處（宜蘭市同慶街 95 號）索取紙本。",
+        "office": "宜蘭縣各鄉鎮市公所，或宜蘭縣政府當年度早期療育委託之相關單位",
+        "contact": "查詢核撥情形：宜蘭縣政府 03-9328822；受理與補助問題：宜蘭縣兒童綜合服務中心通報轉介中心 03-9334040、個案管理中心 03-9229275",
+        "no_double": "已領本縣身心障礙者日間照顧及住宿式照顧費用補助，或依社家署「弱勢兒童及少年醫療補助使用計畫」領取全民健康保險未涵蓋之發展遲緩兒童療育訓練補助者，不能申請；申請縣府復康巴士（含長照交通補助）或搭乘交通車接送療育者，不得再申領交通補助。",
         "source_url": "https://sntroot.e-land.gov.tw/cp.aspx?n=10389",
-        "archived": "research/archive/subsidy_rules/2026-09-28/yilan_social_page.html"
+        "archived": "research/archive/tw8-2026-09-28/yilan/115年度早期療育費用計畫.pdf"
       }
     },
     {
-      "county": "新竹市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "新竹市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "新竹市發展遲緩及身心障礙兒童早期療育費用補助實施計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育訓練費", "交通補助費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育訓練費",
+        "交通補助費"
+      ],
       "transport": "每次 200 元",
       "apply_window": "紙本或線上（新竹市數位市民整合服務平台）",
       "source_url": "https://society.hccg.gov.tw/ch/home.jsp?id=101&parentpath=0,3,21&mcustomize=onemessages_view.jsp&toolsflag=Y&dataserno=201801240001&t=SocietyOnes&mserno=201603090015",
@@ -243,10 +308,16 @@
       }
     },
     {
-      "county": "新竹縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "新竹縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "新竹縣發展遲緩兒童早期療育費用補助實施要點",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育費", "交通費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育費",
+        "交通費"
+      ],
       "transport": "與療育費合併計算",
       "apply_window": "每二個月為一梯次；可線上申請（新竹縣智慧福利服務躍升平台）",
       "source_url": "https://social.hsinchu.gov.tw/News_Content.aspx?n=203&s=3726",
@@ -271,10 +342,17 @@
       }
     },
     {
-      "county": "苗栗縣", "status": "verified", "verified_at": "2026-09-28",
+      "county": "苗栗縣",
+      "status": "verified",
+      "verified_at": "2026-09-28",
       "rule_name": "115 年苗栗縣兒童早期療育費用補助實施計畫（115 年 7 月 1 日起施行）",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["交通費", "療育費", "社區療育費（到宅療育、社區據點療育）"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "交通費",
+        "療育費",
+        "社區療育費（到宅療育、社區據點療育）"
+      ],
       "transport": "每人每次最高 200 元，以實際次數核實支付；同日於同家或 2 家以上醫院療育以 1 次計。與療育費（或社區療育費）合併計入每月上限",
       "apply_window": "每兩個月一期，收件截止 3/5、5/5、7/5、9/5、11/5、1/5（遇例假日順延）；115 年 7 月 1 日起當期得追溯前一期。每個年度開始須重新送資格表件",
       "extra": "療育費依收據實際支出核實支付（掛號費、健保給付項目部分負擔不補助）；社區療育費（到宅、社區據點）每次最高 1,000 元，不得與交通費及療育費同時段重複請領。一般戶含中低收入戶",
@@ -303,10 +381,17 @@
       }
     },
     {
-      "county": "彰化縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "彰化縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "彰化縣政府發展遲緩兒童早期療育費用補助實施要點",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育費", "交通費", "到宅療育服務"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育費",
+        "交通費",
+        "到宅療育服務"
+      ],
       "transport": "與療育費合併計算",
       "apply_window": "按季，4/5、7/5、10/5、12/5",
       "source_url": "https://www.chcg.gov.tw/DTO/social/07other/other01_con.asp?topsn=1755&data_id=14526",
@@ -337,10 +422,16 @@
       }
     },
     {
-      "county": "南投縣", "status": "verified", "verified_at": "2026-09-28",
+      "county": "南投縣",
+      "status": "verified",
+      "verified_at": "2026-09-28",
       "rule_name": "南投縣政府社會及勞動局辦理發展遲緩兒童早期療育費用補助計畫（115 年 9 月 1 日修訂）",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育訓練費", "交通費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育訓練費",
+        "交通費"
+      ],
       "transport": "每次最高 200 元（同日於同家或 2 家以上醫院療育以 1 次計），與療育訓練費合併計算；已申請復康巴士（含長照交通接送服務）者不得再申請交通費",
       "apply_window": "每季申請一次，3 月 10 日、6 月 10 日、9 月 10 日、12 月 10 日前送件，逾期不予受理（截止日遇假日順延）；可至南投縣政府網路 e 櫃檯線上申請",
       "extra": "接受社區療育服務實施計畫到宅療育者，不可同時申領其他醫療院所之療育訓練費及交通費",
@@ -368,10 +459,16 @@
       }
     },
     {
-      "county": "雲林縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "雲林縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "雲林縣政府辦理發展遲緩兒童早期療育費用補助實施計畫（114 年 1 月 14 日增修）",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["交通費", "療育訓練費（自費療育與到宅療育）"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "交通費",
+        "療育訓練費（自費療育與到宅療育）"
+      ],
       "transport": "每次 200 元，以治療日期核算、每日一趟為限；搭復康巴士、長照交通車或在幼兒園接受療育者不得申請",
       "apply_window": "實報實銷；當年度九月已入小學者僅補助至入學前 8 月 31 日",
       "exclusions": "單純注意力不集中／過動、構音異常、日常生活功能（生活自理）領域遲緩者，但診斷證明載明建議接受早療者不在此限",
@@ -402,10 +499,16 @@
       }
     },
     {
-      "county": "嘉義縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "嘉義縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "嘉義縣發展遲緩兒童早期療育費用補助計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育訓練費", "交通費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育訓練費",
+        "交通費"
+      ],
       "transport": "依距離每次 100–200 元",
       "apply_window": "向嘉義縣兒童發展通報轉介中心申請",
       "extra": "療育訓練費每小時最高 800 元",
@@ -438,10 +541,20 @@
       }
     },
     {
-      "county": "嘉義市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "嘉義市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "嘉義市發展遲緩兒童早期療育費用補助執行計畫（99 年 1 月 4 日修正）",
-      "monthly_max_general": 3000, "monthly_max_low_income": 5000,
-      "items": ["認知學習", "物理治療", "職能治療", "語言治療（不含構音治療）", "親職教育", "其他療育訓練"],
+      "monthly_max_general": 3000,
+      "monthly_max_low_income": 5000,
+      "items": [
+        "認知學習",
+        "物理治療",
+        "職能治療",
+        "語言治療（不含構音治療）",
+        "親職教育",
+        "其他療育訓練"
+      ],
       "transport": "市內每次 100 元、外縣市每次 200 元",
       "apply_window": "治療日期起算 3 個月內，逾期不受理",
       "extra": "到宅療育訓練費每小時 800 元",
@@ -471,10 +584,16 @@
       }
     },
     {
-      "county": "屏東縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "屏東縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "屏東縣發展遲緩兒童早期療育費用補助實施計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育訓練費", "交通費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育訓練費",
+        "交通費"
+      ],
       "transport": "低收入戶每次 300 元、一般戶每次 200 元，每月以 5 次為限",
       "apply_window": "每年 4/1-4/10、7/1-7/10、10/1-10/10、12/1-12/10",
       "source_url": "https://socmap.pthg.gov.tw/pt1w/sa100/show/10132",
@@ -505,10 +624,15 @@
       }
     },
     {
-      "county": "臺東縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "臺東縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "臺東縣政府辦理發展遲緩兒童療育補助作業要點",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育項目健保不補助或全額自費部分"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育項目健保不補助或全額自費部分"
+      ],
       "transport": "另依身心障礙者輔具補助規定辦理輔助器具項目",
       "apply_window": "覈實檢據核銷",
       "source_url": "https://taisoc.taitung.gov.tw/WebSite/Service/serviceDetail.aspx?menuid=lW%2bfKiAxClc%3d&page=1&id=qn0c8NC!0!fVY%3d",
@@ -536,10 +660,16 @@
       }
     },
     {
-      "county": "花蓮縣", "status": "verified", "verified_at": "2026-09-13",
+      "county": "花蓮縣",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "花蓮縣發展遲緩兒童早期療育費用補助實施計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育費", "交通費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育費",
+        "交通費"
+      ],
       "transport": "交通費與療育費兩項可同時申請",
       "apply_window": "依計畫規定",
       "source_url": "https://sa.hl.gov.tw/Detail_sp/d0564bb2d83141688962ae789a8a96da",
@@ -565,20 +695,55 @@
       }
     },
     {
-      "county": "澎湖縣", "status": "pending", "verified_at": "2026-09-28",
-      "rule_name": "澎湖縣辦理發展遲緩兒童療育補助實施計畫（2026-05-19 公告）",
-      "monthly_max_general": null, "monthly_max_low_income": null,
-      "items": [],
-      "transport": null,
-      "apply_window": null,
+      "county": "澎湖縣",
+      "status": "verified",
+      "verified_at": "2026-09-29",
+      "rule_name": "澎湖縣辦理發展遲緩兒童療育補助實施計畫（115 年 5 月 19 日府授衛保字第 1153302368 號函修訂）",
+      "monthly_max_general": 6000,
+      "monthly_max_low_income": 8000,
+      "items": [
+        "交通費（赴臺評估、赴臺療育、離島至馬公、偏遠地區、長期在臺療育）",
+        "療育費"
+      ],
+      "transport": "與療育費分開計算：赴臺灣本島評估中心評估，兒童及陪同者 1 人補助來回全額交通費，一年最多 2 次；赴臺療育每人每次最高 1,250 元，列冊低收入戶一年最多 12 次、非低收入戶 10 次；離島地區至馬公評估或療育，兒童及陪同家長 1 人補助來回全額船費或半額機票，另計程車資實報實銷每趟最高 300 元，每人每月最多 4 次；偏遠地區（白沙、西嶼、湖西、澎南）經社工訪視出具證明無法乘坐大眾運輸者，每趟最高 400 元，每月最多 4 次；長期在臺療育且未申請臺澎機票補助者，每趟 200 元，每月最多 4 次",
+      "apply_window": "自就診日起三個月內",
+      "extra": "每月上限只算療育費（列冊低收入戶 8,000 元、非低收入戶 6,000 元，安置於寄養家庭或機構之兒童比照低收入戶），依實際自費收據金額計算；掛號費、健保給付項目之基本部分負擔不予補助",
       "source_url": "https://event.penghu.gov.tw/cydc/home.jsp?id=6&act=view&dataserno=202605190001&mserno=201311190009",
-      "note": "早療專區有計畫公告與附件，但附件的 uploaddowndoc 端點回傳 HTML 而不是 PDF，內容還沒取到。2026-09-28 再試縣府社會處與線上申辦網站，連線逾時，仍未取得計畫原文。"
+      "archived": "research/archive/tw8-2026-09-28/penghu/202605191143110.pdf",
+      "note": "離島特有：交通補助含赴臺評估與療育、離島至馬公的船票與機票，與療育費分開計，金額與本島規則不可比。",
+      "apply": {
+        "eligibility": [
+          "設籍澎湖縣，未達就學年齡之（疑似）發展遲緩或身心障礙兒童。",
+          "設籍澎湖縣，已達就學年齡，經鑑定安置輔導委員會同意暫緩入學之發展遲緩或身心障礙兒童。",
+          "（疑似）發展遲緩兒童須持衛生福利部輔導設置聯合評估中心或縣府認可之醫院開具之綜合報告書（有效期間依報告書有效期限認定），或（疑似）發展遲緩證明書（開立日起一年內有效）。"
+        ],
+        "documents": [
+          "申請書（含個人領據，需完成簽名及蓋章）。",
+          "戶口名簿或戶籍謄本影本及低收入戶證明（無則免附）。",
+          "有效之發展遲緩診斷證明書（小兒神經科、小兒遺傳科、兒童心智科、兒童精神科、兒童復健科醫師開立）、綜合報告書或身障證明影本（擇一）。",
+          "醫療單位、社會福利機構或療育機構開立之收費證明（註明療育項目、金額、療育日期）、療育紀錄單（需經醫師或治療師核章）。",
+          "搭乘飛機或船隻之證明（申請赴台或離島交通費者）。",
+          "申請人金融單位帳號封面影本。",
+          "暫緩入學證明（已達就學年齡但未入小學就讀者）。",
+          "切結書。"
+        ],
+        "how_to_apply": "由兒童父母、監護人、養父母或縣府指定之療育單位為申請人，自就診日起三個月內檢具證明文件送社會處指定收件地點，審核無誤後撥入申請人郵局帳戶或開立支票支付。",
+        "office": "澎湖縣政府社會處婦女福利服務中心二樓（收件地址：馬公市中華路兩百四十二號）",
+        "no_double": "領有托育養護補助或其他不得與本補助重複領取者不得重複領取；兒童已領身心障礙者日間照顧及住宿式照顧費用補助、社會處「社區療育服務之定點療育及到宅療育」服務，或同月份重複請領，應主動通知縣府，經查溢領者停止補助並追回。",
+        "archived": "research/archive/tw8-2026-09-28/penghu/202605191143110.pdf"
+      }
     },
     {
-      "county": "基隆市", "status": "verified", "verified_at": "2026-09-13",
+      "county": "基隆市",
+      "status": "verified",
+      "verified_at": "2026-09-13",
       "rule_name": "基隆市政府 115 年度發展遲緩兒童早期療育費用補助實施計畫",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育費（以實際自費金額補助）", "交通費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育費（以實際自費金額補助）",
+        "交通費"
+      ],
       "transport": "每次 200 元",
       "apply_window": "按季申請，第 4 季須於隔年 1 月 11 日前提出，逾期不予補助",
       "source_url": "https://www.klzz.klcg.gov.tw/tw/klzz/962-258669.html",
@@ -600,10 +765,18 @@
       }
     },
     {
-      "county": "金門縣", "status": "verified", "verified_at": "2026-09-28",
+      "county": "金門縣",
+      "status": "verified",
+      "verified_at": "2026-09-28",
       "rule_name": "金門縣政府辦理發展遲緩兒童早期療育費用補助實施計畫（110 年 7 月 23 日修正發布）",
-      "monthly_max_general": 4000, "monthly_max_low_income": 5000,
-      "items": ["評估費", "療育費（含在宅或至核定定點）", "交通費（臺金機票、陸地交通）", "到宅療育費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 5000,
+      "items": [
+        "評估費",
+        "療育費（含在宅或至核定定點）",
+        "交通費（臺金機票、陸地交通）",
+        "到宅療育費"
+      ],
       "transport": "交通費每案每月不逾 6,000 元，與療育費分開計算：臺金來回機票低收每年最多 10 次、一般戶 6 次（兒童全額、陪同者一人半價）；長期在臺療育且未申請機票者，陸地交通每次 200 元、每月最高 15 次",
       "apply_window": "療育行為或申請事項結束次月起六個月內，逾期不予受理；同一月份已獲補助者不得再申請",
       "extra": "療育費每人單次最高 600 元；評估費（健保不給付項目）檢據實報實銷、全額補助。掛號費、健保給付項目之基本部分負擔不予補助",
@@ -637,10 +810,17 @@
       }
     },
     {
-      "county": "連江縣", "status": "verified", "verified_at": "2026-09-28",
+      "county": "連江縣",
+      "status": "verified",
+      "verified_at": "2026-09-28",
       "rule_name": "連江縣辦理發展遲緩兒童早期療育費用補助實施計畫（113 年 5 月 15 日修正，113 年 1 月 1 日起實施）",
-      "monthly_max_general": 4000, "monthly_max_low_income": 6000,
-      "items": ["療育訓練費", "交通補助費（含臺馬來回機票）", "住宿費"],
+      "monthly_max_general": 4000,
+      "monthly_max_low_income": 6000,
+      "items": [
+        "療育訓練費",
+        "交通補助費（含臺馬來回機票）",
+        "住宿費"
+      ],
       "transport": "健保給付之療育每次 200 元（同日同處 2 次以上以 1 次計）；臺馬來回機票兒童全額、陪同者 1 人半價。與療育訓練費合併計入每月上限",
       "apply_window": "以季為單位，療育當季次月起 1 個月內：1–3 月於 4 月 30 日前、4–6 月於 7 月 31 日前、7–9 月於 10 月 31 日前、10–12 月於次年 1 月 31 日前，逾期不予受理",
       "extra": "療育訓練費以健保不給付須全額自付之項目實際自費金額計算（掛號費、健保給付項目基本部分負擔不補助）；現居縣立醫院及療育據點以外離島者，療育後當日無船班返回得申請住宿費",

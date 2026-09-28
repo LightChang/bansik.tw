@@ -1,0 +1,16 @@
+HTTP/1.1 200 
+Date: Mon, 28 Sep 2026 23:15:11 GMT
+Content-Type: text/html;charset=utf-8
+Connection: keep-alive
+Set-Cookie: route=faf7cca259fe7e5b0570c7eeb13e292a; Path=/; Secure
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: JSESSIONID=43236286E3846AD9AFF58F379417BF52; Path=/cecm; Secure; HttpOnly
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.googletagmanager.com https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com http://cse.google.com https://cse.google.com https://www.google.com; img-src 'self' data: https://www.google-analytics.com http://www.google.com https://www.google.com https://encrypted-tbn0.gstatic.com https://www.gstatic.com http://clients1.google.com https://clients1.google.com https://*.adtrafficquality.google https://i.ytimg.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com http://cse.google.com https://cse.google.com https://*.adtrafficquality.google; form-action 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com http://www.youtube.com https://www.youtube.com http://www.youtube-nocookie.com https://www.youtube-nocookie.com https://*.adtrafficquality.google; object-src 'self'; base-uri 'self';
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Language: zh-TW
+Strict-Transport-Security: max-age=63072000; includeSubdomains; preload
+Set-Cookie: TS0158a6a7=0112d90a3ab0dcd10cb65c3714d8ebdcb985ea12ac890be6611bb4c64a568123c821263ab83335f210056bb46693f888c7c450777e587feaec6e6c8b415e8a302150b65c12; Path=/
+Set-Cookie: TS019fd8f0=0112d90a3ac998265f96e80c0abacdd2cba99551b9890be6611bb4c64a568123c821263ab84adaccbe5b41c1a72771ac997f0809050638e08f76784da78e5d709e39f25743; path=/cecm
+Transfer-Encoding: chunked
+

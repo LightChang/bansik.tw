@@ -6,13 +6,14 @@ import Nav from '../../components/Nav.astro';
 import Caveat from '../../components/Caveat.astro';
 import CountyFinder from '../../components/CountyFinder.astro';
 import { ageData, shared } from '../../lib/data.mjs';
-import { checksFor, visitNo, ageUrl, bandForMonth, overlaps, scalesFor, scaleCount } from '../../lib/age.mjs';
+import { checksFor, visitNo, ageUrl, bandForMonth, overlaps, scalesFor, scaleCount, sfaaFor } from '../../lib/age.mjs';
 import { num } from '../../lib/view.mjs';
 
 const A = ageData();
 const tl = shared().timeline;
 const KB = A.sources.kidbook;
 const SC = A.sources.scales;
+const CK = A.sources.checklist;
 
 const rows = A.bands.map((b) => {
   const { prevent, screening } = checksFor(b, tl);
@@ -27,13 +28,18 @@ const rows = A.bands.map((b) => {
   };
 });
 
-// 社家署線上檢核表 13 個年齡層，各對到哪幾頁
+// 社家署線上檢核表 13 個年齡層，各對到哪幾頁；題目原文放在哪一頁（12 層有，1 歲 3 個月那層沒取得）
 const levels = tl.filter((t) => t.kind === '線上發展檢核表')
   .sort((a, b) => num(a.month_min) - num(b.month_min))
-  .map((t) => ({
-    t,
-    bands: A.bands.filter((b) => overlaps(b.month_min, b.month_max, num(t.month_min), num(t.month_max))),
-  }));
+  .map((t) => {
+    const s = A.sfaa.find((x) => x.label === t.age_label);
+    return {
+      t,
+      bands: A.bands.filter((b) => overlaps(b.month_min, b.month_max, num(t.month_min), num(t.month_max))),
+      home: s && A.bands.find((b) => sfaaFor(b, A.sfaa).includes(s)),
+    };
+  });
+const nSfaa = A.sfaa.reduce((n, s) => n + s.items.length, 0);
 
 // 「N 個月寶寶發展」直接找頁
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 18, 21, 24, 30, 36, 48, 60, 72]
@@ -54,7 +60,7 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
   citations={[
     { name: KB.name, url: KB.url, dateModified: KB.fetched },
     { name: SC.name, url: SC.url, dateModified: SC.list_updated },
-    { name: A.sources.checklist.name, url: A.sources.checklist.url },
+    { name: CK.name, url: CK.url, dateModified: CK.fetched },
   ]}
 >
   <Nav />
@@ -115,16 +121,20 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
 
     <section class="section">
       <h2>社家署線上兒童發展檢核表：13 個年齡層</h2>
-      <p class="lead">家長可以上社家署網站輸入生日，系統依年齡給對應的一份檢核表。每份題數與警訊題數如下。</p>
+      <p class="lead">
+        家長可以上社家署網站輸入生日，系統依年齡給對應的一份檢核表。每份題數與警訊題數如下；
+        其中 {A.sfaa.length} 層的題目原文（共 {nSfaa} 題）放在本站對應月齡的頁面。
+      </p>
       <div class="table-wrap">
         <table>
-          <caption>社家署線上兒童發展檢核表的 13 個年齡層與適用日齡範圍，右欄連到本站同月齡的頁面。</caption>
-          <thead><tr><th>年齡層（適用範圍）</th><th>題數</th><th>看手冊題目</th></tr></thead>
+          <caption>社家署線上兒童發展檢核表的 13 個年齡層與適用日齡範圍。「檢核表題目」欄連到放該層題目原文的頁面，「看手冊題目」欄連到適用範圍重疊的月齡頁。</caption>
+          <thead><tr><th>年齡層（適用範圍）</th><th>題數</th><th>檢核表題目</th><th>看手冊題目</th></tr></thead>
           <tbody>
-            {levels.map(({ t, bands }) => (
+            {levels.map(({ t, bands, home }) => (
               <tr>
                 <td>{t.age_label}</td>
                 <td>{t.detail}</td>
+                <td>{home ? <a href={`${ageUrl(home.slug)}#sfaa`}>{home.short}</a> : '未取得'}</td>
                 <td>{bands.map((b, k) => <>{k > 0 && '、'}<a href={ageUrl(b.slug)}>{b.short}</a></>)}</td>
               </tr>
             ))}
@@ -132,7 +142,9 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
         </table>
       </div>
       <p class="meta">
-        來源：<a href={A.sources.checklist.url} target="_blank" rel="noopener">{A.sources.checklist.name}</a>（2026-09-12 取得的題數）。
+        來源：<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>。題數與警訊題數是 2026-09-12 取得的；
+        題目原文是 {CK.fetched} 由臺灣境內主機重新取得，{A.sfaa.length} 層的題數與 09-12 相同，
+        {CK.missing.join('、')}那一層這次沒有取得。檢核表是篩檢工具，不是診斷標準。
       </p>
     </section>
 

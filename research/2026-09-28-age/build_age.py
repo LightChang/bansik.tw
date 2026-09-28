@@ -12,6 +12,8 @@
   - 國健署兒童發展篩檢量表 9 份分齡 PDF 的題目「敘述」欄：由 extract_scales.py 抽成 scales.json、
     verify_scales.py 逐行比對原檔，這裡原樣併入 age.json 的 scales。量表每頁印有
     「本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權」；站主 2026-09-28 回報國健署已授權本站引用。
+  - 社家署線上兒童發展檢核表 12 個年齡層的「發展里程檢核」題目：臺灣主機 tw8 2026-09-29 代抓表單 HTML，
+    由 extract_sfaa.py 抽成 sfaa.json、verify_sfaa.py 比對原檔，這裡原樣併入 age.json 的 sfaa。
 """
 import json
 import os
@@ -205,7 +207,17 @@ out = {
             'rights': '本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權',
             'note': '站主 2026-09-28 回報國健署已授權本站引用量表題目。',
         },
-        'checklist': {'name': '社家署線上兒童發展檢核表', 'url': 'https://system.sfaa.gov.tw/cecm/'},
+        'checklist': {
+            'name': '社家署線上兒童發展檢核表',
+            'url': 'https://system.sfaa.gov.tw/cecm/',
+            'form': 'https://system.sfaa.gov.tw/cecm/screenView/form',
+            'fetched': '2026-09-29',
+            'fetched_by': '臺灣主機 tw8 代抓（POST birthDt=yyyy/mm/dd）',
+            'archived': 'research/archive/tw8-2026-09-28/sfaa/',
+            'rights': '©2015衛生福利部社會及家庭署 版權所有',
+            'levels': 13,
+            'missing': ['1歲3個月(1歲2個月16天~1歲5個月15天)'],
+        },
         'law_rules': {
             'name': '兒童及少年福利與權益保障法施行細則',
             'url': 'https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=D0050010',
@@ -240,6 +252,9 @@ out = {
         for sc in json.load(open(os.path.join(HERE, 'scales.json'), encoding='utf-8'))
     ],
     'prevent': {str(k): v for k, v in prevent.items()},
+    # 社家署線上檢核表題目（extract_sfaa.py 抽、verify_sfaa.py 比對；12 層，缺 1 歲 3 個月那層）
+    'sfaa': [{k: v for k, v in b.items() if k not in ('sha256', 'file')}
+             for b in json.load(open(os.path.join(HERE, 'sfaa.json'), encoding='utf-8'))],
 }
 path = os.path.join(HERE, 'age.json')
 json.dump(out, open(path, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)

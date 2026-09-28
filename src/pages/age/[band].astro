@@ -3,6 +3,8 @@
 // 題目、警訊題標記、預防保健項目全部是手冊原文（src/data/age.json，research/2026-09-28-age/）；
 // 國健署分齡篩檢量表的題目也是原文（age.json 的 scales，extract_scales.py 抽、verify_scales.py 逐行比對），
 // 站主 2026-09-28 回報國健署已授權引用，獨立一段、附出處，不跟手冊題目混在一起；
+// 社家署線上檢核表的題目也是原文（age.json 的 sfaa，extract_sfaa.py 抽、verify_sfaa.py 比對，臺灣主機 tw8 2026-09-29 代抓），
+// 同樣獨立一段；題目附的示意圖不轉載（社家署網站標「版權所有」、沒有開放授權宣告），要看圖連回社家署；
 // 各項檢查的時程從 shared.json timeline 依月齡重疊算（src/lib/age.mjs），不另寫一份。
 // 站規：不做判讀、不寫「這樣就是發展遲緩」「不用擔心」，何時要評估只引手冊原句。
 import Base from '../../layouts/Base.astro';
@@ -10,7 +12,8 @@ import Nav from '../../components/Nav.astro';
 import Caveat from '../../components/Caveat.astro';
 import CountyFinder from '../../components/CountyFinder.astro';
 import { ageData, shared } from '../../lib/data.mjs';
-import { checksFor, visitNo, ageUrl, scalesFor, scaleCount } from '../../lib/age.mjs';
+import { checksFor, visitNo, ageUrl, scalesFor, scaleCount, sfaaFor } from '../../lib/age.mjs';
+import { num } from '../../lib/view.mjs';
 
 // 標題照家長的搜尋寫法：「6 個月寶寶發展」「7 個月寶寶發展」都要對得到同一頁
 const TITLE = {
@@ -45,6 +48,13 @@ const KB = A.sources.kidbook;
 const Q = A.quotes;
 const SC = A.sources.scales;
 const myScales = scalesFor(b, A.scales);
+const CK = A.sources.checklist;
+const mySfaa = sfaaFor(b, A.sfaa);
+// 社家署有、但這次沒抓到題目的年齡層（1 歲 3 個月）：適用範圍的中點落在這頁就照實說
+const sfaaMissing = checklists.filter((t) => {
+  const mid = (num(t.month_min) + num(t.month_max)) / 2;
+  return CK.missing.includes(t.age_label) && mid >= b.month_min && mid < b.month_max;
+});
 
 const title = `${TITLE[b.slug]}｜bansik`;
 const checkText = [
@@ -55,7 +65,7 @@ const at = /^\d/.test(b.label) ? ` ${b.label}` : b.label;
 const lead = `國健署《兒童健康手冊》在${at}請家長記錄 ${b.items.length} 題發展狀況`
   + (alerts.length ? `，其中 ${alerts.length} 題標為警訊題` : '，這個時段沒有標警訊題')
   + `。這段時間可以做的檢查是${checkText}。`;
-const description = `${lead}附手冊原文題目${myScales.length ? '、國健署分齡篩檢量表題目' : ''}與各縣市篩檢、評估地點。`;
+const description = `${lead}附手冊原文題目${myScales.length ? '、國健署分齡篩檢量表題目' : ''}${mySfaa.length ? '、社家署線上檢核表題目' : ''}與各縣市篩檢、評估地點。`;
 ---
 
 <Base
@@ -66,7 +76,7 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
   citations={[
     { name: KB.name, url: KB.url, dateModified: KB.fetched },
     { name: SC.name, url: SC.url, dateModified: SC.list_updated },
-    { name: A.sources.checklist.name, url: A.sources.checklist.url },
+    { name: CK.name, url: CK.url, dateModified: CK.fetched },
   ]}
 >
   <Nav />
@@ -182,6 +192,46 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
       </section>
     )}
 
+    {mySfaa.length > 0 && (
+      <section class="section" id="sfaa">
+        <h2>社家署線上兒童發展檢核表的題目</h2>
+        <p class="lead">
+          社家署網站的「線上兒童發展檢核」，家長輸入孩子生日，系統依年齡給一份檢核表，每題勾「是」或「否」後送出。
+          {b.short}對到{mySfaa.map((s) => `「${s.short}」`).join('、')}{mySfaa.length > 1 ? `${mySfaa.length} 層` : '這一層'}，
+          下面是表單「發展里程檢核」一欄的題目原文。
+        </p>
+        {mySfaa.map((s) => (
+          <>
+            <h3>{s.short}（{s.range}），{s.items.length} 題</h3>
+            <ol class="items">
+              {s.items.map((x) => (
+                <li>
+                  {x.mark && `${x.mark} `}{x.text}
+                  {x.note && <span class="note">{x.note}</span>}
+                </li>
+              ))}
+            </ol>
+          </>
+        ))}
+        <p class="meta">
+          原文照錄自<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>
+          依生日回傳的表單（{CK.fetched} 由臺灣境內主機取得），錯字照原網頁。
+          題目前的 ★ 是網頁原本印的；「＿」是表單上讓人填寫的空格。
+          題目提到的「圖1」「圖2」等示意圖在社家署網頁上，本站不轉載，要看圖請到社家署網站輸入生日。
+          網頁頁尾標「{CK.rights}」。
+        </p>
+        {sfaaMissing.length > 0 && (
+          <p class="meta">
+            社家署另有「{sfaaMissing.map((t) => t.age_label).join('、')}」一層（{sfaaMissing.map((t) => t.detail).join('、')}），
+            這次沒有取得題目原文，請直接到社家署網站填。
+          </p>
+        )}
+        <p class="meta">
+          這是給家長自己勾的檢核表，是篩檢工具，不是診斷標準；勾到「否」不等於發展遲緩，結果怎麼看請問醫師或縣市通報轉介中心。
+        </p>
+      </section>
+    )}
+
     <section class="section">
       <h2>什麼時候要進一步評估</h2>
       {alerts.length > 0
@@ -211,7 +261,7 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
     <Caveat kind="age" />
 
     <footer class="site-ft">
-      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、{SC.name}{myScales.length > 0 && `（${myScales.map((s) => s.label).join('、')}）`}、社家署線上兒童發展檢核表。</p>
+      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、{SC.name}{myScales.length > 0 && `（${myScales.map((s) => s.label).join('、')}）`}、社家署線上兒童發展檢核表{mySfaa.length > 0 && `（${mySfaa.map((s) => s.short).join('、')}）`}。</p>
       <p>這裡是路標不是掛號窗口，不做判讀，也不代為預約。以主管機關公告為準。</p>
     </footer>
   </main>

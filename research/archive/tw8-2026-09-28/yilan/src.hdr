@@ -1,0 +1,16 @@
+HTTP/1.1 200 OK
+Cache-Control: private,no-cache
+Content-Type: text/html; charset=utf-8
+Set-Cookie: OriginalUrl=https://sntroot.e-land.gov.tw/cp.aspx?n=10389; path=/; secure; HttpOnly; SameSite=Strict
+Set-Cookie: ASP.NET_SessionId=4dyxobd33j3ikf0vga2khzmv; path=/; secure; HttpOnly; SameSite=Strict
+ClientLog: >建立
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-UA-Compatible: IE=edge,chrome=1
+Content-Security-Policy: default-src 'none';script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google.com *.gstatic.com *.googleapis.com *.googletagmanager.com www.google-analytics.com *.facebook.net api.tgos.tw fburl.com www.internalfb.com static.xx.fbcdn.net; img-src 'self' data: *.e-land.gov.tw *.google.com *.google.com.tw *.googleapis.com *.gstatic.com img.youtube.com www.cwa.gov.tw www.cwb.gov.tw *.tgos.tw www.google-analytics.com *.nlsc.gov.tw i.ytimg.com;frame-src 'self'  *.google.com *.youtube.com *.facebook.com api.tgos.tw app.powerbi.com;style-src 'self' 'unsafe-eval' 'unsafe-inline' *.googleapis.com api.tgos.tw www.gstatic.com;font-src 'self'  fonts.gstatic.com;connect-src 'self' maps.googleapis.com www.google-analytics.com analytics.google.com *.googleapis.com stats.g.doubleclick.net;media-src 'self' *.hamastar.com.tw video.fkhh1-1.fna.fbcdn.net video.fkhh1-2.fna.fbcdn.net api.tgos.tw; object-src 'none';frame-ancestors 'self';
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+Date: Mon, 28 Sep 2026 23:25:06 GMT
+Content-Length: 130523
+Set-Cookie: TS01cb8261=013243805133148d314c54d42cb0e2d091b5c0e56d6ea48b20523075e7743ebf1f9fc245e5e3b3b44b8b5fca04c8a0802cf2fb5a5bdfaa9ac4806b722d36d3b11a52f04f7c9522d71730e9fbd76ad245dc920bd818; Path=/; Domain=.sntroot.e-land.gov.tw; Secure; HttpOnly; ; SameSite=Lax
+
