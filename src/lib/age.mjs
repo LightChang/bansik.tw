@@ -24,6 +24,16 @@ export function checksFor(band, timeline) {
   };
 }
 
+/**
+ * 某個時段對到的國健署分齡篩檢量表（age.json 的 scales，依月齡重疊；左閉右開）。
+ * 12–18 個月那頁會對到 12-15、15-18 兩份，3–5 歲那頁對到 3-4、4-5 兩份，6 個月以前沒有量表。
+ */
+export const scalesFor = (band, scales) => scales
+  .filter((s) => overlaps(band.month_min, band.month_max, s.month_min, s.month_max));
+
+/** 一份量表的題數 */
+export const scaleCount = (s) => s.domains.reduce((n, d) => n + d.items.length, 0);
+
 /** 「兒童預防保健第4次」→ 4 */
 export const visitNo = (title) => Number((String(title).match(/第(\d+)次/) || [])[1]) || null;
 

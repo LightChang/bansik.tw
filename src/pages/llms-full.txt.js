@@ -11,6 +11,7 @@
 // 156 家機構的逐筆地址不收在這裡（量太大且非「常青核心事實」），完整名錄見各縣市 /places/ 頁與 sitemap。
 import { counties, county, shared, siteIndex, ageData } from '../lib/data.mjs';
 import { num, screenings } from '../lib/view.mjs';
+import { overlaps } from '../lib/age.mjs';
 
 // 五步流程的說明文字，與 src/pages/[county]/steps.astro 的 STEPS 常數一致（站上已公開的文案，
 // 這裡原樣引用，不改寫；改 steps.astro 的文字時要記得這裡也要跟著改）。
@@ -253,6 +254,19 @@ export async function GET({ site }) {
   for (const b of A.bands) {
     p(`## ${b.label}（${abs(`/age/${b.slug}/`)}）`);
     for (const x of b.items) p(`- ${x.alert ? '※ ' : ''}${x.text}`);
+    p();
+  }
+  p('# 六之一、國健署兒童發展篩檢量表各月齡題目（原文）');
+  p();
+  p(`來源：${A.sources.scales.name}（${A.sources.scales.url}），${A.scales.length} 份分齡 PDF 的「敘述」欄，原文照錄；清單頁更新日期 ${A.sources.scales.list_updated}，${A.sources.scales.fetched} 下載。經國健署授權引用。`);
+  p('這些是醫師或施測人員做兒童發展篩檢時用的題目，通過標準與計分在量表 PDF 裡；不是診斷標準，篩檢沒過不等於診斷。題目前的「★」「○」是量表原件印的，量表未說明其意思。');
+  p();
+  for (const s of A.scales) {
+    const pages = A.bands.filter((b) => overlaps(b.month_min, b.month_max, s.month_min, s.month_max));
+    p(`## ${s.label}（${s.file}；本站：${pages.map((b) => abs(`/age/${b.slug}/`)).join('、')}）`);
+    for (const d of s.domains) {
+      for (const x of d.items) p(`- ${d.domain} ${x.no}．${x.mark ? `${x.mark} ` : ''}${x.text}${x.note ? `（${x.note}）` : ''}`);
+    }
     p();
   }
   p('# 七、法規定義');

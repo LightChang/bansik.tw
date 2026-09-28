@@ -9,8 +9,9 @@
     PDF 25 MB 不進版控，下載網址與 sha256 記在 sources.kidbook。
   - 兒童及少年福利與權益保障法第 31、32 條、同法施行細則第 8、9 條（全國法規資料庫，
     存檔在 research/archive/law/2026-09-28/）。
-國健署分齡篩檢量表 PDF 每頁印有「本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權」，
-所以量表題目一律不抄，只連回國健署。
+  - 國健署兒童發展篩檢量表 9 份分齡 PDF 的題目「敘述」欄：由 extract_scales.py 抽成 scales.json、
+    verify_scales.py 逐行比對原檔，這裡原樣併入 age.json 的 scales。量表每頁印有
+    「本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權」；站主 2026-09-28 回報國健署已授權本站引用。
 """
 import json
 import os
@@ -197,7 +198,12 @@ out = {
         'scales': {
             'name': '國健署兒童發展篩檢量表',
             'url': 'https://www.hpa.gov.tw/Pages/List.aspx?nodeid=4821',
-            'note': '量表每頁印有「本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權」，本站不轉載題目。',
+            'list_updated': '2026-09-24',
+            'file_modified': '2025-05-16',
+            'fetched': '2026-09-28',
+            'archived': 'research/archive/hpa_scales/2026-09-28/',
+            'rights': '本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權',
+            'note': '站主 2026-09-28 回報國健署已授權本站引用量表題目。',
         },
         'checklist': {'name': '社家署線上兒童發展檢核表', 'url': 'https://system.sfaa.gov.tw/cecm/'},
         'law_rules': {
@@ -227,6 +233,12 @@ out = {
         'law_art32': '各類社會福利、教育及醫療機構，發現有疑似發展遲緩兒童，應通報直轄市、縣（市）主管機關。直轄市、縣（市）主管機關應將接獲資料，建立檔案管理，並視其需要提供、轉介適當之服務。',
     },
     'bands': bands,
+    # 分齡篩檢量表題目（scales.json 去掉比對用的 lines）
+    'scales': [
+        {**sc, 'domains': [{**d, 'items': [{k: v for k, v in x.items() if k != 'lines'} for x in d['items']]}
+                           for d in sc['domains']]}
+        for sc in json.load(open(os.path.join(HERE, 'scales.json'), encoding='utf-8'))
+    ],
     'prevent': {str(k): v for k, v in prevent.items()},
 }
 path = os.path.join(HERE, 'age.json')

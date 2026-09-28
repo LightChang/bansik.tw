@@ -1,6 +1,8 @@
 ---
 // 單一月齡時段頁：/age/6-9-months/。時段照國健署兒童健康手冊「家長紀錄事項」的分段（10 段）。
 // 題目、警訊題標記、預防保健項目全部是手冊原文（src/data/age.json，research/2026-09-28-age/）；
+// 國健署分齡篩檢量表的題目也是原文（age.json 的 scales，extract_scales.py 抽、verify_scales.py 逐行比對），
+// 站主 2026-09-28 回報國健署已授權引用，獨立一段、附出處，不跟手冊題目混在一起；
 // 各項檢查的時程從 shared.json timeline 依月齡重疊算（src/lib/age.mjs），不另寫一份。
 // 站規：不做判讀、不寫「這樣就是發展遲緩」「不用擔心」，何時要評估只引手冊原句。
 import Base from '../../layouts/Base.astro';
@@ -8,7 +10,7 @@ import Nav from '../../components/Nav.astro';
 import Caveat from '../../components/Caveat.astro';
 import CountyFinder from '../../components/CountyFinder.astro';
 import { ageData, shared } from '../../lib/data.mjs';
-import { checksFor, visitNo, ageUrl } from '../../lib/age.mjs';
+import { checksFor, visitNo, ageUrl, scalesFor, scaleCount } from '../../lib/age.mjs';
 
 // 標題照家長的搜尋寫法：「6 個月寶寶發展」「7 個月寶寶發展」都要對得到同一頁
 const TITLE = {
@@ -41,6 +43,8 @@ const { prevent, screening, scales, checklists } = checksFor(b, shared().timelin
 const alerts = b.items.filter((x) => x.alert);
 const KB = A.sources.kidbook;
 const Q = A.quotes;
+const SC = A.sources.scales;
+const myScales = scalesFor(b, A.scales);
 
 const title = `${TITLE[b.slug]}｜bansik`;
 const checkText = [
@@ -51,7 +55,7 @@ const at = /^\d/.test(b.label) ? ` ${b.label}` : b.label;
 const lead = `國健署《兒童健康手冊》在${at}請家長記錄 ${b.items.length} 題發展狀況`
   + (alerts.length ? `，其中 ${alerts.length} 題標為警訊題` : '，這個時段沒有標警訊題')
   + `。這段時間可以做的檢查是${checkText}。`;
-const description = `${lead}附手冊原文題目與各縣市篩檢、評估地點。`;
+const description = `${lead}附手冊原文題目${myScales.length ? '、國健署分齡篩檢量表題目' : ''}與各縣市篩檢、評估地點。`;
 ---
 
 <Base
@@ -61,7 +65,7 @@ const description = `${lead}附手冊原文題目與各縣市篩檢、評估地�
   dataDate={A.prepared_at}
   citations={[
     { name: KB.name, url: KB.url, dateModified: KB.fetched },
-    { name: A.sources.scales.name, url: A.sources.scales.url },
+    { name: SC.name, url: SC.url, dateModified: SC.list_updated },
     { name: A.sources.checklist.name, url: A.sources.checklist.url },
   ]}
 >
@@ -136,10 +140,47 @@ const description = `${lead}附手冊原文題目與各縣市篩檢、評估地�
       )}
       <p class="meta">
         健檢項目依{KB.name}第 6–7 頁「兒童預防保健服務時程及服務項目」。
-        醫師篩檢用的<a href={A.sources.scales.url} target="_blank" rel="noopener">國健署分齡量表</a>著作權屬國健署，
-        這裡不轉載題目。
+        {myScales.length > 0
+          ? <>醫師篩檢用的國健署分齡量表題目在<a href="#scales">下一段</a>。</>
+          : <>國健署分齡篩檢量表從 6 個月開始，這個時段沒有。</>}
       </p>
     </section>
+
+    {myScales.length > 0 && (
+      <section class="section" id="scales">
+        <h2>兒童發展篩檢時醫師用的國健署分齡量表題目</h2>
+        <p class="lead">
+          做兒童發展篩檢時，醫師或施測人員照國健署《兒童發展篩檢量表》逐題測，有的題目現場請孩子做，有的問家長。
+          {b.short}對到{myScales.map((s) => `「${s.label}」`).join('、')}{myScales.length > 1 ? '兩份' : ''}量表，
+          分{[...new Set(myScales.flatMap((s) => s.domains.map((d) => d.domain)))].join('、')}幾個面向。下面是量表「敘述」欄的原文。
+        </p>
+        {myScales.map((s) => s.domains.map((d) => (
+          <>
+            <h3>{s.label}量表：{d.domain}</h3>
+            <ol class="items">
+              {d.items.map((x) => (
+                <li>
+                  {x.mark && `${x.mark} `}{x.text}
+                  {x.note && <span class="note">{x.note}</span>}
+                </li>
+              ))}
+            </ol>
+          </>
+        )))}
+        <p class="meta">
+          原文照錄自國健署〈{myScales.map((s) => s.title).join('〉〈')}〉PDF 的「敘述」欄
+          （<a href={SC.url} target="_blank" rel="noopener">{SC.name}</a>，清單頁更新日期 {SC.list_updated}，{SC.fetched} 下載），
+          共 {myScales.map(scaleCount).reduce((a, n) => a + n, 0)} 題，只把 PDF 排版的斷行接回。
+          {myScales.some((s) => s.domains.some((d) => d.items.some((x) => x.mark))) && <>題目前的 ★、○ 是量表原件印的，量表本身沒有說明這兩個記號的意思。</>}
+          量表每頁印有「{SC.rights}」，本站經國健署授權引用。
+        </p>
+        <p class="meta">
+          通過標準、不通過標準與計分方式在量表 PDF 裡，這裡沒有抄；結果由施測者判斷，家長不必自己照這些題目打分數。
+          這些題目是篩檢工具，不是診斷標準，篩檢沒過不等於發展遲緩。
+          下載原檔：{myScales.map((s, k) => <>{k > 0 && '、'}<a href={s.file} target="_blank" rel="noopener">{s.label}（PDF）</a></>)}。
+        </p>
+      </section>
+    )}
 
     <section class="section">
       <h2>什麼時候要進一步評估</h2>
@@ -170,7 +211,7 @@ const description = `${lead}附手冊原文題目與各縣市篩檢、評估地�
     <Caveat kind="age" />
 
     <footer class="site-ft">
-      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、國健署兒童發展篩檢量表清單、社家署線上兒童發展檢核表。</p>
+      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、{SC.name}{myScales.length > 0 && `（${myScales.map((s) => s.label).join('、')}）`}、社家署線上兒童發展檢核表。</p>
       <p>這裡是路標不是掛號窗口，不做判讀，也不代為預約。以主管機關公告為準。</p>
     </footer>
   </main>

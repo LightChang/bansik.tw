@@ -118,6 +118,7 @@ table caption {
 
 /* ── 月齡頁：手冊題目 ───────────────────────────── */
 .items li { margin-top: var(--space-2); }
+.items .note { display: block; font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-1); }
 .quote { border-inline-start: 3px solid var(--border-subtle); padding-inline-start: var(--space-4); margin-top: var(--space-4); color: var(--text-secondary); }
 
 select, input[type="date"] {

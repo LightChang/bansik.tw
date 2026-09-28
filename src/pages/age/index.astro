@@ -6,12 +6,13 @@ import Nav from '../../components/Nav.astro';
 import Caveat from '../../components/Caveat.astro';
 import CountyFinder from '../../components/CountyFinder.astro';
 import { ageData, shared } from '../../lib/data.mjs';
-import { checksFor, visitNo, ageUrl, bandForMonth, overlaps } from '../../lib/age.mjs';
+import { checksFor, visitNo, ageUrl, bandForMonth, overlaps, scalesFor, scaleCount } from '../../lib/age.mjs';
 import { num } from '../../lib/view.mjs';
 
 const A = ageData();
 const tl = shared().timeline;
 const KB = A.sources.kidbook;
+const SC = A.sources.scales;
 
 const rows = A.bands.map((b) => {
   const { prevent, screening } = checksFor(b, tl);
@@ -22,6 +23,7 @@ const rows = A.bands.map((b) => {
     prevent: prevent.map((t) => `第 ${visitNo(t.title)} 次（${t.age_label}）`).join('、'),
     screening: screening.map((t) => `第 ${visitNo(t.title)} 次（${t.age_label}）`).join('、') || '從 6 個月開始',
     alerts: b.items.filter((x) => x.alert).length,
+    scales: scalesFor(b, A.scales),
   };
 });
 
@@ -51,6 +53,7 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
   dataDate={A.prepared_at}
   citations={[
     { name: KB.name, url: KB.url, dateModified: KB.fetched },
+    { name: SC.name, url: SC.url, dateModified: SC.list_updated },
     { name: A.sources.checklist.name, url: A.sources.checklist.url },
   ]}
 >
@@ -59,7 +62,8 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
     <h1>寶寶發展月份對照表</h1>
     <p class="lead">
       國健署兒童健康手冊把出生到未滿 7 歲分成 {A.bands.length} 個時段，每段列出家長要記錄的發展狀況題目；
-      同一本手冊也排好了 9 次兒童預防保健和 6 次兒童發展篩檢。下表把三者對在同一列。
+      同一本手冊也排好了 9 次兒童預防保健和 6 次兒童發展篩檢。下表把三者對在同一列，
+      最右欄是 6 個月起醫師做發展篩檢時用的國健署分齡量表。
     </p>
 
     <section class="section">
@@ -75,10 +79,10 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
         <table>
           <caption>
             寶寶發展月份對照表。發展重點是該次兒童預防保健「發展診察」的項目，依國健署兒童健康手冊第 6–7 頁；
-            點月齡看手冊原文題目。
+            點月齡看手冊原文題目；點量表看該頁的國健署分齡篩檢量表題目。
           </caption>
           <thead>
-            <tr><th>月齡</th><th>發展重點</th><th>兒童預防保健</th><th>兒童發展篩檢</th><th>手冊題目</th></tr>
+            <tr><th>月齡</th><th>發展重點</th><th>兒童預防保健</th><th>兒童發展篩檢</th><th>手冊題目</th><th>國健署分齡量表</th></tr>
           </thead>
           <tbody>
             {rows.map((r) => (
@@ -88,6 +92,11 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
                 <td>{r.prevent}</td>
                 <td>{r.screening}</td>
                 <td class="num">{r.b.items.length} 題{r.alerts > 0 && <>，警訊 {r.alerts}</>}</td>
+                <td>
+                  {r.scales.length > 0
+                    ? r.scales.map((s, k) => <>{k > 0 && '、'}<a href={`${ageUrl(r.b.slug)}#scales`}>{s.label}（{scaleCount(s)} 題）</a></>)
+                    : '從 6 個月開始'}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -97,6 +106,10 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
         依<a href={KB.url} target="_blank" rel="noopener">{KB.name}</a>整理（{KB.fetched} 取得）。
         6 至 9 個月與 9 至 12 個月同屬兒童預防保健第 4 次，發展重點欄相同。
         早產兒未滿 3 歲用矯正年齡，從預產期起算。
+      </p>
+      <p class="meta">
+        分齡量表依<a href={SC.url} target="_blank" rel="noopener">{SC.name}</a>的 {A.scales.length} 份分齡 PDF
+        （清單頁更新日期 {SC.list_updated}，{SC.fetched} 下載），題目原文照錄，經國健署授權引用；量表是篩檢工具，不是診斷標準。
       </p>
     </section>
 
@@ -131,7 +144,7 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
     <Caveat kind="age" />
 
     <footer class="site-ft">
-      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、社家署線上兒童發展檢核表。</p>
+      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、{SC.name}、社家署線上兒童發展檢核表。</p>
       <p>這裡是路標不是掛號窗口，不做判讀，也不代為預約。以主管機關公告為準。</p>
     </footer>
   </main>
