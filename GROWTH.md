@@ -36,29 +36,49 @@
 |---|---|---|
 | 單一機構頁 3,073 頁上線，1,855 頁可收錄，其餘 noindex（規則：`src/lib/placepages.mjs` 的 `noindexReason()`） | ✅ | `bf20748`、`073bd22`、`3d3b1d0` |
 | 服務類型 × 縣市 × 行政區名單頁 | ✅ | `44d7d48`（出頁門檻 `src/lib/facets.mjs`） |
-| Google Indexing API 積壓推送：sitemap 內 `/places/` 共 2,241 頁（2026-09-27 量測），每日 180 筆，每網址只送一次，約 12 天推完（預計 2026-10-08 前後） | 🔄 | seo-ops `bin/index-ping-backlog.mjs`、帳本 `state/bansik.tw/index-ping-backlog.json`（2026-09-27 已送 180）；GCP 專案 bansik-tw |
+| Google Indexing API | 不使用 | 【站主拍板 2026-09-27】同日曾送出首批 180 筆後停用：Google 文件寫明該 API 只用於 JobPosting／BroadcastEvent 頁。見 seo-ops `playbooks/bansik.tw.md` 策略區 |
+| 收錄改靠 sitemap lastmod（內容實際變更日）＋首頁、縣市首頁「最近新增或更新的機構」內鏈；sitemap 由 seo-collect 視過期重送 | ✅ | `0a10eb4` |
+| 舊 `/places/?d=<行政區>` 網址：該區有名單頁時瀏覽器端轉過去並改 canonical | ✅ | `9400079` |
 | 2026-10-04 複查新機構頁收錄率 | ⏳ | 方法見下 |
 
-推送開始前抽查：新機構頁 12/12 為 `URL is unknown to Google`（2026-09-27）。
+內鏈上線前抽查：新機構頁 12/12 為 `URL is unknown to Google`（2026-09-27）。
 
-**2026-10-04 複查方法**：已推送與未推送各抽 20 頁比對，兩組差距就是推送的效果，不只看絕對收錄率。
+**2026-10-04 複查方法**：有內鏈與沒有內鏈的機構頁各抽 20 頁比對，兩組差距就是內鏈（與 lastmod）的效果，不只看絕對收錄率。
+「有內鏈」＝出現在首頁或任一縣市首頁「最近新增或更新的機構」區塊；其餘 `/places/` 機構頁當對照組（只從名單頁連入）。
+09-27 送過 Indexing API 的 180 筆會干擾比較，兩組都排除（帳本 `state/bansik.tw/index-ping-backlog.json`）。
 
 ```bash
 cd /mnt/yao-care/bansik.tw
 L=/mnt/yao-care/seo-ops/state/bansik.tw/index-ping-backlog.json
-# 已推送（09-27 那批）
-python3 -c "import json,random;d=json.load(open('$L'))['sent'];u=[k for k,v in d.items() if v=='2026-09-27'];random.seed(4);print('\n'.join(random.sample(u,20)))" \
-  | xargs env BANSIK_GOOGLE_KEY=/root/.config/bansik/ga4-sa.json node scripts/google-api.mjs inspect
-# 尚未推送的對照組
+KEY=/root/.config/bansik/ga4-sa.json
+# 首頁與 22 個縣市首頁「最近新增或更新的機構」區塊（data-lastmod-skip 那一段）連到的機構頁
+python3 - <<'PY2' > /tmp/linked.txt
+import re, urllib.request
+xml = urllib.request.urlopen('https://bansik.tw/sitemap-0.xml').read().decode()
+pages = ['https://bansik.tw/'] + re.findall(r'<loc>(https://bansik.tw/[a-z_]+/)</loc>', xml)
+out = set()
+for u in pages:
+    h = urllib.request.urlopen(u).read().decode()
+    m = re.search(r'<section[^>]*data-lastmod-skip.*?</section>', h, re.S)
+    out |= {'https://bansik.tw' + x for x in re.findall(r'href="(/[a-z_]+/places/[^"]+/)"', m.group(0) if m else '')}
+print('\n'.join(sorted(out)))
+PY2
+# 有內鏈組
+python3 -c "import json,random;s=json.load(open('$L'))['sent'];u=[l.strip() for l in open('/tmp/linked.txt') if l.strip() not in s];random.seed(4);print('\n'.join(random.sample(u,min(20,len(u)))))" \
+  | xargs env BANSIK_GOOGLE_KEY=$KEY node scripts/google-api.mjs inspect
+# 對照組：sitemap 內其他機構頁
 curl -s https://bansik.tw/sitemap-0.xml | grep -o '<loc>[^<]*/places/[^<]*' | sed 's/<loc>//' \
-  | python3 -c "import sys,json,random;s=json.load(open('$L'))['sent'];u=[l.strip() for l in sys.stdin if l.strip() not in s];random.seed(4);print('\n'.join(random.sample(u,min(20,len(u)))))" \
-  | xargs env BANSIK_GOOGLE_KEY=/root/.config/bansik/ga4-sa.json node scripts/google-api.mjs inspect
+  | python3 -c "import sys,json,random;s=set(json.load(open('$L'))['sent'])|{l.strip() for l in open('/tmp/linked.txt')};u=[l.strip() for l in sys.stdin if l.strip() not in s];random.seed(4);print('\n'.join(random.sample(u,min(20,len(u)))))" \
+  | xargs env BANSIK_GOOGLE_KEY=$KEY node scripts/google-api.mjs inspect
 ```
+
+`sent` 裡的網址若與 sitemap 編碼不同（中文 vs `%XX`），先統一再比對。
+「最近新增或更新的機構」會隨資料更新換掉，複查當天抓的名單就是當天的，不要拿舊名單比。
 
 `~/.config/bansik/gsc-key.json` 在這台機器上不存在（2026-09-27），同一個服務帳號的金鑰是 `ga4-sa.json`，所以要帶 `BANSIK_GOOGLE_KEY`。
 各狀態怎麼解讀見 [SEO.md §3](SEO.md)——「無法辨識」「已找到未建索引」都不是站台的錯。
 
-判準：已推送組收錄明顯高於對照組 → 維持推送到送完；兩組都停在「無法辨識」→ 回報，不要自己加量或重送。
+判準：有內鏈組收錄明顯高於對照組 → 考慮把內鏈區塊擴大（例如名單頁也列「最近更新」）；兩組都停在「無法辨識」→ 回報，**不要重開 Indexing API**，也不要自己重送 sitemap 加量。
 
 ### 1-2 頁型產值（方法②）
 
@@ -93,10 +113,10 @@ GSC 2026-09-10..09-25 的全部 17 個查詢（2026-09-27 量測）分成四群�
 
 | 需求 | 例子（曝光，2026-09-10..09-25） | 承接頁 | 狀態 |
 |---|---|---|---|
-| 機構名稱 | 上巧語言治療所、予泰心理暨職能聯合治療所、青米職能治療所等 | 單一機構頁 | ✅ `bf20748`，🔄 等收錄（§1-1） |
+| 機構名稱 | 上巧語言治療所、予泰心理暨職能聯合治療所、青米職能治療所等 | 單一機構頁 | ✅ `bf20748`；title／description 改用本名（去「社團法人」「(時段)」類註記，H1 仍全名）`9400079`；🔄 等收錄（§1-1） |
 | 縣市早療補助 | 台中早療補助（6，平均排名 36） | `/<縣市>/subsidy/` | ✅ 15 縣市補資格／文件／窗口／FAQ：`bf20748`；標題寫法：`8c90868` |
-| 地區＋發展遲緩 | 苗栗兒童發展遲緩（8，排名 25）、竹南兒童發展遲緩（5，排名 30） | `/miaoli/`、`/miaoli/places/竹南鎮/` | ✅ 頁已存在；⏳ 苗栗補助頁沒有官方申請條文（見下） |
-| 行政區分布 | 台中各區、桃園幾區、屏東地圖分區；`/taoyuan/places/?d=平鎮區` 等舊篩選網址有曝光 | `/<縣市>/map/`、行政區名單頁 | ✅ `8edb1d5`、`44d7d48` |
+| 地區＋發展遲緩 | 苗栗兒童發展遲緩（8，排名 25）、竹南兒童發展遲緩（5，排名 30） | `/miaoli/`、`/miaoli/places/竹南鎮/` | ✅ 頁已存在，縣市首頁 title 補「兒童發展遲緩」`9400079`；⏳ 苗栗補助頁沒有官方申請條文（見下） |
+| 行政區分布 | 台中各區、桃園幾區、屏東地圖分區；`/taoyuan/places/?d=平鎮區` 等舊篩選網址有曝光 | `/<縣市>/map/`、行政區名單頁 | ✅ `8edb1d5`、`44d7d48`；舊 `?d=` 網址轉到行政區名單頁 `9400079` |
 
 待做：
 
@@ -152,9 +172,7 @@ GSC 還沒有任何問題型查詢（2026-09-10..09-25，2026-09-27 量測）。
 
 | 日期 | 事項 |
 |---|---|
-| 2026-09-27 起每日 | Indexing API 推送 180 筆（🔄） |
-| 2026-10-04 | 依 §1-1 方法複查機構頁收錄率，已推送 vs 未推送 |
-| 2026-10-08 前後 | `/places/` 積壓推完；之後只剩新增頁 |
+| 2026-10-04 | 依 §1-1 方法複查機構頁收錄率，有內鏈 vs 沒內鏈 |
 | 2026-10-17 | seo-ops 策略複查日：28 天資料重算 §1-2 頁型產值、§1-3 查詢分群；看有無問題型查詢出現（§2） |
 | 持續 | 7 縣市補助官方條文：找到一個補一個（苗栗優先） |
 
@@ -167,5 +185,5 @@ GSC 還沒有任何問題型查詢（2026-09-10..09-25，2026-09-27 量測）。
 - **不為了一句話型問題開新頁**（§2）：開了也是被 AI 摘要吃掉。
 - **不把改標題／描述當成長手段**（方法④）。標題補搜尋字（`bf20748`）是為了讓頁面寫出家長用的字，不預期單靠它拉流量。
 - **不在 `steps`、`materials` 這類低產值頁型加頁**（§1-2）。
-- **不回退已拍板的事**：單一機構頁與其 noindex 規則、補助申請資訊、Indexing API 推送（seo-ops `playbooks/bansik.tw.md` 策略區「勿再提」）。
-  [SEO.md §4](SEO.md) 第一條「不要用 Indexing API 推頁面」寫於開啟推送之前，以 2026-09-27 拍板為準。
+- **不回退已拍板的事**：單一機構頁與其 noindex 規則、補助申請資訊（seo-ops `playbooks/bansik.tw.md` 策略區「勿再提」）。
+- **不用 Google Indexing API**（2026-09-27 拍板，首批 180 筆後停用），與 [SEO.md §4](SEO.md) 第一條一致。
