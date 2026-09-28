@@ -35,6 +35,10 @@ const types = typePages(c);
 const dpages = districtPages(c);
 const S = shortCounty(c.county);
 
+// 舊的 ?d=<行政區> 網址（分布圖以前這樣連）仍有搜尋曝光，但 canonical 指回本頁。
+// 那一區有自己的名單頁時，瀏覽器端轉過去並把 canonical 改成那一頁。
+const dpageUrls = Object.fromEntries(dpages.map(({ district }) => [district, districtUrl(code, district)]));
+
 const districts = Object.keys(c.districts).sort((a, b) => a.localeCompare(b, 'zh-Hant'));
 const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
 ---
@@ -70,7 +74,7 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
       </nav>
     )}
 
-    <div class="agebar" id="fbar" data-county={c.county}>
+    <div class="agebar" id="fbar" data-county={c.county} data-dpages={JSON.stringify(dpageUrls)}>
       <div class="field">
         <label for="fd">行政區</label>
         <select id="fd">
@@ -172,8 +176,14 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
     fd.addEventListener('change', () => { fill(); track('select'); });
     fc.addEventListener('change', () => { fill(); track('select'); });
 
-    // 從分布圖點過來時會帶 ?d=<行政區>
-    const pre = new URLSearchParams(location.search).get('d');
+    // 從分布圖點過來時會帶 ?d=<行政區>。那一區有自己的名單頁就直接轉過去（舊網址的搜尋曝光改由名單頁承接）
+    const pre = new URLSearchParams(location.search).get('d')?.normalize('NFC');
+    const dpages = JSON.parse(document.getElementById('fbar').dataset.dpages || '{}');
+    if (pre && dpages[pre]) {
+      const target = new URL(dpages[pre], location.origin).href;
+      document.querySelector('link[rel="canonical"]')?.setAttribute('href', target);
+      location.replace(target);
+    }
     if (pre && [...fd.options].some((o) => o.value === pre || o.text === pre)) fd.value = pre;
     fill();
     if (pre) track('url');

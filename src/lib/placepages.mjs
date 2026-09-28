@@ -129,3 +129,37 @@ export function schemaType(e) {
   }
   return 'LocalBusiness';
 }
+
+// 名錄全名前後常掛著法人別與登記註記：「社團法人全腦科學教育協會(時段)」「財團法人…(日間、時段)」。
+// 搜尋結果標題只顯示前二十多個字，家長搜的是中間那段本名，所以 <title> 與 description 把本名放前面。
+// 只拿掉「法人別」與「服務型態／健保特約／核可日期」這類註記；委託經營、院區、服務區域等括號
+// 是在區分不同單位，一律保留。H1、內文、JSON-LD 仍用名錄全名（站規：不改機構名稱）。
+const LEGAL_PREFIX = /^(社團法人|財團法人)(?=.{2,})/;
+const NOTE_WORD = '(?:時段|日間|到宅|健保特約|專辦|走動式|\\d{2,3}\\.\\d{1,2}\\.\\d{1,2}核可)';
+const TRAILING_NOTE = new RegExp(`\\s*[(（]${NOTE_WORD}(?:[、,，]\\s*${NOTE_WORD})*[)）]\\s*$`);
+
+/** 單一名稱的本名：去掉開頭法人別與結尾註記。去完少於兩個字就回傳原名。 */
+export function coreName(name) {
+  const s = name.replace(TRAILING_NOTE, '').replace(LEGAL_PREFIX, '').trim();
+  return s.length >= 2 ? s : name;
+}
+
+/**
+ * 這個縣市每一家在標題用的名稱：Map(entity_key → 名稱)。
+ * 同縣市兩家去掉註記後同名（「某中心(日間)」與「某中心(時段)」），兩家都改回全名，免得標題重複。
+ */
+export function titleNames(c) {
+  const core = new Map(c.entities.map((e) => [e.entity_key, coreName(e.name)]));
+  const count = new Map();
+  for (const e of c.entities) {
+    const k = core.get(e.entity_key);
+    if (k !== e.name) count.set(k, (count.get(k) || 0) + 1);
+  }
+  const full = new Set(c.entities.map((e) => e.name));
+  const out = new Map();
+  for (const e of c.entities) {
+    const k = core.get(e.entity_key);
+    out.set(e.entity_key, k === e.name || (count.get(k) === 1 && !full.has(k)) ? k : e.name);
+  }
+  return out;
+}

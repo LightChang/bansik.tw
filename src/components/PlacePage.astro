@@ -10,7 +10,7 @@ import {
   SERVICE_TYPES, typePages, districtPages, typeUrl, districtUrl, shortCounty,
 } from '../lib/facets.mjs';
 import {
-  CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType,
+  CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType, titleNames,
 } from '../lib/placepages.mjs';
 import { place } from '../lib/jsonld.mjs';
 
@@ -30,9 +30,11 @@ const noindex = noindexReason(e);
 const slugs = placeSlugs(c);
 const obs = obsLine(c.observations, e.entity_key, e.tel);
 
-const title = `${e.name}｜${where} ${words.join('・') || '兒童發展'}`;
+// 標題與 description 用本名（去掉法人別與「(時段)」類註記），H1 以下仍用名錄全名
+const tname = titleNames(c).get(e.entity_key) || e.name;
+const title = `${tname}｜${where} ${words.join('・') || '兒童發展'}`;
 const catText = cats.map((k) => CAT_TEXT[k] || k);
-const description = `${e.name}（${where}）：${catText.join('、')}。`
+const description = `${tname}（${where}）：${catText.join('、')}。`
   + `地址 ${e.address}，電話 ${e.tel}。附${S}評估與早療補助的申請流程。`;
 
 const SOURCE_NAME = {
