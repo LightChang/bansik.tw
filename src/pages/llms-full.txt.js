@@ -9,7 +9,7 @@
 // 站上既有頁面已公開的文字（steps.astro 的五步說明），不摘要、不改寫、不新增判斷語句——
 // 站規鐵則見 README.md §5：官方用語、不做品質排名、等候資訊一律標來源與時間。
 // 156 家機構的逐筆地址不收在這裡（量太大且非「常青核心事實」），完整名錄見各縣市 /places/ 頁與 sitemap。
-import { counties, county, shared, siteIndex } from '../lib/data.mjs';
+import { counties, county, shared, siteIndex, ageData } from '../lib/data.mjs';
 import { num, screenings } from '../lib/view.mjs';
 
 // 五步流程的說明文字，與 src/pages/[county]/steps.astro 的 STEPS 常數一致（站上已公開的文案，
@@ -241,6 +241,28 @@ export async function GET({ site }) {
     p('---');
     p();
   }
+
+  // ── 六、各月齡的手冊題目與法規定義（src/data/age.json，官方原文） ─────────
+  const A = ageData();
+  p('# 六、兒童健康手冊各月齡的發展狀況題目（原文）');
+  p();
+  p(`來源：${A.sources.kidbook.name}（${A.sources.kidbook.url}），各時段「家長紀錄事項」的發展狀況題目，原文照錄。`);
+  p(`標「※」為手冊標記的警訊題。手冊原文：「${A.quotes.alert}」`);
+  p('這些題目是家長在健檢前記錄、給醫師參考用的，不是診斷標準；篩檢沒過不等於診斷。');
+  p();
+  for (const b of A.bands) {
+    p(`## ${b.label}（${abs(`/age/${b.slug}/`)}）`);
+    for (const x of b.items) p(`- ${x.alert ? '※ ' : ''}${x.text}`);
+    p();
+  }
+  p('# 七、法規定義');
+  p();
+  p(`- 發展遲緩兒童：「${A.quotes.rules_art9}」（${A.sources.law_rules.name}第 9 條，${A.sources.law_rules.url}）`);
+  p(`- 早期療育：「${A.quotes.rules_art8}」（同上第 8 條）`);
+  p(`- 早期療育服務：「${A.quotes.law_art31_3}」（${A.sources.law.name}第 31 條，${A.sources.law.url}）`);
+  p();
+  p('---');
+  p();
 
   p('## 資料來源');
   p();

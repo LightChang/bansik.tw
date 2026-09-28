@@ -1,0 +1,62 @@
+---
+// 全國頁的「在你的縣市」表：22 縣市各一列，連到該縣市的檢查時程、篩檢院所、評估醫院與通報轉介中心。
+// 名單頁不足出頁門檻的縣市（facets.mjs）改連全部機構，不連到不存在的頁。
+// 通報轉介中心放第一欄：站規第 4 條，每頁都要導回所屬縣市的通報轉介中心。名錄沒有這類單位的縣市（嘉義縣）照實寫。
+import { counties, county } from '../lib/data.mjs';
+import { typePages, typeUrl } from '../lib/facets.mjs';
+
+interface Props {
+  /** 表格說明（caption），講這張表在這一頁的用途 */
+  caption: string;
+  /** 顯示哪幾欄：checkups 檢查時程、screening 篩檢院所、evaluation 評估醫院、steps 流程、subsidy 補助 */
+  cols?: ('checkups' | 'screening' | 'evaluation' | 'steps' | 'subsidy')[];
+}
+const { caption, cols = ['checkups', 'screening', 'evaluation'] } = Astro.props;
+
+const HEAD = {
+  checkups: '檢查時程',
+  screening: '篩檢院所',
+  evaluation: '評估醫院',
+  steps: '流程五步',
+  subsidy: '補助',
+};
+
+const rows = counties().map(({ code, name }) => {
+  const c = county(code);
+  const types = typePages(c);
+  const has = (slug) => types.find(({ type }) => type.slug === slug);
+  const call = c.entities.find((e) => e.journey_step === '2');
+  const link = (col) => {
+    if (col === 'checkups') return { href: `/${code}/checkups/`, text: '9 次健檢與 6 次篩檢' };
+    if (col === 'steps') return { href: `/${code}/steps/`, text: '各步驟家數' };
+    if (col === 'subsidy') return { href: `/${code}/subsidy/`, text: '金額與申請' };
+    const hit = has(col);
+    return hit
+      ? { href: typeUrl(code, col), text: `${hit.list.length} 家` }
+      : { href: `/${code}/places/`, text: '看全部機構' };
+  };
+  return { code, name, call, cells: cols.map(link) };
+});
+---
+
+<div class="table-wrap">
+  <table>
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        <th>縣市</th>
+        <th>通報轉介／個管中心</th>
+        {cols.map((k) => <th>{HEAD[k]}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          <td><a href={`/${r.code}/`}>{r.name}</a></td>
+          <td>{r.call ? <>{r.call.name} <span class="num">{r.call.tel}</span></> : '名錄未列'}</td>
+          {r.cells.map((x) => <td><a href={x.href}>{x.text}</a></td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

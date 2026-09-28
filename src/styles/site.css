@@ -113,6 +113,12 @@ table caption {
 .site-hd .brand { font-size: var(--text-lg); font-weight: 700; text-decoration: none; color: var(--text-primary); }
 .site-hd .switch { display: flex; align-items: baseline; gap: var(--space-2); margin-inline-start: auto; }
 .site-hd .switch span { font-size: var(--text-xs); color: var(--text-secondary); }
+.site-links { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.site-links a { font-size: var(--text-xs); }
+
+/* ── 月齡頁：手冊題目 ───────────────────────────── */
+.items li { margin-top: var(--space-2); }
+.quote { border-inline-start: 3px solid var(--border-subtle); padding-inline-start: var(--space-4); margin-top: var(--space-4); color: var(--text-secondary); }
 
 select, input[type="date"] {
   font: inherit;

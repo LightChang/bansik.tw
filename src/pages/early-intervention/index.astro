@@ -1,0 +1,98 @@
+---
+// 早療是什麼：施行細則第 8 條的定義，加上兒少權法第 31 條列的五項服務（篩檢、通報、評估、治療、教育）。
+// 各縣市每一步有幾家機構在 /<縣市>/steps/，這裡不重寫那一頁，只連過去。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Caveat from '../../components/Caveat.astro';
+import CountyFinder from '../../components/CountyFinder.astro';
+import { ageData, siteIndex } from '../../lib/data.mjs';
+
+const A = ageData();
+const Q = A.quotes;
+const S = A.sources;
+const idx = siteIndex();
+const totalEnt = idx.counties.reduce((n, c) => n + c.entities, 0);
+
+const title = '早療是什麼：早期療育的定義與流程五步（篩檢、通報、評估、療育、教育）｜bansik';
+const lead = '早療是「早期療育」的簡稱。依兒童及少年福利與權益保障法施行細則第 8 條，'
+  + '是由社會福利、衛生、教育等專業人員以團隊合作方式，依未滿六歲的發展遲緩兒童及其家庭的個別需求，'
+  + '提供治療、教育、諮詢、轉介、安置與其他服務及照顧。';
+const description = `${lead}流程依法條分篩檢、通報、評估、治療、教育五步，附 22 縣市的通報轉介中心電話。`;
+
+// text 裡的 {連結} 由 link 取代，frontmatter 不能寫 JSX
+const STEPS = [
+  { n: '1', name: '篩檢',
+    text: '兒童發展篩檢 6 次、兒童預防保健 9 次，都印在兒童健康手冊上。孩子幾個月該做哪一次，見{連結}。',
+    link: ['/age/', '寶寶發展月份對照表'] },
+  { n: '2', name: '通報',
+    text: '兒少權法第 32 條要求社福、教育、醫療機構發現疑似發展遲緩兒童時通報縣市主管機關。家長可以直接打縣市的通報轉介中心，電話在下表。' },
+  { n: '3', name: '評估',
+    text: '到衛生主管機關認可的醫院做評估，確認後發給證明（施行細則第 9 條）。定義與各年齡警訊題見{連結}。',
+    link: ['/developmental-delay/', '發展遲緩是什麼'] },
+  { n: '4', name: '治療（療育）',
+    text: '依個別需求安排，費用各縣市有補助，見{連結}。',
+    link: ['/subsidy/', '各縣市早療補助'] },
+  { n: '5', name: '教育',
+    text: `銜接學前特殊教育。施行細則第 8 條第 2 項另外規定：「${Q.rules_art8_2}」` },
+].map((x) => ({ ...x, parts: x.text.split('{連結}') }));
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '早療是什麼' }]}
+  dataDate={A.prepared_at}
+  citations={[
+    { name: S.law_rules.name, url: S.law_rules.url, dateModified: A.prepared_at },
+    { name: S.law.name, url: S.law.url, dateModified: A.prepared_at },
+  ]}
+>
+  <Nav />
+  <main class="shell">
+    <h1>早療是什麼</h1>
+    <p class="lead">{lead}</p>
+
+    <section class="section">
+      <h2>早期療育的法規定義</h2>
+      <p class="quote">「{Q.rules_art8}」</p>
+      <p class="meta">
+        <a href={S.law_rules.url} target="_blank" rel="noopener">{S.law_rules.name}</a>第 8 條第 1 項
+        （{S.law_rules.amended}修正）。
+      </p>
+      <p>
+        對象是未滿六歲的發展遲緩兒童「及其家庭」，做事的是社福、衛生、教育三個領域的人一起。
+        所以流程裡會碰到診所或衛生所、通報轉介中心、評估醫院和幼兒園，分屬不同單位。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>早療流程五步</h2>
+      <p class="lead">兒少權法第 31 條第 3 項：「{Q.law_art31_3}」這五項就是家長會依序走過的五步。</p>
+      {STEPS.map((x) => (
+        <div class="step">
+          <h3>{x.n}　{x.name}</h3>
+          <p>{x.parts[0]}{x.link && <a href={x.link[0]}>{x.link[1]}</a>}{x.parts[1] || ''}</p>
+        </div>
+      ))}
+      <p class="meta">
+        法條：<a href={S.law.url} target="_blank" rel="noopener">{S.law.name}</a>第 31、32 條；
+        <a href={S.law_rules.url} target="_blank" rel="noopener">{S.law_rules.name}</a>第 8、9 條（{A.prepared_at} 存檔）。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>各縣市的早療窗口</h2>
+      <p class="lead">
+        每個縣市五步各有多少家機構，點「各步驟家數」看；全臺共收錄 {totalEnt.toLocaleString()} 家兒童發展相關機構。
+      </p>
+      <CountyFinder caption="22 縣市的通報轉介中心電話，以及該縣市早療流程五步、評估醫院與補助的頁面。" cols={['steps', 'evaluation', 'subsidy']} />
+    </section>
+
+    <Caveat kind="list" />
+
+    <footer class="site-ft">
+      <p>底稿整理於 {A.prepared_at}。來源：全國法規資料庫、衛福部社家署、國健署、各縣市衛生局與社會局。</p>
+      <p>這裡是路標不是掛號窗口，不做品質排名，也不代為預約或試算。以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>

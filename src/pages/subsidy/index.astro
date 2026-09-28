@@ -1,0 +1,160 @@
+---
+// 全國早療補助總覽：22 縣市一張表（上限、交通費、申請期限、線上申請），每列連到該縣市的 /subsidy/。
+// 只用 src/data/counties/*.json 的 subsidy（research/scripts/subsidies.json，各縣市官方公告整理）；
+// 官方沒公開的照實寫「未公開」，不拿別縣市的規則補。金額只列不試算（站規第 6 條）。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Caveat from '../../components/Caveat.astro';
+import { counties, county } from '../../lib/data.mjs';
+
+const fmt = (v) => (v == null ? null : v.toLocaleString());
+
+const rows = counties().map(({ code, name }) => {
+  const c = county(code);
+  const s = c.subsidy;
+  const ok = s && s.status !== 'pending';
+  const ap = (s && s.apply) || {};
+  const online = [ap.how_to_apply, s && s.apply_window].filter(Boolean).some((t) => /線上|網路|eservice|https?:/.test(t));
+  const call = c.entities.find((e) => e.journey_step === '2');
+  return {
+    code, name, s, ok, call,
+    general: ok ? fmt(s.monthly_max_general) : null,
+    low: ok ? fmt(s.monthly_max_low_income) : null,
+    transport: ok ? s.transport : null,
+    window: s ? s.apply_window : null,
+    online,
+    hasApply: Boolean(s && s.apply),
+  };
+});
+const nOk = rows.filter((r) => r.ok).length;
+const pending = rows.filter((r) => !r.ok);
+const nOnline = rows.filter((r) => r.online).length;
+const noApply = rows.filter((r) => r.ok && !r.hasApply);
+// 「申請前要先做什麼」那段的數字：有應備文件的縣市裡，幾個要附評估報告或證明
+const docsOf = (r) => ((r.s && r.s.apply && r.s.apply.documents) || []).join(' ');
+const withDocs = rows.filter((r) => docsOf(r)).length;
+const needReport = rows.filter((r) => /報告書|診斷證明|遲緩證明|障礙證明|障礙手冊/.test(docsOf(r))).length;
+const lastVerified = rows.map((r) => r.s && r.s.verified_at).filter(Boolean).sort().pop();
+
+const title = '早療補助怎麼申請：各縣市補助金額、交通補助、申請時間與線上申請｜bansik';
+const lead = `發展遲緩兒童的早期療育補助由各縣市自己訂，22 縣市有 22 套規則。`
+  + `本站讀到官方原文的有 ${nOk} 縣市，每人每月上限多在一般戶 3,000 至 4,000 元、低收入戶 5,000 至 6,000 元之間；`
+  + `${pending.map((r) => r.name).join('、')}的金額沒有公開。`;
+const description = `${lead}表列各縣市交通費、申請期限與能否線上申請。`;
+
+// 上限的實際範圍，從資料算，lead 那句要跟資料一致（見下方 check）
+const gen = rows.filter((r) => r.ok).map((r) => r.s.monthly_max_general);
+const low = rows.filter((r) => r.ok).map((r) => r.s.monthly_max_low_income);
+if (Math.min(...gen) < 3000 || Math.max(...gen) > 4000 || Math.min(...low) < 5000 || Math.max(...low) > 6000) {
+  throw new Error('/subsidy/ 導言寫的金額範圍跟資料對不上，改導言');
+}
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '各縣市早療補助' }]}
+  dataDate={lastVerified}
+  citations={rows.filter((r) => r.s && r.s.source_url).map((r) => ({
+    name: r.s.rule_name, url: r.s.source_url, dateModified: r.s.verified_at,
+  }))}
+>
+  <Nav />
+  <main class="shell">
+    <h1>早療補助怎麼申請</h1>
+    <p class="lead">{lead}</p>
+
+    <section class="section">
+      <h2>各縣市早療補助一覽</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>
+            22 縣市發展遲緩兒童早期療育補助：每人每月上限、交通費、申請期限與線上申請。
+            依各縣市主管機關公告整理（核對於 {lastVerified} 前後），點縣市看資格、文件與電話。
+          </caption>
+          <thead>
+            <tr>
+              <th>縣市</th><th class="num">一般戶上限</th><th class="num">低收入戶上限</th>
+              <th>交通費</th><th>申請期限</th><th>線上申請</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td><a href={`/${r.code}/subsidy/`}>{r.name}</a></td>
+                <td class="num">{r.general ?? '未公開'}</td>
+                <td class="num">{r.low ?? '未公開'}</td>
+                <td>{r.transport ?? (r.ok ? '條文未寫' : '未公開')}</td>
+                <td>{r.window ?? (r.ok ? '條文未寫' : '未公開')}</td>
+                <td>{r.online ? '可以' : (r.ok ? '條文未提' : '未公開')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">
+        金額是療育費與交通費的每月上限，交通費算不算在內各縣市寫法不同，照原文列。
+        「線上申請」依官方條文有沒有寫線上管道判斷，條文沒提不代表一定沒有，打電話確認。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>早療交通補助</h2>
+      <p>
+        交通費多半跟療育費一起申請。有的縣市按次數補（例如每次 200 元、每月有次數上限），
+        有的跟療育費合併算在同一個每月上限裡，金門另有臺金來回機票的規定。上表「交通費」欄是各縣市原文。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>早療補助申請時間</h2>
+      <p>
+        申請期限差很多：有按季收件、逾期不予補助的，也有規定「就診日起四個月內」或「次月起三個月內」的。
+        上表「申請期限」欄是各縣市原文。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>早療補助線上申請</h2>
+      <p>
+        官方條文寫了線上管道的有 {nOnline} 個縣市：
+        {rows.filter((r) => r.online).map((r, k) => <>{k > 0 && '、'}<a href={`/${r.code}/subsidy/`}>{r.name}</a></>)}。
+        網址與平台名稱在各縣市頁的「去哪裡申請」。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>還沒整理到官方原文的縣市</h2>
+      <ul>
+        {pending.map((r) => (
+          <li>
+            <a href={`/${r.code}/subsidy/`}>{r.name}</a>：{r.s ? r.s.note : '規則尚未整理'}
+            {r.call && <>要問金額，打{r.call.name} <span class="num">{r.call.tel}</span>。</>}
+          </li>
+        ))}
+        {noApply.length > 0 && (
+          <li>
+            {noApply.map((r) => r.name).join('、')}：金額有官方原文，申請資格與應備文件還沒整理到，
+            先打縣市頁上的通報轉介中心電話問。
+          </li>
+        )}
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>申請前要先做什麼</h2>
+      <p>
+        官方條文整理到應備文件的 {withDocs} 個縣市，{needReport === withDocs ? '全部' : `有 ${needReport} 個`}要附綜合評估報告書、
+        發展遲緩診斷證明或身心障礙證明其中一種，所以通常要先做過評估。評估怎麼做見
+        <a href="/developmental-delay/">發展遲緩是什麼、怎麼評估</a>，整個流程見<a href="/early-intervention/">早療是什麼</a>。
+      </p>
+    </section>
+
+    <Caveat kind="money" />
+
+    <footer class="site-ft">
+      <p>補助規則核對於 {lastVerified} 前後。來源：各縣市社會局（處）公告的發展遲緩兒童早期療育補助計畫。</p>
+      <p>這裡是路標不是掛號窗口，不代為試算或申請。以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>

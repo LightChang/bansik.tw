@@ -1,0 +1,169 @@
+---
+// 發展遲緩是什麼：法規定義、手冊各年齡警訊題（家長搜「發展遲緩特徵」要的就是這個）、怎麼評估。
+// 定義只引施行細則原文；「特徵」只列手冊標 ※ 的題目原文，不自己歸納症狀；不寫預後。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Caveat from '../../components/Caveat.astro';
+import CountyFinder from '../../components/CountyFinder.astro';
+import { ageData, shared, siteIndex } from '../../lib/data.mjs';
+import { ageUrl } from '../../lib/age.mjs';
+import { screenings } from '../../lib/view.mjs';
+
+const A = ageData();
+const Q = A.quotes;
+const S = A.sources;
+const KB = S.kidbook;
+const s = shared();
+const idx = siteIndex();
+const totalCtr = idx.counties.reduce((n, c) => n + c.centers, 0);
+const SCREENS = screenings(s.timeline);
+
+const withAlerts = A.bands.map((b) => ({ b, alerts: b.items.filter((x) => x.alert) }))
+  .filter((x) => x.alerts.length);
+const nAlerts = withAlerts.reduce((n, x) => n + x.alerts.length, 0);
+
+// 首頁同一套：全國「發展遲緩」特教學生數，學前 vs 國小以後
+const dd = s.stats.filter((r) => r.metric === '特教學生數' && r.dim1_value === '發展遲緩');
+const sum = (pick) => dd.filter((r) => pick(r.dim2_value)).reduce((n, r) => n + (Number(r.value) || 0), 0);
+const pre = sum((v) => v.startsWith('學前'));
+const after = sum((v) => !v.startsWith('學前'));
+
+const title = '發展遲緩是什麼：定義、常見特徵、怎麼評估｜bansik';
+const lead = '依兒童及少年福利與權益保障法施行細則第 9 條，發展遲緩兒童是在認知、生理、語言及溝通、'
+  + '心理社會或生活自理技能等方面有疑似異常或可預期有發展異常，並經衛生主管機關認可的醫院評估確認、發給證明的兒童。';
+const description = `${lead}附兒童健康手冊各年齡的 ${nAlerts} 題警訊題原文與各縣市評估醫院。`;
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '發展遲緩是什麼' }]}
+  dataDate={A.prepared_at}
+  citations={[
+    { name: S.law_rules.name, url: S.law_rules.url, dateModified: A.prepared_at },
+    { name: S.law.name, url: S.law.url, dateModified: A.prepared_at },
+    { name: KB.name, url: KB.url, dateModified: KB.fetched },
+  ]}
+>
+  <Nav />
+  <main class="shell">
+    <h1>發展遲緩是什麼</h1>
+    <p class="lead">{lead}</p>
+
+    <section class="section">
+      <h2>發展遲緩的定義</h2>
+      <p class="quote">「{Q.rules_art9}」</p>
+      <p class="meta">
+        <a href={S.law_rules.url} target="_blank" rel="noopener">{S.law_rules.name}</a>第 9 條第 1 項
+        （{S.law_rules.amended}修正）。
+      </p>
+      <p>法條列的五個面向：</p>
+      <ul>
+        <li>認知發展</li>
+        <li>生理發展</li>
+        <li>語言及溝通發展</li>
+        <li>心理社會發展</li>
+        <li>生活自理技能</li>
+      </ul>
+      <p>
+        所以「發展遲緩」是評估之後才確認的身分。篩檢或家長自己勾的題目沒過，手冊的用語是「建議進一步篩檢或轉介評估」，
+        還不是發展遲緩。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>發展遲緩的特徵：手冊各年齡的警訊題</h2>
+      <p class="lead">
+        國健署兒童健康手冊的家長紀錄事項裡，有 {nAlerts} 題用 ※ 標為警訊題。手冊的說明是：「{Q.alert}」
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption>兒童健康手冊各時段標 ※ 的警訊題原文。其他題目與該時段的健檢見各月齡頁。</caption>
+          <thead><tr><th>月齡</th><th>警訊題（原文）</th></tr></thead>
+          <tbody>
+            {withAlerts.map(({ b, alerts }) => (
+              <tr>
+                <td><a href={ageUrl(b.slug)}>{b.short}</a></td>
+                <td><ul>{alerts.map((x) => <li>{x.text}</li>)}</ul></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">
+        原文照錄自<a href={KB.url} target="_blank" rel="noopener">{KB.name}</a>各時段家長紀錄事項。
+        出生到 4 個月的兩個時段沒有標警訊題。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>發展遲緩怎麼評估</h2>
+      <p>
+        兒童及少年福利與權益保障法第 31 條要求政府建立六歲以下兒童發展的評估機制，
+        早期療育的服務依序是篩檢、通報、評估、治療、教育。落到家長手上是這幾站：
+      </p>
+      <div class="step">
+        <h3>1　兒童發展篩檢</h3>
+        <p>
+          國健署補助 {SCREENS.length} 次，從 {SCREENS[0].age_label}到{SCREENS[SCREENS.length - 1].age_label}，
+          {SCREENS[0].detail}。結果分通過、持續追蹤與衛教、需轉介三種。各月齡該做哪一次見
+          <a href="/age/">寶寶發展月份對照表</a>。
+        </p>
+      </div>
+      <div class="step">
+        <h3>2　通報</h3>
+        <p>
+          法條原文：「{Q.law_art32}」（第 32 條）。家長也可以自己打縣市的通報轉介中心，電話在下表第二欄。
+        </p>
+      </div>
+      <div class="step">
+        <h3>3　聯合評估</h3>
+        <p>
+          施行細則第 9 條寫明要「經衛生主管機關認可之醫院評估確認，發給證明」。
+          本站收錄的兒童發展聯合評估中心共 {totalCtr} 家，各縣市的評估醫院在下表。
+        </p>
+      </div>
+      <p class="meta">
+        法條：<a href={S.law.url} target="_blank" rel="noopener">{S.law.name}</a>第 31、32 條；
+        <a href={S.law_rules.url} target="_blank" rel="noopener">{S.law_rules.name}</a>第 9 條。
+        流程後半段（療育、學前教育）見<a href="/early-intervention/">早療是什麼</a>。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>評估之後：再評估、身心障礙鑑定與入學</h2>
+      <p>
+        發展遲緩會不會一直是發展遲緩，法規沒有給一個答案，只寫了兩件事。
+        施行細則第 9 條第 2 項：「{Q.rules_art9_2}」
+        第 8 條第 2 項：「{Q.rules_art8_2}」
+      </p>
+      {pre > 0 && (
+        <p>
+          「發展遲緩」這個特教類別只用在學前：全國學前有 <span class="num">{pre.toLocaleString()}</span> 名發展遲緩學生，
+          國小一年級以後是 <span class="num">{after}</span> 人。要繼續拿到特教資源，得在入學前的鑑定改判其他障別。
+          <span class="src">資料：教育部特殊教育通報統計。</span>
+        </p>
+      )}
+    </section>
+
+    <section class="section">
+      <h2>發展遲緩補助</h2>
+      <p>
+        療育費與交通費各縣市都有補助計畫，資格、金額與申請方式 22 縣市各自不同，
+        見<a href="/subsidy/">各縣市早療補助</a>。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>在你的縣市找通報轉介中心與評估醫院</h2>
+      <CountyFinder caption="各縣市的通報轉介中心電話、兒童發展評估醫院與篩檢院所。" cols={['evaluation', 'screening', 'steps']} />
+    </section>
+
+    <Caveat kind="age" />
+
+    <footer class="site-ft">
+      <p>底稿整理於 {A.prepared_at}。來源：全國法規資料庫、{KB.name}、國健署、教育部特殊教育通報統計。</p>
+      <p>這裡是路標不是掛號窗口，不做判讀、不做診斷，也不代為預約。以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>

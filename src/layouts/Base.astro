@@ -16,8 +16,17 @@ interface Props {
   noindex?: boolean;
   /** 這一頁自己的結構化資料節點（由 src/lib/jsonld.mjs 組），接在 WebPage／麵包屑後面輸出 */
   jsonld?: unknown[];
+  /** 全國頁（/age/、/subsidy/…）不在縣市底下，麵包屑由頁面自己給：全國 › 這些。path 省略＝目前這一頁 */
+  crumbs?: { name: string; path?: string }[];
+  /** 這一頁實際引用的來源（全國頁用）；省略＝預設的時程來源 */
+  citations?: { name: string; url?: string; dateModified?: string }[];
+  /** 這一頁資料的日期（全國頁的底稿日期）；省略＝資料產生日 */
+  dataDate?: string;
 }
-const { title, description, canonical, trail, noindex, jsonld: extraJsonLd } = Astro.props;
+const {
+  title, description, canonical, trail, noindex, jsonld: extraJsonLd,
+  crumbs: nationalCrumbs, citations: pageCitations, dataDate: pageDataDate,
+} = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const url = canonical === false ? undefined : (canonical ?? `${site}${Astro.url.pathname}`);
 
@@ -38,10 +47,13 @@ if (countyMeta && subTitle) {
   crumbs.push({ name: subTitle, url: trail?.length ? `${site}/${seg[0]}/${seg[1]}/` : url });
   for (const t of trail || []) crumbs.push({ name: t.name, url: t.path ? `${site}${t.path}` : url });
 }
+if (!countyMeta) {
+  for (const t of nationalCrumbs || []) crumbs.push({ name: t.name, url: t.path ? `${site}${t.path}` : url });
+}
 
 // dateModified 用資料產生日，不用建置時間：重新建置不代表資料變新了，
 // 拿建置時間當更新時間就是對引擎謊報新鮮度。
-const dataDate = countyMeta ? county(countyMeta.code).generated_at : siteIndex().generated_at;
+const dataDate = pageDataDate || (countyMeta ? county(countyMeta.code).generated_at : siteIndex().generated_at);
 
 // citation：預設用站上時程／篩檢工具的資料底稿（src/data/shared.json 的 timeline[].url），
 // 這裡去重取出，原樣列成來源引用——不得新增或改寫這裡沒有的網址。
@@ -49,7 +61,7 @@ const dataDate = countyMeta ? county(countyMeta.code).generated_at : siteIndex()
 // 不是篩檢時程，掛時程來源等於告訴引擎「這頁引用了它沒講的東西」，故改用 subsidy 自己的
 // source_url／rule_name／verified_at。沒有 url 的整筆丟棄，陣列為空就整個屬性不輸出。
 const subsidyRecord = (seg[1] === 'subsidy' && countyMeta) ? county(countyMeta.code).subsidy : null;
-const citationEntries = subsidyRecord
+const citationEntries = pageCitations ? pageCitations : subsidyRecord
   ? (subsidyRecord.source_url
       ? [{
           name: subsidyRecord.rule_name || subsidyRecord.county,

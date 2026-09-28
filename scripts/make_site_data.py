@@ -189,6 +189,11 @@ for c in counties:
 
 dump({'generated_at': generated_at, 'counties': index}, 'index.json')
 
+# 月齡頁與發展遲緩／早療主題頁的底稿：官方原文抄錄，由 research/2026-09-28-age/build_age.py 產生，原樣搬過來
+AGE = os.path.join(HERE, '..', 'research', '2026-09-28-age', 'age.json')
+if os.path.exists(AGE):
+    dump(json.load(open(AGE, encoding='utf-8')), 'age.json')
+
 print(f'\n共用檔 {shared_size // 1024} KB（timeline + materials + 全國統計 '
       f'{len(shared["stats"])} 列）')
 print(f'22 縣市 + 共用 + 索引，合計 {total // 1024} KB')

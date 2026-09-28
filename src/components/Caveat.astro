@@ -8,9 +8,10 @@
 //   list  機構名錄（places、map）
 //   wait  流程與時程（steps、checkups）
 //   money 補助（subsidy）
+//   age   月齡頁（/age/）：題目是手冊原文，不是診斷
 
 interface Props {
-  kind: 'list' | 'wait' | 'money';
+  kind: 'list' | 'wait' | 'money' | 'age';
 }
 const { kind } = Astro.props;
 
@@ -22,6 +23,8 @@ const TEXT = {
       + '每個孩子的發展速度本來就不同，篩檢沒過也不等於診斷。',
   money: '補助的金額與資格以主管機關最新公告為準，這裡不代為試算，'
        + '也不保證申請一定通過。',
+  age: '這裡的題目照國健署兒童健康手冊原文抄錄，是家長在健檢前記錄、給醫師參考用的，'
+     + '網站不做判讀。篩檢沒過不等於診斷，診斷只能由醫療院所做。',
 };
 ---
 

@@ -3,7 +3,9 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Caveat from '../components/Caveat.astro';
 import RecentPlaces from '../components/RecentPlaces.astro';
-import { siteIndex, shared } from '../lib/data.mjs';
+import { siteIndex, shared, ageData } from '../lib/data.mjs';
+import { NATIONAL } from '../lib/national.mjs';
+import { ageUrl } from '../lib/age.mjs';
 
 const idx = siteIndex();
 const s = shared();
@@ -55,6 +57,17 @@ const desc = `全臺 ${totalEnt} 家兒童發展相關機構、${totalCtr} 家�
         <span class="src">教育部特殊教育通報統計</span>
       </p>
     )}
+
+    <section class="section">
+      <h2>依月齡看寶寶發展重點</h2>
+      <p class="lead">國健署兒童健康手冊分 {ageData().bands.length} 個時段列出發展狀況題目，每段附該做的健檢與篩檢。</p>
+      <nav class="pagenav" aria-label="依月齡">
+        {ageData().bands.map((b) => <a href={ageUrl(b.slug)}>{b.short}</a>)}
+      </nav>
+      <nav class="pagenav" aria-label="全國通用">
+        {NATIONAL.map(([href, name]) => <a href={href}>{name} →</a>)}
+      </nav>
+    </section>
 
     <section class="section">
       <h2>選你的縣市</h2>

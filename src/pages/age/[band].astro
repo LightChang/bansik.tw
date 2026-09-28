@@ -1,0 +1,177 @@
+---
+// 單一月齡時段頁：/age/6-9-months/。時段照國健署兒童健康手冊「家長紀錄事項」的分段（10 段）。
+// 題目、警訊題標記、預防保健項目全部是手冊原文（src/data/age.json，research/2026-09-28-age/）；
+// 各項檢查的時程從 shared.json timeline 依月齡重疊算（src/lib/age.mjs），不另寫一份。
+// 站規：不做判讀、不寫「這樣就是發展遲緩」「不用擔心」，何時要評估只引手冊原句。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Caveat from '../../components/Caveat.astro';
+import CountyFinder from '../../components/CountyFinder.astro';
+import { ageData, shared } from '../../lib/data.mjs';
+import { checksFor, visitNo, ageUrl } from '../../lib/age.mjs';
+
+// 標題照家長的搜尋寫法：「6 個月寶寶發展」「7 個月寶寶發展」都要對得到同一頁
+const TITLE = {
+  '0-2-months': '新生兒到 2 個月寶寶發展：發展重點與第 1 次兒童健檢',
+  '2-4-months': '3 個月寶寶發展（2～4 個月）：發展重點、要做哪次檢查',
+  '4-6-months': '4、5 個月寶寶發展：發展重點、要做哪次檢查',
+  '6-9-months': '6、7、8 個月寶寶發展：發展重點、要做哪次檢查',
+  '9-12-months': '9、10、11 個月寶寶發展：發展重點、要做哪次檢查',
+  '12-18-months': '1 歲到 1 歲半寶寶發展（12～18 個月）：發展重點、要做哪次檢查',
+  '18-24-months': '1 歲半到 2 歲寶寶發展（18～24 個月）：發展重點、要做哪次檢查',
+  '2-3-years': '2 歲到 3 歲幼兒發展：發展重點、要做哪次檢查',
+  '3-5-years': '3 歲到 5 歲兒童發展：發展重點、要做哪次檢查',
+  '5-7-years': '5 歲到 7 歲兒童發展：發展重點、要做哪次檢查',
+};
+
+export function getStaticPaths() {
+  const { bands } = ageData();
+  return bands.map((b, i) => ({
+    params: { band: b.slug },
+    props: { i },
+  }));
+}
+
+const { i } = Astro.props;
+const A = ageData();
+const b = A.bands[i];
+const prev = A.bands[i - 1];
+const next = A.bands[i + 1];
+const { prevent, screening, scales, checklists } = checksFor(b, shared().timeline);
+const alerts = b.items.filter((x) => x.alert);
+const KB = A.sources.kidbook;
+const Q = A.quotes;
+
+const title = `${TITLE[b.slug]}｜bansik`;
+const checkText = [
+  ...prevent.map((t) => `${t.title}（${t.age_label}）`),
+  ...screening.map((t) => `${t.title.replace('服務', '')}（${t.age_label}）`),
+].join('、');
+const at = /^\d/.test(b.label) ? ` ${b.label}` : b.label;
+const lead = `國健署《兒童健康手冊》在${at}請家長記錄 ${b.items.length} 題發展狀況`
+  + (alerts.length ? `，其中 ${alerts.length} 題標為警訊題` : '，這個時段沒有標警訊題')
+  + `。這段時間可以做的檢查是${checkText}。`;
+const description = `${lead}附手冊原文題目與各縣市篩檢、評估地點。`;
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '寶寶發展月份對照表', path: '/age/' }, { name: b.short }]}
+  dataDate={A.prepared_at}
+  citations={[
+    { name: KB.name, url: KB.url, dateModified: KB.fetched },
+    { name: A.sources.scales.name, url: A.sources.scales.url },
+    { name: A.sources.checklist.name, url: A.sources.checklist.url },
+  ]}
+>
+  <Nav />
+  <main class="shell">
+    <p class="crumb"><a href="/age/">← 寶寶發展月份對照表</a></p>
+    <h1>{b.short}寶寶發展重點</h1>
+    <p class="lead">{lead}</p>
+
+    <section class="section">
+      <h2>手冊在{at}列的發展狀況題目</h2>
+      <p class="lead">
+        家長在帶孩子做健檢之前，照實勾「是」或「否」，給醫師參考。
+        {alerts.length > 0 && <>標「警訊題」的是手冊用 ※ 標出的題目。</>}
+      </p>
+      <ol class="items">
+        {b.items.map((x) => (
+          <li>{x.alert && <span class="pill key">警訊題</span>}{x.text}</li>
+        ))}
+      </ol>
+      <p class="meta">
+        原文照錄自<a href={KB.url} target="_blank" rel="noopener">{KB.name}</a>
+        第 {b.page} 頁「{b.period} 家長紀錄事項」。{b.items.some((x) => x.text.includes('第 53 頁')) && '題目裡的「第 53 頁」是手冊頁碼。'}
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>{b.short}要做哪次檢查</h2>
+      <p class="lead">{Q.prevent_intro}；兒童發展篩檢另有 6 次，兩套分開算，都印在兒童健康手冊的就醫憑證上。</p>
+      <div class="table-wrap">
+        <table>
+          <caption>{b.label}會碰到的兒童預防保健、兒童發展篩檢與線上檢核表。</caption>
+          <thead><tr><th>檢查</th><th>建議年齡</th><th>內容</th></tr></thead>
+          <tbody>
+            {prevent.map((t) => {
+              const p = A.prevent[String(visitNo(t.title))];
+              return (
+                <tr>
+                  <td>{t.title}</td>
+                  <td>{t.age_label}</td>
+                  <td>
+                    {p ? <>
+                      發展診察：{p.dev}<br />
+                      身體診察：{p.body}<br />
+                      問診項目：{p.ask}
+                      {p.fluoride && <><br />另有牙醫師塗氟，每半年 1 次。</>}
+                      {p.vaccine && <><br />並確認預防接種是否完整。</>}
+                    </> : t.detail}
+                  </td>
+                </tr>
+              );
+            })}
+            {screening.map((t) => (
+              <tr>
+                <td>{t.title}</td>
+                <td>{t.age_label}</td>
+                <td>{t.detail}。{scales.length > 0 && <>醫師用的量表：{scales.map((s) => s.age_label).join('、')}。</>}</td>
+              </tr>
+            ))}
+            {checklists.map((t) => (
+              <tr>
+                <td><a href={t.url} target="_blank" rel="noopener">社家署{t.title}</a></td>
+                <td>{t.age_label}</td>
+                <td>家長上網自己做，{t.detail}。</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {screening.length === 0 && (
+        <p class="meta">兒童發展篩檢從 6 個月開始，第 1 次是 6 至 10 個月。</p>
+      )}
+      <p class="meta">
+        健檢項目依{KB.name}第 6–7 頁「兒童預防保健服務時程及服務項目」。
+        醫師篩檢用的<a href={A.sources.scales.url} target="_blank" rel="noopener">國健署分齡量表</a>著作權屬國健署，
+        這裡不轉載題目。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>什麼時候要進一步評估</h2>
+      {alerts.length > 0
+        ? <p class="quote">「{b.alert_note || Q.alert}」</p>
+        : <p>這個時段手冊沒有標警訊題。有擔心的事，手冊請家長寫在紀錄事項最後一題，健檢時直接問醫師。</p>}
+      <p class="quote">「{Q.screening}」</p>
+      <p class="quote">「{Q.diagnosis}」</p>
+      {b.month_min < 36 && <p class="quote">「{Q.premature}」</p>}
+      <p>
+        兒童發展篩檢的結果分三種：通過、持續追蹤與衛教、需轉介。需轉介時，縣市的通報轉介中心是下一步的窗口，
+        電話在下面表格第二欄，也可以先看<a href="/developmental-delay/">發展遲緩是什麼、怎麼評估</a>。
+      </p>
+      <p class="meta">引文出自{KB.name}的前言、家長紀錄事項與生長紀錄頁。</p>
+    </section>
+
+    <section class="section">
+      <h2>在你的縣市哪裡做篩檢、哪裡評估</h2>
+      <CountyFinder caption={`${b.short}的健檢與發展篩檢可以在各縣市的篩檢院所做；需轉介時找通報轉介中心與評估醫院。`} />
+    </section>
+
+    <nav class="pagenav" aria-label="其他月齡">
+      {prev && <a href={ageUrl(prev.slug)}>← {prev.short}</a>}
+      <a href="/age/">全部月齡對照表</a>
+      {next && <a href={ageUrl(next.slug)}>{next.short} →</a>}
+    </nav>
+
+    <Caveat kind="age" />
+
+    <footer class="site-ft">
+      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、國健署兒童發展篩檢量表清單、社家署線上兒童發展檢核表。</p>
+      <p>這裡是路標不是掛號窗口，不做判讀，也不代為預約。以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>

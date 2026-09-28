@@ -22,6 +22,8 @@ function read(rel) {
 export const counties = () => read('counties.json').counties;
 export const siteIndex = () => read('index.json');
 export const shared = () => read('shared.json');
+/** 月齡頁與發展遲緩／早療主題頁的官方原文底稿（research/2026-09-28-age/build_age.py） */
+export const ageData = () => read('age.json');
 export const county = (code) => canonDistricts(read(`counties/${code}.json`));
 
 /**

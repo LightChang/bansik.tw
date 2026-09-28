@@ -1,0 +1,138 @@
+---
+// 寶寶發展月份對照表：手冊 10 個時段 × 預防保健／發展篩檢，另附社家署線上檢核表 13 個年齡層。
+// 「發展重點」欄用手冊第 6–7 頁預防保健的「發展診察」項目原文（醫師在那一次健檢看的項目）。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Caveat from '../../components/Caveat.astro';
+import CountyFinder from '../../components/CountyFinder.astro';
+import { ageData, shared } from '../../lib/data.mjs';
+import { checksFor, visitNo, ageUrl, bandForMonth, overlaps } from '../../lib/age.mjs';
+import { num } from '../../lib/view.mjs';
+
+const A = ageData();
+const tl = shared().timeline;
+const KB = A.sources.kidbook;
+
+const rows = A.bands.map((b) => {
+  const { prevent, screening } = checksFor(b, tl);
+  const dev = [...new Set(prevent.map((t) => A.prevent[String(visitNo(t.title))]?.dev).filter(Boolean))];
+  return {
+    b,
+    dev,
+    prevent: prevent.map((t) => `第 ${visitNo(t.title)} 次（${t.age_label}）`).join('、'),
+    screening: screening.map((t) => `第 ${visitNo(t.title)} 次（${t.age_label}）`).join('、') || '從 6 個月開始',
+    alerts: b.items.filter((x) => x.alert).length,
+  };
+});
+
+// 社家署線上檢核表 13 個年齡層，各對到哪幾頁
+const levels = tl.filter((t) => t.kind === '線上發展檢核表')
+  .sort((a, b) => num(a.month_min) - num(b.month_min))
+  .map((t) => ({
+    t,
+    bands: A.bands.filter((b) => overlaps(b.month_min, b.month_max, num(t.month_min), num(t.month_max))),
+  }));
+
+// 「N 個月寶寶發展」直接找頁
+const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 18, 21, 24, 30, 36, 48, 60, 72]
+  .map((m) => ({ m, b: bandForMonth(A.bands, m) }))
+  .filter((x) => x.b);
+const mText = (m) => (m < 24 || m % 12 ? `${m} 個月` : `${m / 12} 歲`);
+
+const title = '寶寶發展月份對照表：0 到 7 歲發展重點與健檢、篩檢時程｜bansik';
+const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 ${A.bands.length} 個時段列出發展狀況題目；`
+  + '這張表把每個時段的發展重點、兒童預防保健第幾次、兒童發展篩檢第幾次對在一起。';
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '寶寶發展月份對照表' }]}
+  dataDate={A.prepared_at}
+  citations={[
+    { name: KB.name, url: KB.url, dateModified: KB.fetched },
+    { name: A.sources.checklist.name, url: A.sources.checklist.url },
+  ]}
+>
+  <Nav />
+  <main class="shell">
+    <h1>寶寶發展月份對照表</h1>
+    <p class="lead">
+      國健署兒童健康手冊把出生到未滿 7 歲分成 {A.bands.length} 個時段，每段列出家長要記錄的發展狀況題目；
+      同一本手冊也排好了 9 次兒童預防保健和 6 次兒童發展篩檢。下表把三者對在同一列。
+    </p>
+
+    <section class="section">
+      <h2>依月數找</h2>
+      <nav class="pagenav" aria-label="依月數找">
+        {months.map(({ m, b }) => <a href={ageUrl(b.slug)}>{mText(m)}</a>)}
+      </nav>
+    </section>
+
+    <section class="section">
+      <h2>月齡、發展重點與檢查對照</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>
+            寶寶發展月份對照表。發展重點是該次兒童預防保健「發展診察」的項目，依國健署兒童健康手冊第 6–7 頁；
+            點月齡看手冊原文題目。
+          </caption>
+          <thead>
+            <tr><th>月齡</th><th>發展重點</th><th>兒童預防保健</th><th>兒童發展篩檢</th><th>手冊題目</th></tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td><a href={ageUrl(r.b.slug)}>{r.b.short}</a></td>
+                <td>{r.dev.join(' ')}</td>
+                <td>{r.prevent}</td>
+                <td>{r.screening}</td>
+                <td class="num">{r.b.items.length} 題{r.alerts > 0 && <>，警訊 {r.alerts}</>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">
+        依<a href={KB.url} target="_blank" rel="noopener">{KB.name}</a>整理（{KB.fetched} 取得）。
+        6 至 9 個月與 9 至 12 個月同屬兒童預防保健第 4 次，發展重點欄相同。
+        早產兒未滿 3 歲用矯正年齡，從預產期起算。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>社家署線上兒童發展檢核表：13 個年齡層</h2>
+      <p class="lead">家長可以上社家署網站輸入生日，系統依年齡給對應的一份檢核表。每份題數與警訊題數如下。</p>
+      <div class="table-wrap">
+        <table>
+          <caption>社家署線上兒童發展檢核表的 13 個年齡層與適用日齡範圍，右欄連到本站同月齡的頁面。</caption>
+          <thead><tr><th>年齡層（適用範圍）</th><th>題數</th><th>看手冊題目</th></tr></thead>
+          <tbody>
+            {levels.map(({ t, bands }) => (
+              <tr>
+                <td>{t.age_label}</td>
+                <td>{t.detail}</td>
+                <td>{bands.map((b, k) => <>{k > 0 && '、'}<a href={ageUrl(b.slug)}>{b.short}</a></>)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">
+        來源：<a href={A.sources.checklist.url} target="_blank" rel="noopener">{A.sources.checklist.name}</a>（2026-09-12 取得的題數）。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>在你的縣市做檢查</h2>
+      <CountyFinder caption="各縣市的兒童預防保健與發展篩檢時程、篩檢院所與評估醫院。" />
+    </section>
+
+    <Caveat kind="age" />
+
+    <footer class="site-ft">
+      <p>底稿整理於 {A.prepared_at}。來源：{KB.name}、社家署線上兒童發展檢核表。</p>
+      <p>這裡是路標不是掛號窗口，不做判讀，也不代為預約。以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>

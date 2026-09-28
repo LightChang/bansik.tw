@@ -3,6 +3,7 @@
 // 縣市頁一定要有換縣市的入口，不然使用者只能自己改網址。
 import { counties } from '../lib/data.mjs';
 import { SITE_NAME } from '../lib/jsonld.mjs';
+import { NATIONAL } from '../lib/national.mjs';
 
 interface Props {
   current?: string;
@@ -23,6 +24,10 @@ const list = counties();
         ))}
       </select>
     </label>
+    {/* 全國通用的頁：月齡對照與發展遲緩、早療、補助的說明，不分縣市 */}
+    <nav class="site-links" aria-label="全國通用">
+      {NATIONAL.map(([href, name]) => <a href={href}>{name}</a>)}
+    </nav>
   </div>
 </header>
 
