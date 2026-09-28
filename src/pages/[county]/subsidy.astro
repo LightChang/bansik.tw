@@ -197,7 +197,7 @@ const compare = counties().map(({ code: k, name }) => {
         )}
         <p class="meta">
           申請資格、文件與窗口依「{s.rule_name}」的
-          <a href={s.source_url} target="_blank" rel="noopener">官方公告</a>整理（{s.verified_at} 存檔）。
+          <a href={ap.source_url || s.source_url} target="_blank" rel="noopener">官方公告</a>整理（{s.verified_at} 存檔）。
           表單與最新規定以主管機關公告為準。
         </p>
       </>

@@ -1,0 +1,70 @@
+
+<script src="/Scripts/main_ToSort.js"></script>
+<script>
+    function hit(obj) {
+        var token = $('#filedow input[name="__RequestVerificationToken"]').val();
+        var HitID = obj.id;
+        $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/1486/P_File/FileDowloadHit',
+                data: {
+                    '__RequestVerificationToken': token,
+                    'HitID': HitID,
+                },
+            success: function (data) {
+                    if (data.chk == true) {
+
+                    } else {
+
+                    }
+            }
+        });
+    }
+</script>
+
+<div class="table-responsive noJSarea" id="filedow">
+    <input name="__RequestVerificationToken" type="hidden" value="VVO8CBBGIVCzS3jwdDa8qV3CcPOQwA7DrIoKpTp9uO6VGsGtztxwL3S2bwWNeZAyjh47MHb4vFZfUIvp5_aX8vq0af3ckou2SDxjq1K5eXA1" />
+    <table class="table table-bordered table-striped table_List">
+        <tbody>
+                            <div class="a5-group">
+                                    <a class="a5-title" data-toggle="collapse" href="#collapseExample_1" aria-expanded="false"title="發展遲緩兒童早期療育費用補助計畫">
+                                        發展遲緩兒童早期療育費用補助計畫<div class="pull-right">
+                                            <i class="fa fa-chevron-down" aria-hidden="false"></i>
+                                        </div>
+                                    </a>
+                                    <div id="collapseExample_1" class="a5-content collapse">
+                                            <div>
+                                                申請表 下載
+
+                                                        <a href="/ViewService/FileDownload.ashx?id=99361d1b-3abe-49d2-900c-ef08f2685618&amp;name=8C9921175293488DB916C56EC5F1E9AA&amp;module=File" class="dl-btn word" onclick="hit(this)" id="99361d1b-3abe-49d2-900c-ef08f2685618" title="下載檔案_word 早期療育費用補助申請表"><img src="/img/icon/word.png" alt="word圖片" style="height:30px;vertical-align: text-bottom;" /></a>
+                                                        <a href="/ViewService/FileDownload.ashx?id=6d3b199c-290e-4936-9b47-543a456f0bf4&amp;name=D5422B551CFC48E9BC6C00F2A505F899&amp;module=File" class="dl-btn-odf" onclick="hit(this)" id="6d3b199c-290e-4936-9b47-543a456f0bf4" title="下載檔案_odf 早期療育費用補助申請表"><img src="/img/icon/odf.png" alt="odf 圖片" style="height:30px;" /></a>
+                                                        <a href="/ViewService/FileDownload.ashx?id=673fc7ff-8fc9-4348-ab65-ae3364be21d6&amp;name=7AD20352FB044E5DA1E0CD0322776AA5&amp;module=File" class="dl-btn pdf" onclick="hit(this)" id="673fc7ff-8fc9-4348-ab65-ae3364be21d6" title="下載檔案_pdf 早期療育費用補助申請表"><img src="/img/icon/pdf.png" alt="pdf圖片" style="height:30px;vertical-align: text-bottom;" /></a>
+                                                }
+
+                                            </div>
+                                            <div>
+                                                補助紀錄表 下載
+
+                                                        <a href="/ViewService/FileDownload.ashx?id=f93b5740-64a2-4ec4-be1f-5fc0bd6da45e&amp;name=2EFA223EFEC24C0C84C9EB7841D39460&amp;module=File" class="dl-btn pdf" onclick="hit(this)" id="f93b5740-64a2-4ec4-be1f-5fc0bd6da45e" title="下載檔案_pdf 費用補助紀錄表"><img src="/img/icon/pdf.png" alt="pdf圖片" style="height:30px;vertical-align: text-bottom;" /></a>
+                                                }
+
+                                            </div>
+                                            <div>
+                                                補助計畫 下載
+
+                                                        <a href="/ViewService/FileDownload.ashx?id=6024e33b-58c5-4474-b19e-1c8733fcb6a7&amp;name=DB789C4A48BA4A29B809417B04FCA6E6&amp;module=File" class="dl-btn word" onclick="hit(this)" id="6024e33b-58c5-4474-b19e-1c8733fcb6a7" title="下載檔案_word 115年南投縣政府社會及勞動局辦理發展遲緩兒童早期療育費用補助計畫(115.09.01起)"><img src="/img/icon/word.png" alt="word圖片" style="height:30px;vertical-align: text-bottom;" /></a>
+                                                        <a href="/ViewService/FileDownload.ashx?id=bb59e6cb-275d-4249-8e9e-163d9c3bed86&amp;name=330EBC94A8A34AC6AFDE800FC7C59C05&amp;module=File" class="dl-btn-odf" onclick="hit(this)" id="bb59e6cb-275d-4249-8e9e-163d9c3bed86" title="下載檔案_odf 115年南投縣政府社會及勞動局辦理發展遲緩兒童早期療育費用補助計畫(115.09.01起)"><img src="/img/icon/odf.png" alt="odf 圖片" style="height:30px;" /></a>
+                                                        <a href="/ViewService/FileDownload.ashx?id=cd941a00-28df-47c0-9f36-06f0880fdacb&amp;name=0C043C0DC0FA466BB17A420EB6F788AA&amp;module=File" class="dl-btn pdf" onclick="hit(this)" id="cd941a00-28df-47c0-9f36-06f0880fdacb" title="下載檔案_pdf 115年南投縣政府社會及勞動局辦理發展遲緩兒童早期療育費用補助計畫(115.09.01起)"><img src="/img/icon/pdf.png" alt="pdf圖片" style="height:30px;vertical-align: text-bottom;" /></a>
+                                                }
+
+                                            </div>
+                                    </div>
+                            </div>
+
+        </tbody>
+    </table>
+</div>
+<!-- 分頁 -->
+
+<!-- 分頁 -->
