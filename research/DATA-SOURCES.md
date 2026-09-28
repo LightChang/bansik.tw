@@ -55,7 +55,7 @@
 
 | # | 來源 | 內容與筆數 | 取得方式 | 官方頻率 | 實際觀察 | 留歷史 |
 |---|---|---|---|---|---|---|
-| D1 | 社家署 線上兒童發展檢核表 | **13 個年齡層**（4 個月～6 歲），每層 11–13 題發展題＋5 題危險因子，★為警訊題 | **POST** `/cecm/screenView/form`，帶 `birthDt=yyyy/mm/dd`（GET 會 302 回首頁）；年齡層由生日推得，表單裡 `model` 隱藏欄是年齡代碼（4、6、9、10、15…60） | 未宣告 | 2026-09-12 抓 13 層；2026-09-29 臺灣主機 tw8 代抓 12 層（缺 1 歲 3 個月），題數與 09-12 相同。題目原文已上 `/age/`（`research/2026-09-28-age/sfaa.json`）；頁尾「©2015衛生福利部社會及家庭署 版權所有」，題目示意圖 188 張只存檔不轉載 | 否 |
+| D1 | 社家署 線上兒童發展檢核表 | **13 個年齡層**（4 個月～6 歲），每層 11–13 題發展題＋5 題危險因子，★為警訊題 | **POST** `/cecm/screenView/form`，帶 `birthDt=yyyy/mm/dd`（GET 會 302 回首頁）；年齡層由生日推得，表單裡 `model` 隱藏欄是年齡代碼（4、6、9、10、15…60） | 未宣告 | 2026-09-12 抓 13 層；2026-09-29 臺灣主機 tw8 代抓 13 層（1 歲 3 個月那層是同日補抓），題數與 09-12 相同（09-12 把 1 歲 3 個月記成 11 題，是計數程式濾掉短題「2. 可以放手自己走」，實為 12 題，已更正）。題目原文已上 `/age/`（`research/2026-09-28-age/sfaa.json`）；頁尾「©2015衛生福利部社會及家庭署 版權所有」，題目示意圖 200 張只存檔不轉載 | 否 |
 | D2 | 國健署 兒童發展篩檢量表 | 10 份 PDF（9 次檢核總表＋6-9 個月～5-7 歲分齡量表）；另有圖卡及工具規格 | 直連 PDF | 不定期 | 每頁標「使用須經授權」；站主 2026-09-28 回報已取得國健署授權，`/age/` 引用 9 份分齡量表的題目原文（原檔存 `research/archive/hpa_scales/2026-09-28/`） | 否 |
 | D3 | 國健署 兒童健康手冊 | 103 頁；**9 個時段的「家長紀錄事項」**＋**兒童發展篩檢服務 6 次**就醫憑證＋兒童預防保健 9 次；中／英／越／印／柬／泰 6 語 | 直連 PDF（25MB） | 改版制 | 中文版 115 年 6 月；外語版 109 年 9 月。站主 2026-09-28 回報國健署確認本站可引用家長紀錄事項的發展題目 | 否（舊版會被換掉） |
 | D4 | 社家署 宣導資料 | **27 筆**：早療宣導單張 5 語各 2 版、短片（國／臺／客語）、寶貝發展篩檢指南光碟 6 個年齡 | HTML 清單＋逐筆 detail；單張是 `.jpg`，影片是 **YouTube 內嵌無檔案** | 未宣告 | 最新 113-12-11 | 是（舊項目保留） |
@@ -82,7 +82,7 @@
 | shorturl.at 短網址（臺中衛生局頁的 5 個連結） | HTTP 403，header 帶 `cf-mitigated: challenge`，是 Cloudflare 反機器人挑戰；換 UA、加 Accept 標頭都一樣 | 不繞。那 5 家（童綜合、衛福部臺中醫院、豐原醫院、國軍臺中總醫院、大里仁愛）的網址留空，要補就人工開啟填進 `scripts/urls.json` |
 | 桃園市衛生局 聯評中心聯絡資訊頁 | HiNetCDN 一律回 **HTTP 428**（Precondition Required），帶 User-Agent 也一樣。這是防爬機制，不繞 | 已從 `sources.json` 移除。桃園的名錄仍可從社家署與國健署取得，只是拿不到這頁的彙整 |
 
-澎湖原本列在上表，2026-09-29 由臺灣主機 tw8 代抓取得：`event.penghu.gov.tw/uploaddowndoc?file=down/202605191143110.pdf` 還要帶 **`&filedisplay=<顯示檔名>&flag=doc`**（站內自己的連結都是這個形式）；少參數時回 97 bytes 的 `alert("您的瀏覽器未送出Cookie")`，那句訊息是誤導，原因是參數不全。宜蘭社會處頁（`sntroot.e-land.gov.tw/cp.aspx?n=10389`）的附件 `www-ws.e-land.gov.tw/Download.ashx?u=<base64 路徑>` 也要帶 **`&n=<base64 檔名>`**，少了回 404。存檔在 `research/archive/tw8-2026-09-28/`（MANIFEST.md 有每個檔的來源與 sha256）。
+澎湖原本列在上表，2026-09-29 由臺灣主機 tw8 代抓取得：`event.penghu.gov.tw/uploaddowndoc?file=down/202605191143110.pdf` 還要帶 **`&filedisplay=<顯示檔名>&flag=doc`**（站內自己的連結都是這個形式）；少參數時回 97 bytes 的 `alert("您的瀏覽器未送出Cookie")`，那句訊息是誤導，原因是參數不全。實際下載用的完整網址 `https://www.penghu.gov.tw/uploaddowndoc?file=down/202605191143110.pdf&filedisplay=202605191143110.pdf&flag=doc` 已記進 `scripts/subsidies.json` 的 `file_url`：**`filedisplay` 的值是 tw8 代抓時自己填的檔名，不是從縣府頁面的連結複製來的**（沒找到掛這個檔的公告頁，handler 看來只檢查有沒有給值）；`file=` 是原值、`flag=doc` 取自站內連結形式，回傳 134,052 bytes 與存檔 sha256 相同。出處 `source_url` 仍是縣府計畫公告頁。宜蘭社會處頁（`sntroot.e-land.gov.tw/cp.aspx?n=10389`）的附件 `www-ws.e-land.gov.tw/Download.ashx?u=<base64 路徑>` 也要帶 **`&n=<base64 檔名>`**，少了回 404。存檔在 `research/archive/tw8-2026-09-28/`（MANIFEST.md 有每個檔的來源與 sha256）。
 
 苗栗、連江原本列在上表，2026-09-28 已取得：苗栗的計畫在社會處申辦須知那列的彈出視窗 `RelData.aspx?sms=9468&ParentSN=975712`（`href="#"` 是 fancybox，附件在這個端點）；連江的 113 年計畫是縣府「兒童及少年福利」公告列表第 5 頁的 `.odt` 附件（`matsu.gov.tw/upload/f-20240619140543.odt`），不在法規系統。原檔存 `research/archive/subsidy_rules/2026-09-28/`。
 

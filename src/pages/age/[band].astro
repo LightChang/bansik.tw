@@ -13,7 +13,6 @@ import Caveat from '../../components/Caveat.astro';
 import CountyFinder from '../../components/CountyFinder.astro';
 import { ageData, shared } from '../../lib/data.mjs';
 import { checksFor, visitNo, ageUrl, scalesFor, scaleCount, sfaaFor } from '../../lib/age.mjs';
-import { num } from '../../lib/view.mjs';
 
 // 標題照家長的搜尋寫法：「6 個月寶寶發展」「7 個月寶寶發展」都要對得到同一頁
 const TITLE = {
@@ -50,11 +49,6 @@ const SC = A.sources.scales;
 const myScales = scalesFor(b, A.scales);
 const CK = A.sources.checklist;
 const mySfaa = sfaaFor(b, A.sfaa);
-// 社家署有、但這次沒抓到題目的年齡層（1 歲 3 個月）：適用範圍的中點落在這頁就照實說
-const sfaaMissing = checklists.filter((t) => {
-  const mid = (num(t.month_min) + num(t.month_max)) / 2;
-  return CK.missing.includes(t.age_label) && mid >= b.month_min && mid < b.month_max;
-});
 
 const title = `${TITLE[b.slug]}｜bansik`;
 const checkText = [
@@ -220,12 +214,6 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
           題目提到的「圖1」「圖2」等示意圖在社家署網頁上，本站不轉載，要看圖請到社家署網站輸入生日。
           網頁頁尾標「{CK.rights}」。
         </p>
-        {sfaaMissing.length > 0 && (
-          <p class="meta">
-            社家署另有「{sfaaMissing.map((t) => t.age_label).join('、')}」一層（{sfaaMissing.map((t) => t.detail).join('、')}），
-            這次沒有取得題目原文，請直接到社家署網站填。
-          </p>
-        )}
         <p class="meta">
           這是給家長自己勾的檢核表，是篩檢工具，不是診斷標準；勾到「否」不等於發展遲緩，結果怎麼看請問醫師或縣市通報轉介中心。
         </p>

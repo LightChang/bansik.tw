@@ -2,7 +2,7 @@
 
     python3 research/2026-09-28-age/verify_sfaa.py
 
-1. 12 份表單 HTML 的 sha256 與 research/archive/tw8-2026-09-28/MANIFEST.md 記的相同。
+1. 13 份表單 HTML 的 sha256 與 research/archive/tw8-2026-09-28/MANIFEST.md 記的相同。
 2. 每題 text（去掉「＿」與空白）是該份 HTML 可見文字（去標籤、去空白）的連續子字串；note 亦同。
 3. 每份的題數、★ 題數與 2026-09-12 另一次抓取（src/data/shared.json 的 materials）記下的題數、警訊題數相同。
 """

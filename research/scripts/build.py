@@ -795,7 +795,9 @@ def build_timeline():
         items = [strip_tags(m) for m in re.findall(r'<label[^>]*>(.*?)</label>', s, re.S)]
         dev = [i for i in items
                if re.match(r'^[★☆]?\s*\d+[\.、]\s*\S', i)
-               and not re.match(r'^\d+\.(先天|產前|腦部|家族)', i) and len(i) > 12]
+               and not re.match(r'^\d+\.(先天|產前|腦部|家族)', i)
+               # 原本用 len(i) > 12 濾短字串，會把「2. 可以放手自己走」（1歲3個月）濾掉，少算一題
+               and len(re.sub(r'^[★☆]?\s*\d+[\.、]\s*', '', i)) >= 5]
         add('線上發展檢核表', 1, label, lo, hi, f'{short}兒童發展檢核表',
             f'{len(dev)} 題，其中 {sum(1 for i in dev if i.startswith("★"))} 題為警訊題',
             '社家署線上檢核', 'https://system.sfaa.gov.tw/cecm/')
@@ -819,7 +821,9 @@ def build_materials():
         items = [strip_tags(m) for m in re.findall(r'<label[^>]*>(.*?)</label>', s, re.S)]
         dev = [i for i in items
                if re.match(r'^[★☆]?\s*\d+[\.、]\s*\S', i)
-               and not re.match(r'^\d+\.(先天|產前|腦部|家族)', i) and len(i) > 12]
+               and not re.match(r'^\d+\.(先天|產前|腦部|家族)', i)
+               # 原本用 len(i) > 12 濾短字串，會把「2. 可以放手自己走」（1歲3個月）濾掉，少算一題
+               and len(re.sub(r'^[★☆]?\s*\d+[\.、]\s*', '', i)) >= 5]
         if b:
             bands[b.group(1)] = {'items': len(dev), 'alerts': sum(1 for i in dev if i.startswith('★')),
                                  'sample': dev[0][:60] if dev else ''}

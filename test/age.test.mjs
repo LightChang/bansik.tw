@@ -102,16 +102,21 @@ test('量表出處：清單頁網址、更新日期、下載日期、授權聲�
   assert.equal(S.rights, '本量表之著作財產權屬於衛生福利部國民健康署，使用須經授權');
 });
 
-test('社家署線上檢核表題目：12 層 148 題、★ 62 題，題數與 2026-09-12 的紀錄相同，缺的只有 1 歲 3 個月', () => {
+test('社家署線上檢核表題目：13 層 160 題、★ 67 題，題數與 2026-09-12 的紀錄相同，每層都有題目', () => {
   const S = A.sfaa;
   const prev = shared().materials['社家署線上兒童發展檢核表'];
-  assert.equal(S.length, 12);
-  assert.equal(S.reduce((n, s) => n + s.items.length, 0), 148);
-  assert.equal(S.flatMap((s) => s.items).filter((x) => x.mark === '★').length, 62);
+  assert.equal(S.length, 13);
+  assert.equal(S.reduce((n, s) => n + s.items.length, 0), 160);
+  assert.equal(S.flatMap((s) => s.items).filter((x) => x.mark === '★').length, 67);
   const levels = tl.filter((t) => t.kind === '線上發展檢核表').map((t) => t.age_label);
-  assert.equal(levels.length, 13, '社家署線上檢核表是 13 層（tw8 只抓到 12 層）');
-  assert.deepEqual(levels.filter((l) => !S.some((s) => s.label === l)), A.sources.checklist.missing);
-  assert.deepEqual(A.sources.checklist.missing, ['1歲3個月(1歲2個月16天~1歲5個月15天)']);
+  assert.equal(levels.length, 13, '社家署線上檢核表是 13 層');
+  assert.deepEqual(levels.filter((l) => !S.some((s) => s.label === l)), [], '每層都有題目原文');
+  assert.equal(A.sources.checklist.missing, undefined, '不再有未取得的年齡層');
+  const s15 = S.find((s) => s.key === '15m');
+  assert.equal(s15.label, '1歲3個月(1歲2個月16天~1歲5個月15天)');
+  assert.equal(s15.items.length, 12);
+  assert.equal(s15.items[0].text, '能不須扶束西自己站起來');
+  assert.equal(s15.items[1].text, '可以放手自己走', '09-12 計數漏掉的第 2 題');
   for (const s of S) {
     assert.ok(levels.includes(s.label), s.label);
     assert.equal(prev[s.label].items, s.items.length, s.label);
@@ -134,7 +139,7 @@ test('社家署檢核表題目每層只放一頁：依名目月齡落在哪個�
   assert.deepEqual(keys('4-6-months'), ['4m']);
   assert.deepEqual(keys('6-9-months'), ['6m']);
   assert.deepEqual(keys('9-12-months'), ['9m']);
-  assert.deepEqual(keys('12-18-months'), ['12m']);
+  assert.deepEqual(keys('12-18-months'), ['12m', '15m']);
   assert.deepEqual(keys('18-24-months'), ['18m']);
   assert.deepEqual(keys('2-3-years'), ['24m', '30m']);
   assert.deepEqual(keys('3-5-years'), ['36m', '42m', '48m']);

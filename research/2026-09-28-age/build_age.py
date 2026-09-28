@@ -216,7 +216,6 @@ out = {
             'archived': 'research/archive/tw8-2026-09-28/sfaa/',
             'rights': '©2015衛生福利部社會及家庭署 版權所有',
             'levels': 13,
-            'missing': ['1歲3個月(1歲2個月16天~1歲5個月15天)'],
         },
         'law_rules': {
             'name': '兒童及少年福利與權益保障法施行細則',
@@ -252,7 +251,7 @@ out = {
         for sc in json.load(open(os.path.join(HERE, 'scales.json'), encoding='utf-8'))
     ],
     'prevent': {str(k): v for k, v in prevent.items()},
-    # 社家署線上檢核表題目（extract_sfaa.py 抽、verify_sfaa.py 比對；12 層，缺 1 歲 3 個月那層）
+    # 社家署線上檢核表題目（extract_sfaa.py 抽、verify_sfaa.py 比對；13 層）
     'sfaa': [{k: v for k, v in b.items() if k not in ('sha256', 'file')}
              for b in json.load(open(os.path.join(HERE, 'sfaa.json'), encoding='utf-8'))],
 }

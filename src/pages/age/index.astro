@@ -28,7 +28,7 @@ const rows = A.bands.map((b) => {
   };
 });
 
-// 社家署線上檢核表 13 個年齡層，各對到哪幾頁；題目原文放在哪一頁（12 層有，1 歲 3 個月那層沒取得）
+// 社家署線上檢核表 13 個年齡層，各對到哪幾頁；題目原文放在哪一頁
 const levels = tl.filter((t) => t.kind === '線上發展檢核表')
   .sort((a, b) => num(a.month_min) - num(b.month_min))
   .map((t) => {
@@ -134,7 +134,7 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
               <tr>
                 <td>{t.age_label}</td>
                 <td>{t.detail}</td>
-                <td>{home ? <a href={`${ageUrl(home.slug)}#sfaa`}>{home.short}</a> : '未取得'}</td>
+                <td><a href={`${ageUrl(home.slug)}#sfaa`}>{home.short}</a></td>
                 <td>{bands.map((b, k) => <>{k > 0 && '、'}<a href={ageUrl(b.slug)}>{b.short}</a></>)}</td>
               </tr>
             ))}
@@ -142,9 +142,9 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
         </table>
       </div>
       <p class="meta">
-        來源：<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>。題數與警訊題數是 2026-09-12 取得的；
-        題目原文是 {CK.fetched} 由臺灣境內主機重新取得，{A.sfaa.length} 層的題數與 09-12 相同，
-        {CK.missing.join('、')}那一層這次沒有取得。檢核表是篩檢工具，不是診斷標準。
+        來源：<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>。題數與警訊題數是 2026-09-12 取得的，
+        題目原文是 {CK.fetched} 由臺灣境內主機重新取得，{A.sfaa.length} 層的題數都與 09-12 相同
+        （1 歲 3 個月那層 09-12 記成 11 題，是當時計數漏了第 2 題，已更正為 12 題）。檢核表是篩檢工具，不是診斷標準。
       </p>
     </section>
 

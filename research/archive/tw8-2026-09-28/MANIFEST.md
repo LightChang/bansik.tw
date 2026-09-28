@@ -6,18 +6,21 @@ UA `tw8-research/0.1 (+https://yao.care; archival fetch on behalf of bansik.tw, 
 
 ## 🔴 工單三個網址都要修正（都是少參數，不是失效）
 
-| 工單寫的 | 實際要的 |
-|---|---|
-| `system.sfaa.gov.tw/cecm/screenView/form`（GET）| **POST**，欄位 `birthDt=yyyy/mm/dd`；GET 會 302 轉回首頁 |
-| `event.penghu.gov.tw/uploaddowndoc?file=down/…pdf` | 要加 **`&filedisplay=<檔名>&flag=doc`**；少參數時回 97 bytes 的 `alert("您的瀏覽器未送出Cookie")`——**那句訊息是誤導，真正原因是參數不全，不是 cookie** |
-| `www-ws.e-land.gov.tw/Download.ashx?u=…` | 要加 **`&n=<base64 檔名>`**；少了它回 HTTP 404 / 0 bytes |
+| 工單寫的 | 實際要的 | 少了的症狀 |
+|---|---|---|
+| `system.sfaa.gov.tw/cecm/screenView/form`（GET）| **POST**，欄位 `birthDt=yyyy/mm/dd` | 302 轉回首頁 |
+| `event.penghu.gov.tw/uploaddowndoc?file=…` | 加 **`&filedisplay=<檔名>&flag=doc`** | 97 bytes 的 `alert("您的瀏覽器未送出Cookie")`——**訊息是誤導，真因是參數不全** |
+| `www-ws.e-land.gov.tw/Download.ashx?u=…` | 加 **`&n=<base64 檔名>`** | HTTP 404 / 0 bytes |
 
-## 1. 社家署 兒童發展檢核表 — 12 個年齡層（不是 13）
+## 1. 社家署 兒童發展檢核表 — **13 個年齡層**
 
-入口 <https://system.sfaa.gov.tw/cecm/>。年齡層由 `birthDt` 推得，沒有 API、沒有切換參數。
+⚠️ **更正**：本檔 2026-09-29 首版寫「只有 12 層」，**那是錯的**。
+當時用里程碑年齡取樣（4/6/9/12/18/24…個月）再測上下界——**上下界只證明了兩端，證明不了取樣點之間沒有東西**，
+而 `1歲3個月` 正好夾在 1歲 與 1歲半 之間被跳過。感謝 bansik.tw 指出。
 
-**「12 不是 13」是驗過的**：出生 20/50/80 天大三個日期全部落回 4個月那層（下方到頂）；
-84 個月大與 72 個月大回傳 **bytes 完全相同**的同一份（上方到頂）。
+**改用可證明的方法**：各層區間首尾相接（`x月15天` → `x月16天`），所以查連續性就能找出所有缺口。
+13 層排序後**缺口 0 個**，從 `3個月16天` 連續到 `6歲11個月15天`。
+獨立佐證：題目圖片檔名前綴 `cf100_{4,6,9,10,13,15,20,25,30,35,40,50,60}` **恰好 13 組**。
 
 | 檔案 | 年齡層 | bytes | sha256 |
 |---|---|---|---|
@@ -25,6 +28,7 @@ UA `tw8-research/0.1 (+https://yao.care; archival fetch on behalf of bansik.tw, 
 | `sfaa/band-6m.html` | 6個月(5個月16天~8個月15天) | 95,030 | `241f5cdd15d46f1e…` |
 | `sfaa/band-9m.html` | 9個月(8個月16天~11個月15天) | 94,671 | `ab565967c98787be…` |
 | `sfaa/band-12m.html` | 1歲(11個月16天~1歲2個月15天) | 94,015 | `26d82b09c5b5424f…` |
+| `sfaa/band-15m.html` | 1歲3個月(1歲2個月16天~1歲5個月15天) | 94,958 | `4deaed1e10b6e2a5…` |
 | `sfaa/band-18m.html` | 1歲半(1歲5個月16天~1歲11個月15天) | 96,682 | `10dbdd76eec98150…` |
 | `sfaa/band-24m.html` | 2歲(1歲11個月16天~2歲5個月15天) | 95,226 | `aefcc9109cf5ebf6…` |
 | `sfaa/band-30m.html` | 2歲半(2歲5個月16天~2歲11個月15天) | 95,915 | `6b018d80787cef43…` |
@@ -36,24 +40,34 @@ UA `tw8-research/0.1 (+https://yao.care; archival fetch on behalf of bansik.tw, 
 
 | `sfaa/cecm-index.html` | 28,577 | `f28d16365dd7d2e9…` | ← 入口頁
 
-**題目圖片 188 張**在 `sfaa/images/`（零失敗），來源 `/cecm/assets/images/screenView/`，清單見 `sfaa/images/list.txt`。
+**題目圖片 200 張**在 `sfaa/images/`（零失敗），來源 `/cecm/assets/images/screenView/`，清單見 `sfaa/images/list.txt`。
+其中 `cf100_13_*` 共 12 張是 `1歲3個月` 那層專屬，首版漏抓、本版補齊。
 
 ## 2. 澎湖縣 — PDF 取得；法規頁未取得
 
-**怎麼找到的**：www.penghu.gov.tw → 社會處 → 該站自己的 `uploaddowndoc` 連結一律帶 `&filedisplay=…&flag=…`，
-照同一形式補上參數即取得。**沒有猜路徑**，`file=down/202605191143110.pdf` 用的是工單原值。
+**實際下載用的完整網址**：
+
+```
+https://www.penghu.gov.tw/uploaddowndoc?file=down/202605191143110.pdf&filedisplay=202605191143110.pdf&flag=doc
+```
+
+⚠️ **`filedisplay` 的值是我自己填的**（直接用檔名 `202605191143110.pdf`），不是從頁面連結複製來的——
+我沒有找到掛這個檔的公告頁。該 handler 似乎只檢查 `filedisplay` 有沒有給值、不檢查內容。
+`file=down/202605191143110.pdf` 是工單原值，**沒有猜任何路徑**。
+`flag=doc` 取自該站自己的連結形式（站上圖片用 `flag=pic`）。
+同一組參數改打 `event.penghu.gov.tw` 主機**也回相同的 134,052 bytes**，兩個主機皆可。
+
+**怎麼發現的**：www.penghu.gov.tw → 社會處，該頁自己的 `uploaddowndoc` 連結一律帶 `&filedisplay=…&flag=…`。
 
 | 檔案 | bytes | sha256 |
 |---|---|---|
 | `penghu/202605191143110.pdf` | 134,052 | `5278b8cabe618dd1…` |
 
-PDF 1.7、4 頁，內嵌 `CreationDate D:20260519111747+08'00'`，與檔名 `202605191143110` 相符。
+PDF 1.7、4 頁，內嵌 `CreationDate D:20260519111747+08'00'`，與檔名 `202605191143110`（2026/05/19 11:43）相符。
 
 **`law.penghu.gov.tw/NewsContent.aspx?id=232` 未取得**：HTTP 404，錯誤頁寫「要求的 URL: **/NewsContent.aspx**」
-——路徑本身不存在（站台根目錄回 302，站是活的）。站內導覽（社會處／兒少福利 id=42／身障福利 id=24／身障經濟補助 id=225）
-全部 0 次「早期療育」字樣，站內搜尋是 Google CSE 不走。依指示「站內找不到就算了」。
-
-導覽過程的頁面一併存檔供查核：`penghu/www-index.html`、`society.html`、`child.html`、`sec-24.html`、`sec-225.html`、`law-NewsContent-232.html`。
+——路徑本身不存在。站內導覽（社會處／兒少福利 id=42／身障福利 id=24／身障經濟補助 id=225）四頁「早期療育」字樣皆 0 次；
+站內搜尋是 Google CSE，不走。導覽頁面存於 `penghu/` 供查核。
 
 ## 3. 宜蘭縣 — 取得
 
@@ -63,12 +77,13 @@ PDF 1.7、4 頁，內嵌 `CreationDate D:20260519111747+08'00'`，與檔名 `202
 | `yilan/115年度宜蘭縣早期療育訓練單位一覽表-11508.pdf` | 62,182 | `0b22a8c8cc87638a…` |
 | `yilan/source-cp-10389.html` | 130,523 | `c4b737c76209ca7b…` |
 
-兩份都是 PDF 1.6、4 頁。第二份是同頁順帶取得。來源頁 <https://sntroot.e-land.gov.tw/cp.aspx?n=10389>（共 31 個下載連結）。
+兩份皆 PDF 1.6、4 頁。第二份同頁順帶取得。來源頁 <https://sntroot.e-land.gov.tw/cp.aspx?n=10389>（共 31 個下載連結）。
 
 ## 全部檔案 sha256
 
 ```
 26d82b09c5b5424fc2cd7f9dadb325a9f6a3c825678e3e5f0f19b8cd5524e085      94015  sfaa/band-12m.html
+4deaed1e10b6e2a5d284a858efb3c348dd77ca871505a4dcf3650836e3c57bdb      94958  sfaa/band-15m.html
 10dbdd76eec98150dd0c6a5a36581673502e288dca9d4acc85f16ce3ecbc9cac      96682  sfaa/band-18m.html
 aefcc9109cf5ebf6b549076a15e548ac47e0cd2c4b43dbc5d3cf5f5ec8fd06bb      95226  sfaa/band-24m.html
 6b018d80787cef43f4e647f68c537ba3c372eb4be166dcef112356814986c463      95915  sfaa/band-30m.html
@@ -94,6 +109,18 @@ d8f9062e24d6a3b024364a2e1a13584b8f3b57d9c43159fbbe2dda829b60be67      37626  sfa
 2e7235b019131d2d7082d65b267740d182daceffc0afcd6532e6277ff3aea861      46651  sfaa/images/cf100_10_7_1.png
 7974782088e395286d936dc51d51c18ab06f114e79ce0582ea94afd80f404598      27238  sfaa/images/cf100_10_8_1.png
 b47ffe990fbbad3c3409e5ff33e2ec31783b5dce49be474058ef1930720b5334      34498  sfaa/images/cf100_10_9_1.png
+f1d66caa793142e6b0cc5e1931dda14cb64d99d4c22a52ee7bba2d79f1f3054b      31770  sfaa/images/cf100_13_10_1.png
+c828c183b00b762f74e9953eb20dc578037781b99cd1eae6d24c96f157139e7c      35843  sfaa/images/cf100_13_11_1.png
+a1bfb0595fa8062a5483f8d988490fdc49333c1618941e395cdec4dd737063e6      21936  sfaa/images/cf100_13_12_1.png
+9e188a98917217696456feedd1ff3f2947978887c7a7706ff7ef1180a304ff2e      33509  sfaa/images/cf100_13_1_1.png
+18cfa2099588f166a52239d0d9dc3aa51c5c6f55452f6dd4d5c21016dda93614      23791  sfaa/images/cf100_13_2_1.png
+19b440049ddb35f34251a64cd147491308647998ff03fd39c042f515dfc49b18      30926  sfaa/images/cf100_13_3_1.png
+42fd033dafb77e7dd839aa322f0cfd0ea7f4ec02474e6970d44efaf547f573ed      34931  sfaa/images/cf100_13_4_1.png
+b05215433632ad71f067357b815ee590cf3e8cb6a6841a66601b30764aff3357      25553  sfaa/images/cf100_13_5_1.png
+fc443f64b190385882e7570263bdd93a0abe6edbc79739b970b74f002b0440c4      42516  sfaa/images/cf100_13_6_1.png
+ee181cffb1bdcd4fa51df8b9cd6f8806c52b9ffdad614b98d5c2c201d58cb868      31240  sfaa/images/cf100_13_7_1.png
+57cc55e5774819a1d28002e90d66df32fdff73544f81e1c91353605eaad1d60b      26672  sfaa/images/cf100_13_8_1.png
+a0c38af245ee924fdd1d7e6fbe8050706234bd8fdf2dcf5ff1e39162658d607c      32040  sfaa/images/cf100_13_9_1.png
 1e9adff7f43a8e8a685ca241e0df0abd9cd605f93e22d8421dea108a371d055d      38948  sfaa/images/cf100_15_10_1.png
 0090c5947aef99b852fb818e16f9566a0861d9bcf8ed521c7bd2df2e72c32252      47372  sfaa/images/cf100_15_11_1.png
 6bdf431a3a64309e8821b36939cfdebefef5e67c33d792667b923e014e98f18d      21790  sfaa/images/cf100_15_12_1.png
@@ -271,7 +298,7 @@ c4def75cae8cab59f659d540654481c5cc18836df6ab66c3d9e046be741b031e      25230  sfa
 b67c8afda4bb6a37633f3d9d3d3c4503d1e0872d61153ce3c5bf4182f2bda492      28552  sfaa/images/cf100_9_7_1.png
 5aca5c470201e2d0850b5572ef753973a0cb64d9badb641838c7ec5e4afe4ac7      32408  sfaa/images/cf100_9_8_1.png
 cb3e6f745ae162ef9fd2e5e54952bcf8719aada586421b0f24151c322aa5cd53      47281  sfaa/images/cf100_9_9_1.png
-268a732d9af6eb8569dacc6306cbcb324348edb9bdd9db9a28250b1fd730d63b       9048  sfaa/images/list.txt
+6dc01c827fd38c4c7bb3346689ab25f3937867f3b691daf163e7c2a26526aa03       9627  sfaa/images/list.txt
 5278b8cabe618dd1f2713fa7cc897726bda49fab9b25e41ee440a06cb95c941e     134052  penghu/202605191143110.pdf
 7dfe6ace3a249d75226d3ddc92b528594a22cf3485563abab40016d1b58eba67      78622  penghu/child.html
 577df90835ed5fa0989c0d8014621d6530df737277c0fa792c2eb7a5cbec037c       1866  penghu/law-NewsContent-232.html

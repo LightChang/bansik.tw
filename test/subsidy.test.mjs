@@ -27,6 +27,8 @@ test('澎湖：115-05-19 修訂計畫，療育費上限 6,000／8,000、交通�
   assert.match(s.transport, /^與療育費分開計算/);
   assert.equal(s.apply_window, '自就診日起三個月內');
   assert.equal(s.archived, 'research/archive/tw8-2026-09-28/penghu/202605191143110.pdf');
+  assert.equal(s.file_url, 'https://www.penghu.gov.tw/uploaddowndoc?file=down/202605191143110.pdf&filedisplay=202605191143110.pdf&flag=doc');
+  assert.match(s.source_url, /^https:\/\/event\.penghu\.gov\.tw\/cydc\/home\.jsp/);
 });
 
 test('宜蘭：115 年計畫，出處是社會處頁，金額 4,000／6,000，交通費照原文級距', () => {
