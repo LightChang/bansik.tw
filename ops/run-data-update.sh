@@ -73,21 +73,27 @@ rm -rf "$BUILD"; mkdir -p "$BUILD"
 WORK="$STATE_DIR/work"
 rsync -a --delete "$INBOX/work/" "$WORK/"
 FILLED=""; MISSING=""
-while IFS=$'\t' read -r sid out; do
+while IFS=$'\t' read -r sid out url; do
   [ -e "$WORK/$out" ] && continue
   snap=$(ls -d research/archive/"$sid"/*/ 2>/dev/null | sort | tail -1)
   if [ -n "$snap" ] && [ -f "$snap$out" ]; then
     mkdir -p "$WORK/$(dirname "$out")"; cp "$snap$out" "$WORK/$out"
     FILLED="$FILLED $out（$(basename "$snap")）"
+  elif [ -n "$url" ] && { [ -f "$STATE_DIR/cache/$out" ] || { mkdir -p "$STATE_DIR/cache/$(dirname "$out")" \
+       && curl -fsSL --connect-timeout 15 -m 180 -o "$STATE_DIR/cache/$out.tmp" "$url" \
+       && mv "$STATE_DIR/cache/$out.tmp" "$STATE_DIR/cache/$out"; }; }; then
+    # 標了 big 的大檔 tw8 平常不抓；這台連得到的（鄉鎮界圖資在 GitHub、已停更）抓一次存 cache
+    mkdir -p "$WORK/$(dirname "$out")"; cp "$STATE_DIR/cache/$out" "$WORK/$out"
+    FILLED="$FILLED $out（境外直抓）"
   else
     MISSING="$MISSING $out"
   fi
 done < <(python3 -c '
 import json
 for s in json.load(open("research/scripts/sources.json"))["sources"]:
-    if s.get("big"): continue
-    outs = [f["out"] for f in s.get("files", []) + s.get("posts", [])] + ([s["out"]] if "out" in s else [])
-    for o in outs: print(s["id"], o, sep="\t")')
+    outs = [(f["out"], f.get("url", "") if s.get("method") == "get" else "") for f in s.get("files", []) + s.get("posts", [])]
+    outs += [(s["out"], "")] if "out" in s else []
+    for o, u in outs: print(s["id"], o, u, sep="\t")')
 [ -n "$FILLED" ] && log "用存檔補上：$FILLED"
 [ -n "$MISSING" ] && log "缺檔且沒有存檔：$MISSING"
 ( cd research \
