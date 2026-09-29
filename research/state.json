@@ -3,14 +3,14 @@
   "csh_quota": {
    "files": {
     "dyn/csh.html": {
-     "sha256": "bd571699bc93c49d1a2a4134850a57d2a57112412bd141eac0827658707c69bd",
-     "bytes": 36038,
-     "fetched_at": "2026-09-13T06:02:01.953045+00:00"
+     "sha256": "8a7f473f3c6d6bec4b3340a6712fbb6b00ba17f0ad5d9232cd70e04f062c37fe",
+     "bytes": 36428,
+     "fetched_at": "2026-09-29T06:53:58.535978+00:00"
     }
    },
-   "last_fetched": "2026-09-13T06:02:01.953055+00:00",
-   "next_due": "2026-09-14T06:02:01.953058+00:00",
-   "last_changed": "2026-09-13T06:02:01.953070+00:00",
+   "last_fetched": "2026-09-29T06:53:58.535994+00:00",
+   "next_due": "2026-09-30T06:53:58.535997+00:00",
+   "last_changed": "2026-09-29T06:53:58.536005+00:00",
    "pending_big": false
   },
   "stats_special_ed": {
@@ -18,218 +18,229 @@
     "setstat.csv": {
      "sha256": "0d5fcec5212a24555dfbcb1c1a71430f8e268e8c8c82bdc028d7457824ac93bc",
      "bytes": 1317,
-     "fetched_at": "2026-09-12T03:14:24.021006+00:00"
+     "fetched_at": "2026-09-29T06:54:06.794177+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:24.021062+00:00",
-   "next_due": "2026-12-12T03:14:24.021065+00:00",
-   "last_changed": "2026-09-12T03:06:58.267995+00:00"
+   "last_fetched": "2026-09-29T06:54:06.794193+00:00",
+   "next_due": "2026-12-29T06:54:06.794196+00:00",
+   "last_changed": "2026-09-12T03:06:58.267995+00:00",
+   "pending_big": false
   },
   "nhi_clinic_hours": {
    "files": {
     "nhi_clinic_hours.json": {
-     "sha256": "a6de1d9a001401b8b2ac12cec115c4221a3afe8de6c1a0a3de9e12b95577d0bc",
-     "bytes": 8414084,
-     "fetched_at": "2026-09-12T03:13:41.733392+00:00"
+     "sha256": "02c33ef1942f6f31f2786702302186e1e777628266faceb7d1782240328ec5eb",
+     "bytes": 8426740,
+     "fetched_at": "2026-09-29T06:53:31.549816+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:13:41.733423+00:00",
-   "next_due": "2026-09-19T03:13:41.733429+00:00",
-   "last_changed": "2026-09-12T03:13:41.733441+00:00"
+   "last_fetched": "2026-09-29T06:53:31.549839+00:00",
+   "next_due": "2026-10-06T06:53:31.549842+00:00",
+   "last_changed": "2026-09-29T06:53:31.549853+00:00",
+   "pending_big": false
   },
   "sfaa_resource": {
    "files": {
     "sfaa/1_qtype2_1.html": {
-     "sha256": "a4f01861032add53ca3e51339d6d74db0cf1277087ef880e0430975172cd7375",
+     "sha256": "25072eedce6ceba450a409f68070a7653cb43de03d68324d2d5de5d8c977c491",
      "bytes": 102259,
-     "fetched_at": "2026-09-12T03:12:21.663667+00:00"
+     "fetched_at": "2026-09-29T06:52:43.420938+00:00"
     },
     "sfaa/1_qtype2_2.html": {
-     "sha256": "71aeddf8d3438598d3b88ccb5849bab28b0ebc3a2e90ff6f9fab7f1ca2e20912",
+     "sha256": "7b497498079924a929652c2aee05103d3b4761e2203317e9f48624a05d821542",
      "bytes": 176352,
-     "fetched_at": "2026-09-12T03:12:22.699127+00:00"
+     "fetched_at": "2026-09-29T06:52:44.093401+00:00"
     },
     "sfaa/1_qtype2_3.html": {
-     "sha256": "03aca4d263435d223570b2feed85ab61aac435376e50c7350fee4a731a7a5a80",
+     "sha256": "02ab4e55a86d188fc1db4ea6f3913fcaf5b9a19ed9a7a05ed667cbc3a1a6d339",
      "bytes": 47530,
-     "fetched_at": "2026-09-12T03:12:23.193043+00:00"
+     "fetched_at": "2026-09-29T06:52:44.766447+00:00"
     },
     "sfaa/1_qtype2_4.html": {
-     "sha256": "c72e7f243e9af8e40d757a8a8fe41662f9d56b264280c3ff24556f52941ee5bf",
+     "sha256": "43cf9c340f64141686161be8401d9960203b055fe7d07615fc0b75522819ed27",
      "bytes": 132705,
-     "fetched_at": "2026-09-12T03:12:23.916154+00:00"
+     "fetched_at": "2026-09-29T06:52:45.356957+00:00"
     },
     "sfaa/1_qtype2_5.html": {
-     "sha256": "5321741c7104f5249b04b3a25c73f90a5e401eedb0cd56806972d865a12bd48e",
-     "bytes": 386884,
-     "fetched_at": "2026-09-12T03:12:25.480030+00:00"
+     "sha256": "f4b67770126a30948a2db52db94ee2a60d1c722755e3969235e0e463ae44c5c0",
+     "bytes": 384883,
+     "fetched_at": "2026-09-29T06:52:46.756877+00:00"
     },
     "sfaa/1_qtype2_6.html": {
-     "sha256": "572764dc4609a3c257442e7882d98d861eea5a763f9485300533d11f40afb411",
-     "bytes": 107406,
-     "fetched_at": "2026-09-12T03:12:26.487250+00:00"
+     "sha256": "31006cf279679e95022ffc8834737f3985c49f6d47346e7082c001dd86b169e9",
+     "bytes": 107396,
+     "fetched_at": "2026-09-29T06:52:47.189378+00:00"
     },
     "sfaa/1_qtype2_7.html": {
-     "sha256": "9d2195b98782d3e8b4fdcef25e4ea0bfb97f20b3d138ab2995080938b2374cfd",
+     "sha256": "aab674fd8a4f7b6637d3129d9d76e319c8a2394dc1064aed742dc291fc3184fc",
      "bytes": 141474,
-     "fetched_at": "2026-09-12T03:12:27.768451+00:00"
+     "fetched_at": "2026-09-29T06:52:47.729020+00:00"
     },
     "sfaa/1_qtype2_8.html": {
-     "sha256": "f6d0978dbe0a0727292dc425f598d78528836633b1a75e72e04b209c85578457",
+     "sha256": "4892ae3f42f2d3b93209544f45707b98cd936c40f3c04223558cc262f3714771",
      "bytes": 56523,
-     "fetched_at": "2026-09-12T03:12:28.036247+00:00"
+     "fetched_at": "2026-09-29T06:52:47.964217+00:00"
     },
     "sfaa/2_qtype2_4.html": {
-     "sha256": "ef48787e94df791be291d284a340918e1280edcd92e663c8cfe2126704937bdf",
-     "bytes": 7438902,
-     "fetched_at": "2026-09-12T03:12:41.764240+00:00"
+     "sha256": "8ba9df3c2f5a662a8f0199d79ea26014d1d0f8f5d6d14c96c7ed4b845f8402ea",
+     "bytes": 7459633,
+     "fetched_at": "2026-09-29T06:52:56.961280+00:00"
     },
     "sfaa/2_qtype2_5.html": {
-     "sha256": "0c7c80f077462eca7252b3a9982f08828fd5abcc7bab40f8ddf74675e6df567a",
-     "bytes": 748754,
-     "fetched_at": "2026-09-12T03:12:44.483249+00:00"
+     "sha256": "cc60492c6268301944f29c85cff69b8602e2adc156e5d19fb84f8a051b556524",
+     "bytes": 745076,
+     "fetched_at": "2026-09-29T06:52:58.855751+00:00"
     },
     "sfaa/2_qtype2_7_qtype3_1.html": {
-     "sha256": "0ec38996915114e031362d4bdd78148632c4ae2ecc5e84535279892b70d5f939",
-     "bytes": 155163,
-     "fetched_at": "2026-09-12T03:12:45.212983+00:00"
+     "sha256": "927c7b40fda7f6d73f1b459bbf0bc37c0f91f18df37a406aa766548ce5c73c5b",
+     "bytes": 153515,
+     "fetched_at": "2026-09-29T06:52:59.480687+00:00"
     },
     "sfaa/2_qtype2_7_qtype3_3.html": {
-     "sha256": "6af5be3ec2e6ff1d7f5b7b93c248f64c1fa9ee920c69d74a6ade2de9806c09ae",
-     "bytes": 465211,
-     "fetched_at": "2026-09-12T03:12:46.766635+00:00"
+     "sha256": "3b9f261847a1b697184b3a66255570affd9743eb342503f036737de8ac7e5858",
+     "bytes": 465217,
+     "fetched_at": "2026-09-29T06:53:00.643884+00:00"
     },
     "sfaa/2_qtype2_7_qtype3_9.html": {
-     "sha256": "dee0dadd4168d3a21a546f97001497a8a20e420f309759f2c497fa044e9bc5e6",
-     "bytes": 856104,
-     "fetched_at": "2026-09-12T03:12:49.196433+00:00"
+     "sha256": "cee4e45fdfa5dda019f92ec6ec349d30238cb22cfa60b540a3231374cb2ed088",
+     "bytes": 845542,
+     "fetched_at": "2026-09-29T06:53:02.428026+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:12:49.196448+00:00",
-   "next_due": "2026-10-12T03:12:49.196451+00:00",
-   "last_changed": "2026-09-12T03:12:49.196463+00:00"
+   "last_fetched": "2026-09-29T06:53:02.428049+00:00",
+   "next_due": "2026-10-29T06:53:02.428052+00:00",
+   "last_changed": "2026-09-29T06:53:02.428098+00:00",
+   "pending_big": false
   },
   "hpa_center_list": {
    "files": {
     "hpa115.pdf": {
      "sha256": "de34178e972133ae9d2c9a05534a94922a71eff1c55a3911a567353357ac1975",
      "bytes": 246688,
-     "fetched_at": "2026-09-12T03:12:49.778762+00:00"
+     "fetched_at": "2026-09-29T06:53:02.618056+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:12:49.778772+00:00",
-   "next_due": "2027-09-12T03:12:49.778775+00:00",
-   "last_changed": "2026-09-12T03:12:49.778782+00:00"
+   "last_fetched": "2026-09-29T06:53:02.618081+00:00",
+   "next_due": "2027-09-29T06:53:02.618085+00:00",
+   "last_changed": "2026-09-12T03:12:49.778782+00:00",
+   "pending_big": false
   },
   "nhi_roster": {
    "files": {
     "nhi_roster.json": {
-     "sha256": "3fcd6d449c6f4d1357ecd697a3ec1138b1fd10bc056c0f2f237c33ab0ae2f4fa",
-     "bytes": 12431868,
-     "fetched_at": "2026-09-12T03:13:18.913306+00:00"
+     "sha256": "316fd933ad98faa5e01ad4b9b1471153f8973a4bcf769bee673820cc15d2aec3",
+     "bytes": 12455639,
+     "fetched_at": "2026-09-29T06:53:19.171348+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:13:18.913340+00:00",
-   "next_due": "2026-09-19T03:13:18.913347+00:00",
-   "last_changed": "2026-09-12T03:13:18.913363+00:00"
+   "last_fetched": "2026-09-29T06:53:19.171369+00:00",
+   "next_due": "2026-10-06T06:53:19.171372+00:00",
+   "last_changed": "2026-09-29T06:53:19.171384+00:00",
+   "pending_big": false
   },
   "nhi_specialty": {
    "files": {
     "nhi_specialty.json": {
-     "sha256": "69765dc7cf9655789b894cdc77efcf9e9f255f1fc8b3faafb5d9eddba86142f5",
-     "bytes": 1345454,
-     "fetched_at": "2026-09-12T03:13:57.788734+00:00"
+     "sha256": "d0603dbfad63aee57f1e55b0057e34b7144e241fea6a24d76d7ea7d88ff1c750",
+     "bytes": 1346006,
+     "fetched_at": "2026-09-29T06:53:43.449672+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:13:57.788758+00:00",
-   "next_due": "2026-10-12T03:13:57.788764+00:00",
-   "last_changed": "2026-09-12T03:13:57.788776+00:00"
+   "last_fetched": "2026-09-29T06:53:43.449694+00:00",
+   "next_due": "2026-10-29T06:53:43.449697+00:00",
+   "last_changed": "2026-09-29T06:53:43.449707+00:00",
+   "pending_big": false
   },
   "moh_inst": {
    "files": {
     "moh_inst.ods": {
      "sha256": "0cecabbc3770f28fc84c0699e9ca313c5e8196658bf308f80e2f6eb04374d2aa",
      "bytes": 2193354,
-     "fetched_at": "2026-09-12T03:14:02.891320+00:00"
+     "fetched_at": "2026-09-29T06:53:48.003263+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:02.891330+00:00",
-   "next_due": "2027-09-12T03:14:02.891333+00:00",
-   "last_changed": "2026-09-12T03:14:02.891339+00:00"
+   "last_fetched": "2026-09-29T06:53:48.003291+00:00",
+   "next_due": "2027-09-29T06:53:48.003295+00:00",
+   "last_changed": "2026-09-12T03:14:02.891339+00:00",
+   "pending_big": false
   },
   "hfk_map": {
    "files": {
     "hfk_joint.ods": {
-     "sha256": "7885aaffed7956334c67ce6513c764403d44383b4ab08498297a60bd57f23f5c",
-     "bytes": 8480,
-     "fetched_at": "2026-09-12T03:14:03.356305+00:00"
+     "sha256": "33273a9034c1b53527df696cc9f7e935093d272a17349807cbc1639f46523c94",
+     "bytes": 8481,
+     "fetched_at": "2026-09-29T06:53:48.294492+00:00"
     },
     "hfk_joint_page.html": {
-     "sha256": "a4fe3c4968c8f3720664e33210308e1da7c96233440b8d7081a658e72649cd54",
+     "sha256": "240616cafdf63180711f94a6814ab7f975eaf35ac85a56819e91412ee03e5083",
      "bytes": 244580,
-     "fetched_at": "2026-09-12T03:14:04.230415+00:00"
+     "fetched_at": "2026-09-29T06:53:49.032773+00:00"
     },
     "hfk_screen.ods": {
-     "sha256": "432d1160eac6813384d34b27ec941f6a0a3ed77d5ebb53cb8b2b813c72422512",
-     "bytes": 59441,
-     "fetched_at": "2026-09-12T03:14:07.865478+00:00"
+     "sha256": "e9e3c73e736dc6ed6bfce7213fbc3262fdda993b1a7b29a68fba67451fc29b36",
+     "bytes": 59846,
+     "fetched_at": "2026-09-29T06:53:52.698962+00:00"
     },
     "hfk_screen_page.html": {
-     "sha256": "af80971a9af113a6e54898e1e805407759e539034c5f416df14700deb824db57",
-     "bytes": 2805038,
-     "fetched_at": "2026-09-12T03:14:13.886338+00:00"
+     "sha256": "2af7d9df62ae861a53a2a7da3386fb125ad12ab06ac29a124be2998810704a7d",
+     "bytes": 2822765,
+     "fetched_at": "2026-09-29T06:53:57.822507+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:13.886352+00:00",
-   "next_due": "2026-10-12T03:14:13.886355+00:00",
-   "last_changed": "2026-09-12T03:14:13.886362+00:00"
+   "last_fetched": "2026-09-29T06:53:57.822544+00:00",
+   "next_due": "2026-10-29T06:53:57.822547+00:00",
+   "last_changed": "2026-09-29T06:53:57.822563+00:00",
+   "pending_big": false
   },
   "ntpc_booking": {
    "files": {
     "dyn/ntpc_booking.html": {
-     "sha256": "9a4128bdac1f0b7b11cb4d542e2720b6aed6586654c39123b30a9cb2ec917e7b",
-     "bytes": 72844,
-     "fetched_at": "2026-09-12T03:14:15.477400+00:00"
+     "sha256": "9328613023c399f24e4469777e61545ad65f66849c52b12597871c2e445178b3",
+     "bytes": 73314,
+     "fetched_at": "2026-09-29T06:53:59.352586+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:15.477460+00:00",
-   "next_due": "2026-09-19T03:14:15.477463+00:00",
-   "last_changed": "2026-09-12T03:14:15.477470+00:00"
+   "last_fetched": "2026-09-29T06:53:59.352602+00:00",
+   "next_due": "2026-10-06T06:53:59.352605+00:00",
+   "last_changed": "2026-09-29T06:53:59.352613+00:00",
+   "pending_big": false
   },
   "tc_health_booking": {
    "files": {
     "dyn/tc_health.html": {
-     "sha256": "31009868ae896258588e4ce3c9fd1851849d94f0ea8d89d5d9f93790ce686f89",
-     "bytes": 101086,
-     "fetched_at": "2026-09-12T03:14:17.235965+00:00"
+     "sha256": "dd320c0c543d4a4865d3ea92ca00d8e65b9436fc5cdc44f0d402c897d6b10658",
+     "bytes": 101459,
+     "fetched_at": "2026-09-29T06:54:00.011965+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:17.236031+00:00",
-   "next_due": "2026-09-19T03:14:17.236034+00:00",
-   "last_changed": "2026-09-12T03:14:17.236062+00:00"
+   "last_fetched": "2026-09-29T06:54:00.011994+00:00",
+   "next_due": "2026-10-06T06:54:00.011999+00:00",
+   "last_changed": "2026-09-29T06:54:00.012010+00:00",
+   "pending_big": false
   },
   "tc_selfpay": {
    "files": {
     "dyn/tc_selfpay.html": {
-     "sha256": "613a5c550b4b1a4153bd6b94d74ae7ad0658bb2af894dff9a30be56aebdfe38d",
-     "bytes": 104635,
-     "fetched_at": "2026-09-12T03:14:17.774819+00:00"
+     "sha256": "be4f368e908c08439dec8271b3a9b74e58e55690d53a5817246c42db84e5b007",
+     "bytes": 105675,
+     "fetched_at": "2026-09-29T06:54:00.451042+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:17.774863+00:00",
-   "next_due": "2026-12-12T03:14:17.774866+00:00",
-   "last_changed": "2026-09-12T03:14:17.774889+00:00"
+   "last_fetched": "2026-09-29T06:54:00.451055+00:00",
+   "next_due": "2026-12-29T06:54:00.451058+00:00",
+   "last_changed": "2026-09-29T06:54:00.451066+00:00",
+   "pending_big": false
   },
   "stats_report": {
    "files": {
     "stats/254.xlsx": {
      "sha256": "bfbeade7c4febfbe7a4975e59fc7a7c987e882cff43934618150e6f4e1af10e2",
      "bytes": 259014,
-     "fetched_at": "2026-09-12T03:30:23.338101+00:00"
+     "fetched_at": "2026-09-29T06:54:00.919448+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:30:23.338115+00:00",
-   "next_due": "2026-12-12T03:30:23.338118+00:00",
+   "last_fetched": "2026-09-29T06:54:00.919475+00:00",
+   "next_due": "2026-12-29T06:54:00.919480+00:00",
    "last_changed": "2026-09-12T03:14:18.289694+00:00",
    "pending_big": false
   },
@@ -238,71 +249,74 @@
     "stats/255.xlsx": {
      "sha256": "bac67740d1293074f18cfacb4961c787adad87804e942f1d6a2915f7c6fda9f6",
      "bytes": 66936,
-     "fetched_at": "2026-09-12T03:14:18.614536+00:00"
+     "fetched_at": "2026-09-29T06:54:01.140616+00:00"
     },
     "stats/256.xlsx": {
      "sha256": "563a9c3f6bbb2d2586983656e586f4d137fa54af072a8bab51ee104c1ebbddd9",
      "bytes": 94273,
-     "fetched_at": "2026-09-12T03:14:19.004576+00:00"
+     "fetched_at": "2026-09-29T06:54:01.343284+00:00"
     },
     "stats/257.xlsx": {
      "sha256": "751fa6660a18d5cfea7769e68df832405518e1f65f4f324f51054ad81417d3b2",
      "bytes": 86118,
-     "fetched_at": "2026-09-12T03:14:19.333111+00:00"
+     "fetched_at": "2026-09-29T06:54:01.547397+00:00"
     },
     "stats/258.xlsx": {
      "sha256": "50e9954f55e7ce6765628ab5bd9a3e3e6c4c072beb890e5d90a547efd4ebd291",
      "bytes": 89387,
-     "fetched_at": "2026-09-12T03:14:19.711839+00:00"
+     "fetched_at": "2026-09-29T06:54:01.772255+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:19.711848+00:00",
-   "next_due": "2027-09-12T03:14:19.711850+00:00",
-   "last_changed": "2026-09-12T03:14:19.711856+00:00"
+   "last_fetched": "2026-09-29T06:54:01.772273+00:00",
+   "next_due": "2027-09-29T06:54:01.772276+00:00",
+   "last_changed": "2026-09-12T03:14:19.711856+00:00",
+   "pending_big": false
   },
   "stats_protection": {
    "files": {
     "s322.xlsx": {
-     "sha256": "ecbb48f33048038976b8e92306880badb8165d639088241241ef5e09828fee5d",
-     "bytes": 547695,
-     "fetched_at": "2026-09-12T03:14:21.181712+00:00"
+     "sha256": "32fe1551e10d1f61ec8e43c17708a284db2a69a9e0402bb350a35df35dcfdded",
+     "bytes": 579798,
+     "fetched_at": "2026-09-29T06:54:02.155801+00:00"
     },
     "s355.xlsx": {
      "sha256": "d1a1cf2f5b3dc08752035f4be99674d58fea3279d87919fd78526b4e19b1dd5f",
      "bytes": 212414,
-     "fetched_at": "2026-09-12T03:14:21.630965+00:00"
+     "fetched_at": "2026-09-29T06:54:02.347098+00:00"
     },
     "s356.xlsx": {
      "sha256": "3273c1e7ed43596fd9b3fd8b631a3e2828e144efec40a6de7944e00e2a019b99",
      "bytes": 225311,
-     "fetched_at": "2026-09-12T03:14:22.191808+00:00"
+     "fetched_at": "2026-09-29T06:54:05.615942+00:00"
     },
     "s359.xlsx": {
      "sha256": "a1f8bb80b296f73ad78e9e41c5965d4525e768f380ebc6f0bfd38fb252d0d313",
      "bytes": 337429,
-     "fetched_at": "2026-09-12T03:14:22.768695+00:00"
+     "fetched_at": "2026-09-29T06:54:05.925197+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:22.768705+00:00",
-   "next_due": "2027-03-13T03:14:22.768708+00:00",
-   "last_changed": "2026-09-12T03:14:22.768715+00:00"
+   "last_fetched": "2026-09-29T06:54:05.925219+00:00",
+   "next_due": "2027-03-30T06:54:05.925222+00:00",
+   "last_changed": "2026-09-29T06:54:05.925233+00:00",
+   "pending_big": false
   },
   "stats_protection_field": {
    "files": {
     "s_field.pdf": {
      "sha256": "6f8c754ed9da06384af830087b67c572dd0387f3114c15946b76bd8d4c793a23",
      "bytes": 228083,
-     "fetched_at": "2026-09-12T03:14:23.302706+00:00"
+     "fetched_at": "2026-09-29T06:54:06.281994+00:00"
     },
     "dops_child.html": {
-     "sha256": "171af6000b0744b3edcc553719bcabadb33d3cbb53330344f2664eb1e1cf50a4",
-     "bytes": 29357,
-     "fetched_at": "2026-09-12T03:14:23.643821+00:00"
+     "sha256": "049b99247c363fa4b8bb9445e6c8d447009221d408b9fd5feaafb22f73cc1ddc",
+     "bytes": 29391,
+     "fetched_at": "2026-09-29T06:54:06.548409+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:23.643829+00:00",
-   "next_due": "2027-09-12T03:14:23.643851+00:00",
-   "last_changed": "2026-09-12T03:14:23.643858+00:00"
+   "last_fetched": "2026-09-29T06:54:06.548422+00:00",
+   "next_due": "2027-09-29T06:54:06.548424+00:00",
+   "last_changed": "2026-09-29T06:54:06.548432+00:00",
+   "pending_big": false
   },
   "serc_yearbook": {
    "files": {
@@ -317,122 +331,126 @@
      "fetched_at": "2026-09-12T03:14:29.782836+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:29.782847+00:00",
-   "next_due": "2027-09-12T03:14:29.782850+00:00",
-   "last_changed": "2026-09-12T03:14:29.782856+00:00"
+   "last_fetched": "2026-09-29T06:57:31.280150+00:00",
+   "next_due": "2027-09-29T06:57:31.280228+00:00",
+   "last_changed": "2026-09-12T03:14:29.782856+00:00",
+   "pending_big": false
   },
   "screen_checklist": {
    "files": {
     "screen/2026_06_20.html": {
-     "sha256": "f010f477858e1d5cd373c496636518ed7be2256716a4732d4bed319b39af78f9",
-     "bytes": 94814,
-     "fetched_at": "2026-09-12T03:14:30.302337+00:00"
+     "sha256": "b33cf1f1f89bda9692828ef062225b7a6d170831d6264ba45b54ae603252481c",
+     "bytes": 94813,
+     "fetched_at": "2026-09-29T06:57:31.392268+00:00"
     },
     "screen/2026_03_01.html": {
-     "sha256": "453d5a4a8e3e5d93f31457489b0d2a09c2ca57ab5a724f00724b2cea4f195dd7",
+     "sha256": "3e85d5a2b02fd643a5441ac876554091440ee66980748c2570a91744795b81e5",
      "bytes": 95030,
-     "fetched_at": "2026-09-12T03:14:30.684827+00:00"
+     "fetched_at": "2026-09-29T06:57:31.514926+00:00"
     },
     "screen/2025_12_01.html": {
-     "sha256": "4cd2b46edf1af18bd22c963661fa22b770c7b3da39b3ea87e8ea1ff06185f501",
+     "sha256": "1e198749e9a7875fef07e7b3c5035308199470fea746775824aa8693b47c8d5e",
      "bytes": 94671,
-     "fetched_at": "2026-09-12T03:14:30.979788+00:00"
+     "fetched_at": "2026-09-29T06:57:31.660275+00:00"
     },
     "screen/2025_09_01.html": {
-     "sha256": "adf97da02ad35b3bfb7cf0c66e7184fe4c4f70dc5600ae345ab8131e2716bd0c",
+     "sha256": "738e8e4d01b830b03bce1dc65ce296188659d61acdee1e01683b67d7a7c6f44f",
      "bytes": 94014,
-     "fetched_at": "2026-09-12T03:14:31.189837+00:00"
+     "fetched_at": "2026-09-29T06:57:31.790755+00:00"
     },
     "screen/2025_06_01.html": {
-     "sha256": "89400b14e02fda5d192bd77f68bca64384ff3b0abb41d4d9e73645d61fb2b890",
+     "sha256": "d17cb613405ab031c281b0a2fdee46962a150b352092786e7189b78c1130bd05",
      "bytes": 94959,
-     "fetched_at": "2026-09-12T03:14:31.399563+00:00"
+     "fetched_at": "2026-09-29T06:57:31.931178+00:00"
     },
     "screen/2025_03_01.html": {
-     "sha256": "290b835fd986f526033fc8ff483b433144031fb480a43a7a641a02901d9d36f5",
+     "sha256": "704c8c2799399049771cbef528da84f8eebad0bda05d407a7c18c60033217d63",
      "bytes": 96682,
-     "fetched_at": "2026-09-12T03:14:31.659880+00:00"
+     "fetched_at": "2026-09-29T06:57:32.035838+00:00"
     },
     "screen/2024_09_01.html": {
-     "sha256": "cf4aa36dc5d6955a0de5cf545e65f3f6cd872a0e1164ea6ea76541ac8fb0d46f",
+     "sha256": "289b382fa272f04f68f728efc46b0a97ff608f51767dc0ad6e06a72fbd63b145",
      "bytes": 95225,
-     "fetched_at": "2026-09-12T03:14:31.915928+00:00"
+     "fetched_at": "2026-09-29T06:57:32.170460+00:00"
     },
     "screen/2024_01_15.html": {
-     "sha256": "2f75076b74338e716ecab727889d88e264940c2da320fda7e1fe2933c58022cd",
+     "sha256": "798c59c2bdfa1e1cb2539f82de0ee7226892c51ceabcda8c00f37881f9b740dd",
      "bytes": 95915,
-     "fetched_at": "2026-09-12T03:14:32.122011+00:00"
+     "fetched_at": "2026-09-29T06:57:32.287590+00:00"
     },
     "screen/2023_09_10.html": {
-     "sha256": "f87eae43ed235e7122bb2dc01e70a11e4a46c8079902f8857004b3afcab0411d",
-     "bytes": 97972,
-     "fetched_at": "2026-09-12T03:14:32.377204+00:00"
+     "sha256": "6337fe1dbf50c6e496d105217db18d6da51826d4e5497b55932fbed01afb4acb",
+     "bytes": 97973,
+     "fetched_at": "2026-09-29T06:57:32.437382+00:00"
     },
     "screen/2023_03_10.html": {
-     "sha256": "c52f75a045719c275c3aef7616b0c7438d51083b28730a0caa96d159ac54fc45",
-     "bytes": 98157,
-     "fetched_at": "2026-09-12T03:14:32.618364+00:00"
+     "sha256": "2cfb39b66c942f71bd0a931106a39f182452625d2d09093f7d8c7ddcbae7926d",
+     "bytes": 98158,
+     "fetched_at": "2026-09-29T06:57:32.960694+00:00"
     },
     "screen/2022_09_10.html": {
-     "sha256": "eb86a6ca2a6653aabcc7d4b71171e2e42e8fde833b2e2aa2b0f5891ba2875074",
-     "bytes": 98565,
-     "fetched_at": "2026-09-12T03:14:33.131561+00:00"
+     "sha256": "17a6501d8d6aa86c096642bc1d74612dde5ebc3d582b8699ff68ca2d3d537351",
+     "bytes": 98566,
+     "fetched_at": "2026-09-29T06:57:33.277252+00:00"
     },
     "screen/2021_01_05.html": {
-     "sha256": "a88e67731d7cb492aedce188d0c9e28163937f220a0752cf4c5fe4482d3322ff",
-     "bytes": 98323,
-     "fetched_at": "2026-09-12T03:14:33.301568+00:00"
+     "sha256": "b6a259eb31bfbe4774eba448a5f51e81e9368faa1d2d429534bfe4e8710210a1",
+     "bytes": 98324,
+     "fetched_at": "2026-09-29T06:57:33.796755+00:00"
     },
     "screen/2020_09_10.html": {
-     "sha256": "c0f926ff9476d6497cc24adf99a4aec12bdd37f2a95bb6bdb8756466dcb7000f",
-     "bytes": 100590,
-     "fetched_at": "2026-09-12T03:14:33.481162+00:00"
+     "sha256": "a895e6be26e299015b25f06219e43c871689282aaa89f465fcc6ff7547eb7d05",
+     "bytes": 100591,
+     "fetched_at": "2026-09-29T06:57:33.962670+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:33.481178+00:00",
-   "next_due": "2026-10-12T03:14:33.481191+00:00",
-   "last_changed": "2026-09-12T03:14:33.481199+00:00"
+   "last_fetched": "2026-09-29T06:57:33.962689+00:00",
+   "next_due": "2026-10-29T06:57:33.962692+00:00",
+   "last_changed": "2026-09-29T06:57:33.962701+00:00",
+   "pending_big": false
   },
   "sfaa_promo": {
    "files": {
     "cecm_video.html": {
-     "sha256": "c55f8ea9343bba7f21af7e50e3a555c07e9839919e5d2f9cb8bc634e256070b3",
+     "sha256": "84588ab294dcf2aab3b1c79ed24f62c092d20a1997d24d935504fdbf55e75517",
      "bytes": 30299,
-     "fetched_at": "2026-09-12T03:14:33.669272+00:00"
+     "fetched_at": "2026-09-29T06:57:35.253687+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:33.669284+00:00",
-   "next_due": "2026-10-12T03:14:33.669287+00:00",
-   "last_changed": "2026-09-12T03:14:33.669293+00:00"
+   "last_fetched": "2026-09-29T06:57:35.253703+00:00",
+   "next_due": "2026-10-29T06:57:35.253706+00:00",
+   "last_changed": "2026-09-29T06:57:35.253714+00:00",
+   "pending_big": false
   },
   "hpa_scales": {
    "files": {
     "hpa_scale.html": {
-     "sha256": "2fc7d549146fdcbf1684753c5dba0c59e628694f1f31c17f820da9483be23cff",
+     "sha256": "a3f0968fbcd0e364193b89c3642f08c0bf2d0c121bff064be0b84b6149e97644",
      "bytes": 191859,
-     "fetched_at": "2026-09-12T03:14:35.733335+00:00"
+     "fetched_at": "2026-09-29T06:57:36.828894+00:00"
     },
     "hpa_card.html": {
-     "sha256": "b7ba2d866baca1a00af60248e99acdbddc00a1abf120826eee59fbac121475f1",
+     "sha256": "8db94d2ace7380403e2cf6510f24426f1d790a628af27390d1c879d339fcda36",
      "bytes": 187045,
-     "fetched_at": "2026-09-12T03:14:38.215131+00:00"
+     "fetched_at": "2026-09-29T06:57:38.032323+00:00"
     },
     "hpa_plan.html": {
-     "sha256": "02d655f6d4174467b3541b1628eba6616e299956897eaca3646f36dc4a84f32a",
+     "sha256": "42a5dfd3381eaff52987a193d9b1f93f667333e5e3d51a883f6b4b4749b6affd",
      "bytes": 198226,
-     "fetched_at": "2026-09-12T03:14:40.154696+00:00"
+     "fetched_at": "2026-09-29T06:57:39.203987+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:40.154709+00:00",
-   "next_due": "2026-10-12T03:14:40.154711+00:00",
-   "last_changed": "2026-09-12T03:14:40.154718+00:00"
+   "last_fetched": "2026-09-29T06:57:39.204005+00:00",
+   "next_due": "2026-10-29T06:57:39.204008+00:00",
+   "last_changed": "2026-09-29T06:57:39.204016+00:00",
+   "pending_big": false
   },
   "hpa_kidbook": {
    "files": {
     "hpa_kidbook.html": {
-     "sha256": "8f41bf0bb7d50cbd710b88b7f63d82fe4252edcbf29837b01ec45522665c3f10",
+     "sha256": "ff81e1901086af3d1f757d45ef869e5f4fa2ad79fa7efca692da7322450764d4",
      "bytes": 228318,
-     "fetched_at": "2026-09-12T03:20:14.456059+00:00"
+     "fetched_at": "2026-09-29T06:57:40.920933+00:00"
     },
     "kidbook.pdf": {
      "sha256": "418ebad867f37219cd54c35756584426c344824f8dd6c250911007d1da22916c",
@@ -440,112 +458,118 @@
      "fetched_at": "2026-09-12T03:20:31.069219+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:20:31.069238+00:00",
-   "next_due": "2027-09-12T03:20:31.069242+00:00",
-   "last_changed": "2026-09-12T03:20:31.069254+00:00",
-   "pending_big": false
+   "last_fetched": "2026-09-29T06:57:40.920949+00:00",
+   "next_due": "2027-09-29T06:57:40.920952+00:00",
+   "last_changed": "2026-09-29T06:57:40.920961+00:00",
+   "pending_big": true
   },
   "tp_manual": {
    "files": {
     "tp_manual.html": {
-     "sha256": "714b5c6ddcd275e5d1a0d2b0fd0b709c6c3689f828072eb92fd32c0fd55460fb",
-     "bytes": 111947,
-     "fetched_at": "2026-09-12T03:14:44.124141+00:00"
+     "sha256": "89f87d045296897ca62232ac6ad465dfb7b99cc6873d859366e7c5f19f15e0a1",
+     "bytes": 112022,
+     "fetched_at": "2026-09-29T06:57:41.087889+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:44.124159+00:00",
-   "next_due": "2026-10-12T03:14:44.124162+00:00",
-   "last_changed": "2026-09-12T03:14:44.124170+00:00"
+   "last_fetched": "2026-09-29T06:57:41.087906+00:00",
+   "next_due": "2026-10-29T06:57:41.087920+00:00",
+   "last_changed": "2026-09-29T06:57:41.087930+00:00",
+   "pending_big": false
   },
   "crpd_books": {
    "files": {
     "crpd_1521.html": {
-     "sha256": "95add12075adf785ba9b64938a257fa372b6868c4dee22427cfcb81b47dea798",
+     "sha256": "bf964fb3cbab5d86eceead47a273bf04143ea34dcbc8ccdea56aa6b718e8dcd0",
      "bytes": 4406514,
-     "fetched_at": "2026-09-12T03:14:47.869037+00:00"
+     "fetched_at": "2026-09-29T06:57:43.370430+00:00"
     },
     "crpd_book.pdf": {
      "sha256": "359aaa5657f0aede9f2d3c0f31f2bdbcb58cc52bd292d1b238c6572f54535e91",
      "bytes": 17349574,
-     "fetched_at": "2026-09-12T03:14:57.520152+00:00"
+     "fetched_at": "2026-09-29T06:57:47.562573+00:00"
     },
     "crpd_sheet.pdf": {
      "sha256": "748181eb6fa40ad5c061e114fa2dca0a3cee06af32d870b3b1e268f20e75629d",
      "bytes": 567666,
-     "fetched_at": "2026-09-12T03:14:58.034860+00:00"
+     "fetched_at": "2026-09-29T06:57:48.197479+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:58.034880+00:00",
-   "next_due": "2026-10-12T03:14:58.034883+00:00",
-   "last_changed": "2026-09-12T03:14:58.034889+00:00"
+   "last_fetched": "2026-09-29T06:57:48.197499+00:00",
+   "next_due": "2026-10-29T06:57:48.197518+00:00",
+   "last_changed": "2026-09-29T06:57:48.197529+00:00",
+   "pending_big": false
   },
   "doe_inclusive": {
    "files": {
     "doe_list.html": {
-     "sha256": "33df9c6160e6e06e844c39182be8242a1a3582c4accf51eb36c39d4f2f54bb1a",
-     "bytes": 95830,
-     "fetched_at": "2026-09-12T03:14:58.298815+00:00"
+     "sha256": "f7f49dc62350122d382dda3bc79223def3afaeb268468a33f96c02f0fd45f986",
+     "bytes": 95829,
+     "fetched_at": "2026-09-29T06:57:48.362885+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:14:58.298827+00:00",
-   "next_due": "2026-10-12T03:14:58.298830+00:00",
-   "last_changed": "2026-09-12T03:14:58.298837+00:00"
+   "last_fetched": "2026-09-29T06:57:48.362907+00:00",
+   "next_due": "2026-10-29T06:57:48.362911+00:00",
+   "last_changed": "2026-09-29T06:57:48.362924+00:00",
+   "pending_big": false
   },
   "moe_lessons": {
    "files": {
     "spehouse.html": {
-     "sha256": "56d8057afc2c8a18f27ef2ad8f54f453f2af1f47003952fb04ccfec1e6922b06",
-     "bytes": 66658,
-     "fetched_at": "2026-09-12T03:15:39.816023+00:00"
+     "sha256": "98d37493ab756e2dfb4c834b903b0b75e441f4f9958ade67be8d696addb137e1",
+     "bytes": 66688,
+     "fetched_at": "2026-09-29T06:57:48.491682+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:15:39.816036+00:00",
-   "next_due": "2026-10-12T03:15:39.816038+00:00",
-   "last_changed": "2026-09-12T03:15:39.816045+00:00"
+   "last_fetched": "2026-09-29T06:57:48.491706+00:00",
+   "next_due": "2026-10-29T06:57:48.491709+00:00",
+   "last_changed": "2026-09-29T06:57:48.491721+00:00",
+   "pending_big": false
   },
   "sibling_support": {
    "files": {
     "ahh_qa.html": {
-     "sha256": "3be1bc95b3c923ba17415e68ad5cb494b4b40b875a4065d30bafa045c4d08f64",
+     "sha256": "24985d3a820bd8b6ffc044b85f6f003f6df1c6fc331fed1b3c9515d2a70e2489",
      "bytes": 64045,
-     "fetched_at": "2026-09-12T03:15:40.075686+00:00"
+     "fetched_at": "2026-09-29T06:57:48.658266+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:15:40.075700+00:00",
-   "next_due": "2026-10-12T03:15:40.075703+00:00",
-   "last_changed": "2026-09-12T03:15:40.075711+00:00"
+   "last_fetched": "2026-09-29T06:57:48.658285+00:00",
+   "next_due": "2026-10-29T06:57:48.658339+00:00",
+   "last_changed": "2026-09-29T06:57:48.658349+00:00",
+   "pending_big": false
   },
   "gender_special_ed": {
    "files": {
     "gender_index.html": {
-     "sha256": "d802970968f1997e5e2ac4011f7b15b7c46aedd31d26c99410c8033a588d402c",
+     "sha256": "6cd24d897877e44236c191ff955d739a8e49e75f63cd4a80f918a6592cb0220f",
      "bytes": 68365,
-     "fetched_at": "2026-09-12T03:15:40.375582+00:00"
+     "fetched_at": "2026-09-29T06:57:48.768236+00:00"
     },
     "gender2_index.html": {
-     "sha256": "2728dbaae4fde38919a996bfb3f85591e38e285661ceec1a553aeffca676e8ce",
+     "sha256": "6858f13ba08c53e982355cf7835179aa854601a9278f5e1c2699d152bf5b4026",
      "bytes": 68175,
-     "fetched_at": "2026-09-12T03:15:40.572147+00:00"
+     "fetched_at": "2026-09-29T06:57:48.877972+00:00"
     },
     "gender3_index.html": {
-     "sha256": "d2e7a41468f5cd37d469e8e567c04003a0ef2f87004e02e9f8e26875f1842179",
+     "sha256": "b9c70e5c0eab13c7d10afd5e70107b6f2191cdb9119dbf50c64d465d510bfbfe",
      "bytes": 68964,
-     "fetched_at": "2026-09-12T03:15:40.818335+00:00"
+     "fetched_at": "2026-09-29T06:57:48.969583+00:00"
     },
     "gender4_index.html": {
-     "sha256": "cd405143ab862a3334c55db10e0a0d32264d3431b2e7bde82d30647c8a964ada",
+     "sha256": "7821e485eb5dfe81a38c9ba13ff9833df0e457b497754805b58875f7cd770e65",
      "bytes": 69840,
-     "fetched_at": "2026-09-12T03:15:41.034526+00:00"
+     "fetched_at": "2026-09-29T06:57:49.073668+00:00"
     },
     "gender5_index.html": {
-     "sha256": "975e998665ea89d1fcecabc9a8769b7acbd84d3ac328c980514a37465b951b0d",
+     "sha256": "8a454e6a00f2b96fcf4d34b118e97c0d082eab8cdb81882e1931fd2ba90378af",
      "bytes": 67993,
-     "fetched_at": "2026-09-12T03:15:41.203004+00:00"
+     "fetched_at": "2026-09-29T06:57:49.194189+00:00"
     }
    },
-   "last_fetched": "2026-09-12T03:15:41.203017+00:00",
-   "next_due": "2026-10-12T03:15:41.203020+00:00",
-   "last_changed": "2026-09-12T03:15:41.203026+00:00"
+   "last_fetched": "2026-09-29T06:57:49.194209+00:00",
+   "next_due": "2026-10-29T06:57:49.194212+00:00",
+   "last_changed": "2026-09-29T06:57:49.194221+00:00",
+   "pending_big": false
   },
   "gender_sexedu_manual": {
    "files": {
@@ -557,139 +581,139 @@
    },
    "last_fetched": "2026-09-12T03:21:00.630079+00:00",
    "next_due": "2026-10-12T03:21:00.630084+00:00",
-   "pending_big": false,
+   "pending_big": true,
    "last_changed": "2026-09-12T03:21:00.630093+00:00"
   },
   "subsidy_rules": {
    "files": {
     "subsidy/taipei.html": {
-     "sha256": "31e4224133f64406a2d60ea1939b65a170cb9d6f9199e6deefd298c0a64ebfed",
+     "sha256": "463d54ffa621dd303e47bb4842591bc2ad5a160883c4459482648003489cf612",
      "bytes": 87430,
-     "fetched_at": "2026-09-13T06:10:52.825440+00:00"
+     "fetched_at": "2026-09-29T06:57:49.328128+00:00"
     },
     "subsidy/new_taipei.html": {
-     "sha256": "7b964f360b88f30b92e4bf74b85e5eb2f6f33699ca141237956615a9c3354d72",
-     "bytes": 113972,
-     "fetched_at": "2026-09-13T06:10:53.569536+00:00"
+     "sha256": "0bcca676630d9764069e3f742e64d38ab96afc27e2cb16d9cceecdf137fc79dd",
+     "bytes": 112455,
+     "fetched_at": "2026-09-29T06:57:49.938029+00:00"
     },
     "subsidy/taoyuan.html": {
-     "sha256": "25efa01da7509d21c2a70d323b8917faf99f7b5fa9cdf26c155b6fa7ad915db8",
-     "bytes": 284120,
-     "fetched_at": "2026-09-13T06:10:54.993308+00:00"
+     "sha256": "9049a4b8c1640fd830e1852bbd8905e3d6d603db829973a808342363c30df506",
+     "bytes": 284132,
+     "fetched_at": "2026-09-29T06:58:00.950561+00:00"
     },
     "subsidy/taichung.html": {
-     "sha256": "36e4c34b3279e826a02a276ae92ce83c17a0286f346990c05715ee1293737245",
-     "bytes": 101663,
-     "fetched_at": "2026-09-13T06:10:56.028664+00:00"
+     "sha256": "c3092596c326757acbc4e2cb933e53767dda0dbe4aee3354da7aa3ba665ab332",
+     "bytes": 101914,
+     "fetched_at": "2026-09-29T06:58:01.345247+00:00"
     },
     "subsidy/tainan.html": {
-     "sha256": "03217cfeb732aa7d7f30a377b87558f1ff78dc3d6ea623a5d749fcf82cf46a90",
-     "bytes": 168240,
-     "fetched_at": "2026-09-13T06:10:56.184587+00:00"
+     "sha256": "367acc5cd31e2dcbefbd0cf087b25ce4ccec2cc175d60712f3619bc155a44eef",
+     "bytes": 168379,
+     "fetched_at": "2026-09-29T06:58:02.558694+00:00"
     },
     "subsidy/kaohsiung.html": {
-     "sha256": "a3006f61fd1514be7823a3b44099158b9ab5c3e95f2f6b44b369cc4e4f7e1b8a",
+     "sha256": "5f9d873be07a4af5e39a7607b6315fcf5aa8035d3ca82f7acb60210b3b94bafd",
      "bytes": 28221,
-     "fetched_at": "2026-09-13T06:10:56.334355+00:00"
+     "fetched_at": "2026-09-29T06:58:02.793907+00:00"
     },
     "subsidy/yilan.html": {
-     "sha256": "de426901656daeb64bdf417b41bf1dc0881855046b85708af4e0876ccc52cf36",
+     "sha256": "70fdd3f6958a11e0bfe802780eacdd5459999960f40b1d3c9f245dc895c154ac",
      "bytes": 79672,
-     "fetched_at": "2026-09-13T06:10:56.534722+00:00"
+     "fetched_at": "2026-09-29T06:58:04.085474+00:00"
     },
     "subsidy/hsinchu_city.html": {
-     "sha256": "6a8dfd1160c786ebfb8f9e5ac8244521287dc49d9409616b8f1f4a591e0b7ac3",
+     "sha256": "4f030dab07429575a252b8fa32b42cad187af65cf2cf15d09c9a82d20572a37a",
      "bytes": 253073,
-     "fetched_at": "2026-09-13T06:10:57.598160+00:00"
+     "fetched_at": "2026-09-29T06:58:05.962353+00:00"
     },
     "subsidy/hsinchu_county.html": {
-     "sha256": "49b95c3001004c404d49c9467037925f9d0c4e7f1af0065cc7cd38ac14a8ca95",
-     "bytes": 73316,
-     "fetched_at": "2026-09-13T06:10:57.796692+00:00"
+     "sha256": "5435b016091ecdd5696cfb637d1cc30b2b4beb9b86e3f5ea909ac3a1254c1e9e",
+     "bytes": 73269,
+     "fetched_at": "2026-09-29T06:58:06.694279+00:00"
     },
     "subsidy/miaoli.html": {
-     "sha256": "26860cb417dc7d08adfb2095e738483adb4e780059e90d1652b8fa6201f3e075",
-     "bytes": 96733,
-     "fetched_at": "2026-09-13T06:10:58.263584+00:00"
+     "sha256": "82d6541cee7322024db2d179273952f228ff197b8be1b119bc0a468429712c13",
+     "bytes": 96739,
+     "fetched_at": "2026-09-29T06:58:07.124615+00:00"
     },
     "subsidy/changhua.html": {
-     "sha256": "985b25334a91530f28f9aa489ee4a7489cb8c69134983f4df649dd452d2ae23c",
+     "sha256": "38f90346a0a2577fc5bf97ccb7cadcfc0c1b8fb549987177fb33e4f27bcab9fd",
      "bytes": 115705,
-     "fetched_at": "2026-09-13T06:10:59.355807+00:00"
+     "fetched_at": "2026-09-29T06:58:08.110249+00:00"
     },
     "subsidy/nantou.html": {
-     "sha256": "cee12321cca6cd0c1bac3ac23e6b12a9d811c2535aaed63c0d745897178625dc",
-     "bytes": 238058,
-     "fetched_at": "2026-09-13T06:10:59.813455+00:00"
+     "sha256": "3cf55e90800635e2c8b20de732647bcddc58449788cb37792d761454917ae6b3",
+     "bytes": 238807,
+     "fetched_at": "2026-09-29T06:58:08.541714+00:00"
     },
     "subsidy/yunlin.pdf": {
      "sha256": "f378466ffa2deee057712a7f6f53cf669f18922cb6e2ad8f4bacadbad96e8556",
      "bytes": 360536,
-     "fetched_at": "2026-09-13T06:11:00.676449+00:00"
+     "fetched_at": "2026-09-29T06:58:09.380775+00:00"
     },
     "subsidy/chiayi_city.html": {
-     "sha256": "257129999f864b1e2a8f0193fc0034c4e490b51a9682b78dacb3893997b673da",
+     "sha256": "bae7a0f2a71050e207ba96b70df502d3957d7276843cb10103a22cb76eace7fc",
      "bytes": 31850,
-     "fetched_at": "2026-09-13T06:11:01.190218+00:00"
+     "fetched_at": "2026-09-29T06:58:10.790686+00:00"
     },
     "subsidy/pingtung.html": {
      "sha256": "11d82f2e5806d8926527e2b26ab63a9891058bdb8185b46282befb9cb97866e8",
      "bytes": 10371,
-     "fetched_at": "2026-09-13T06:11:01.314779+00:00"
+     "fetched_at": "2026-09-29T06:58:10.879251+00:00"
     },
     "subsidy/taitung.html": {
-     "sha256": "7ed9b5338c8ec544d2687fa53df2c70652d8a03ce5594af670f90122f22c03ab",
+     "sha256": "95c279eaf55875c6ad9ca557e07e0b6429c7cfc5275dc6b92ca6bb750ae9b456",
      "bytes": 37489,
-     "fetched_at": "2026-09-13T06:11:02.656387+00:00"
+     "fetched_at": "2026-09-29T06:58:11.096116+00:00"
     },
     "subsidy/hualien.html": {
-     "sha256": "de42b1667b41d0df84c4cea6c6116be2daba4f0472ab0217a2baa042012c796b",
+     "sha256": "ca0c20a34eb23996d080a0561e580b39c163e528c68b8d4536269919d2ca6322",
      "bytes": 19797,
-     "fetched_at": "2026-09-13T06:11:02.821934+00:00"
+     "fetched_at": "2026-09-29T06:58:11.239371+00:00"
     },
     "subsidy/penghu.html": {
-     "sha256": "eb767f2abcba5de7ca0570bfd96b2ab4aaea25800a2a2b2d5d7bdf561e2149e7",
-     "bytes": 30545,
-     "fetched_at": "2026-09-13T06:11:03.692800+00:00"
+     "sha256": "6a03d58770e66d4d9f99be2235f4a6307c09010d45207d79ed5c2d0d5ea31597",
+     "bytes": 30371,
+     "fetched_at": "2026-09-29T06:58:12.666466+00:00"
     },
     "subsidy/keelung.html": {
-     "sha256": "c2eaa9560fc915b17c1c69c7f6bf4cb45bb3bc530bd3584fcf0031007087189b",
+     "sha256": "685aa6386868840bf12ee69d3d110e56f05ca04c4b7ad329e4175f7fb2766d8d",
      "bytes": 49123,
-     "fetched_at": "2026-09-13T06:11:04.088420+00:00"
+     "fetched_at": "2026-09-29T06:58:13.099192+00:00"
     },
     "subsidy/kinmen.html": {
-     "sha256": "22a150b176c3879e697d7080ed26eda80929bdcc98147e448a0192c926752a8e",
-     "bytes": 90406,
-     "fetched_at": "2026-09-13T06:11:04.453242+00:00"
+     "sha256": "e8fc21ca74f02d268627eb2132425900a80411f14f3184a1d9b193022e18024b",
+     "bytes": 90755,
+     "fetched_at": "2026-09-29T06:58:14.621601+00:00"
     },
     "subsidy/lienchiang.html": {
-     "sha256": "1322464deba52571ec4cfaf29753156c0f93c6a1fb347758f4038d8577538618",
+     "sha256": "fb4152ae3d83afd310c3d38df29b820dc34c26bb46c050a889e5bdd5aa51cc07",
      "bytes": 94385,
-     "fetched_at": "2026-09-13T06:11:05.685878+00:00"
+     "fetched_at": "2026-09-29T06:58:17.555224+00:00"
     },
     "subsidy/chiayi_county.html": {
-     "sha256": "3c32bd417a1891452ec76ca2039afdba2fff66bf7f27ac8c4820b94b6d64bda8",
+     "sha256": "dce9caa072c3b3086edb5aeb87534b7aa26346b964a3c8a3f508022250130773",
      "bytes": 97625,
-     "fetched_at": "2026-09-13T06:11:00.971198+00:00"
+     "fetched_at": "2026-09-29T06:58:10.572293+00:00"
     }
    },
-   "last_fetched": "2026-09-13T06:11:05.685897+00:00",
-   "next_due": "2026-12-13T06:11:05.685903+00:00",
+   "last_fetched": "2026-09-29T06:58:17.555270+00:00",
+   "next_due": "2026-12-29T06:58:17.555274+00:00",
    "pending_big": false,
-   "last_changed": "2026-09-13T06:11:05.685921+00:00"
+   "last_changed": "2026-09-29T06:58:17.555294+00:00"
   },
   "county_booking_more": {
    "files": {
     "dyn/cy_health.html": {
-     "sha256": "d79d486d57ff30cde8fc5c1971becd951fbb3ff6c94b0b95df2d68c2e74fc26f",
-     "bytes": 147469,
-     "fetched_at": "2026-09-13T06:06:52.729587+00:00"
+     "sha256": "209f91b15d46bd41dabafaada2e3a154043d7658e36aa3f6bf96f60f99432e0d",
+     "bytes": 147885,
+     "fetched_at": "2026-09-29T06:58:18.649144+00:00"
     }
    },
-   "last_fetched": "2026-09-13T06:06:52.729605+00:00",
-   "next_due": "2026-09-20T06:06:52.729611+00:00",
+   "last_fetched": "2026-09-29T06:58:18.649159+00:00",
+   "next_due": "2026-10-06T06:58:18.649162+00:00",
    "pending_big": false,
-   "last_changed": "2026-09-13T06:06:52.729623+00:00"
+   "last_changed": "2026-09-29T06:58:18.649170+00:00"
   },
   "tw_town_geo": {
    "files": {
@@ -701,8 +725,21 @@
    },
    "last_fetched": "2026-09-13T06:07:18.729003+00:00",
    "next_due": "2026-10-13T06:07:18.729006+00:00",
-   "pending_big": false,
+   "pending_big": true,
    "last_changed": "2026-09-13T06:07:18.729014+00:00"
+  },
+  "hpa_center_contacts": {
+   "files": {
+    "dyn/hpa_centers.pdf": {
+     "sha256": "472f36d71736cfe20cb50424ff1959ab75cc24892f54a98f8c1e5b3631da7686",
+     "bytes": 120513,
+     "fetched_at": "2026-09-29T06:58:17.658256+00:00"
+    }
+   },
+   "last_fetched": "2026-09-29T06:58:17.658270+00:00",
+   "next_due": "2027-09-29T06:58:17.658273+00:00",
+   "pending_big": false,
+   "last_changed": "2026-09-29T06:58:17.658280+00:00"
   }
  }
 }
