@@ -9,8 +9,10 @@
 #   for f in ops/fetch-taiwan.sh research/state.json research/scripts/sync.py research/scripts/sources.json \
 #            research/scripts/fetch_all.sh research/2026-09-11-sources/scripts/fetch.sh \
 #            research/2026-09-12-education/scripts/fetch_edu.sh research/2026-09-12-topics/scripts/fetch_topics.sh; do
-#     mkdir -p "$H/$(dirname $f)" && curl -fsSL "$B/$f" -o "$H/$f"; done
-# 來源清單或抓取腳本改版時，境外那邊會通知 tw8 重跑上面這段；不自動更新（不讓台灣主機每週執行新下載的程式）。
+#     mkdir -p "$H/$(dirname $f)" && curl -fsSL "$B/$f" -o "$H/$f" || { echo "失敗：$f"; break; }; done
+# 不自動更新（不讓台灣主機每週執行新下載的程式），但每輪會比對（見下方 FILES）：
+#   遠端取不到（repo 轉 private、404）或內容跟本機不同 → 這輪中止、不投遞，fetch.log 寫明原因。
+#   境外那邊收不到 DONE 就會在 Slack 發 🟡，不會悄悄拿舊版跑下去。改版時重跑上面這段即可。
 # 相依只有系統 python3（標準函式庫）、curl、rsync；不需要 pandas／pdfplumber。
 #
 #   ① 第一次（DATA/work 是空的）：research/scripts/fetch_all.sh 整批抓一輪，建立完整原始檔。
@@ -46,6 +48,19 @@ exec 200>"$DATA/.lock"
 flock -n 200 || { log "上一輪還在跑"; exit 1; }
 
 cd "$ROOT" || exit 1
+
+# 本機檔案要跟 repo 一致（state.json 不比，那是這台自己在寫的起點）
+RAW="https://raw.githubusercontent.com/LightChang/bansik.tw/main"
+FILES="ops/fetch-taiwan.sh research/scripts/sync.py research/scripts/sources.json research/scripts/fetch_all.sh
+  research/2026-09-11-sources/scripts/fetch.sh research/2026-09-12-education/scripts/fetch_edu.sh
+  research/2026-09-12-topics/scripts/fetch_topics.sh"
+for f in $FILES; do
+  remote=$(curl -fsSL -m 30 "$RAW/$f" | sha256sum | cut -d' ' -f1; exit "${PIPESTATUS[0]}") \
+    || { log "中止：取不到 $RAW/$f（repo 轉 private 或檔案搬走？），不投遞"; exit 1; }
+  [ -f "$f" ] && [ "$(sha256sum < "$f" | cut -d' ' -f1)" = "$remote" ] \
+    || { log "中止：$f 跟 repo 版本不同，請重跑檔頭的下載段落，不投遞"; exit 1; }
+done
+
 [ -f "$DATA/state.json" ] || cp research/state.json "$DATA/state.json"
 mkdir -p "$DATA/archive"
 
