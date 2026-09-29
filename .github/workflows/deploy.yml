@@ -3,7 +3,8 @@
 # 只做建置與部署，不抓資料——抓取與解析在 research/ 的 Python 管線，
 # 產出的 src/data/*.json 是進版控的，所以 CI 上只要有 node 就夠，
 # 不必在 CI 裝 Python、也不必重跑一次全國抓取。
-# 資料要更新時在本機跑 `pnpm run data` 再 commit。
+# 資料每週自動更新：台灣主機 tw8 抓（ops/fetch-taiwan.sh）、境外主機解析後 commit
+# （ops/run-data-update.sh，排程 ops/bansik-data.cron）。手動更新仍可本機跑 `pnpm run data` 再 commit。
 name: deploy
 
 on:

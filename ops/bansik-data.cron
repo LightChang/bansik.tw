@@ -1,0 +1,9 @@
+# /etc/cron.d/bansik-data — bansik.tw 每週資料更新（2026-09-29 起）
+# 來源檔：/mnt/yao-care/bansik.tw/ops/bansik-data.cron（改這裡再 install，不要直接改 /etc/cron.d）
+#   install -m 644 -o root -g root /mnt/yao-care/bansik.tw/ops/bansik-data.cron /etc/cron.d/bansik-data
+# 腳本：ops/run-data-update.sh（收 tw8 投遞 → 解析 → 守門 → test/build → 有實質變更才 push main）
+# tw8 那輪（ops/fetch-taiwan.sh）是每週一台北 07:30；這輪台北 10:00，留 2.5 小時給抓取與投遞。
+# 時區：系統為 UTC、Vixie cron 忽略 CRON_TZ。UTC 02:00 ＝ 台北 10:00。
+SHELL=/bin/bash
+PATH=/root/.local/bin:/usr/local/bin:/usr/bin:/bin
+0 2 * * 1 root /mnt/yao-care/bansik.tw/ops/run-data-update.sh
