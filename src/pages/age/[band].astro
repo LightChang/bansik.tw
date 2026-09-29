@@ -177,7 +177,6 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
           （<a href={SC.url} target="_blank" rel="noopener">{SC.name}</a>，清單頁更新日期 {SC.list_updated}，{SC.fetched} 下載），
           共 {myScales.map(scaleCount).reduce((a, n) => a + n, 0)} 題，只把 PDF 排版的斷行接回。
           {myScales.some((s) => s.domains.some((d) => d.items.some((x) => x.mark))) && <>題目前的 ★、○ 是量表原件印的，量表本身沒有說明這兩個記號的意思。</>}
-          量表每頁印有「{SC.rights}」，本站經國健署授權引用。
         </p>
         <p class="meta">
           通過標準、不通過標準與計分方式在量表 PDF 裡，這裡沒有抄；結果由施測者判斷，家長不必自己照這些題目打分數。
@@ -219,10 +218,9 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
         ))}
         <p class="meta">
           原文照錄自<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>
-          依生日回傳的表單（{CK.fetched} 由臺灣境內主機取得），錯字照原網頁。
+          依生日回傳的表單（{CK.fetched} 取得），錯字照原網頁。
           題目前的 ★ 是網頁原本印的；「＿」是表單上讓人填寫的空格。
           題目附的示意圖也來自同一份表單，縮小後照原順序放在題目下方。
-          網頁頁尾標「{CK.rights}」，本站經社家署同意引用。
         </p>
         <p class="meta">
           這是給家長自己勾的檢核表，是篩檢工具，不是診斷標準；勾到「否」不等於發展遲緩，結果怎麼看請問醫師或縣市通報轉介中心。

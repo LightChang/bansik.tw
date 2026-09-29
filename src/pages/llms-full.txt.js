@@ -258,7 +258,7 @@ export async function GET({ site }) {
   }
   p('# 六之一、國健署兒童發展篩檢量表各月齡題目（原文）');
   p();
-  p(`來源：${A.sources.scales.name}（${A.sources.scales.url}），${A.scales.length} 份分齡 PDF 的「敘述」欄，原文照錄；清單頁更新日期 ${A.sources.scales.list_updated}，${A.sources.scales.fetched} 下載。經國健署授權引用。`);
+  p(`來源：${A.sources.scales.name}（${A.sources.scales.url}），${A.scales.length} 份分齡 PDF 的「敘述」欄，原文照錄；清單頁更新日期 ${A.sources.scales.list_updated}，${A.sources.scales.fetched} 下載。`);
   p('這些是醫師或施測人員做兒童發展篩檢時用的題目，通過標準與計分在量表 PDF 裡；不是診斷標準，篩檢沒過不等於診斷。題目前的「★」「○」是量表原件印的，量表未說明其意思。');
   p();
   for (const s of A.scales) {

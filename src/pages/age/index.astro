@@ -115,7 +115,7 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
       </p>
       <p class="meta">
         分齡量表依<a href={SC.url} target="_blank" rel="noopener">{SC.name}</a>的 {A.scales.length} 份分齡 PDF
-        （清單頁更新日期 {SC.list_updated}，{SC.fetched} 下載），題目原文照錄，經國健署授權引用；量表是篩檢工具，不是診斷標準。
+        （清單頁更新日期 {SC.list_updated}，{SC.fetched} 下載），題目原文照錄；量表是篩檢工具，不是診斷標準。
       </p>
     </section>
 
@@ -142,9 +142,7 @@ const description = `從出生到未滿 7 歲，國健署兒童健康手冊分 $
         </table>
       </div>
       <p class="meta">
-        來源：<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>。題數與警訊題數是 2026-09-12 取得的，
-        題目原文與示意圖是 {CK.fetched} 由臺灣境內主機重新取得、經社家署同意引用，{A.sfaa.length} 層的題數都與 09-12 相同
-        （1 歲 3 個月那層 09-12 記成 11 題，是當時計數漏了第 2 題，已更正為 12 題）。檢核表是篩檢工具，不是診斷標準。
+        來源：<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>（{CK.fetched} 取得），題目原文照錄。檢核表是篩檢工具，不是診斷標準。
       </p>
     </section>
 
