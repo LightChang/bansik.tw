@@ -3,18 +3,16 @@
 # bansik.tw 台灣端抓取器（tw8，2026-09-29 起）。比照 seh.tw 的 ops/fetch-taiwan-only.sh：
 # 台灣主機只抓、不碰 git、不解析、不 build；解析與上線在境外主機的 ops/run-data-update.sh。
 #
-# 【tw8 不 clone repo】只放抓取需要的 8 個檔，目錄結構照 repo（fetch_all.sh 靠相對路徑找另外三支）。
+# 【tw8 不 clone repo】只放抓取需要的 4 個檔，目錄結構照 repo。
 # 安裝（也是改版後的更新方式）——網址釘在 commit SHA，內容不可變，不受 raw CDN 快取影響：
 #   H=/opt/bansik-fetch
 #   REF=$(curl -fsSL -H 'Accept: application/vnd.github.sha' https://api.github.com/repos/LightChang/bansik.tw/commits/main)
-#   for f in ops/fetch-taiwan.sh research/state.json research/scripts/sync.py research/scripts/sources.json \
-#            research/scripts/fetch_all.sh research/2026-09-11-sources/scripts/fetch.sh \
-#            research/2026-09-12-education/scripts/fetch_edu.sh research/2026-09-12-topics/scripts/fetch_topics.sh; do
+#   for f in ops/fetch-taiwan.sh research/state.json research/scripts/sync.py research/scripts/sources.json; do
 #     mkdir -p "$H/$(dirname $f)" && curl -fsSL "https://raw.githubusercontent.com/LightChang/bansik.tw/$REF/$f" -o "$H/$f" \
 #       || { echo "失敗：$f，安裝未完成"; exit 1; }
 #   done && echo "$REF" > "$H/.ref"
 # 不自動更新（不讓台灣主機每週執行新下載的程式），但每輪用 GitHub compare API 查 .ref 到 main 之間
-# 這 7 個抓取檔有沒有被改（state.json 不算）：有改、查不到（repo 轉 private、API 失敗）→ 這輪中止、不投遞，
+# 這 3 個抓取檔有沒有被改（state.json 不算）：有改、查不到（repo 轉 private、API 失敗）→ 這輪中止、不投遞，
 # fetch.log 寫明原因；境外收不到 DONE 會在 Slack 發 🟡。
 # 相依只有系統 python3（標準函式庫）、curl、rsync；不需要 pandas／pdfplumber。
 #
@@ -48,9 +46,7 @@ flock -n 200 || { log "上一輪還在跑"; exit 1; }
 cd "$ROOT" || exit 1
 
 # 安裝的版本（.ref）之後，repo 有沒有改過抓取檔
-FILES="ops/fetch-taiwan.sh research/scripts/sync.py research/scripts/sources.json research/scripts/fetch_all.sh
-  research/2026-09-11-sources/scripts/fetch.sh research/2026-09-12-education/scripts/fetch_edu.sh
-  research/2026-09-12-topics/scripts/fetch_topics.sh"
+FILES="ops/fetch-taiwan.sh research/scripts/sync.py research/scripts/sources.json"
 [ -s .ref ] || { log "中止：沒有 .ref，安裝沒做完，不投遞"; exit 1; }
 CHANGED=$(curl -fsSL -m 30 "https://api.github.com/repos/LightChang/bansik.tw/compare/$(cat .ref)...main" \
   | FILES="$FILES" python3 -c '
@@ -66,11 +62,10 @@ print(" ".join(n for n in names if n in os.environ["FILES"].split()))
 [ -f "$DATA/state.json" ] || cp research/state.json "$DATA/state.json"
 mkdir -p "$DATA/archive"
 
-if [ -z "$(ls -A "$DATA/work")" ]; then
-  log "第一次：整批抓取"
-  PYTHON="$PY" bash research/scripts/fetch_all.sh "$DATA/work" || log "整批抓取有來源失敗（見上方），照常投遞"
-fi
-"$PY" research/scripts/sync.py --due --work "$DATA/work" --state "$DATA/state.json" --archive "$DATA/archive" \
+# 第一次（work/ 是空的）抓全部來源；之後只抓到期的。
+# 不用 fetch_all.sh：它只涵蓋最初三次實測的來源，sources.json 後來加的（補助條文、鄉鎮界圖資…）不在裡面。
+if [ -z "$(ls -A "$DATA/work")" ]; then MODE=--all; log "第一次：抓全部來源"; else MODE=--due; fi
+"$PY" research/scripts/sync.py $MODE --work "$DATA/work" --state "$DATA/state.json" --archive "$DATA/archive" \
   || log "sync.py 回報錯誤，照常投遞已抓到的部分"
 
 cd "$DATA" || exit 1

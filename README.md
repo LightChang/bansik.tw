@@ -152,8 +152,8 @@
 
 台灣主機 tw8 每週一 07:30 抓（`ops/fetch-taiwan.sh`），投遞到境外主機；境外每週一 10:00 解析、守門後上線（`ops/run-data-update.sh`）。
 
-**改了下面 7 個檔要通知 tw8 重跑安裝段落**（見 `ops/fetch-taiwan.sh` 檔頭），否則 tw8 每週都會中止、Slack 每週一出現 🟡：
-`ops/fetch-taiwan.sh`、`research/scripts/sync.py`、`research/scripts/sources.json`、`research/scripts/fetch_all.sh`、`research/2026-09-11-sources/scripts/fetch.sh`、`research/2026-09-12-education/scripts/fetch_edu.sh`、`research/2026-09-12-topics/scripts/fetch_topics.sh`。`research/state.json` 不在此列。
+**改了下面 3 個檔要通知 tw8 重跑安裝段落**（見 `ops/fetch-taiwan.sh` 檔頭），否則 tw8 每週都會中止、Slack 每週一出現 🟡：
+`ops/fetch-taiwan.sh`、`research/scripts/sync.py`、`research/scripts/sources.json`。`research/state.json` 不在此列。
 
 ## 來源網址一覽
 

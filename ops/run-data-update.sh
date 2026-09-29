@@ -47,7 +47,7 @@ exec 200>"$LOCK_FILE"
 flock -w 3600 200 || fail "等鎖超過 60 分"
 
 # ── 1. 有沒有新投遞 ───────────────────────────
-[ -f "$INBOX/DONE" ] || { log "inbox 沒有 DONE，這週 tw8 沒投遞"; notify "🟡 bansik.tw 資料更新 $(TZ=Asia/Taipei date +%-m/%-d)：台灣主機這週沒有送資料來，跳過（查 tw8 的 /var/lib/bansik/fetch.log，最常見是最近改過 README 列的 7 個抓取檔、tw8 還沒重裝）"; exit 0; }
+[ -f "$INBOX/DONE" ] || { log "inbox 沒有 DONE，這週 tw8 沒投遞"; notify "🟡 bansik.tw 資料更新 $(TZ=Asia/Taipei date +%-m/%-d)：台灣主機這週沒有送資料來，跳過（查 tw8 的 /var/lib/bansik/fetch.log，最常見是最近改過 README 列的 3 個抓取檔、tw8 還沒重裝）"; exit 0; }
 if [ -f "$STATE_DIR/last-import" ] && ! [ "$INBOX/DONE" -nt "$STATE_DIR/last-import" ]; then
   log "DONE 沒比上次新，跳過"; exit 0
 fi
@@ -76,8 +76,8 @@ FILLED=""; MISSING=""
 while IFS=$'\t' read -r sid out; do
   [ -e "$WORK/$out" ] && continue
   snap=$(ls -d research/archive/"$sid"/*/ 2>/dev/null | sort | tail -1)
-  if [ -n "$snap" ] && [ -f "$snap$(basename "$out")" ]; then
-    mkdir -p "$WORK/$(dirname "$out")"; cp "$snap$(basename "$out")" "$WORK/$out"
+  if [ -n "$snap" ] && [ -f "$snap$out" ]; then
+    mkdir -p "$WORK/$(dirname "$out")"; cp "$snap$out" "$WORK/$out"
     FILLED="$FILLED $out（$(basename "$snap")）"
   else
     MISSING="$MISSING $out"
@@ -86,7 +86,8 @@ done < <(python3 -c '
 import json
 for s in json.load(open("research/scripts/sources.json"))["sources"]:
     if s.get("big"): continue
-    for f in s.get("files", []): print(s["id"], f["out"], sep="\t")')
+    outs = [f["out"] for f in s.get("files", []) + s.get("posts", [])] + ([s["out"]] if "out" in s else [])
+    for o in outs: print(s["id"], o, sep="\t")')
 [ -n "$FILLED" ] && log "用存檔補上：$FILLED"
 [ -n "$MISSING" ] && log "缺檔且沒有存檔：$MISSING"
 ( cd research \
