@@ -65,9 +65,33 @@ BEFORE=$(count)
 cp "$INBOX/state.json" research/state.json
 [ -d "$INBOX/archive" ] && rsync -a "$INBOX/archive/" research/archive/
 rm -rf "$BUILD"; mkdir -p "$BUILD"
+
+# 投遞只保證「送來的檔沒壞」，不保證「該有的都有」：來源失效時 tw8 照樣送 DONE
+# （2026-09-29 第一輪 hpa115.pdf 因 TLS＋403 沒抓到就是這樣）。所以這裡拿 sources.json
+# 的應有清單對一次：缺的檔用 research/archive/<來源>/ 最新一份補上並在 Slack 註明；
+# 連存檔都沒有的也列出來，交給下面的解析與機構數守門決定能不能上。
+WORK="$STATE_DIR/work"
+rsync -a --delete "$INBOX/work/" "$WORK/"
+FILLED=""; MISSING=""
+while IFS=$'\t' read -r sid out; do
+  [ -e "$WORK/$out" ] && continue
+  snap=$(ls -d research/archive/"$sid"/*/ 2>/dev/null | sort | tail -1)
+  if [ -n "$snap" ] && [ -f "$snap$(basename "$out")" ]; then
+    mkdir -p "$WORK/$(dirname "$out")"; cp "$snap$(basename "$out")" "$WORK/$out"
+    FILLED="$FILLED $out（$(basename "$snap")）"
+  else
+    MISSING="$MISSING $out"
+  fi
+done < <(python3 -c '
+import json
+for s in json.load(open("research/scripts/sources.json"))["sources"]:
+    if s.get("big"): continue
+    for f in s.get("files", []): print(s["id"], f["out"], sep="\t")')
+[ -n "$FILLED" ] && log "用存檔補上：$FILLED"
+[ -n "$MISSING" ] && log "缺檔且沒有存檔：$MISSING"
 ( cd research \
-  && "$PY" scripts/districts.py "$INBOX/work" "$BUILD" \
-  && "$PY" scripts/build.py "$INBOX/work" "$BUILD" \
+  && "$PY" scripts/districts.py "$WORK" "$BUILD" \
+  && "$PY" scripts/build.py "$WORK" "$BUILD" \
   && "$PY" scripts/renames.py "$BUILD" entity_prev.csv \
   && "$PY" ../scripts/make_site_data.py "$BUILD" ) || { revert; fail "解析失敗（看 $LOG）"; }
 
@@ -93,7 +117,7 @@ RENAMES=$(( $(wc -l < "$BUILD/rename_candidates.csv" 2>/dev/null || echo 1) - 1 
 STAT=$(git diff --shortstat -- src/data)
 
 if [ "${BANSIK_DRY:-0}" = 1 ]; then
-  log "DRY：機構 $BEFORE → $AFTER；$STAT；更名候選 $RENAMES"
+  log "DRY：機構 $BEFORE → $AFTER；$STAT；更名候選 $RENAMES；存檔補上：${FILLED:-無}；缺檔：${MISSING:-無}"
   git diff --stat -- src/data research | tail -20
   revert
   exit 0
@@ -113,6 +137,10 @@ touch "$STATE_DIR/last-import"
 log "已推送：機構 $BEFORE → $AFTER；$STAT；更名候選 $RENAMES"
 
 MSG="🟢 bansik.tw 資料更新 $(TZ=Asia/Taipei date +%-m/%-d)：機構 $BEFORE → $AFTER 家，已上線"
+[ -n "$FILLED" ] && MSG="$MSG
+🟡 這輪沒抓到、改用舊存檔：$FILLED"
+[ -n "$MISSING" ] && MSG="$MSG
+🟡 這輪沒抓到、也沒有存檔：$MISSING"
 if [ "$RENAMES" -gt 0 ]; then
   MSG="$MSG
 ⚠️ 有 $RENAMES 組疑似更名要人確認（地址電話相同、名稱不同）。確認後寫進 research/scripts/aliases.json：
