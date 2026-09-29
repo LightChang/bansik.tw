@@ -215,6 +215,7 @@ out = {
             'fetched_by': '臺灣主機 tw8 代抓（POST birthDt=yyyy/mm/dd）',
             'archived': 'research/archive/tw8-2026-09-28/sfaa/',
             'rights': '©2015衛生福利部社會及家庭署 版權所有',
+            'note': '站主 2026-09-29 回報社家署同意本站引用檢核表（題目與示意圖）。',
             'levels': 13,
         },
         'law_rules': {

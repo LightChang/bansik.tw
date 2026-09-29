@@ -153,4 +153,29 @@ test('社家署檢核表出處：網址、表單端點、取得日期、頁尾�
   assert.equal(C.form, 'https://system.sfaa.gov.tw/cecm/screenView/form');
   assert.match(C.fetched, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal(C.rights, '©2015衛生福利部社會及家庭署 版權所有');
+  assert.match(C.note, /社家署同意/);
+});
+
+test('社家署檢核表示意圖：200 張都有 WebP、寬高與檔案相符、單張與每頁位元組有上限', async () => {
+  const fs = await import('node:fs');
+  const { sfaaFor } = await import('../src/lib/age.mjs');
+  const dir = new URL('../public/age/sfaa/', import.meta.url);
+  const all = A.sfaa.flatMap((s) => s.items.flatMap((x) => x.imgs));
+  assert.equal(all.length, 200);
+  assert.equal(new Set(all.map((g) => g.file)).size, 200);
+  assert.deepEqual(fs.readdirSync(dir).sort(), all.map((g) => g.file).sort(), 'public/age/sfaa/ 只放用到的圖');
+  for (const s of A.sfaa) for (const x of s.items) assert.equal(x.imgs.length, x.figs, `${s.key} ${x.no}`);
+  for (const g of all) {
+    const buf = fs.readFileSync(new URL(g.file, dir));
+    assert.equal(buf.toString('ascii', 8, 12), 'WEBP', g.file);
+    // VP8 有損格式：寬高在 frame header（14 bit，存的就是實際像素數）
+    assert.equal(buf.toString('ascii', 12, 16), 'VP8 ', g.file);
+    assert.deepEqual([buf.readUInt16LE(26) & 0x3fff, buf.readUInt16LE(28) & 0x3fff], [g.w, g.h], g.file);
+    assert.ok(buf.length <= 16 * 1024, `${g.file} ${buf.length} bytes`);
+  }
+  for (const b of A.bands) {
+    const bytes = sfaaFor(b, A.sfaa).flatMap((s) => s.items.flatMap((x) => x.imgs))
+      .reduce((n, g) => n + fs.statSync(new URL(g.file, dir)).size, 0);
+    assert.ok(bytes <= 400 * 1024, `${b.slug} 示意圖共 ${bytes} bytes`);
+  }
 });

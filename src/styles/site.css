@@ -119,6 +119,13 @@ table caption {
 /* ── 月齡頁：手冊題目 ───────────────────────────── */
 .items li { margin-top: var(--space-2); }
 .items .note { display: block; font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-1); }
+/* 社家署檢核表題目的示意圖：原網頁以高 200px 顯示，這裡 160px（手機一排放得下兩張），寬圖照比例縮到版面寬 */
+.item-figs { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-2); margin: var(--space-2) 0 var(--space-4); }
+.item-figs img {
+  height: 160px; width: auto; max-width: 100%; object-fit: contain;
+  border: var(--hairline) solid var(--border-subtle); border-radius: 0.5rem;
+}
+.item-figs figcaption { flex: 1 1 100%; font-size: var(--text-xs); color: var(--text-secondary); }
 .quote { border-inline-start: 3px solid var(--border-subtle); padding-inline-start: var(--space-4); margin-top: var(--space-4); color: var(--text-secondary); }
 
 select, input[type="date"] {

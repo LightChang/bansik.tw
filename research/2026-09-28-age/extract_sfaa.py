@@ -12,8 +12,8 @@ POST https://system.sfaa.gov.tw/cecm/screenView/form 帶 birthDt=yyyy/mm/dd；sh
     題目最後的整行作答框（6 歲第 4 題）不算題目文字，拿掉。
   - 題前的 ★ 另存 mark（網頁沒有圖例說明 ★ 的意思，站上照印不解釋）。
   - 題目下「計分：…」小字另存 note（只有 6 歲第 4 題有）。
-  - 題目附的示意圖只記張數 figs，圖本身不轉載（頁尾「©2015衛生福利部社會及家庭署 版權所有」，
-    網站沒有開放授權宣告）。
+  - 題目附的示意圖照網頁順序記在 imgs（檔名與站上縮圖的寬高），figs 是張數。
+    站主 2026-09-29 回報社家署同意本站引用檢核表，圖由 make_sfaa_images.py 壓成 WebP 放 public/age/sfaa/。
 """
 import hashlib
 import html
@@ -23,6 +23,17 @@ import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ARCH = os.path.join(HERE, '..', 'archive', 'tw8-2026-09-28', 'sfaa')
+IMG_H, IMG_W_MAX = 320, 720   # 站上縮圖：高 320px（顯示 160px 的 2 倍），寬圖最寬 720px
+
+
+def thumb_size(name):
+    """存檔原圖 → 站上縮圖的寬高（等比例，make_sfaa_images.py 照這個尺寸輸出）"""
+    from PIL import Image
+    w, h = Image.open(os.path.join(ARCH, 'images', name)).size
+    tw, th = round(w * IMG_H / h), IMG_H
+    if tw > IMG_W_MAX:
+        tw, th = IMG_W_MAX, round(h * IMG_W_MAX / w)
+    return tw, th
 
 # 檔名 → 名目月齡（用來對到 /age/ 的頁：落在哪個時段的左閉右開區間就放哪頁）
 BANDS = [('4m', 4), ('6m', 6), ('9m', 9), ('12m', 12), ('15m', 15), ('18m', 18), ('24m', 24), ('30m', 30),
@@ -57,7 +68,8 @@ def parse(path):
     # 每題一個 form-group：題目在左欄，右邊兩欄是「是／否」
     for g in re.split(r'<div class="form-group">', body)[1:]:
         q = g.split('<div class="col-lg-2')[0]
-        figs = len(re.findall(r'<img [^>]*screenView/cf100_', q))
+        names = re.findall(r'<img [^>]*screenView/(cf100_[0-9_]+\.png)', q)
+        imgs = [dict(zip(('file', 'w', 'h'), (n[:-4] + '.webp', *thumb_size(n)))) for n in names]
         note = ''
         m = re.search(r'<span style="display: inline-block; font-size: 10pt">(.*?)</span>', q, re.S)
         if m:
@@ -69,7 +81,7 @@ def parse(path):
         mk = re.match(r'(★?)\s*(\d+)\.\s*(.*)', text, re.S)
         assert mk, (path, text)
         items.append({'no': int(mk.group(2)), 'mark': mk.group(1), 'text': mk.group(3).strip(),
-                      'note': note, 'figs': figs})
+                      'note': note, 'figs': len(imgs), 'imgs': imgs})
     n_radio = len(set(re.findall(r'name="check(\d+)"', body)))
     assert n_radio == len(items), (path, n_radio, len(items))
     return {'label': title, 'short': rng.group(1), 'range': f'{rng.group(2)}~{rng.group(3)}',

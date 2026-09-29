@@ -4,7 +4,8 @@
 // 國健署分齡篩檢量表的題目也是原文（age.json 的 scales，extract_scales.py 抽、verify_scales.py 逐行比對），
 // 站主 2026-09-28 回報國健署已授權引用，獨立一段、附出處，不跟手冊題目混在一起；
 // 社家署線上檢核表的題目也是原文（age.json 的 sfaa，extract_sfaa.py 抽、verify_sfaa.py 比對，臺灣主機 tw8 2026-09-29 代抓），
-// 同樣獨立一段；題目附的示意圖不轉載（社家署網站標「版權所有」、沒有開放授權宣告），要看圖連回社家署；
+// 同樣獨立一段；站主 2026-09-29 回報社家署同意本站引用，題目附的示意圖也放上來
+// （make_sfaa_images.py 壓成 WebP 放 public/age/sfaa/，lazy-load，alt 用題目原文）；
 // 各項檢查的時程從 shared.json timeline 依月齡重疊算（src/lib/age.mjs），不另寫一份。
 // 站規：不做判讀、不寫「這樣就是發展遲緩」「不用擔心」，何時要評估只引手冊原句。
 import Base from '../../layouts/Base.astro';
@@ -192,7 +193,7 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
         <p class="lead">
           社家署網站的「線上兒童發展檢核」，家長輸入孩子生日，系統依年齡給一份檢核表，每題勾「是」或「否」後送出。
           {b.short}對到{mySfaa.map((s) => `「${s.short}」`).join('、')}{mySfaa.length > 1 ? `${mySfaa.length} 層` : '這一層'}，
-          下面是表單「發展里程檢核」一欄的題目原文。
+          下面是表單「發展里程檢核」一欄的題目原文與示意圖。
         </p>
         {mySfaa.map((s) => (
           <>
@@ -202,6 +203,15 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
                 <li>
                   {x.mark && `${x.mark} `}{x.text}
                   {x.note && <span class="note">{x.note}</span>}
+                  {x.imgs.length > 0 && (
+                    <figure class="item-figs">
+                      {x.imgs.map((g, k) => (
+                        <img src={`/age/sfaa/${g.file}`} width={g.w} height={g.h} loading="lazy" decoding="async"
+                          alt={x.imgs.length > 1 ? `${x.text}（第 ${k + 1} 張圖）` : x.text} />
+                      ))}
+                      <figcaption>圖：衛福部社家署兒童發展檢核表</figcaption>
+                    </figure>
+                  )}
                 </li>
               ))}
             </ol>
@@ -211,8 +221,8 @@ const description = `${lead}附手冊原文題目${myScales.length ? '、國健�
           原文照錄自<a href={CK.url} target="_blank" rel="noopener">{CK.name}</a>
           依生日回傳的表單（{CK.fetched} 由臺灣境內主機取得），錯字照原網頁。
           題目前的 ★ 是網頁原本印的；「＿」是表單上讓人填寫的空格。
-          題目提到的「圖1」「圖2」等示意圖在社家署網頁上，本站不轉載，要看圖請到社家署網站輸入生日。
-          網頁頁尾標「{CK.rights}」。
+          題目附的示意圖也來自同一份表單，縮小後照原順序放在題目下方。
+          網頁頁尾標「{CK.rights}」，本站經社家署同意引用。
         </p>
         <p class="meta">
           這是給家長自己勾的檢核表，是篩檢工具，不是診斷標準；勾到「否」不等於發展遲緩，結果怎麼看請問醫師或縣市通報轉介中心。
