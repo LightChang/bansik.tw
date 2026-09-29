@@ -47,7 +47,7 @@ exec 200>"$LOCK_FILE"
 flock -w 3600 200 || fail "等鎖超過 60 分"
 
 # ── 1. 有沒有新投遞 ───────────────────────────
-[ -f "$INBOX/DONE" ] || { log "inbox 沒有 DONE，這週 tw8 沒投遞"; notify "🟡 bansik.tw 資料更新 $(TZ=Asia/Taipei date +%-m/%-d)：台灣主機這週沒有送資料來，跳過（查 tw8 的 /var/lib/bansik/fetch.log，常見原因是抓取檔跟 repo 版本不同）"; exit 0; }
+[ -f "$INBOX/DONE" ] || { log "inbox 沒有 DONE，這週 tw8 沒投遞"; notify "🟡 bansik.tw 資料更新 $(TZ=Asia/Taipei date +%-m/%-d)：台灣主機這週沒有送資料來，跳過（查 tw8 的 /var/lib/bansik/fetch.log，最常見是最近改過 README 列的 7 個抓取檔、tw8 還沒重裝）"; exit 0; }
 if [ -f "$STATE_DIR/last-import" ] && ! [ "$INBOX/DONE" -nt "$STATE_DIR/last-import" ]; then
   log "DONE 沒比上次新，跳過"; exit 0
 fi
