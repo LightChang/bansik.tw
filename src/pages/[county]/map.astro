@@ -93,7 +93,8 @@ const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
     <h1>{N ? `${c.county}有哪些區：共 ${N} 個${townUnit}與各區兒童發展機構家數` : `${c.county}各區有幾家兒童發展機構`}</h1>
     <p class="lead">
-      {N > 0 && <>{c.county}共有 <span class="num">{N}</span> 個{townUnit}。</>}
+      {N > 0 && code === 'changhua' && <>{c.county}共有 <span class="num">{N}</span> 個{townUnit}：{townLinks.map((t, i) => <>{i > 0 && '、'}{t.href ? <a href={t.href}>{t.name}</a> : t.name}</>)}。</>}
+      {N > 0 && code !== 'changhua' && <>{c.county}共有 <span class="num">{N}</span> 個{townUnit}。</>}
       {c.county}的 <span class="num">{c.counts.entities}</span> 家兒童發展相關機構分布在
       <span class="num">{withPlaces.length}</span> 個行政區，最多的是{top}。
     </p>
