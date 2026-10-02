@@ -67,6 +67,8 @@ hr { border: 0; border-top: var(--hairline) solid var(--border-subtle); margin: 
 }
 
 .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+/* 名錄原文的換行照原樣顯示（社家署「服務內容」欄常分行寫項目與時間） */
+.pre { white-space: pre-line; }
 
 .label {
   font-family: var(--font-mono);

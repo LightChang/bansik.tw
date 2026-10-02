@@ -15,7 +15,10 @@ const c = county(code);
 // 混在一起畫會讓同一區的機構全部疊在一個點上，看起來像「這區只有一家」。
 // 底圖也不放，直接用經緯度投影成 SVG，圓圈大小就是家數。
 const geo = c.district_geo || {};
-const names = Object.keys(geo);
+// 現行鄉鎮市區名單（內政部國土測繪中心，research/scripts/towns.json）。
+// 圖資 district_geo 會混進服務區域的異寫（屏東「車城鎮」「霧台鄉」），有名單時只畫名單上的區
+const towns = c.towns || [];
+const names = Object.keys(geo).filter((n) => towns.length === 0 || towns.includes(n));
 const cnt = (n) => (c.districts[n] || {}).located || 0;
 
 let svg = null;
@@ -53,8 +56,8 @@ if (names.length > 0) {
   };
 }
 
-// 表格列出所有有機構設籍的行政區，加上圖資裡有、但目前 0 家的區（照實列 0）
-const all = [...new Set([...names, ...Object.keys(c.districts).filter((n) => cnt(n) > 0)])];
+// 表格列出現行全部鄉鎮市區（0 家的照實列 0），加上有機構設籍但不在名單上的寫法（理論上沒有）
+const all = [...new Set([...towns, ...names, ...Object.keys(c.districts).filter((n) => cnt(n) > 0)])];
 const sorted = all.sort((a, b) => cnt(b) - cnt(a) || a.localeCompare(b, 'zh-Hant'));
 const withPlaces = sorted.filter((n) => cnt(n) > 0);
 
@@ -71,23 +74,40 @@ const mixOf = (n) => {
 };
 
 const S = shortCounty(c.county);
+const N = towns.length;
+// 「有哪些區」清單：照內政部名單的順序，有名單頁的連過去，其餘純文字
+const townLinks = towns.map((n) => ({ name: n, href: dpages.has(n) ? districtUrl(code, n) : null }));
+const townUnit = /市$/.test(c.county) && towns.every((t) => /區$/.test(t)) ? '區' : '鄉鎮市';
 const top = withPlaces.slice(0, 3).map((n) => `${n}（${cnt(n)} 家）`).join('、');
 const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
 ---
 
 <Base
-  title={`${S}各區兒童發展與早療機構家數｜哪一區有幾家`}
-  description={`${c.county}各行政區的兒童發展相關機構家數：${withPlaces.length} 個行政區共 ${c.counts.entities} 家，`
+  title={N ? `${S}有哪些區（共${N}區）｜各區兒童發展與早療機構家數` : `${S}各區兒童發展與早療機構家數｜哪一區有幾家`}
+  description={(N ? `${c.county}共 ${N} 個${townUnit}：${towns.slice(0, 6).join('、')}${N > 6 ? '等' : ''}。` : '')
+    + `兒童發展相關機構分布在 ${withPlaces.length} 個行政區、共 ${c.counts.entities} 家，`
     + `最多的是${top}。每一區可再看篩檢、評估、治療各類的名單。`}
 >
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
-    <h1>{c.county}各區有幾家兒童發展機構</h1>
+    <h1>{N ? `${c.county}有哪些區：共 ${N} 個${townUnit}與各區兒童發展機構家數` : `${c.county}各區有幾家兒童發展機構`}</h1>
     <p class="lead">
+      {N > 0 && <>{c.county}共有 <span class="num">{N}</span> 個{townUnit}。</>}
       {c.county}的 <span class="num">{c.counts.entities}</span> 家兒童發展相關機構分布在
       <span class="num">{withPlaces.length}</span> 個行政區，最多的是{top}。
     </p>
+
+    {N > 0 && (
+      <section class="section">
+        <h2>{c.county}的 {N} 個{townUnit}</h2>
+        <p>{townLinks.map((t, i) => <>{i > 0 && '、'}{t.href ? <a href={t.href}>{t.name}</a> : t.name}</>)}</p>
+        <p class="meta">
+          行政區名單來源：內政部國土測繪中心行政區域資料（2026-10-02 取得）。
+          有連結的區有自己的兒童發展機構名單頁（{MIN_DISTRICT} 家以上才出頁）。
+        </p>
+      </section>
+    )}
 
     {svg ? (
       <>

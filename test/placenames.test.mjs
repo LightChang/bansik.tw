@@ -1,7 +1,7 @@
 // 機構頁 <title>／description 用的本名：去掉法人別與「(時段)」類註記，其他括號保留。
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { coreName, titleNames } from '../src/lib/placepages.mjs';
+import { coreName, titleNames, noindexReason } from '../src/lib/placepages.mjs';
 
 test('去掉開頭法人別與結尾註記（半形、全形括號）', () => {
   assert.equal(coreName('社團法人全腦科學教育協會(時段)'), '全腦科學教育協會');
@@ -35,4 +35,14 @@ test('同縣市去掉註記後撞名，兩家都用全名', () => {
   assert.equal(m.get('c'), '甲協會');
   assert.equal(m.get('d'), '乙協會(時段)');
   assert.equal(m.get('e'), '乙協會');
+});
+
+test('noindex：門牌去空白、認國字；療育提供者沒門牌但有行政區照樣收錄', () => {
+  const base = { tel: '03-1234567', district: '平鎮區' };
+  assert.equal(noindexReason({ ...base, name: '某某醫院', cats: '療育-醫療單位', address: '桃園市平鎮區某路 49 號' }), null);
+  assert.equal(noindexReason({ ...base, name: '某某醫院', cats: '聯合評估中心', address: '台中市北區育德路二號' }), null);
+  assert.equal(noindexReason({ ...base, name: '某協會社區療育據點', cats: '社區療育據點', address: '南投縣埔里鎮行動式服務' }), null);
+  assert.equal(noindexReason({ ...base, name: '某國小', cats: '療育-教育單位', address: '某縣某鄉無' }), '地址沒有門牌號碼');
+  assert.equal(noindexReason({ ...base, name: '某婦產科診所', cats: '兒童發展篩檢院所', address: '某市某路1號' }), '只列在篩檢名單上的一般診所');
+  assert.equal(noindexReason({ ...base, district: '', name: '某治療所', cats: '療育-醫療單位', address: '無' }), '地址沒有門牌號碼');
 });

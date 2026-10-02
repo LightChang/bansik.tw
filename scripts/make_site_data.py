@@ -29,7 +29,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..', 'src', 'data')
 
 ENTITY_FIELDS = ['entity_key', 'name', 'plain_cat', 'cat', 'cats', 'journey_step', 'district',
-                 'address', 'tel', 'url', 'tier', 'lat', 'lng', 'geo_level', 'sources']
+                 'address', 'tel', 'url', 'tier', 'lat', 'lng', 'geo_level', 'sources', 'hosp_id']
+
+# 社家署名錄每一筆（entity_raw.csv、source=sfaa）的原文欄位，機構頁原樣列出。
+# 一家機構在社家署可能登記好幾筆（不同類別、時段／日間各一筆），每筆分開放，不合併改寫。
+SFAA_FIELDS = [('cat', 'cat'), ('area', '服務區域'), ('mode', '服務方式'), ('content', '服務內容'),
+               ('operator', '辦理單位'), ('updated', '更新日期'), ('name', 'name')]
 
 # 按縣市分的統計只有這一個 metric，其餘都是全國共用
 COUNTY_METRIC = '早療通報人數'
@@ -84,6 +89,25 @@ def subsidy_table():
     return {c['county']: c for c in json.load(open(path, encoding='utf-8'))['counties']}
 
 
+def sfaa_details():
+    """entity_key → 社家署那幾筆的原文欄位（空的欄位不放）。"""
+    out = collections.defaultdict(list)
+    for r in rows('entity_raw.csv'):
+        if r['source'] != 'sfaa':
+            continue
+        d = {k: (r.get(src) or '').strip() for k, src in SFAA_FIELDS}
+        d = {k: v for k, v in d.items() if v}
+        if d not in out[r['entity_key']]:
+            out[r['entity_key']].append(d)
+    return out
+
+
+def towns():
+    """縣市 → 現行鄉鎮市區名單（內政部國土測繪中心，research/scripts/towns.json）。"""
+    path = os.path.join(HERE, '..', 'research', 'scripts', 'towns.json')
+    return json.load(open(path, encoding='utf-8'))['counties'] if os.path.exists(path) else {}
+
+
 def materials():
     path = os.path.join(BUILD, 'materials.json')
     return json.load(open(path, encoding='utf-8')) if os.path.exists(path) else {}
@@ -97,6 +121,8 @@ all_stats = rows('stats.csv')
 all_relations = rows('relation.csv')
 district_rows = rows('district.csv')
 subsidies = subsidy_table()
+sfaa = sfaa_details()
+town_list = towns()
 
 # ── 共用檔：跨縣市完全相同的部分 ──────────────────────────
 shared = {
@@ -166,7 +192,11 @@ for c in counties:
         'code': code,
         'generated_at': generated_at,
         'subsidy': subsidies.get(name),
-        'entities': [{k: e.get(k, '') for k in ENTITY_FIELDS} for e in ent],
+        'entities': [{**{k: e.get(k, '') for k in ENTITY_FIELDS},
+                      **({'sfaa': sfaa[e['entity_key']]} if e['entity_key'] in sfaa else {})}
+                     for e in ent],
+        # 現行鄉鎮市區（內政部國土測繪中心）。districts 只含有機構或服務區域的區，數「共幾區」要用這份
+        'towns': town_list.get(name, []),
         'districts': districts,
         'district_geo': dist_geo,
         'observations': [o for o in rows('observation.csv') if o['entity_key'] in keys],

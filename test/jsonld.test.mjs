@@ -48,6 +48,18 @@ test('place：必填 name、address 由名錄帶入，沒有的欄位不出現',
   assert.equal(errors(html(ld)).length, 0);
   const bad = { ...ld }; delete bad.address;
   assert.ok(errors(html(bad)).some((i) => i.code === 'missing-required'));
+  assert.ok(!('identifier' in ld) && !('areaServed' in ld), '名錄沒有代碼與服務區域就不出現');
+});
+
+test('place：健保代碼與社家署服務區域照名錄帶入', () => {
+  const e = {
+    name: '某某治療所', address: '臺中市西區某路1號', district: '西區', hosp_id: '1234567890',
+    sfaa: [{ cat: '療育-醫療單位', area: '西區,南區' }, { cat: '早療機構', area: '南區、北區' }],
+  };
+  const ld = place(e, { type: 'MedicalClinic', county: '臺中市' });
+  assert.deepEqual(ld.identifier, { '@type': 'PropertyValue', propertyID: '健保醫事機構代碼', value: '1234567890' });
+  assert.deepEqual(ld.areaServed, ['西區', '南區', '北區']);
+  assert.equal(errors(html(ld)).length, 0);
 });
 
 test('首頁節點與名單頁通過驗證', () => {

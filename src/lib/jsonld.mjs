@@ -131,7 +131,25 @@ export function place(e, { type, county }) {
     ...(e.geo_level === 'address' && e.lat && e.lng
       ? { geo: { '@type': 'GeoCoordinates', latitude: Number(e.lat), longitude: Number(e.lng) } }
       : {}),
+    // 健保醫事機構代碼：只有比對到健保署特約醫療院所名冊的才有
+    ...(e.hosp_id
+      ? { identifier: { '@type': 'PropertyValue', propertyID: '健保醫事機構代碼', value: e.hosp_id } }
+      : {}),
+    // 服務區域：社家署名錄「服務區域」欄原文，逗號拆開去重；頁面表格列的是同一欄
+    ...(serviceAreas(e).length ? { areaServed: serviceAreas(e) } : {}),
   };
+}
+
+/** 社家署名錄登記的服務區域（原文以逗號分隔），去重後照原順序 */
+export function serviceAreas(e) {
+  const out = [];
+  for (const r of e.sfaa || []) {
+    for (const a of (r.area || '').split(/[,，、]/)) {
+      const s = a.trim();
+      if (s && !out.includes(s)) out.push(s);
+    }
+  }
+  return out;
 }
 
 /**

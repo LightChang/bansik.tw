@@ -77,10 +77,21 @@ const SCREEN_ONLY = new Set(['兒童發展篩檢院所', '新生兒聽力篩檢�
  *   - 學校與幼兒園的療育時段（療育-教育單位）：名稱多是「某某國小(時段)」，
  *     家長不會拿它來搜，收錄了只是佔掉新站的檢索額度
  * 不收錄的頁照樣產生、照樣從清單頁連過去，只是加 noindex 並排除在 sitemap 外。
+ *
+ * 2026-10-02 放寬（站主核准）：
+ *   - 門牌判斷先去空白、轉半形，也認國字數字：名錄常寫「49 號」「一號」，舊規則誤判成沒有門牌。
+ *   - 療育提供者（療育-醫療單位、早療機構、社區療育據點，或名稱有治療所／發展中心／早療／療育）
+ *     有行政區就收錄，即使地址是「行動式服務」「未設置據點」：家長搜的是機構名稱本身。
  */
+const HOUSE_NO = /[0-9一二三四五六七八九十百零〇]+號/;
+const TREATMENT_CATS = new Set(['療育-醫療單位', '早療機構', '社區療育據點']);
+export const hasHouseNo = (addr) => HOUSE_NO.test((addr || '').normalize('NFKC').replace(/\s+/g, ''));
+export const isTreatmentProvider = (e) => catList(e).some((k) => TREATMENT_CATS.has(k))
+  || /治療所|發展中心|早療|療育/.test(e.name);
+
 export function noindexReason(e) {
   const cats = catList(e);
-  if (!/\d+號/.test(e.address || '')) return '地址沒有門牌號碼';
+  if (!hasHouseNo(e.address) && !(isTreatmentProvider(e) && e.district)) return '地址沒有門牌號碼';
   if ((e.tel || '').replace(/\D/g, '').length < 7) return '沒有可用的電話';
   // 名稱看得出兒童服務的例外（小兒科、兒童、愛兒、婦兒、親子、婦幼、幼安…），家長會拿名稱直接搜；
   // 家醫科本身看不出，但列在兒童發展篩檢名單上就是有做兒童服務，也收錄。
