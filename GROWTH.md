@@ -39,6 +39,8 @@
 | Google Indexing API | 不使用 | 【站主拍板 2026-09-27】同日曾送出首批 180 筆後停用：Google 文件寫明該 API 只用於 JobPosting／BroadcastEvent 頁。見 seo-ops `playbooks/bansik.tw.md` 策略區 |
 | 收錄改靠 sitemap lastmod（內容實際變更日）＋首頁、縣市首頁「最近新增或更新的機構」內鏈；sitemap 由 seo-collect 視過期重送 | ✅ | `0a10eb4` |
 | 舊 `/places/?d=<行政區>` 網址：該區有名單頁時瀏覽器端轉過去並改 canonical | ✅ | `9400079` |
+| noindex 放寬【站主核准 2026-10-02】：門牌判斷去空白、認國字數字（「49 號」「一號」原被誤判）；療育提供者（療育-醫療單位、早療機構、社區療育據點，或名稱有治療所／發展中心／早療／療育）有行政區就收錄，地址是「行動式服務」也一樣。學校療育時段、只在篩檢名單上的一般診所維持 noindex | ✅ | noindex 1,221 → 1,182（2026-10-02，3,075 家），放出 39 頁，清單 `ops/growth/indexable-from-2026-10-02.txt` |
+| 機構頁補上社家署名錄原文欄位（服務方式、服務內容、服務區域、辦理單位、名錄更新日期）與健保特約（健保署特約醫療院所名冊的醫事機構代碼）；聯評中心層級補上全國重點／一般家數；JSON-LD 加 `areaServed`、`identifier`【站主核准 2026-10-02】 | ✅ | `src/components/PlacePage.astro`、`scripts/make_site_data.py`；社家署名錄只有這幾欄，沒有服務時間、服務對象年齡欄，所以不列 |
 | 2026-10-04 複查新機構頁收錄率 | ⏳ | 方法見下 |
 
 內鏈上線前抽查：新機構頁 12/12 為 `URL is unknown to Google`（2026-09-27）。
@@ -47,33 +49,28 @@
 「有內鏈」＝出現在首頁或任一縣市首頁「最近新增或更新的機構」區塊；其餘 `/places/` 機構頁當對照組（只從名單頁連入）。
 09-27 送過 Indexing API 的 180 筆會干擾比較，兩組都排除（帳本 `state/bansik.tw/index-ping-backlog.json`）。
 
+**2026-10-02 的變動對這個比較的影響**（上面兩項）：
+- 約 2,000 頁機構頁內容變了，lastmod 一起變成 10-02，兩組都有，lastmod 不再區分兩組。
+- 「最近新增或更新的機構」區塊因此在 10-02 換成另一批。**有內鏈組改用 10-02 部署前從線上抓下的名單** `ops/growth/linked-until-2026-10-02.txt`（172 頁，09-29 起到 10-02 掛在區塊裡），不要用 10-04 當天的區塊。
+- 10-02 才從 noindex 放出的 39 頁（`ops/growth/indexable-from-2026-10-02.txt`）只開放兩天，兩組都排除。
+
 ```bash
 cd /mnt/yao-care/bansik.tw
 L=/mnt/yao-care/seo-ops/state/bansik.tw/index-ping-backlog.json
 KEY=/root/.config/bansik/ga4-sa.json
-# 首頁與 22 個縣市首頁「最近新增或更新的機構」區塊（data-lastmod-skip 那一段）連到的機構頁
-python3 - <<'PY2' > /tmp/linked.txt
-import re, urllib.request
-xml = urllib.request.urlopen('https://bansik.tw/sitemap-0.xml').read().decode()
-pages = ['https://bansik.tw/'] + re.findall(r'<loc>(https://bansik.tw/[a-z_]+/)</loc>', xml)
-out = set()
-for u in pages:
-    h = urllib.request.urlopen(u).read().decode()
-    m = re.search(r'<section[^>]*data-lastmod-skip.*?</section>', h, re.S)
-    out |= {'https://bansik.tw' + x for x in re.findall(r'href="(/[a-z_]+/places/[^"]+/)"', m.group(0) if m else '')}
-print('\n'.join(sorted(out)))
-PY2
-# 有內鏈組
+# 有內鏈組：09-29～10-02 掛在首頁與 22 個縣市首頁「最近新增或更新的機構」區塊的機構頁（10-02 部署前抓的）
+cp ops/growth/linked-until-2026-10-02.txt /tmp/linked.txt
+NEW=ops/growth/indexable-from-2026-10-02.txt
 python3 -c "import json,random;s=json.load(open('$L'))['sent'];u=[l.strip() for l in open('/tmp/linked.txt') if l.strip() not in s];random.seed(4);print('\n'.join(random.sample(u,min(20,len(u)))))" \
   | xargs env BANSIK_GOOGLE_KEY=$KEY node scripts/google-api.mjs inspect
-# 對照組：sitemap 內其他機構頁
+# 對照組：sitemap 內其他機構頁（排除有內鏈組與 10-02 才放出的 39 頁）
 curl -s https://bansik.tw/sitemap-0.xml | grep -o '<loc>[^<]*/places/[^<]*' | sed 's/<loc>//' \
-  | python3 -c "import sys,json,random;s=set(json.load(open('$L'))['sent'])|{l.strip() for l in open('/tmp/linked.txt')};u=[l.strip() for l in sys.stdin if l.strip() not in s];random.seed(4);print('\n'.join(random.sample(u,min(20,len(u)))))" \
+  | python3 -c "import sys,json,random;s=set(json.load(open('$L'))['sent'])|{l.strip() for l in open('/tmp/linked.txt')}|{l.strip() for l in open('$NEW')};u=[l.strip() for l in sys.stdin if l.strip() not in s];random.seed(4);print('\n'.join(random.sample(u,min(20,len(u)))))" \
   | xargs env BANSIK_GOOGLE_KEY=$KEY node scripts/google-api.mjs inspect
 ```
 
 `sent` 裡的網址若與 sitemap 編碼不同（中文 vs `%XX`），先統一再比對。
-「最近新增或更新的機構」會隨資料更新換掉，複查當天抓的名單就是當天的，不要拿舊名單比。
+有內鏈組固定用上面那份 10-02 名單：區塊在 10-02 已經換過一批，10-04 當天的區塊只掛了兩天。
 
 `~/.config/bansik/gsc-key.json` 在這台機器上不存在（2026-09-27），同一個服務帳號的金鑰是 `ga4-sa.json`，所以要帶 `BANSIK_GOOGLE_KEY`。
 各狀態怎麼解讀見 [SEO.md §3](SEO.md)——「無法辨識」「已找到未建索引」都不是站台的錯。
@@ -116,7 +113,7 @@ GSC 2026-09-10..09-25 的全部 17 個查詢（2026-09-27 量測）分成四群�
 | 機構名稱 | 上巧語言治療所、予泰心理暨職能聯合治療所、青米職能治療所等 | 單一機構頁 | ✅ `bf20748`；title／description 改用本名（去「社團法人」「(時段)」類註記，H1 仍全名）`9400079`；🔄 等收錄（§1-1） |
 | 縣市早療補助 | 台中早療補助（6，平均排名 36） | `/<縣市>/subsidy/` | ✅ 15 縣市補資格／文件／窗口／FAQ：`bf20748`，另 6 縣市 2026-09-28 補上，澎湖 2026-09-29 補上（臺灣主機 tw8 代抓）；標題寫法：`8c90868` |
 | 地區＋發展遲緩 | 苗栗兒童發展遲緩（8，排名 25）、竹南兒童發展遲緩（5，排名 30） | `/miaoli/`、`/miaoli/places/竹南鎮/` | ✅ 頁已存在，縣市首頁 title 補「兒童發展遲緩」`9400079`；✅ 苗栗補助頁已補 115 年計畫的金額與申請條文（2026-09-28） |
-| 行政區分布 | 台中各區、桃園幾區、屏東地圖分區；`/taoyuan/places/?d=平鎮區` 等舊篩選網址有曝光 | `/<縣市>/map/`、行政區名單頁 | ✅ `8edb1d5`、`44d7d48`；舊 `?d=` 網址轉到行政區名單頁 `9400079` |
+| 行政區分布 | 台中各區、桃園幾區、屏東地圖分區、彰化有哪些區；`/taoyuan/places/?d=平鎮區` 等舊篩選網址有曝光 | `/<縣市>/map/`、行政區名單頁 | ✅ `8edb1d5`、`44d7d48`；舊 `?d=` 網址轉到行政區名單頁 `9400079`；✅ 2026-10-02 地圖頁 title／H1 改答「{縣市}有哪些區（共 N 區）」，全部鄉鎮市區列成文字（有名單頁的連過去），名單取內政部國土測繪中心 API（`research/scripts/towns.json`，全國 368 個）——算中心點用的 g0v 圖資是 1982 年版，臺中 31 面、金門少烏坵、臺東少達仁，不能拿來數區 |
 
 待做：
 
@@ -184,6 +181,7 @@ GSC 還沒有任何問題型查詢（2026-09-10..09-25，2026-09-27 量測）。
 | 補助頁 FAQPage JSON-LD（15 縣市） | 已移除 | Google 2026-05-07 起停止顯示 FAQ 強化結果；問答保留在頁面上。見 SEO.md §5 |
 | JSON-LD 集中產生、跳脫 `<`、建置時驗證（錯誤就不部署） | ✅ | `src/lib/jsonld.mjs`、`jsonld-pages.json`、`scripts/jsonld-check.mjs`；SEO.md §5 |
 | 單一機構頁的機構 JSON-LD（名稱、地址、座標） | ✅ | `bf20748`，`src/components/PlacePage.astro` |
+| 機構 JSON-LD 加 `areaServed`（社家署名錄服務區域）、`identifier`（健保醫事機構代碼），只放名錄有的 | ✅ | 2026-10-02，`src/lib/jsonld.mjs` 的 `place()` |
 | `llms.txt` 的網址結構補上單一機構頁（`/{縣市代碼}/places/{機構名稱}/`）與 noindex 規則 | ✅ | 2026-09-28 與 §1-4 全國頁一起補上 |
 | `llms-full.txt` 加各月齡手冊題目原文與法規定義 | ✅ | 2026-09-28，`src/pages/llms-full.txt.js` 第六、七節 |
 
@@ -207,5 +205,5 @@ GSC 還沒有任何問題型查詢（2026-09-10..09-25，2026-09-27 量測）。
 - **不為了一句話型問題開新頁**（§2）：開了也是被 AI 摘要吃掉。§1-4 的頁型除外（站主 2026-09-28 核准）。
 - **不把改標題／描述當成長手段**（方法④）。標題補搜尋字（`bf20748`）是為了讓頁面寫出家長用的字，不預期單靠它拉流量。
 - **不在 `steps`、`materials` 這類低產值頁型加頁**（§1-2）。全國月齡頁與發展遲緩／早療／補助主題頁是站主 2026-09-28 核准的例外（§1-4）。
-- **不回退已拍板的事**：單一機構頁與其 noindex 規則、補助申請資訊（seo-ops `playbooks/bansik.tw.md` 策略區「勿再提」）。
+- **不回退已拍板的事**：單一機構頁與其 noindex 規則、補助申請資訊（seo-ops `playbooks/bansik.tw.md` 策略區「勿再提」）。noindex 規則 2026-10-02 經站主核准放寬一次（§1-1），以那版為準。
 - **不用 Google Indexing API**（2026-09-27 拍板，首批 180 筆後停用），與 [SEO.md §4](SEO.md) 第一條一致。
