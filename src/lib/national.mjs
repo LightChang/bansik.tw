@@ -4,4 +4,5 @@ export const NATIONAL = [
   ['/developmental-delay/', '發展遲緩是什麼'],
   ['/early-intervention/', '早療是什麼'],
   ['/subsidy/', '各縣市早療補助'],
+  ['/school-entry/', '孩子要上小學'],
 ];

@@ -1,0 +1,158 @@
+---
+// 孩子要上小學，發展遲緩的身分會怎樣：只引特殊教育法與鑑定辦法原文條文，不寫各縣市的實際作業時程（本站查不到）。
+// 條文 2026-10-02 取自全國法規資料庫；數字用站上 shared.json 的特教通報統計，與 /developmental-delay/ 同一套算法。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import { ageData, shared } from '../../lib/data.mjs';
+
+const A = ageData();
+const Q = A.quotes;
+const S = A.sources;
+const s = shared();
+
+const dd = s.stats.filter((r) => r.metric === '特教學生數' && r.dim1_value === '發展遲緩');
+const sum = (pick) => dd.filter((r) => pick(r.dim2_value)).reduce((n, r) => n + (Number(r.value) || 0), 0);
+const pre = sum((v) => v.startsWith('學前'));
+const after = sum((v) => !v.startsWith('學前'));
+
+const SPED = { name: '特殊教育法', url: 'https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0080027' };
+const JD = { name: '特殊教育學生及幼兒鑑定辦法', url: 'https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0080065' };
+const checked = '2026-10-02';
+
+const title = '孩子要上小學，發展遲緩的身分會不會不見：特教鑑定、轉銜與入學｜bansik';
+const description = '特殊教育學生及幼兒鑑定辦法第 14 條把發展遲緩限定在未滿六歲。孩子上小學前後會發生什麼事：鑑輔會怎麼鑑定、'
+  + '法律怎麼保障入學、轉銜與個別化教育計畫何時訂定，逐條附法條原文。';
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '孩子要上小學' }]}
+  dataDate={checked}
+  citations={[
+    { name: SPED.name, url: SPED.url, dateModified: checked },
+    { name: JD.name, url: JD.url, dateModified: checked },
+    { name: S.law_rules.name, url: S.law_rules.url, dateModified: A.prepared_at },
+  ]}
+>
+  <Nav />
+  <main class="shell">
+    <h1>孩子要上小學，發展遲緩的身分會不會不見</h1>
+    <p class="lead">
+      「發展遲緩」這個特教類別只給未滿六歲的孩子，所以到了小學，這個名稱會換掉。
+      但換掉名稱不等於資源斷掉：法律要求入學前後有轉銜、有重新評估、有個別化教育計畫，而且學校不能因為身心障礙拒收。
+    </p>
+
+    <section class="section">
+      <h2>先分清楚兩種「身分」</h2>
+      <p>
+        家長口中的「早療身分」，其實法條上是兩條不同的路。
+      </p>
+      <div class="step">
+        <h3>早療的評估證明</h3>
+        <p>
+          兒童及少年福利與權益保障法施行細則第 9 條：「{Q.rules_art9}」這張證明是社政與衛政這一側的，
+          早療的對象是未滿六歲的兒童（同細則第 8 條），細節見<a href="/developmental-delay/">發展遲緩是什麼</a>。
+        </p>
+      </div>
+      <div class="step">
+        <h3>特教的鑑定與安置</h3>
+        <p>
+          特殊教育法第 19 條：「各級主管機關為實施特殊教育，應依鑑定基準辦理特殊教育學生及幼兒之鑑定。」
+          做決定的是各縣市政府的特殊教育學生鑑定及就學輔導會（簡稱鑑輔會，第 6 條），屬於教育這一側。
+        </p>
+      </div>
+      <p>
+        兩邊各自有自己的程序。孩子在學前被評估為發展遲緩，法條沒有規定它會轉成小學的特教資格；
+        小學要給特教資源，看的是教育這一側的鑑定與安置。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>為什麼上小學時名稱會變</h2>
+      <p class="quote">「{JD.name}第 14 條：本法第三條第十二款所稱發展遲緩，指未滿六歲之兒童，因生理、心理或社會環境因素，在知覺、動作、認知、語言溝通、社會情緒或生活自理等方面之發展較同年齡者顯著落後，且其障礙類別無法確定。」</p>
+      <p>
+        重點在最後半句「障礙類別無法確定」。這個類別是留給還看不出障別的幼兒，過了六歲，
+        法條就沒有給它位置了。
+      </p>
+      {pre > 0 && (
+        <p>
+          站上的特教通報統計印證了這一點：全國學前階段有 <span class="num">{pre.toLocaleString()}</span> 名發展遲緩學生，
+          國小以後是 <span class="num">{after}</span> 人。
+          <span class="src">資料：教育部特殊教育通報統計，與<a href="/developmental-delay/">發展遲緩是什麼</a>同一份。</span>
+        </p>
+      )}
+      <p>
+        所以這個階段要問的不是「身分會不會不見」，而是「入學前這一次鑑定，孩子會被安置到哪裡」。
+        法條沒有保證結果：鑑定看的是孩子的教育需求評估（鑑定辦法第 24 條列的項目包括健康狀況、知覺動作、生活自理、認知、溝通、情緒、社會行為、領域學習），
+        不是看他以前拿過什麼證明。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>入學前後會走過哪幾件事</h2>
+      <div class="step">
+        <h3>1　提出鑑定</h3>
+        <p>
+          特殊教育法第 20 條：幼兒園應主動或依申請發掘具特殊教育需求的幼兒，經法定代理人或實際照顧者同意後鑑定、安置。
+          家長不同意進行鑑定安置時，幼兒園應通報主管機關。所以第一步通常是和孩子現在的幼兒園談。
+        </p>
+      </div>
+      <div class="step">
+        <h3>2　鑑輔會開會</h3>
+        <p>
+          鑑定辦法第 23 條：鑑輔會每學年度上、下學期至少召開一次會議辦理鑑定。
+          特殊教育法第 6 條：辦理鑑定與安置的會議，應通知學生或幼兒的法定代理人、實際照顧者參與討論，
+          家長還可以邀請專業人員列席。各縣市實際的收件與報名時程不一樣，本站查不到統一的日期，請向縣（市）政府教育主管單位或孩子的幼兒園確認。
+        </p>
+      </div>
+      <div class="step">
+        <h3>3　安置結果與入學</h3>
+        <p>
+          特殊教育法第 12 條：學前與國民教育階段的特殊教育，以就近入學為原則。第 25 條：學校、幼兒園不得以身心障礙為由拒絕入學。
+          對鑑定、安置結果有爭議，家長可以向主管機關提起申訴（第 24 條），主管機關應提供申訴服務。
+          鑑輔會不採納學校或幼兒園提出的安置建議時，也要說明理由（第 6 條）。
+        </p>
+      </div>
+      <div class="step">
+        <h3>4　轉銜與個別化教育計畫</h3>
+        <p>
+          特殊教育法第 36 條：各教育階段的學校與幼兒園應提供整體性與持續性的轉銜輔導及服務，讓服務需求銜接得上。
+          第 31 條：身心障礙新生的個別化教育計畫，應於開學前訂定初步版本，並於開學後一個月內檢討修正。
+        </p>
+      </div>
+      <div class="step">
+        <h3>5　入學後還能再評估</h3>
+        <p>
+          鑑定辦法第 25 條：重新評估以跨教育階段為原則。經鑑輔會安置的孩子，遇到障礙情形改變、優弱勢能力改變、適應不良或其他特殊需求時，
+          教師、法定代理人、實際照顧者都可以向學校或主管機關提出重新評估的申請。
+        </p>
+      </div>
+      <p class="meta">
+        法條：<a href={SPED.url} target="_blank" rel="noopener">{SPED.name}</a>第 6、12、19、20、24、25、31、36 條；
+        <a href={JD.url} target="_blank" rel="noopener">{JD.name}</a>第 2、14、23、24、25 條（{checked}查閱全國法規資料庫）。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>這一頁沒有回答的事</h2>
+      <ul>
+        <li>你的縣市何時收件、要附什麼文件：各縣市自訂，本站沒有統一資料。</li>
+        <li>孩子會被安置到普通班、資源班還是其他場所：由鑑輔會依鑑定結果決定，法條沒有預設答案。</li>
+        <li>身心障礙證明：屬於身心障礙者權益保障法，本站沒有整理。鑑定時可參考證明上的記載蒐集資料（鑑定辦法第 2 條）。</li>
+      </ul>
+      <p>
+        療育費與交通費的補助見<a href="/subsidy/">各縣市早療補助</a>；整個早療流程見<a href="/early-intervention/">早療是什麼</a>。
+      </p>
+    </section>
+
+    <p class="caveat">
+      這頁整理的是法條的規定，不是個案建議。孩子適合哪一種安置，要由鑑輔會與專業人員評估，網站不做判讀，也不代為申請。
+    </p>
+
+    <footer class="site-ft">
+      <p>條文查閱於 {checked}。來源：全國法規資料庫、教育部特殊教育通報統計。</p>
+      <p>這裡是路標不是窗口，以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>
