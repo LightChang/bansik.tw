@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/lastmod.mjs update",
+    "build": "astro build && node scripts/lastmod.mjs update && node scripts/check-sitemap-noindex.mjs dist",
     "preview": "astro preview",
     "sync:tokens": "node scripts/sync-tokens.mjs",
     "data": "cd research && python3 ../scripts/make_site_data.py",
