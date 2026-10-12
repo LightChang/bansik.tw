@@ -3,14 +3,14 @@
   "csh_quota": {
    "files": {
     "dyn/csh.html": {
-     "sha256": "edc83e73eec3979f3fcd55c80d86d4e0cfc5863d4a41552136f38944569b4991",
+     "sha256": "8c3e14d16c2bbe7dca6b3b68abaf4cdc032cbe187459a078509fbcde643f9272",
      "bytes": 36330,
-     "fetched_at": "2026-10-04T23:30:13.933174+00:00"
+     "fetched_at": "2026-10-11T23:30:49.102086+00:00"
     }
    },
-   "last_fetched": "2026-10-04T23:30:13.933195+00:00",
-   "next_due": "2026-10-05T23:30:13.933198+00:00",
-   "last_changed": "2026-10-04T23:30:13.933216+00:00",
+   "last_fetched": "2026-10-11T23:30:49.102104+00:00",
+   "next_due": "2026-10-12T23:30:49.102108+00:00",
+   "last_changed": "2026-10-11T23:30:49.102117+00:00",
    "pending_big": false
   },
   "stats_special_ed": {
@@ -29,14 +29,14 @@
   "nhi_clinic_hours": {
    "files": {
     "nhi_clinic_hours.json": {
-     "sha256": "02c33ef1942f6f31f2786702302186e1e777628266faceb7d1782240328ec5eb",
-     "bytes": 8426740,
-     "fetched_at": "2026-09-29T06:53:31.549816+00:00"
+     "sha256": "12b4bd1e52dd6199bd08a5809025b2fe9bcd1b5cc1ba5e93ffd92d6718e865c6",
+     "bytes": 8428958,
+     "fetched_at": "2026-10-11T23:30:47.463032+00:00"
     }
    },
-   "last_fetched": "2026-09-29T06:53:31.549839+00:00",
-   "next_due": "2026-10-06T06:53:31.549842+00:00",
-   "last_changed": "2026-09-29T06:53:31.549853+00:00",
+   "last_fetched": "2026-10-11T23:30:47.463055+00:00",
+   "next_due": "2026-10-18T23:30:47.463058+00:00",
+   "last_changed": "2026-10-11T23:30:47.463068+00:00",
    "pending_big": false
   },
   "sfaa_resource": {
@@ -128,14 +128,14 @@
   "nhi_roster": {
    "files": {
     "nhi_roster.json": {
-     "sha256": "316fd933ad98faa5e01ad4b9b1471153f8973a4bcf769bee673820cc15d2aec3",
-     "bytes": 12455639,
-     "fetched_at": "2026-09-29T06:53:19.171348+00:00"
+     "sha256": "07057a5a09d8c41e73daeb8188f7677a4a953efaae333d0618ce4842e32fff97",
+     "bytes": 12470942,
+     "fetched_at": "2026-10-11T23:30:35.053440+00:00"
     }
    },
-   "last_fetched": "2026-09-29T06:53:19.171369+00:00",
-   "next_due": "2026-10-06T06:53:19.171372+00:00",
-   "last_changed": "2026-09-29T06:53:19.171384+00:00",
+   "last_fetched": "2026-10-11T23:30:35.053463+00:00",
+   "next_due": "2026-10-18T23:30:35.053466+00:00",
+   "last_changed": "2026-10-11T23:30:35.053489+00:00",
    "pending_big": false
   },
   "nhi_specialty": {
@@ -195,27 +195,27 @@
   "ntpc_booking": {
    "files": {
     "dyn/ntpc_booking.html": {
-     "sha256": "9328613023c399f24e4469777e61545ad65f66849c52b12597871c2e445178b3",
-     "bytes": 73314,
-     "fetched_at": "2026-09-29T06:53:59.352586+00:00"
+     "sha256": "17e50a1f7d559fecdddc4e961e022954898e805d0260cbe305113be821a3fe05",
+     "bytes": 73352,
+     "fetched_at": "2026-10-11T23:30:49.300884+00:00"
     }
    },
-   "last_fetched": "2026-09-29T06:53:59.352602+00:00",
-   "next_due": "2026-10-06T06:53:59.352605+00:00",
-   "last_changed": "2026-09-29T06:53:59.352613+00:00",
+   "last_fetched": "2026-10-11T23:30:49.300902+00:00",
+   "next_due": "2026-10-18T23:30:49.300905+00:00",
+   "last_changed": "2026-10-11T23:30:49.300913+00:00",
    "pending_big": false
   },
   "tc_health_booking": {
    "files": {
     "dyn/tc_health.html": {
-     "sha256": "dd320c0c543d4a4865d3ea92ca00d8e65b9436fc5cdc44f0d402c897d6b10658",
-     "bytes": 101459,
-     "fetched_at": "2026-09-29T06:54:00.011965+00:00"
+     "sha256": "2833c68172bdc08e85d66c5ddd637fc77790a10b23dc737ef5e42b581d191836",
+     "bytes": 101482,
+     "fetched_at": "2026-10-11T23:30:50.079631+00:00"
     }
    },
-   "last_fetched": "2026-09-29T06:54:00.011994+00:00",
-   "next_due": "2026-10-06T06:54:00.011999+00:00",
-   "last_changed": "2026-09-29T06:54:00.012010+00:00",
+   "last_fetched": "2026-10-11T23:30:50.079652+00:00",
+   "next_due": "2026-10-18T23:30:50.079654+00:00",
+   "last_changed": "2026-10-11T23:30:50.079663+00:00",
    "pending_big": false
   },
   "tc_selfpay": {
@@ -705,15 +705,15 @@
   "county_booking_more": {
    "files": {
     "dyn/cy_health.html": {
-     "sha256": "209f91b15d46bd41dabafaada2e3a154043d7658e36aa3f6bf96f60f99432e0d",
+     "sha256": "2d527e937049b2bf4ade5dfdbe7df6decec1e1857dc7b2f60b628dbbb7d83d6a",
      "bytes": 147885,
-     "fetched_at": "2026-09-29T06:58:18.649144+00:00"
+     "fetched_at": "2026-10-11T23:30:51.373640+00:00"
     }
    },
-   "last_fetched": "2026-09-29T06:58:18.649159+00:00",
-   "next_due": "2026-10-06T06:58:18.649162+00:00",
+   "last_fetched": "2026-10-11T23:30:51.373661+00:00",
+   "next_due": "2026-10-18T23:30:51.373664+00:00",
    "pending_big": false,
-   "last_changed": "2026-09-29T06:58:18.649170+00:00"
+   "last_changed": "2026-10-11T23:30:51.373672+00:00"
   },
   "tw_town_geo": {
    "files": {
