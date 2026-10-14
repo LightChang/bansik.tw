@@ -24,6 +24,11 @@
 #
 # 排程：/etc/cron.d/bansik-data，每週一台北 10:00（tw8 那輪是 07:30）。
 # 鎖：與 seo-ops 反思／大腦共用 /tmp/seo-claude-bansik.tw.lock，三者不會同時改工作樹。
+# build（只有 pnpm build 那一步；pnpm test 不建置）走全機 build 輪流（2026-10-14 起）：
+#   `site-build-run bansik.tw -- pnpm -s build`，與本機其他站共用 /var/lock/site-build.lock，
+#   最久沒建置的先；查表 site-build-turns，協定在 /usr/local/lib/site-build-turn.sh 檔頭。
+#   等超過 SITE_BUILD_WAIT（預設 3600 秒）回 75：這週不推（還原、發 Slack），不寫 last-import，
+#   下一次執行（手動或下週）會重收同一份投遞。
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -133,7 +138,10 @@ fi
 
 # ── 4. 測試與建置（CI 還會再跑一次，這裡先擋掉壞資料）──
 pnpm -s test >/dev/null || { revert; fail "pnpm test 沒過"; }
-pnpm -s build >/dev/null || { revert; fail "pnpm build 沒過"; }
+/usr/local/bin/site-build-run bansik.tw -- pnpm -s build >/dev/null
+code=$?
+[ $code -eq 75 ] && { revert; fail "等全機 build 鎖逾時（別站在建置，查表 site-build-turns），本輪跳過"; }
+[ $code -eq 0 ] || { revert; fail "pnpm build 沒過"; }
 
 # ── 5. 提交 ───────────────────────────────────
 git add src/data src/lastmod.json research/state.json research/archive research/entity_prev.csv
