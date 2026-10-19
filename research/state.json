@@ -3,14 +3,14 @@
   "csh_quota": {
    "files": {
     "dyn/csh.html": {
-     "sha256": "8c3e14d16c2bbe7dca6b3b68abaf4cdc032cbe187459a078509fbcde643f9272",
+     "sha256": "7340e33fc2c843fb81d61c90493b538badc8f49715fe7a57de56e05266fc3794",
      "bytes": 36330,
-     "fetched_at": "2026-10-11T23:30:49.102086+00:00"
+     "fetched_at": "2026-10-18T23:30:02.602708+00:00"
     }
    },
-   "last_fetched": "2026-10-11T23:30:49.102104+00:00",
-   "next_due": "2026-10-12T23:30:49.102108+00:00",
-   "last_changed": "2026-10-11T23:30:49.102117+00:00",
+   "last_fetched": "2026-10-18T23:30:02.602728+00:00",
+   "next_due": "2026-10-19T23:30:02.602731+00:00",
+   "last_changed": "2026-10-18T23:30:02.620772+00:00",
    "pending_big": false
   },
   "stats_special_ed": {
