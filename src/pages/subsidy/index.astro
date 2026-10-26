@@ -67,6 +67,9 @@ const description = `${lead}表列各縣市交通費、申請期限與能否線�
   <main class="shell">
     <h1>早療補助怎麼申請</h1>
     <p class="lead">{lead}</p>
+    <nav class="pagenav" aria-label="依縣市">
+      {rows.map((r) => <a href={`/${r.code}/subsidy/`}>{r.name}</a>)}
+    </nav>
 
     <section class="section">
       <h2>各縣市早療補助一覽</h2>
