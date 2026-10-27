@@ -16,6 +16,9 @@
 #   - 機構總數比上一版少超過 10%：多半是某個來源這輪沒抓成功，不是真的關了一成機構。
 #   - 除了 generated_at 以外沒有任何變化：不推（避免每週一個空 commit 讓 lastmod 全站變動）。
 #   - renames.py 找到更名候選：照推，但在 Slack 列出來請人確認後寫進 aliases.json。
+#   - 機構頁網址因改名而變：scripts/place-redirects.mjs update 自動把「舊網址→新網址」併進
+#     src/data/place-redirects.json（建置時舊網址產生轉址頁），Slack 逐筆列出；網址不見了又配不到
+#     新網址的也逐筆列（不轉址）。這一步失敗只警示、不擋本週上線。
 #
 # 環境變數：
 #   BANSIK_INBOX     inbox 位置（預設 /root/.config/bansik/intake/inbox）
@@ -108,6 +111,13 @@ for s in json.load(open("research/scripts/sources.json"))["sources"]:
   && "$PY" scripts/renames.py "$BUILD" entity_prev.csv \
   && "$PY" ../scripts/make_site_data.py "$BUILD" ) || { revert; fail "解析失敗（看 $LOG）"; }
 
+# 機構改名轉址表：比對 HEAD 與這輪解析結果的機構頁網址（規則見 src/lib/placeredirects.mjs）
+REDIR_OUT=$(node scripts/place-redirects.mjs update 2>&1) || REDIR_OUT="🟡 轉址表更新失敗：$(printf '%s' "$REDIR_OUT" | tail -1)"
+printf '%s\n' "$REDIR_OUT" | sed 's/^/  /'
+REDIR_ADDED=$(printf '%s\n' "$REDIR_OUT" | grep '^\[轉址\]' || true)
+REDIR_GONE=$(printf '%s\n' "$REDIR_OUT" | grep '^\[不轉址\]' || true)
+REDIR_FAIL=$(printf '%s\n' "$REDIR_OUT" | grep '^🟡' || true)
+
 AFTER=$(count)
 if [ "$AFTER" -lt $(( BEFORE * 9 / 10 )) ]; then
   revert
@@ -162,4 +172,12 @@ if [ "$RENAMES" -gt 0 ]; then
 ⚠️ 有 $RENAMES 組疑似更名要人確認（地址電話相同、名稱不同）。確認後寫進 research/scripts/aliases.json：
 $(tail -n +2 "$BUILD/rename_candidates.csv" | head -5)"
 fi
+[ -n "$REDIR_ADDED" ] && MSG="$MSG
+↪️ 機構改名、舊網址已加轉址（$(printf '%s\n' "$REDIR_ADDED" | wc -l) 筆）：
+$(printf '%s\n' "$REDIR_ADDED" | sed 's/^\[轉址\] HEAD→工作樹 //' | head -5)"
+[ -n "$REDIR_GONE" ] && MSG="$MSG
+🟡 機構頁網址不見了、也配不到新名稱（不轉址，舊網址會 404；若其實是改名，在 src/data/place-redirects.json 手動補一列）：
+$(printf '%s\n' "$REDIR_GONE" | sed 's/^\[不轉址\] HEAD→工作樹 //; s/ 這一版沒有了.*//' | head -5)"
+[ -n "$REDIR_FAIL" ] && MSG="$MSG
+$REDIR_FAIL"
 notify "$MSG"

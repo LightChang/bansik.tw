@@ -3,10 +3,12 @@
 // 類型代碼是英文、行政區是中文，兩者不會撞名，所以共用同一層網址。
 // 單一機構頁（/changhua/places/上巧語言治療所/）也在這一層：網址用機構名稱，
 // 撞到區名或類型代碼的由 placeSlugs() 加上行政區錯開。
+// 機構改名後的舊網址也在這一層，產生轉址頁（src/data/place-redirects.json、src/lib/placeredirects.mjs）。
 import FacetPage from '../../../components/FacetPage.astro';
 import PlacePage from '../../../components/PlacePage.astro';
+import PlaceRedirect from '../../../components/PlaceRedirect.astro';
 import { placeSlugs } from '../../../lib/placepages.mjs';
-import { counties, county } from '../../../lib/data.mjs';
+import { counties, county, placeRedirectsFor } from '../../../lib/data.mjs';
 import { typePages, districtPages } from '../../../lib/facets.mjs';
 
 export function getStaticPaths() {
@@ -28,14 +30,26 @@ export function getStaticPaths() {
           props: { place: e },
         }));
       })(),
+      ...(() => {
+        const { pages, dropped } = placeRedirectsFor(code);
+        for (const d of dropped) {
+          console.warn(`[place-redirects] ${code}: ${d.from} 不產生轉址頁：${d.reason}`);
+        }
+        return pages.map((r) => ({
+          params: { county: code, facet: r.from },
+          props: { redirect: r },
+        }));
+      })(),
     ];
   });
 }
 
 const { county: code } = Astro.params;
-const { type, district, list, place } = Astro.props;
+const { type, district, list, place, redirect } = Astro.props;
 ---
 
-{place
+{redirect
+  ? <PlaceRedirect code={code} to={redirect.to} toName={redirect.toName} fromName={redirect.fromName} />
+  : place
   ? <PlacePage code={code} c={county(code)} e={place} />
   : <FacetPage code={code} c={county(code)} list={list} type={type} district={district} />}

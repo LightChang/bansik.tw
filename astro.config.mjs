@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { placeSlugs, noindexReason } from './src/lib/placepages.mjs';
+import { counties, placeRedirectsFor } from './src/lib/data.mjs';
 import { lastmodFor } from './src/lib/lastmod.mjs';
 import jsonldCheck from './scripts/jsonld-check.mjs';
 import linksCheck from './scripts/links-check.mjs';
@@ -21,6 +22,10 @@ function noindexPaths() {
   return out;
 }
 const NOINDEX = noindexPaths();
+// 機構改名的舊網址（轉址頁）也不進 sitemap：它只是指路，要收錄的是新網址
+for (const { code } of counties()) {
+  for (const r of placeRedirectsFor(code).pages) NOINDEX.add(`/${code}/places/${r.from.normalize('NFC')}/`);
+}
 
 // 22 個縣市頁 + 全國首頁，全部靜態產生（getStaticPaths），沒有伺服器端。
 // 資料在建置期從 src/data/ 讀進來，執行期不對外要任何東西——

@@ -1,6 +1,9 @@
 // 建置期的讀檔層。只有 getStaticPaths 與 frontmatter 會呼叫這裡，
 // 不要在 <script> 裡 import 這個檔——它用 node:fs，會把瀏覽器的打包弄壞。
 import { readFileSync } from 'node:fs';
+import { placeSlugs } from './placepages.mjs';
+import { typePages, districtPages } from './facets.mjs';
+import { redirectPages } from './placeredirects.mjs';
 
 // 用 process.cwd() 不用 import.meta.url：這個檔會被 Astro 打包進
 // dist/.prerender/chunks/，打包後的 import.meta.url 指向那個目錄，
@@ -77,4 +80,16 @@ export const SUBPAGES = [
 /** 22 個縣市頁共用的 getStaticPaths */
 export function countyPaths() {
   return counties().map((c) => ({ params: { county: c.code }, props: { meta: c } }));
+}
+
+/**
+ * 這個縣市要產生的機構改名轉址頁（舊機構頁網址 → 新網址），轉址表見 src/data/place-redirects.json，
+ * 規則見 src/lib/placeredirects.mjs。dropped 是表上有、但這一版轉不過去的，建置時逐筆列出。
+ */
+export function placeRedirectsFor(code) {
+  const c = county(code);
+  const slugs = placeSlugs(c);
+  const live = new Map(c.entities.map((e) => [slugs.get(e.entity_key), e.name]));
+  const reserved = new Set([...typePages(c).map((p) => p.type.slug), ...districtPages(c).map((p) => p.district)]);
+  return redirectPages(read('place-redirects.json').redirects, code, live, reserved);
 }

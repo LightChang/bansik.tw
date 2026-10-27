@@ -1,0 +1,38 @@
+---
+// 機構改名後的舊網址。GitHub Pages 給不出 HTTP 301，改用 0 秒 meta refresh ＋ canonical 指向新網址
+// （Google 當永久轉址處理，見 src/lib/placeredirects.mjs）。不加 noindex：noindex 跟 canonical／轉址
+// 放在一起是互相矛盾的訊號，Google 可能連新網址的評價一起丟掉。舊網址不進 sitemap（astro.config.mjs）。頁面照樣走 Base，WebPage／麵包屑與全站一致，
+// 萬一瀏覽器不跟 meta refresh，家長看到的是一句說明和新頁連結，不是空白頁。
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import { placeUrl } from '../lib/placepages.mjs';
+
+interface Props {
+  code: string;
+  to: string;
+  toName: string;
+  fromName?: string;
+}
+const { code, to, toName, fromName } = Astro.props;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const href = placeUrl(code, to);
+const target = `${site}${href}`;
+---
+
+<Base
+  title={`${toName}（已改名）｜bansik`}
+  description={`這家機構在名錄上的名稱已改為「${toName}」，頁面移到新網址。`}
+  canonical={target}
+  trail={[{ name: toName, path: href }]}
+>
+  <meta slot="head" http-equiv="refresh" content={`0; url=${href}`} />
+  <Nav current={code} />
+  <main class="shell">
+    <h1>這一頁已經移到新網址</h1>
+    <p class="lead">
+      {fromName ? `「${fromName}」在名錄上的名稱改成了「${toName}」，` : `這家機構在名錄上的名稱改成了「${toName}」，`}
+      網址跟著換了。
+    </p>
+    <p><a href={href}>前往 {toName}</a></p>
+  </main>
+</Base>
