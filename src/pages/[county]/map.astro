@@ -4,7 +4,7 @@ import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
-import { districtPages, typePages, districtUrl, shortCounty, MIN_DISTRICT } from '../../lib/facets.mjs';
+import { districtPages, typePages, districtUrl, shortCounty, MIN_DISTRICT, typeBySlug } from '../../lib/facets.mjs';
 
 export const getStaticPaths = countyPaths;
 
@@ -80,20 +80,41 @@ const townLinks = towns.map((n) => ({ name: n, href: dpages.has(n) ? districtUrl
 const townUnit = /市$/.test(c.county) && towns.every((t) => /區$/.test(t)) ? '區' : '鄉鎮市';
 const top = withPlaces.slice(0, 3).map((n) => `${n}（${cnt(n)} 家）`).join('、');
 const addressLevel = c.entities.filter((e) => e.geo_level === 'address').length;
+
+// 彰化試點：導言從「有哪些區」改答「哪幾區有評估／治療機構」——這是 SERP 摘要答不完、要點進來才看到的部分
+const evalType = typeBySlug('evaluation');
+const therapyTypes = ['speech-therapy', 'occupational-therapy', 'physical-therapy', 'psychotherapy', 'rehabilitation'].map(typeBySlug);
+const hasEval = (n) => c.entities.some((e) => e.district === n && evalType.match(e));
+const hasTherapy = (n) => c.entities.some((e) => e.district === n && therapyTypes.some((t) => t.match(e)));
+const evalDistricts = towns.filter(hasEval);
+const therapyDistricts = towns.filter(hasTherapy);
+const neitherDistricts = towns.filter((n) => !hasEval(n) && !hasTherapy(n));
 ---
 
 <Base
   title={N ? `${S}有哪些區（共${N}區）｜各區兒童發展與早療機構家數` : `${S}各區兒童發展與早療機構家數｜哪一區有幾家`}
-  description={(N ? `${c.county}共 ${N} 個${townUnit}：${towns.slice(0, 6).join('、')}${N > 6 ? '等' : ''}。` : '')
-    + `兒童發展相關機構分布在 ${withPlaces.length} 個行政區、共 ${c.counts.entities} 家，`
-    + `最多的是${top}。每一區可再看篩檢、評估、治療各類的名單。`}
+  description={code === 'changhua'
+    ? `${c.county}共 ${N} 個${townUnit}，${evalDistricts.length} 區有兒童發展評估機構、`
+      + `${therapyDistricts.length} 區有語言／職能／物理／心理治療或復健早療機構`
+      + (neitherDistricts.length > 0 ? `，${neitherDistricts.length} 區目前兩者都沒有` : '')
+      + `。各區詳細名單與家數看這頁。`
+    : (N ? `${c.county}共 ${N} 個${townUnit}：${towns.slice(0, 6).join('、')}${N > 6 ? '等' : ''}。` : '')
+      + `兒童發展相關機構分布在 ${withPlaces.length} 個行政區、共 ${c.counts.entities} 家，`
+      + `最多的是${top}。每一區可再看篩檢、評估、治療各類的名單。`}
 >
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
     <h1>{N ? `${c.county}有哪些區：共 ${N} 個${townUnit}與各區兒童發展機構家數` : `${c.county}各區有幾家兒童發展機構`}</h1>
     <p class="lead">
-      {N > 0 && code === 'changhua' && <>{c.county}共有 <span class="num">{N}</span> 個{townUnit}：{townLinks.map((t, i) => <>{i > 0 && '、'}{t.href ? <a href={t.href}>{t.name}</a> : t.name}</>)}。</>}
+      {N > 0 && code === 'changhua' && (
+        <>
+          {c.county}共有 <span class="num">{N}</span> 個{townUnit}，
+          <span class="num">{evalDistricts.length}</span> 區有兒童發展評估機構、
+          <span class="num">{therapyDistricts.length}</span> 區有語言、職能、物理、心理治療或復健早療機構
+          {neitherDistricts.length > 0 && <>，{neitherDistricts.join('、')}等 <span class="num">{neitherDistricts.length}</span> 區目前兩者都沒有</>}。
+        </>
+      )}
       {N > 0 && code !== 'changhua' && <>{c.county}共有 <span class="num">{N}</span> 個{townUnit}。</>}
       {c.county}的 <span class="num">{c.counts.entities}</span> 家兒童發展相關機構分布在
       <span class="num">{withPlaces.length}</span> 個行政區，最多的是{top}。
