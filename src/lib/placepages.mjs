@@ -76,7 +76,9 @@ const SCREEN_ONLY = new Set(['兒童發展篩檢院所', '新生兒聽力篩檢�
  *   - 只列在篩檢名單上的一般診所：跟早療沒有其他關聯，一頁只有一句話
  *   - 學校與幼兒園的療育時段（療育-教育單位）：名稱多是「某某國小(時段)」，
  *     家長不會拿它來搜，收錄了只是佔掉新站的檢索額度
+ *   - 2026-11-01 起只收錄療育類機構（isTherapyPlace）：篩檢診所、小兒科與其他單位一律不收錄
  * 不收錄的頁照樣產生、照樣從清單頁連過去，只是加 noindex 並排除在 sitemap 外。
+ * sitemap 排除（astro.config.mjs）與頁面 noindex（PlacePage.astro）都只呼叫這一個函式，判準只有這一處。
  *
  * 2026-10-02 放寬（站主核准）：
  *   - 門牌判斷先去空白、轉半形，也認國字數字：名錄常寫「49 號」「一號」，舊規則誤判成沒有門牌。
@@ -88,6 +90,23 @@ const TREATMENT_CATS = new Set(['療育-醫療單位', '早療機構', '社區�
 export const hasHouseNo = (addr) => HOUSE_NO.test((addr || '').normalize('NFKC').replace(/\s+/g, ''));
 export const isTreatmentProvider = (e) => catList(e).some((k) => TREATMENT_CATS.has(k))
   || /治療所|發展中心|早療|療育/.test(e.name);
+
+/**
+ * 療育類機構：治療所、早療中心、聯評、復健、諮商（2026-11-01 用戶拍板方案 A 的收錄範圍）。
+ * 判準只用名錄類別與名稱，跟類型頁（facets.mjs）同一套：
+ *   - 聯合評估中心、評估醫院、其他經許可辦理評估之醫院
+ *   - 早療機構、社區療育據點
+ *   - 療育類別裡，名稱有治療所／語言・職能・物理・心理治療／心理諮商／諮商／復健的單位
+ * 只有名稱是醫院或診所、沒寫出治療類別的療育醫療單位不算（家長搜的是那家診所，頁面講不出療育內容）。
+ */
+const THERAPY_CATS = /^(聯合評估中心|評估醫院|其他經許可辦理評估之醫院|早療機構|社區療育據點)$/;
+const THERAPY_NAME = /治療所|語言治療|職能治療|物理治療|心理治療|諮商|復健/;
+const SCREEN_CATS = /篩檢院所|聽力/;
+export const isTherapyPlace = (e) => {
+  const cats = catList(e);
+  return cats.some((k) => THERAPY_CATS.test(k))
+    || (cats.some((k) => /療育/.test(k)) && THERAPY_NAME.test(e.name));
+};
 
 export function noindexReason(e) {
   const cats = catList(e);
@@ -101,6 +120,12 @@ export function noindexReason(e) {
     return '只列在篩檢名單上的一般診所';
   }
   if (cats.every((k) => k === '療育-教育單位')) return '學校或幼兒園的療育時段';
+  // 2026-11-01 用戶拍板（方案 A）：只收錄療育類機構頁，篩檢診所／小兒科與其他單位一律 noindex。
+  if (!isTherapyPlace(e)) {
+    return cats.some((k) => SCREEN_CATS.test(k)) || /診所|醫院|兒科|婦產|婦幼/.test(e.name)
+      ? '篩檢診所或小兒科（只收錄療育類機構）'
+      : '非療育類機構（只收錄療育類機構）';
+  }
   return null;
 }
 

@@ -39,10 +39,21 @@ test('同縣市去掉註記後撞名，兩家都用全名', () => {
 
 test('noindex：門牌去空白、認國字；療育提供者沒門牌但有行政區照樣收錄', () => {
   const base = { tel: '03-1234567', district: '平鎮區' };
-  assert.equal(noindexReason({ ...base, name: '某某醫院', cats: '療育-醫療單位', address: '桃園市平鎮區某路 49 號' }), null);
+  assert.equal(noindexReason({ ...base, name: '某某復健科診所', cats: '療育-醫療單位', address: '桃園市平鎮區某路 49 號' }), null);
   assert.equal(noindexReason({ ...base, name: '某某醫院', cats: '聯合評估中心', address: '台中市北區育德路二號' }), null);
   assert.equal(noindexReason({ ...base, name: '某協會社區療育據點', cats: '社區療育據點', address: '南投縣埔里鎮行動式服務' }), null);
   assert.equal(noindexReason({ ...base, name: '某國小', cats: '療育-教育單位', address: '某縣某鄉無' }), '地址沒有門牌號碼');
   assert.equal(noindexReason({ ...base, name: '某婦產科診所', cats: '兒童發展篩檢院所', address: '某市某路1號' }), '只列在篩檢名單上的一般診所');
   assert.equal(noindexReason({ ...base, district: '', name: '某治療所', cats: '療育-醫療單位', address: '無' }), '地址沒有門牌號碼');
+});
+
+test('noindex：2026-11-01 方案 A，只收錄療育類機構', () => {
+  const base = { district: '某區', tel: '04-12345678', address: '某市某路1號' };
+  assert.equal(noindexReason({ ...base, name: '某語言治療所', cats: '療育-醫療單位' }), null);
+  assert.equal(noindexReason({ ...base, name: '某心理諮商所', cats: '療育-醫療單位' }), null);
+  assert.equal(noindexReason({ ...base, name: '某某醫院', cats: '兒童發展篩檢院所;療育-醫療單位;聯合評估中心' }), null);
+  assert.equal(noindexReason({ ...base, name: '某協會', cats: '社區療育據點' }), null);
+  assert.equal(noindexReason({ ...base, name: '某小兒科診所', cats: '兒童發展篩檢院所' }), '篩檢診所或小兒科（只收錄療育類機構）');
+  assert.equal(noindexReason({ ...base, name: '某某醫院(健保特約)', cats: '療育-醫療單位' }), '篩檢診所或小兒科（只收錄療育類機構）');
+  assert.equal(noindexReason({ ...base, name: '某縣兒童發展通報轉介中心', cats: '通報轉介中心' }), '非療育類機構（只收錄療育類機構）');
 });

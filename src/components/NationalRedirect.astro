@@ -1,0 +1,35 @@
+---
+// 合併到全國版的縣市子頁（/<縣市>/checkups/ → /checkups/、/<縣市>/materials/ → /materials/）。
+// 2026-11-01 用戶拍板合併。GitHub Pages 給不出 HTTP 301，跟機構改名轉址（PlaceRedirect.astro）同一套：
+// 0 秒 meta refresh ＋ canonical 指向全國版，Google 當永久轉址處理
+// （https://developers.google.com/search/docs/crawling-indexing/301-redirects#metarefresh）。
+// 不加 noindex（理由同 PlaceRedirect）；不進 sitemap（astro.config.mjs）。
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+
+interface Props {
+  code: string;
+  county: string;
+  /** 全國版網址，例如 /checkups/ */
+  href: string;
+  /** 全國版頁名 */
+  name: string;
+}
+const { code, county, href, name } = Astro.props;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+---
+
+<Base
+  title={`${name}（全國版）｜bansik`}
+  description={`這一頁的內容全國通用，已合併到全國版「${name}」。`}
+  canonical={`${site}${href}`}
+>
+  <meta slot="head" http-equiv="refresh" content={`0; url=${href}`} />
+  <Nav current={code} />
+  <main class="shell">
+    <h1>這一頁已經合併到全國版</h1>
+    <p class="lead">「{name}」的內容各縣市都一樣，所以只留一頁全國版。</p>
+    <p><a href={href}>前往 {name}</a></p>
+    <p><a href={`/${code}/`}>回到{county}</a></p>
+  </main>
+</Base>

@@ -1,7 +1,7 @@
 ---
 // 縣市頁的頁尾：六個內頁的入口 + 資料來源。
 // 首頁放不下的東西（預防保健 9 次、上百家機構、補助規則、教育素材）都從這裡進去。
-import { SUBPAGES } from '../lib/data.mjs';
+import { SUBPAGES, subpageUrl } from '../lib/data.mjs';
 
 interface Props {
   code: string;
@@ -12,7 +12,7 @@ const { code, generatedAt } = Astro.props;
 
 <footer class="site-ft">
   <nav>
-    {SUBPAGES.map(([slug, title]) => <a href={`/${code}/${slug}/`}>{title}</a>)}
+    {SUBPAGES.map(([slug, title]) => <a href={subpageUrl(code, slug)}>{title}</a>)}
   </nav>
   {/* 日期與「來源：」之間一定要有句號：JSX 會把換行壓成一個空白，
       之前長出「資料產生於 <日期>來源：…」這種黏在一起的句子，被引擎抄走就是一團。

@@ -195,7 +195,7 @@ const ld = place(e, { type: schemaType(e), county: C });
         <li><a href={`/${code}/steps/`}>{S}早療怎麼開始：從篩檢、通報到療育的五步</a></li>
         {evalPage
           ? <li><a href={typeUrl(code, 'evaluation')}>{S}兒童發展評估：聯合評估中心與評估醫院 {evalPage.list.length} 家</a></li>
-          : <li><a href={`/${code}/checkups/`}>{S}兒童發展篩檢與評估時程</a></li>}
+          : <li><a href="/checkups/">兒童發展篩檢與預防保健時程（全國通用）</a></li>}
         <li><a href={`/${code}/subsidy/`}>{S}早療補助怎麼申請：資格、文件與窗口</a></li>
       </ul>
     </section>

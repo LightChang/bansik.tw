@@ -77,6 +77,14 @@ export const SUBPAGES = [
   ['materials', '看懂發展的素材'],
 ];
 
+/**
+ * 2026-11-01 用戶拍板：評估檢查（checkups）與衛教材料（materials）22 縣市內容幾乎一樣，合併成全國版
+ * /checkups/、/materials/。縣市版網址留著當轉址頁（[county]/checkups.astro、materials.astro），
+ * 站內連結一律用 subpageUrl() 直接連全國版，不經轉址。
+ */
+export const NATIONAL_SUBPAGES = new Set(['checkups', 'materials']);
+export const subpageUrl = (code, slug) => (NATIONAL_SUBPAGES.has(slug) ? `/${slug}/` : `/${code}/${slug}/`);
+
 /** 22 個縣市頁共用的 getStaticPaths */
 export function countyPaths() {
   return counties().map((c) => ({ params: { county: c.code }, props: { meta: c } }));

@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { placeSlugs, noindexReason } from './src/lib/placepages.mjs';
-import { counties, placeRedirectsFor } from './src/lib/data.mjs';
+import { counties, placeRedirectsFor, NATIONAL_SUBPAGES } from './src/lib/data.mjs';
 import { lastmodFor } from './src/lib/lastmod.mjs';
 import jsonldCheck from './scripts/jsonld-check.mjs';
 import linksCheck from './scripts/links-check.mjs';
@@ -25,6 +25,8 @@ const NOINDEX = noindexPaths();
 // 機構改名的舊網址（轉址頁）也不進 sitemap：它只是指路，要收錄的是新網址
 for (const { code } of counties()) {
   for (const r of placeRedirectsFor(code).pages) NOINDEX.add(`/${code}/places/${r.from.normalize('NFC')}/`);
+  // 合併到全國版的縣市子頁（/taichung/checkups/ → /checkups/）只剩轉址頁，同理不進 sitemap
+  for (const slug of NATIONAL_SUBPAGES) NOINDEX.add(`/${code}/${slug}/`);
 }
 
 // 22 個縣市頁 + 全國首頁，全部靜態產生（getStaticPaths），沒有伺服器端。

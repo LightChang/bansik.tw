@@ -1,0 +1,100 @@
+---
+// 全國版「看懂發展的素材」。2026-11-01 用戶拍板：22 個縣市版的素材本身全國通用，各縣市版只差最後
+// 「填完之後問誰」一段（獨特內容 1%–14%），合併成這一頁；縣市版網址 /<縣市>/materials/ 轉到這裡。
+// 縣市不同的那一段（通報轉介中心、聯合評估中心）改成頁尾的 22 縣市表，電話與評估醫院照樣查得到。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Caveat from '../../components/Caveat.astro';
+import CountyFinder from '../../components/CountyFinder.astro';
+import { shared } from '../../lib/data.mjs';
+
+const m = shared().materials || {};
+const chk = m['社家署線上兒童發展檢核表'] || {};
+
+// 素材清單的形狀不一致，三種都要接：國健署量表是純字串陣列、宣導與繪本是物件，
+// 而物件的連結有的是絕對網址、有的是相對路徑（社家署寫 /cecm/...）。
+// 相對路徑直接放進 href 會連到 bansik.tw 自己，變成壞連結。
+const abs = (u, base) => (/^https?:/i.test(u) ? u : (base ? base + u : ''));
+const items = (arr, n, base) => (arr || []).slice(0, n).map((x) => {
+  if (typeof x === 'string') return { title: x, url: '' };
+  return { title: x.title, url: abs(x.url || x.file || x.page || '', base) };
+});
+
+const scales = items(m['國健署兒童發展篩檢量表'], 12);
+const promo = items(m['社家署宣導資料'], 10, 'https://system.sfaa.gov.tw');
+const books = items(m['CRPD繪本'], 5);
+---
+
+<Base
+  title="兒童發展檢核表與早療衛教素材｜篩檢量表下載"
+  description="兒童發展檢核表、國健署篩檢量表、宣導資料與繪本，全部可直接下載；填完之後各縣市要打哪一支通報轉介中心電話也列在同一頁。"
+  crumbs={[{ name: '兒童發展檢核表與衛教素材' }]}
+>
+  <Nav />
+  <main class="shell">
+    <p class="crumb"><a href="/">← 回到「現在該做什麼」</a></p>
+    <h1>看懂發展的素材</h1>
+    <p class="lead">
+      素材都是官方或公益單位做的，可以直接下載，全國通用。
+      填完覺得不對勁時，各縣市要問誰寫在這一頁最後面。
+    </p>
+
+    <section class="section">
+      <h2>線上發展檢核表（{Object.keys(chk).length} 個年齡層）</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>社家署線上兒童發展檢核表：各年齡層的題數與警訊題數。全國通用。</caption>
+          <thead>
+            <tr><th>年齡層</th><th class="num">題數</th><th class="num">警訊題</th><th>第一題長這樣</th></tr>
+          </thead>
+          <tbody>
+            {Object.entries(chk).map(([k, v]) => (
+              <tr>
+                <td>{k}</td>
+                <td class="num">{v.items ?? ''}</td>
+                <td class="num">{v.alerts ?? ''}</td>
+                <td>{v.sample || ''}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {scales.length > 0 && (
+      <section class="section">
+        <h2>國健署篩檢量表</h2>
+        <ul>
+          {scales.map((x) => (
+            <li>{x.url ? <a href={x.url} target="_blank" rel="noopener">{x.title}</a> : x.title}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {(promo.length > 0 || books.length > 0) && (
+      <section class="section">
+        <h2>宣導與繪本</h2>
+        <ul>
+          {[...promo, ...books].map((x) => (
+            <li>{x.url ? <a href={x.url} target="_blank" rel="noopener">{x.title}</a> : x.title}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <p class="meta">官方素材裡沒有任何一份是寫給孩子本人看的，手足的部分也只有民間單位有。</p>
+
+    <section class="section">
+      <h2>填完之後，在你的縣市問誰</h2>
+      <p>
+        檢核表的結果不是診斷，不放心就打所屬縣市的通報轉介中心——它是單一窗口，會幫你轉到評估或療育。
+        各縣市的電話、評估醫院與流程在下表。
+      </p>
+      <CountyFinder caption="22 縣市的通報轉介中心電話，以及該縣市的評估醫院、早療流程五步與補助頁。" cols={['evaluation', 'steps', 'subsidy']} />
+    </section>
+
+    <Caveat kind="wait" />
+
+  </main>
+</Base>

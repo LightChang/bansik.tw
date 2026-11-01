@@ -4,7 +4,7 @@ import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
 import RecentPlaces from '../../components/RecentPlaces.astro';
-import { countyPaths, countyBundle, SUBPAGES } from '../../lib/data.mjs';
+import { countyPaths, countyBundle, SUBPAGES, subpageUrl } from '../../lib/data.mjs';
 import { typePages, typeUrl, shortCounty } from '../../lib/facets.mjs';
 import { scriptJson } from '../../lib/scriptjson.mjs';
 import { NATIONAL } from '../../lib/national.mjs';
@@ -128,7 +128,7 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
     </div>
 
     <nav class="pagenav">
-      {SUBPAGES.map(([slug, title]) => <a href={`/${code}/${slug}/`}>{title} →</a>)}
+      {SUBPAGES.map(([slug, title]) => <a href={subpageUrl(code, slug)}>{title} →</a>)}
     </nav>
 
     {types.length > 0 && (
