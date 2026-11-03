@@ -31,8 +31,10 @@
 - `/developmental-delay/` 發展遲緩是什麼（施行細則第 9 條定義、各年齡警訊題原文、怎麼評估）
 - `/early-intervention/` 早療是什麼（施行細則第 8 條定義、流程五步、22 縣市通報轉介中心）
 - `/subsidy/` 22 縣市早療補助對照（上限、交通費、申請期限、線上申請）
+- `/checkups/` 全國版：這個年齡的所有檢查（幾個月大做哪一次）
+- `/materials/` 全國版：檢核表與衛教素材
+- `/school-entry/` 孩子要上小學，發展遲緩的身分會不會不見
 - `/{縣市代碼}/` 該縣市首頁（月齡入口）
-- `/{縣市代碼}/checkups/` 這個年齡的所有檢查
 - `/{縣市代碼}/steps/` 完整流程五步（篩檢→通報→評估→療育→學前特教）
 - `/{縣市代碼}/places/` 全部機構（名稱、類型、地址、電話）
 - `/{縣市代碼}/places/{類型}/` 單一服務類型的名單，類型代碼：`evaluation`（兒童發展評估）、
@@ -40,12 +42,12 @@
   `psychotherapy`（心理治療與諮商）、`rehabilitation`（復健科）、`pediatrics`（小兒科）、
   `screening`（兒童發展篩檢）、`early-intervention`（早療機構與社區療育據點）。
   分類依社家署名錄的類別與機構名稱，名稱沒寫出治療類別的單位不歸類。家數不足 3 家的組合不出頁。
-- `/{縣市代碼}/places/{機構名稱}/` 單一機構頁；資料太少的機構頁 noindex，不列在 sitemap
+- `/{縣市代碼}/places/{機構名稱}/` 單一機構頁；只有療育類（治療所、早療中心、聯合評估、復健、諮商）會被收錄，篩檢診所、小兒科與其他單位頁面還在，但 noindex、不列在 sitemap
 - `/{縣市代碼}/places/{行政區}/` 單一行政區的名單（行政區用中文，例如 `/taoyuan/places/平鎮區/`），8 家以上才出頁
 - `/{縣市代碼}/places/{行政區}/{類型}/` 行政區 × 類型，5 家以上才出頁
 - `/{縣市代碼}/map/` 各行政區家數
 - `/{縣市代碼}/subsidy/` 補助怎麼申請
-- `/{縣市代碼}/materials/` 檢核表與素材，附該縣市的通報轉介中心
+- `/{縣市代碼}/checkups/`、`/{縣市代碼}/materials/` 已合併為全國版，這兩個網址只轉址到 `/checkups/`、`/materials/`
 
 縣市代碼是英文，例如 `taichung`、`new_taipei`、`hsinchu_city`。
 全部網址列在 <https://bansik.tw/sitemap-index.xml>，核心事實的純文字全文在 <https://bansik.tw/llms-full.txt>。
