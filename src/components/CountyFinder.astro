@@ -3,6 +3,7 @@
 // 檢查時程 2026-11-01 起只有全國版 /checkups/，不再是縣市欄位（22 列都會連到同一頁）。
 // 名單頁不足出頁門檻的縣市（facets.mjs）改連全部機構，不連到不存在的頁。
 // 通報轉介中心放第一欄：站規第 4 條，每頁都要導回所屬縣市的通報轉介中心。名錄沒有這類單位的縣市（嘉義縣）照實寫。
+import Tel from './Tel.astro';
 import { counties, county } from '../lib/data.mjs';
 import { typePages, typeUrl } from '../lib/facets.mjs';
 
@@ -52,7 +53,7 @@ const rows = counties().map(({ code, name }) => {
       {rows.map((r) => (
         <tr>
           <td><a href={`/${r.code}/`}>{r.name}</a></td>
-          <td>{r.call ? <>{r.call.name} <span class="num">{r.call.tel}</span></> : '名錄未列'}</td>
+          <td>{r.call ? <>{r.call.name} <span class="num"><Tel tel={r.call.tel} /></span></> : '名錄未列'}</td>
           {r.cells.map((x) => <td><a href={x.href}>{x.text}</a></td>)}
         </tr>
       ))}

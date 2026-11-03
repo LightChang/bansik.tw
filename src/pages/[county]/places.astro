@@ -1,4 +1,5 @@
 ---
+import Tel from '../../components/Tel.astro';
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
@@ -118,7 +119,7 @@ const cats = [...new Set(c.entities.map((e) => e.plain_cat))].sort((a, b) => a.l
                   {r.approx && <span class="meta">（座標只到行政區）</span>}
                   {r.obs && <div class="meta">{r.obs}</div>}
                 </td>
-                <td class="num">{r.tel}</td>
+                <td class="num"><Tel tel={r.tel} /></td>
               </tr>
             ))}
             <tr id="fempty" hidden><td colspan="4">這個組合沒有機構，換一個行政區或類型試試。</td></tr>

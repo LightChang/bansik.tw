@@ -1,4 +1,5 @@
 ---
+import Tel from '../../components/Tel.astro';
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
@@ -96,7 +97,7 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
           <h3>不知道從哪開始，先打這支</h3>
           <div class="entry">
             <span>{call.name}</span>
-            <span class="tel num">{call.tel}</span>
+            <span class="tel num"><Tel tel={call.tel} /></span>
           </div>
           <p class="meta">
             通報轉介中心是單一窗口，{c.county}共 {referrals.length} 處，打這支會幫你轉。
@@ -112,7 +113,7 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
                 {e.tier && <span class={`pill ${e.tier === '重點' ? 'key' : ''}`}>{e.tier}</span>}
                 {e.name}
               </span>
-              <span class="tel num">{e.tel}</span>
+              <span class="tel num"><Tel tel={e.tel} /></span>
             </div>
             {quotaOf(e.entity_key) && (
               <p class="meta">下次開放名額 {quotaOf(e.entity_key)}（醫院公告，以院方為準）</p>

@@ -4,6 +4,7 @@
 //
 // 名單在建置期就輸出成真的表格列：這些頁存在的理由就是讓搜尋引擎與 AI 工具
 // 不跑 JS 也讀得到「某區有哪幾家語言治療所」。
+import Tel from './Tel.astro';
 import Base from '../layouts/Base.astro';
 import Nav from './Nav.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -146,7 +147,7 @@ const itemList = placeItemList(h1, list);
                     {e.geo_level === 'district' && <span class="meta">（座標只到行政區）</span>}
                     {obs && <div class="meta">{obs}</div>}
                   </td>
-                  <td class="num">{e.tel}</td>
+                  <td class="num"><Tel tel={e.tel} /></td>
                 </tr>
               );
             })}
@@ -163,7 +164,7 @@ const itemList = placeItemList(h1, list);
           <h3>不確定該找哪一類，先打這支</h3>
           <div class="entry">
             <span>{referral.name}</span>
-            <span class="tel num">{referral.tel}</span>
+            <span class="tel num"><Tel tel={referral.tel} /></span>
           </div>
           <p class="meta">{referral.cat}。不確定下一步該找哪一類，可以先打這支問。</p>
         </div>

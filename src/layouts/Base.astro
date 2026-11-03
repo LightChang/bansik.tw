@@ -133,6 +133,11 @@ const jsonld = [
           s.async = true;
           s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
           document.head.appendChild(s);
+          // 目標事件：機構電話、地圖連結（data-goal）被點時送出
+          document.addEventListener('click', function (ev) {
+            var a = ev.target.closest && ev.target.closest('[data-goal]');
+            if (a) window.gtag('event', a.dataset.goal, { method: a.dataset.method, page_location: location.href, transport_type: 'beacon' });
+          });
         }
       </script>
     )}

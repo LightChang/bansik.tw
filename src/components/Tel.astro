@@ -1,0 +1,7 @@
+---
+// 電話一律可點，點擊送目標事件 contact_click。多支號碼或分機只撥第一支的主號。
+import { telKey } from '../lib/placeredirects.mjs';
+const { tel } = Astro.props;
+const digits = telKey(tel);
+---
+{digits.length >= 7 ? <a href={`tel:${digits}`} data-goal="contact_click" data-method="tel">{tel}</a> : tel}

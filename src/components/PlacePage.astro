@@ -2,6 +2,7 @@
 // 單一機構頁。內容只用名錄裡已有的欄位（名稱、類別、地址、電話、網址、國健署層級、
 // 衛生局頁解析出的門診與預約方式、健保醫事機構代碼、社家署名錄的服務方式／內容／區域／辦理單位），
 // 沒有的欄位就不出現，不替機構補它沒登記的服務。社家署欄位原文照列，不改寫、不歸納。
+import Tel from './Tel.astro';
 import Base from '../layouts/Base.astro';
 import Nav from './Nav.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -121,9 +122,9 @@ const ld = place(e, { type: schemaType(e), county: C });
             <tr><th>所在地</th><td>{where}</td></tr>
             <tr>
               <th>地址</th>
-              <td>{e.address}{e.geo_level === 'district' && <span class="meta">（地圖座標只到行政區）</span>}</td>
+              <td>{e.address} <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${e.name} ${e.address}`)}`} target="_blank" rel="nofollow noopener" data-goal="contact_click" data-method="map">在 Google 地圖開啟</a>{e.geo_level === 'district' && <span class="meta">（地圖座標只到行政區）</span>}</td>
             </tr>
-            <tr><th>電話</th><td class="num">{e.tel}</td></tr>
+            <tr><th>電話</th><td class="num"><Tel tel={e.tel} /></td></tr>
             {obs && <tr><th>門診與預約</th><td>{obs}</td></tr>}
             {e.url && <tr><th>網址</th><td><a href={e.url} target="_blank" rel="noopener">{e.url}</a></td></tr>}
             {e.tier && (
