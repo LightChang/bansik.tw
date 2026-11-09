@@ -14,7 +14,8 @@
 #
 # 守門（任一條不過就不推，發 Slack）：
 #   - 機構總數比上一版少超過 10%：多半是某個來源這輪沒抓成功，不是真的關了一成機構。
-#   - 除了 generated_at 以外沒有任何變化：不推（避免每週一個空 commit 讓 lastmod 全站變動）。
+#   - src/data 除了 generated_at（與 observations[].observed_at）以外沒有任何變化：不推（避免每週一個空 commit 讓 lastmod 全站變動）。
+#     research/ 的抓取紀錄與快照不單獨觸發推送，等下次有實質變更時一起帶。
 #   - renames.py 找到更名候選：照推，但在 Slack 列出來請人確認後寫進 aliases.json。
 #   - 機構頁網址因改名而變：scripts/place-redirects.mjs update 自動把「舊網址→新網址」併進
 #     src/data/place-redirects.json（建置時舊網址產生轉址頁），Slack 逐筆列出；網址不見了又配不到
@@ -124,11 +125,38 @@ if [ "$AFTER" -lt $(( BEFORE * 9 / 10 )) ]; then
   fail "機構數從 $BEFORE 掉到 $AFTER（少超過一成），多半是有來源沒抓到"
 fi
 
-# 只有 generated_at 變的話不推
-REAL=$(git diff --unified=0 -- src/data research/state.json research/archive research/entity_prev.csv \
-  | grep -E '^[+-][^+-]' | grep -vc '"generated_at"' || true)
-UNTRACKED=$(git ls-files --others --exclude-standard -- src/data research/archive | wc -l)
-if [ "$REAL" -eq 0 ] && [ "$UNTRACKED" -eq 0 ]; then
+# 只有 generated_at 變的話不推。
+# 實質變更只看 src/data（JSON 剔除 generated_at 與 observations[].observed_at 後跟 HEAD 比）；research/state.json、archive、
+# entity_prev.csv 的變動不算——tw8 每週都會帶新快照與 fetched_at／sha256，算進去就等於每週必推。
+# 它們這輪若沒推，跟著 revert 掉；inbox 是 no-del 投遞，archive 會留著，下次有實質變更時一起帶上。
+# 有實質變更時，只有這兩種時間戳變的檔還原成 HEAD：頁面印著「資料產生於」，
+# 不還原的話沒變的縣市頁內容雜湊也會變，src/lastmod.json 全站被改成今天。
+REAL=$(python3 - <<'PY'
+import json, subprocess
+def git(*a): return subprocess.run(['git', *a], capture_output=True, text=True, check=True).stdout
+def strip(text):
+    try: d = json.loads(text)
+    except ValueError: return text
+    if isinstance(d, dict):
+        d.pop('generated_at', None)
+        # observations[].observed_at 是「這輪又看到一次」的時間戳，頁面不顯示；值沒變就不算變更
+        for o in d.get('observations') or []:
+            if isinstance(o, dict): o.pop('observed_at', None)
+    return json.dumps(d, sort_keys=True, ensure_ascii=False)
+real = git('ls-files', '--others', '--exclude-standard', '--', 'src/data').split()
+for f in git('diff', '--name-only', '--', 'src/data').split():
+    try: head = git('show', f'HEAD:{f}')
+    except subprocess.CalledProcessError: head = None
+    try: cur = open(f, encoding='utf-8').read()
+    except FileNotFoundError: cur = None
+    if head is not None and cur is not None and strip(head) == strip(cur):
+        git('checkout', '-q', '--', f)
+    else:
+        real.append(f)
+print(len(real))
+PY
+) || { revert; fail "比對資料變更失敗"; }
+if [ "$REAL" -eq 0 ]; then
   revert
   touch "$STATE_DIR/last-import"
   log "資料沒有實質變化（機構 $AFTER）"
