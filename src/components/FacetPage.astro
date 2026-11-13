@@ -9,7 +9,8 @@ import Base from '../layouts/Base.astro';
 import Nav from './Nav.astro';
 import SiteFooter from './SiteFooter.astro';
 import Caveat from './Caveat.astro';
-import { obsLine } from '../lib/view.mjs';
+import { obsLine, screenings } from '../lib/view.mjs';
+import { shared } from '../lib/data.mjs';
 import {
   typePages, districtPages, typeDistrictPages, shortCounty,
   typeUrl, districtUrl, typeDistrictUrl,
@@ -52,17 +53,37 @@ const typeCounts = allTypes
 const catCounts = [...list.reduce((m, e) => m.set(e.plain_cat, (m.get(e.plain_cat) || 0) + 1), new Map())
   .entries()].sort((a, b) => b[1] - a[1]);
 
-const title = type
+// 試點（交接 serp-screening-clinics-taipei，2026-11-14）：只有台北的篩檢院所頁，
+// title、description、開頭直接回答「台北可做兒童發展篩檢的院所有哪些」。
+// 篩檢次數與月齡從 shared.json 的時程算，不手寫；有效再套到其他縣市。
+const screeningAnswer = code === 'taipei' && type?.slug === 'screening' && !district;
+const screens = screeningAnswer ? screenings(shared().timeline) : [];
+const screenSpan = screens.length
+  ? `從 ${Number(screens[0].month_min)} 個月大到${screens[screens.length - 1].age_label.split('至').pop()}`
+  : '';
+
+const title = screeningAnswer
+  ? `${S}可做兒童發展篩檢的院所有哪些｜${n} 家診所與醫院名單`
+  : type
   ? type.title(district ? `${S}${district}` : S, n)
   : `${S}${district}兒童發展與早療機構｜${n} 家名單`;
 const h1 = type ? type.h1(where) : `${where}兒童發展相關機構`;
 const names = list.slice(0, 3).map((e) => e.name).join('、');
-const description = type
+const description = screeningAnswer
+  ? `${C}可做兒童發展篩檢的院所共 ${n} 家（${names}等），列出地址與電話。`
+    + (screens.length ? `兒童健康手冊排了 ${screens.length} 次篩檢，${screenSpan}；` : '')
+    + '各院所門診時段不同，出發前先打電話確認。'
+  : type
   ? `${where}${type.label}相關單位 ${n} 家（${names}等）的地址與電話，依主管機關公開名錄整理。`
   : `${where} ${n} 家兒童發展相關機構（${names}等）：篩檢、評估、療育各類的地址與電話。`;
 
 const top = byDistrict.slice(0, 3).map(([d, k]) => `${d}（${k} 家）`).join('、');
-const lead = type
+const lead = screeningAnswer
+  ? `${C}可做兒童發展篩檢的院所共 ${n} 家，分布在 ${byDistrict.length} 個行政區`
+    + (top ? `，最多的是${top}` : '') + '，名單在下方表格。'
+    + (screens.length ? `兒童健康手冊排了 ${screens.length} 次篩檢，${screenSpan}，帶手冊去就能做。` : '')
+    + '各院所門診時段不同，出發前先打電話確認。'
+  : type
   ? (district
       ? `${where}有 ${n} 家${type.label}相關單位列在主管機關名錄裡。`
       : `${C}有 ${n} 家${type.label}相關單位列在主管機關名錄裡，分布在 ${byDistrict.length} 個行政區`
