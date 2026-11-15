@@ -30,7 +30,10 @@ export function contentHash(html) {
   const m = html.match(/<main[\s\S]*<\/main>/);
   const body = (m ? m[0] : html)
     .replace(/<section[^>]*data-lastmod-skip[\s\S]*?<\/section>/g, '')
-    .replace(/資料產生於\s*\d{4}-\d{2}-\d{2}/g, '資料產生於');
+    .replace(/資料產生於\s*\d{4}-\d{2}-\d{2}/g, '資料產生於')
+    // 2026-11-15：頁尾（SiteFooter 的 <footer class="site-ft">）是全站共用的版面，不是這一頁的內容；
+    //   頁尾加一個連結不該讓三千多頁的 lastmod 一起變成今天。
+    .replace(/<footer class="site-ft"[\s\S]*?<\/footer>/g, '');
   return createHash('sha1').update(body).digest('hex').slice(0, 12);
 }
 
