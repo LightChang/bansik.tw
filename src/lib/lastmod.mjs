@@ -23,10 +23,14 @@ export function ledger() {
   return cache;
 }
 
-/** 頁面內容的雜湊：只看 <main>，剔除 data-lastmod-skip 區塊 */
+/** 頁面內容的雜湊：只看 <main>，剔除 data-lastmod-skip 區塊與「資料產生於 YYYY-MM-DD」字樣
+ *  （2026-11-15：這行日期散在頁尾、表格說明、名單段落裡，每週資料重產都會變，
+ *   即使名單內容一字未改也會讓整站 lastmod 被刷成今天，等於對搜尋引擎謊報有更新）。 */
 export function contentHash(html) {
   const m = html.match(/<main[\s\S]*<\/main>/);
-  const body = (m ? m[0] : html).replace(/<section[^>]*data-lastmod-skip[\s\S]*?<\/section>/g, '');
+  const body = (m ? m[0] : html)
+    .replace(/<section[^>]*data-lastmod-skip[\s\S]*?<\/section>/g, '')
+    .replace(/資料產生於\s*\d{4}-\d{2}-\d{2}/g, '資料產生於');
   return createHash('sha1').update(body).digest('hex').slice(0, 12);
 }
 
