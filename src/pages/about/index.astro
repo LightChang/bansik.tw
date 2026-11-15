@@ -2,12 +2,12 @@
 // 關於本站：誰經營、為什麼做、資料從哪來、多久更新、怎麼回報錯誤（站主 2026-11-15 同意新增）。
 // 內容只改寫 README 的定位與倫理邊界、public/llms.txt 的來源清單；
 // 更新頻率依 ops/run-data-update.sh、ops/fetch-taiwan.sh 與 research/scripts/sources.json 的 cadence，不另外編。
-// 回報表單網址在 src/site.config.mjs 的 FEEDBACK_FORM_URL，空字串時不放連結。
+// 回報信箱與 mailto 範本在 src/site.config.mjs 的 CORRECTION_EMAIL／correctionMailto()。
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import { organization } from '../../lib/jsonld.mjs';
 import { siteIndex } from '../../lib/data.mjs';
-import { FEEDBACK_FORM_URL } from '../../site.config.mjs';
+import { CORRECTION_EMAIL, correctionMailto } from '../../site.config.mjs';
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const written = '2026-11-15';
@@ -102,17 +102,11 @@ const description = 'bansik.tw 兒童發展地圖由 bansik.tw 編輯團隊整�
 
     <section class="section">
       <h2>資料有錯怎麼辦</h2>
-      {FEEDBACK_FORM_URL ? (
-        <p>
-          看到電話打不通、機構已經搬家或關閉、補助規則已經改了，請到
-          <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener">回報資料錯誤</a>
-          告訴我們是哪一頁、哪一筆。我們會回頭核對官方來源再修正，不會只憑一則回報就改。
-        </p>
-      ) : (
-        <p>
-          回報管道即將開放。在那之前，資料以主管機關公告為準；有疑問時，請直接聯絡該機構或所在縣市的衛生局、社會局。
-        </p>
-      )}
+      <p>
+        發現資料有誤，請來信 {CORRECTION_EMAIL}，附上頁面網址與正確來源（<a href={correctionMailto(`${site}/about/`)}>回報資料錯誤</a>）。
+        電話打不通、機構已經搬家或關閉、補助規則已經改了，都請告訴我們是哪一頁、哪一筆；
+        各縣市頁頁尾的「回報資料錯誤」連結會自動帶上該頁網址。我們會回頭核對官方來源再修正，不會只憑一則回報就改。
+      </p>
     </section>
 
     <footer class="site-ft">

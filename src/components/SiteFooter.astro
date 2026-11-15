@@ -2,13 +2,14 @@
 // 縣市頁的頁尾：六個內頁的入口 + 資料來源。
 // 首頁放不下的東西（預防保健 9 次、上百家機構、補助規則、教育素材）都從這裡進去。
 import { SUBPAGES, subpageUrl } from '../lib/data.mjs';
-import { FEEDBACK_FORM_URL } from '../site.config.mjs';
+import { correctionMailto } from '../site.config.mjs';
 
 interface Props {
   code: string;
   generatedAt: string;
 }
 const { code, generatedAt } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <footer class="site-ft">
@@ -25,6 +26,6 @@ const { code, generatedAt } = Astro.props;
   <p>這裡是路標不是掛號窗口，不做品質排名，也不代為預約或試算。以主管機關公告為準。</p>
   <p>
     <a href="/about/">關於本站</a>
-    {FEEDBACK_FORM_URL && <>　<a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener">回報資料錯誤</a></>}
+    　<a href={correctionMailto(pageUrl)}>回報資料錯誤</a>
   </p>
 </footer>

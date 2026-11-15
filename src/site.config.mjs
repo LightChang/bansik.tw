@@ -29,7 +29,27 @@ export const GA_HOSTS = ['bansik.tw', 'www.bansik.tw'];
 export const GSC_VERIFICATION = process.env.BANSIK_GSC_TOKEN || '';
 
 /**
- * 「回報資料錯誤」的表單網址（Google 表單）。站主之後提供。
- * 有值：/about/ 與縣市頁頁尾顯示「回報資料錯誤」連結；空字串：不顯示連結，/about/ 寫「回報管道即將開放」。
+ * 「回報資料錯誤」的收件信箱（站主 2026-11-15 決定：五站一律用 service@yao.care，不用 GitHub issue、不用 Google 表單）。
+ * /about/ 與縣市頁頁尾的「回報資料錯誤」連結都由 correctionMailto() 產生。
  */
-export const FEEDBACK_FORM_URL = '';
+export const CORRECTION_EMAIL = 'service@yao.care';
+
+/**
+ * 預先填好主旨與欄位範本的 mailto 連結；pageUrl 是目前頁面的正式網址，拿不到就留空讓人自己填。
+ * 主旨與內文用 encodeURIComponent：URLSearchParams 會把空白編成「+」，在郵件裡原樣顯示成加號。
+ */
+export function correctionMailto(pageUrl = '') {
+  const subject = '[bansik.tw] 資料錯誤回報';
+  const body = [
+    `資料頁：${pageUrl}`,
+    '',
+    '錯誤欄位：',
+    '',
+    '正確內容：',
+    '',
+    '來源證明（公告網址、截圖或聯絡方式）：',
+    '',
+    '是否為當事單位（是／否，單位名稱）：',
+  ].join('\n');
+  return `mailto:${CORRECTION_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
