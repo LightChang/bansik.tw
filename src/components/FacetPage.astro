@@ -95,6 +95,11 @@ const lead = screeningAnswer
 const referrals = c.entities.filter((e) => e.journey_step === '2');
 const referral = (district && referrals.find((e) => e.district === district)) || referrals[0];
 
+// 2026-11-15 用戶拍板（Google 2026 年 11 月核心更新期間，降低彙整型薄頁的比例）：
+// 「行政區 × 服務類型」名單頁一律 noindex（sitemap 也排除，見 astro.config.mjs），頁面留著給站內導覽。
+// 縣市層級的類型頁與單一行政區頁照常收錄。
+const typeDistrictNoindex = !!(district && type);
+
 const trail = district && type
   ? [{ name: district, path: districtUrl(code, district) }, { name: type.label }]
   : [{ name: district || type.label }];
@@ -103,7 +108,7 @@ const trail = district && type
 const itemList = placeItemList(h1, list);
 ---
 
-<Base title={title} description={description} trail={trail} jsonld={[itemList]}>
+<Base title={title} description={description} trail={trail} jsonld={[itemList]} noindex={typeDistrictNoindex}>
   <Nav current={code} />
   <main class="shell">
     <p class="crumb">

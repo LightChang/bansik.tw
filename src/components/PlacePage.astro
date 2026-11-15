@@ -12,7 +12,7 @@ import {
   SERVICE_TYPES, typePages, districtPages, typeUrl, districtUrl, shortCounty,
 } from '../lib/facets.mjs';
 import {
-  CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType, titleNames,
+  CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType, titleNames, sfaaRecords,
 } from '../lib/placepages.mjs';
 import { place } from '../lib/jsonld.mjs';
 import { counties, county } from '../lib/data.mjs';
@@ -60,11 +60,8 @@ const areaText = (a) => {
   }
   return list.length > 1 ? list.join('、') : a;
 };
-// 「服務內容」偶爾只填了郵遞區號加行政區（「40201臺中市南區」），那不是服務內容，不列
-const ZIP_ONLY = /^\d{3,6}\S{2,4}[市縣]\S{1,4}[區鄉鎮市]$/;
-const sfaaRecs = (e.sfaa || [])
-  .map((r) => (r.content && ZIP_ONLY.test(r.content.trim()) ? { ...r, content: '' } : r))
-  .filter((r) => r.area || r.mode || r.content || r.operator);
+// 「服務內容」只有郵遞區號加行政區的當空白、只有更新日期的筆不列，規則在 sfaaRecords()（收錄判準也用它）
+const sfaaRecs = sfaaRecords(e);
 const sfaaMulti = sfaaRecs.length > 1;
 
 // 國健署聯評中心名單的層級：家數從全國資料算，不寫死

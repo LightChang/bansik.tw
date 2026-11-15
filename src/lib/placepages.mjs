@@ -77,6 +77,7 @@ const SCREEN_ONLY = new Set(['兒童發展篩檢院所', '新生兒聽力篩檢�
  *   - 學校與幼兒園的療育時段（療育-教育單位）：名稱多是「某某國小(時段)」，
  *     家長不會拿它來搜，收錄了只是佔掉新站的檢索額度
  *   - 2026-11-01 起只收錄療育類機構（isTherapyPlace）：篩檢診所、小兒科與其他單位一律不收錄
+ *   - 2026-11-15 起療育類機構還要有社家署登記的服務內容，或是聯評中心／評估醫院類，才收錄
  * 不收錄的頁照樣產生、照樣從清單頁連過去，只是加 noindex 並排除在 sitemap 外。
  * sitemap 排除（astro.config.mjs）與頁面 noindex（PlacePage.astro）都只呼叫這一個函式，判準只有這一處。
  *
@@ -108,6 +109,17 @@ export const isTherapyPlace = (e) => {
     || (cats.some((k) => /療育/.test(k)) && THERAPY_NAME.test(e.name));
 };
 
+/**
+ * 社家署名錄登記的服務內容（服務方式、服務內容、服務區域、辦理單位）。PlacePage.astro 的
+ * 「社家署名錄登記內容」那一段就是印這裡回傳的筆；只有更新日期的筆不算。
+ * 「服務內容」偶爾只填了郵遞區號加行政區（「40201臺中市南區」），那不是服務內容，當空白。
+ */
+const ZIP_ONLY = /^\d{3,6}\S{2,4}[市縣]\S{1,4}[區鄉鎮市]$/;
+export const sfaaRecords = (e) => (e.sfaa || [])
+  .map((r) => (r.content && ZIP_ONLY.test(r.content.trim()) ? { ...r, content: '' } : r))
+  .filter((r) => r.area || r.mode || r.content || r.operator);
+const EVAL_CATS = /^(聯合評估中心|評估醫院|其他經許可辦理評估之醫院)$/;
+
 export function noindexReason(e) {
   const cats = catList(e);
   if (!hasHouseNo(e.address) && !(isTreatmentProvider(e) && e.district)) return '地址沒有門牌號碼';
@@ -125,6 +137,13 @@ export function noindexReason(e) {
     return cats.some((k) => SCREEN_CATS.test(k)) || /診所|醫院|兒科|婦產|婦幼/.test(e.name)
       ? '篩檢診所或小兒科（只收錄療育類機構）'
       : '非療育類機構（只收錄療育類機構）';
+  }
+  // 2026-11-15 用戶拍板（Google 2026 年 11 月核心更新期間，降低彙整型薄頁的比例）：
+  // 療育類機構頁也要有名錄以外的內容才收錄——社家署名錄有登記服務內容（sfaaRecords），
+  // 或是聯合評估中心／評估醫院類（頁面有國健署名單與評估流程可講）。
+  // 只有名稱、類型、地址、電話的頁，跟縣市名單裡那一列沒有差別，改 noindex。
+  if (!catList(e).some((k) => EVAL_CATS.test(k)) && !sfaaRecords(e).length) {
+    return '沒有社家署登記的服務內容（只有名稱、類型、地址、電話）';
   }
   return null;
 }

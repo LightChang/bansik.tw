@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { placeSlugs, noindexReason } from './src/lib/placepages.mjs';
-import { counties, placeRedirectsFor, NATIONAL_SUBPAGES } from './src/lib/data.mjs';
+import { counties, county, placeRedirectsFor, NATIONAL_SUBPAGES } from './src/lib/data.mjs';
+import { typeDistrictPages } from './src/lib/facets.mjs';
 import { lastmodFor } from './src/lib/lastmod.mjs';
 import jsonldCheck from './scripts/jsonld-check.mjs';
 import linksCheck from './scripts/links-check.mjs';
@@ -27,6 +28,10 @@ for (const { code } of counties()) {
   for (const r of placeRedirectsFor(code).pages) NOINDEX.add(`/${code}/places/${r.from.normalize('NFC')}/`);
   // 合併到全國版的縣市子頁（/taichung/checkups/ → /checkups/）只剩轉址頁，同理不進 sitemap
   for (const slug of NATIONAL_SUBPAGES) NOINDEX.add(`/${code}/${slug}/`);
+  // 行政區 × 服務類型名單頁：頁面 noindex（2026-11-15 用戶拍板，見 FacetPage.astro），sitemap 一起排除
+  for (const { district, type } of typeDistrictPages(county(code))) {
+    NOINDEX.add(`/${code}/places/${district.normalize('NFC')}/${type.slug}/`);
+  }
 }
 
 // 22 個縣市頁 + 全國首頁，全部靜態產生（getStaticPaths），沒有伺服器端。
