@@ -27,3 +27,9 @@ export const GA_HOSTS = ['bansik.tw', 'www.bansik.tw'];
  * 空字串＝不輸出。apex 網域建議改用 DNS TXT 驗證，這個欄位是備案。
  */
 export const GSC_VERIFICATION = process.env.BANSIK_GSC_TOKEN || '';
+
+/**
+ * 「回報資料錯誤」的表單網址（Google 表單）。站主之後提供。
+ * 有值：/about/ 與縣市頁頁尾顯示「回報資料錯誤」連結；空字串：不顯示連結，/about/ 寫「回報管道即將開放」。
+ */
+export const FEEDBACK_FORM_URL = '';

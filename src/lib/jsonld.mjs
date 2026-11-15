@@ -37,7 +37,7 @@ export function webSite(site) {
 
 /**
  * Organization：站台身分的最小可驗證版本。沒有登記在案的統編、地址、電話或對外聯絡窗口，
- * 那些欄位不編。只在首頁輸出，其他頁以 @id 參照。
+ * 那些欄位不編（sameAs 也不放：站台沒有其他官方帳號）。首頁與 /about/ 輸出，其他頁以 @id 參照。
  */
 export function organization(site) {
   return {
@@ -45,7 +45,8 @@ export function organization(site) {
     '@type': 'Organization',
     '@id': orgId(site),
     name: SITE_NAME,
-    url: `${site}/`,
+    // 指向「關於本站」：經營者、資料來源、更新頻率與回報管道都在那一頁
+    url: `${site}/about/`,
     description:
       '臺灣兒童發展篩檢與早期療育的資源地圖。以孩子的月齡為入口，回答三件事：'
       + '現在該做哪一次檢查、附近哪裡可以評估與療育、補助怎麼申請。',

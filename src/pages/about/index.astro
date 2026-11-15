@@ -1,0 +1,123 @@
+---
+// 關於本站：誰經營、為什麼做、資料從哪來、多久更新、怎麼回報錯誤（站主 2026-11-15 同意新增）。
+// 內容只改寫 README 的定位與倫理邊界、public/llms.txt 的來源清單；
+// 更新頻率依 ops/run-data-update.sh、ops/fetch-taiwan.sh 與 research/scripts/sources.json 的 cadence，不另外編。
+// 回報表單網址在 src/site.config.mjs 的 FEEDBACK_FORM_URL，空字串時不放連結。
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import { organization } from '../../lib/jsonld.mjs';
+import { siteIndex } from '../../lib/data.mjs';
+import { FEEDBACK_FORM_URL } from '../../site.config.mjs';
+
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const written = '2026-11-15';
+const generatedAt = siteIndex().generated_at.slice(0, 10);
+
+const title = '關於本站：誰在做、資料從哪來、多久更新｜bansik';
+const description = 'bansik.tw 兒童發展地圖由 bansik.tw 編輯團隊整理。為什麼做這個站、不做哪些事、'
+  + '資料來自社家署、國健署、教育部、全國法規資料庫與各縣市衛生局社會局，每週一自動檢查更新，以及資料有錯時怎麼回報。';
+---
+
+<Base
+  title={title}
+  description={description}
+  crumbs={[{ name: '關於本站' }]}
+  dataDate={written}
+  citations={[]}
+  jsonld={[organization(site)]}
+>
+  <Nav />
+  <main class="shell">
+    <h1>關於本站</h1>
+    <p class="lead">
+      這個站由 <strong>bansik.tw 編輯團隊</strong>整理。我們把散在各個政府機關的兒童發展篩檢、評估、療育與補助資料，
+      照孩子的月齡和家長走的順序排在一起，讓您比較快知道下一步去哪裡。
+    </p>
+
+    <section class="section">
+      <h2>為什麼做這個站</h2>
+      <p>
+        孩子可能有發展遲緩時，家長要走的路是：篩檢、通報、聯合評估、療育、學前特教，最後上小學。
+        每一段的資料由不同機關管，名錄在社家署、評估中心名單在國健署、特教在教育部、補助在各縣市社會局，
+        沒有一個地方把它們接起來。這個站做的就是把它們放進同一張地圖和同一條時間軸。
+      </p>
+      <p>做這件事時，我們守住幾條界線：</p>
+      <div class="step">
+        <h3>只到機構層級</h3>
+        <p>站上只有機構的公開資料。不收集孩子或家長的任何資訊，也沒有留言、社群或帳號。</p>
+      </div>
+      <div class="step">
+        <h3>不排名</h3>
+        <p>不評哪一家評得好、哪一家療育做得好。站上只列主管機關公告的名單與公開的聯絡方式。</p>
+      </div>
+      <div class="step">
+        <h3>等候資訊一定標時間</h3>
+        <p>
+          您會依據這些資訊安排行程，過期的資訊比沒有更糟。所以寫到放名額日時會註明是醫院公告、以院方為準，
+          頁尾也一律標示這份資料是哪一天產生的。
+          各聯合評估中心要等多久，目前沒有任何公開資料，站上不寫推估天數，請直接打電話問該中心。
+        </p>
+      </div>
+      <div class="step">
+        <h3>名錄不等於現在可以去等</h3>
+        <p>
+          列在名單上，代表它是主管機關公告的機構，不代表它現在收得了案、排得到，或一定提供您要的那項服務。
+          出發前請先打電話確認。
+        </p>
+      </div>
+      <p>
+        這裡是路標，不是窗口：不代為預約或掛號、不代為試算補助金額、不提供醫療建議。
+        要通報或申請，請找孩子所在縣市的通報轉介中心，流程見<a href="/early-intervention/">早療是什麼</a>。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>資料從哪裡來</h2>
+      <ul>
+        <li>衛生福利部社會及家庭署：發展遲緩兒童通報暨個案管理服務網的資源名錄、發展檢核表與宣導資料。</li>
+        <li>衛生福利部國民健康署：兒童發展聯合評估中心名單、兒童健康手冊（2026 年 6 月第 21 版）、兒童發展篩檢。</li>
+        <li>衛生福利部中央健康保險署：特約醫事機構名冊。</li>
+        <li>教育部：特殊教育通報網與特殊教育統計。</li>
+        <li>全國法規資料庫：兒童及少年福利與權益保障法與其施行細則、特殊教育法等條文。</li>
+        <li>各縣市衛生局與社會局：聯合評估中心聯絡資訊、早療費用補助規則。</li>
+      </ul>
+      <p>每一家機構的資料來自哪個來源，都逐筆記在原始資料裡；有官方網址的頁面也會列出引用的來源。</p>
+    </section>
+
+    <section class="section">
+      <h2>多久更新一次</h2>
+      <p>
+        每週一自動檢查一次。每個來源依它本身的更新節奏去抓：例如健保署特約院所名冊與新北、臺中衛生局的聯評中心頁每週抓，
+        社家署名錄每月抓，各縣市補助規則每季抓，國健署聯評中心名單與兒童健康手冊每年抓。
+      </p>
+      <p>
+        抓回來的資料解析、檢查過，內容真的有變才更新網站。如果機構總數比上一版少了一成以上，
+        多半是某個來源這次沒抓成功，那一週就不更新，舊資料照常顯示，等人工確認。
+      </p>
+      <p>
+        所以每一頁都是某一天的快照。縣市頁與機構頁的頁尾都寫著「資料產生於」哪一天（目前這一版是 {generatedAt}），
+        引用時請一併帶上，並以主管機關最新公告為準。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>資料有錯怎麼辦</h2>
+      {FEEDBACK_FORM_URL ? (
+        <p>
+          看到電話打不通、機構已經搬家或關閉、補助規則已經改了，請到
+          <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener">回報資料錯誤</a>
+          告訴我們是哪一頁、哪一筆。我們會回頭核對官方來源再修正，不會只憑一則回報就改。
+        </p>
+      ) : (
+        <p>
+          回報管道即將開放。在那之前，資料以主管機關公告為準；有疑問時，請直接聯絡該機構或所在縣市的衛生局、社會局。
+        </p>
+      )}
+    </section>
+
+    <footer class="site-ft">
+      <p>本頁撰寫於 {written}。經營：bansik.tw 編輯團隊。</p>
+      <p>這裡是路標不是窗口，以主管機關公告為準。</p>
+    </footer>
+  </main>
+</Base>
