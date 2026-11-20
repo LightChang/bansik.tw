@@ -13,6 +13,7 @@ import {
 } from '../lib/facets.mjs';
 import {
   CAT_TEXT, catList, placeSlugs, placeUrl, noindexReason, serviceWords, schemaType, titleNames, sfaaRecords,
+  isTherapyPlace, isEvalPlace,
 } from '../lib/placepages.mjs';
 import { place } from '../lib/jsonld.mjs';
 import { counties, county } from '../lib/data.mjs';
@@ -93,6 +94,23 @@ const nearby = c.entities
 const referrals = c.entities.filter((x) => x.journey_step === '2' && x.entity_key !== e.entity_key);
 const referral = referrals.find((x) => x.district === e.district) || referrals[0];
 
+// 家長點進一家療育單位時，下一個問題是「在這裡做，縣市補多少、要附什麼」；
+// 點進評估中心時是「什麼時候排得到、評估完拿什麼去申請」。答案只用縣市補助規則
+// （research/scripts/subsidies.json，官方公告逐條整理）與衛生局頁的名額公告，沒有的就不寫。
+const sub = c.subsidy && c.subsidy.status !== 'pending' ? c.subsidy : null;
+const subAp = sub && sub.apply;
+const proofDoc = subAp && (subAp.documents || []).find((d) => /遲緩|報告書/.test(d));
+const subMoney = sub && sub.monthly_max_general
+  ? `${C}的早期療育補助，一般戶每人每月最高 ${sub.monthly_max_general.toLocaleString()} 元`
+    + (sub.monthly_max_low_income ? `、低收入戶最高 ${sub.monthly_max_low_income.toLocaleString()} 元` : '')
+    + ((sub.items || []).length ? `，補助項目包括${sub.items.join('、')}` : '') + '。'
+  : '';
+const evalHere = isEvalPlace(e);
+const therapyHere = !evalHere && isTherapyPlace(e);
+const quota = c.observations
+  .filter((o) => o.entity_key === e.entity_key && o.field === 'quota_release_date')
+  .map((o) => o.value).sort()[0] || null;
+
 // 結構化資料：與上方表格同一筆 e，欄位規則見 src/lib/jsonld.mjs 的 place()
 const ld = place(e, { type: schemaType(e), county: C });
 ---
@@ -165,6 +183,39 @@ const ld = place(e, { type: schemaType(e), county: C });
           來源：<a href={SFAA_URL} target="_blank" rel="noopener">衛福部社家署發展遲緩兒童通報暨個案管理服務網・資源查詢</a>。
           名錄沒有填的欄位這裡就不列；實際時段、名額與收費以機構自己的說明為準。
         </p>
+      </section>
+    )}
+
+    {therapyHere && sub && (
+      <section class="section">
+        <h2>在{tname}做療育，{S}早療補助怎麼算</h2>
+        <p class="lead">
+          {subMoney}
+          {proofDoc && <>申請時要附的證明：{proofDoc.replace(/[。；]+$/, '')}。</>}
+          {subAp && subAp.office && <>受理窗口：{subAp.office}。</>}
+        </p>
+        <p class="meta">
+          補助由家長向{C}的受理窗口申請。每次收費多少、在這家做的療育能不能申請補助，出發前先打電話問機構或受理窗口。
+          規定依{sub.rule_name}（核對於 {sub.verified_at}）。
+        </p>
+        <nav class="pagenav"><a href={`/${code}/subsidy/`}>{S}早療補助的資格、文件與申請期限 →</a></nav>
+      </section>
+    )}
+
+    {evalHere && (
+      <section class="section">
+        <h2>到{tname}做評估之前與之後</h2>
+        <ul>
+          {quota && <li>醫院公告的下次開放名額：{quota}（以院方公告為準）。</li>}
+          <li>評估大多要預約，先打電話問掛號方式：<span class="num"><Tel tel={e.tel} /></span>。</li>
+          {proofDoc && /報告書/.test(proofDoc) && (
+            <li>評估後拿到的綜合報告書，可以當作申請{S}早療補助的證明文件，{C}規定的證明文件是：{proofDoc.replace(/[。；]+$/, '')}。</li>
+          )}
+        </ul>
+        <nav class="pagenav">
+          <a href={`/${code}/steps/`}>{S}早療的五個步驟 →</a>
+          {sub && <a href={`/${code}/subsidy/`}>{S}早療補助怎麼申請 →</a>}
+        </nav>
       </section>
     )}
 

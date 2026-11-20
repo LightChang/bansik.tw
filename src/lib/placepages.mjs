@@ -119,6 +119,8 @@ export const sfaaRecords = (e) => (e.sfaa || [])
   .map((r) => (r.content && ZIP_ONLY.test(r.content.trim()) ? { ...r, content: '' } : r))
   .filter((r) => r.area || r.mode || r.content || r.operator);
 const EVAL_CATS = /^(聯合評估中心|評估醫院|其他經許可辦理評估之醫院)$/;
+/** 名錄類別裡有評估類（聯合評估中心、評估醫院） */
+export const isEvalPlace = (e) => catList(e).some((k) => EVAL_CATS.test(k));
 
 export function noindexReason(e) {
   const cats = catList(e);

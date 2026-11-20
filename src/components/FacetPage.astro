@@ -91,6 +91,17 @@ const lead = screeningAnswer
   : `${where}有 ${n} 家兒童發展相關機構列在主管機關名錄裡：`
     + catCounts.slice(0, 4).map(([k, v]) => `${k} ${v} 家`).join('、') + '。';
 
+// 療育類名單頁（語言、職能、物理、心理、復健、早療機構）：家長挑療育單位時接著會問補助補多少。
+// 金額取自縣市補助規則（c.subsidy），金額未公開的縣市不寫數字。
+const THERAPY_SLUGS = ['speech-therapy', 'occupational-therapy', 'physical-therapy', 'psychotherapy',
+  'rehabilitation', 'early-intervention'];
+const sub = c.subsidy && c.subsidy.status !== 'pending' && c.subsidy.monthly_max_general ? c.subsidy : null;
+const subLine = type && THERAPY_SLUGS.includes(type.slug) && sub
+  ? `孩子符合${C}早療補助資格的話，在這些單位做療育可以申請補助，一般戶每人每月最高 ${sub.monthly_max_general.toLocaleString()} 元`
+    + (sub.monthly_max_low_income ? `、低收入戶最高 ${sub.monthly_max_low_income.toLocaleString()} 元` : '')
+    + '。各單位收費與能不能用在補助上，先打電話問。'
+  : '';
+
 // 行政區頁優先放設在同一區的通報轉介中心
 const referrals = c.entities.filter((e) => e.journey_step === '2');
 const referral = (district && referrals.find((e) => e.district === district)) || referrals[0];
@@ -119,6 +130,9 @@ const itemList = placeItemList(h1, list);
     <h1>{h1}</h1>
     <p class="lead">{lead}</p>
     {type && <p class="meta">這一頁收的是：{type.basis}</p>}
+    {subLine && (
+      <p class="meta">{subLine}<a href={`/${code}/subsidy/`}>{S}早療補助的資格與文件 →</a></p>
+    )}
 
     {type && !district && byDistrict.length > 1 && (
       <section class="section">
