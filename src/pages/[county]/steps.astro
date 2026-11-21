@@ -3,64 +3,231 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
+import Tel from '../../components/Tel.astro';
+import ReferralTable from '../../components/ReferralTable.astro';
 import { countyPaths, county } from '../../lib/data.mjs';
+import { typePages, typeUrl, shortCounty } from '../../lib/facets.mjs';
+import { placeSlugs, placeUrl, catList } from '../../lib/placepages.mjs';
+import { firstCall, referralsOf, latestQuota } from '../../lib/referral.mjs';
+import { obsLine } from '../../lib/view.mjs';
 
 export const getStaticPaths = countyPaths;
 
 const { county: code } = Astro.params;
 const c = county(code);
+const S = shortCounty(c.county);
+const types = typePages(c);
+const page = (slug) => types.find(({ type }) => type.slug === slug);
+const slugs = placeSlugs(c);
 
+// 進這一頁的家長多半是：篩檢結果寫「需轉介」，或自己覺得孩子哪裡跟不上，想知道在這個縣市接下來找誰。
+// 所以每一步要回答「我要做什麼、找哪一家、拿到什麼」，家數只是附帶。
 // 官方用語不換掉——家長打電話、拿報告時聽到的就是這幾個字，換成白話反而對不上。
-// 但第一次出現時要說清楚那是什麼。
-const STEPS = [
-  ['1', '篩檢', '在診所或衛生所做兒童發展篩檢，這是入口。帶兒童健康手冊去，醫師會照四個面向看。'],
-  ['2', '通報', '篩檢覺得有疑慮，由「通報轉介中心」接手。它是單一窗口，不知道下一步做什麼就打這支。'],
-  ['3', '評估', '到「聯合評估中心」做完整評估，拿到「綜合報告書」——之後申請補助、安排療育都要用這份。這一段最花時間。'],
-  ['4', '療育', '依報告書安排療育：醫院復健科、早療機構、社區據點或到宅。自費的部分可以申請補助。'],
-  ['5', '學前教育', '銜接幼兒園的學前特教資源與巡迴輔導，滿 6 歲後由學校系統接手。'],
-];
+// 醫療內容只寫站上已有出處的（兒少權法與施行細則、國健署兒童健康手冊、社家署名錄），沒有出處的不寫。
 
-const cnt = (s) => c.entities.filter((e) => e.journey_step === s).length;
+// 家數一律跟名單頁同一個算法（一家可能同時屬於兩類），同一個數字在站上各頁才對得起來。
+const has = (re) => c.entities.filter((e) => catList(e).some((k) => re.test(k))).length;
+const nScreen = page('screening') ? page('screening').list.length : has(/兒童發展篩檢院所/);
+const nEar = has(/新生兒聽力篩檢院所/);
+const EVAL = /聯合評估中心|其他經許可辦理評估之醫院/;
+const evals = c.entities
+  .filter((e) => catList(e).some((k) => EVAL.test(k)))
+  .sort((a, b) => (b.cat === '聯合評估中心') - (a.cat === '聯合評估中心')
+    || (b.tier === '重點') - (a.tier === '重點')
+    || a.name.localeCompare(b.name, 'zh-Hant'));
+const nEval = evals.length;
+const refs = referralsOf(c);
+const intakes = refs.filter((r) => r.e.cat === '通報轉介中心');
+const one = firstCall(c);
+const nTherapy = c.entities.filter((e) => e.journey_step === '4').length;
+const nSchool = c.entities.filter((e) => e.journey_step === '5').length;
 
-// 家長用語 → 官方分類 的對照與家數
+// 個案管理中心做什麼：照社家署名錄該縣市個管中心自己填的服務內容，第一句就好
+const cmContent = (() => {
+  for (const r of refs) {
+    for (const x of r.e.sfaa || []) {
+      if (x.cat === '個案管理中心' && x.content) return x.content.split(/[\n。]/)[0].replace(/^個案服務：/, '');
+    }
+  }
+  return '';
+})();
+
+// 補助：只用縣市補助規則裡有的數字（research/scripts/subsidies.json）
+const sub = c.subsidy && c.subsidy.status !== 'pending' && c.subsidy.monthly_max_general ? c.subsidy : null;
+const subLine = sub
+  ? `一般戶每人每月最高 ${sub.monthly_max_general.toLocaleString()} 元`
+    + (sub.monthly_max_low_income ? `、低收入戶最高 ${sub.monthly_max_low_income.toLocaleString()} 元` : '')
+  : '';
+const THERAPY_SLUGS = ['speech-therapy', 'occupational-therapy', 'physical-therapy', 'psychotherapy', 'rehabilitation', 'early-intervention'];
+const therapyPages = types.filter(({ type }) => THERAPY_SLUGS.includes(type.slug));
+
+// 通報人數：衛福部統計處 2.5.4，取最新一年與最早一年
+const reports = c.stats.filter((r) => r.metric === '早療通報人數' && r.value)
+  .sort((a, b) => Number(b.year) - Number(a.year));
+const latest = reports[0];
+const oldest = reports.length > 1 ? reports[reports.length - 1] : null;
+
+// 家長用語 → 官方分類 的對照與家數（一家可能算進兩類，與名單頁一致）
+// 只當次要類別出現的分類（臺中的個管中心都兼通報轉介）資料裡沒有白話名，照 research/scripts/build.py 的對照補
+const plainOf = { 個案管理中心: '有人陪你走完流程的地方', 新生兒聽力篩檢院所: '做新生兒聽力篩檢的院所', 新生兒聽力確診醫院: '聽力有問題時做確診的醫院', 其他經許可辦理評估之醫院: '也能做評估的醫院' };
+for (const e of c.entities) if (e.plain_cat) plainOf[e.cat] = e.plain_cat;
 const byCat = Object.entries(
   c.entities.reduce((m, e) => {
-    const k = `${e.plain_cat}|${e.cat}`;
-    m[k] = (m[k] || 0) + 1;
+    for (const k of catList(e)) m[k] = (m[k] || 0) + 1;
     return m;
   }, {})
-).sort((a, b) => b[1] - a[1]).map(([k, n]) => {
-  const [plain, cat] = k.split('|');
-  return { plain, cat, n };
-});
+).sort((a, b) => b[1] - a[1]).map(([cat, n]) => ({ cat, plain: plainOf[cat] || cat, n }));
+
+const title = `${S}早療怎麼開始｜先打哪支、去哪評估、補助多少`;
+const description = `${c.county}的早期療育從篩檢、通報、評估、療育到學前教育：`
+  + (one ? `第一通電話打${one.e.name}` : intakes.length ? `通報轉介中心 ${intakes.length} 處依行政區分工` : '名錄沒有列通報轉介中心')
+  + `，可以做發展評估的醫院 ${nEval} 家` + (subLine ? `，療育補助${subLine}` : '') + '。';
 ---
 
-<Base
-  title={`${c.county}早療怎麼開始｜發展遲緩從篩檢、通報、評估到療育五步`}
-  description={`篩檢、通報、評估、療育、學前教育——${c.county}每一步分別有多少家機構，各由哪個單位負責。`}
->
+<Base title={title} description={description}>
   <Nav current={code} />
   <main class="shell">
     <p class="crumb"><a href={`/${code}/`}>← 回到「現在該做什麼」</a></p>
-    <h1>完整流程五步</h1>
+    <h1>{c.county}早療怎麼開始：完整流程五步</h1>
     <p class="lead">
-      每一步由不同機關管，沒有任何一處把它們接起來——這也是這個站想補的那一段。
-      家數是{c.county}目前收錄的。
+      篩檢結果寫「需轉介」，或自己覺得孩子哪裡跟不上，在{c.county}的下一步是打通報轉介中心。
+      {one
+        ? <>全{c.county}都由<a href="#centers">{one.e.name}</a>受理。</>
+        : intakes.length
+          ? <>{c.county}的通報轉介中心有 {intakes.length} 處，依行政區分工，<a href="#centers">先看你住的區歸哪一處</a>。</>
+          : <>社家署名錄沒有列{c.county}的通報轉介中心，<a href="#centers">先看下面怎麼找</a>。</>}
+      之後是評估、療育、學前教育，每一步由不同機關管。
     </p>
 
-    {STEPS.map(([s, name, desc]) => (
-      <div class={`step ${cnt(s) ? 'here' : ''}`}>
-        <h3>{s}　{name}　<span class="count">{cnt(s)} 家</span></h3>
-        <p>{desc}</p>
-      </div>
-    ))}
+    <div class="step here">
+      <h3>1　篩檢　<span class="count">{nScreen} 家</span></h3>
+      <p>
+        國健署的兒童發展篩檢共 6 次，從 6 到 10 個月大開始，由醫師就粗大動作、精細動作、語言認知、社會發展四面向看，
+        結果分通過、持續追蹤與衛教、需轉介三種。帶兒童健康手冊去。
+        {page('screening')
+          ? <>{c.county}可以做篩檢的院所見<a href={typeUrl(code, 'screening')}>{S}兒童發展篩檢（{nScreen} 家）</a>，</>
+          : <>{c.county}可以做篩檢的院所有 {nScreen} 家，在<a href={`/${code}/places/`}>全部機構</a>裡，</>}
+        孩子幾個月大做哪一次見<a href="/age/">寶寶發展月份對照表</a>。
+        {nEar > 0 && <>新生兒聽力篩檢另有 {nEar} 家院所。</>}
+      </p>
+    </div>
+
+    <div class="step here">
+      <h3>2　通報　<span class="count">{refs.length} 處</span></h3>
+      <p>
+        兒少權法第 32 條要求醫療、教育、社福機構發現疑似發展遲緩兒童時通報縣市主管機關；
+        家長自己覺得不對勁，也可以直接打通報轉介中心，它會幫你轉到評估或療育。
+        {cmContent && <>通報之後由個案管理中心接手，{c.county}的個管中心在社家署名錄寫的服務內容是：「{cmContent}」。</>}
+      </p>
+    </div>
+
+    <section class="section">
+      <h2 id="centers">{c.county}住哪一區打哪一處</h2>
+      {refs.length === 0 ? (
+        <p class="lead">
+          社家署名錄裡沒有{c.county}的通報轉介中心或個案管理中心。可以先問做篩檢的院所，
+          或打下面的評估醫院問該怎麼轉介。
+        </p>
+      ) : (
+        <>
+          <p class="lead">
+            {refs.length === 1
+              ? <>{c.county}只有這一處，全縣市都由它受理。</>
+              : <>通報轉介中心先接電話；個案管理中心是通報後跟著孩子的那一處。負責的區照社家署名錄每一處填的服務區域列出。</>}
+          </p>
+          <ReferralTable c={c} caption={`${c.county}的通報轉介中心與個案管理中心，各自負責的區與電話。資料產生於 ${c.generated_at.slice(0, 10)}。`} />
+        </>
+      )}
+    </section>
+
+    <div class="step here">
+      <h3>3　評估　<span class="count">{nEval} 家</span></h3>
+      <p>
+        到衛生主管機關認可的醫院評估，確認後發給證明（兒少權法施行細則第 9 條）。
+        國健署補助的兒童發展聯合評估中心評估完會給「綜合報告書」，之後申請補助、安排療育都要用這份。
+        要等多久沒有任何公開資料；有些醫院會公告每個月的名額開放日，列在下表。
+      </p>
+    </div>
+
+    {evals.length > 0 ? (
+      <section class="section">
+        <h2>{c.county}可以做發展評估的醫院</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>
+              {c.county}的兒童發展聯合評估中心（國健署補助，分重點與一般）與其他經認可辦理評估的醫院。
+              名額開放日是醫院自己公告的，以院方為準。資料產生於 {c.generated_at.slice(0, 10)}。
+            </caption>
+            <thead><tr><th>醫院</th><th>類型</th><th>電話</th><th>名額與預約</th></tr></thead>
+            <tbody>
+              {evals.map((e) => {
+                const q = latestQuota(c.observations, e.entity_key);
+                const obs = obsLine(c.observations, e.entity_key, e.tel);
+                const slug = slugs.get(e.entity_key);
+                return (
+                  <tr>
+                    <td>
+                      {e.tier && <span class={`pill ${e.tier === '重點' ? 'key' : ''}`}>{e.tier}</span>}
+                      {slug ? <a href={placeUrl(code, slug)}>{e.name}</a> : e.name}
+                    </td>
+                    <td>{e.cat === '聯合評估中心' ? '聯合評估中心' : '其他認可的評估醫院'}</td>
+                    <td class="num"><Tel tel={e.tel} /></td>
+                    <td>{[q && q.text, obs].filter(Boolean).join('　') || '沒有公告，打電話問'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ) : (
+      <p class="meta">
+        社家署名錄與國健署名單裡，{c.county}沒有可以做發展評估的醫院，需要跨縣市；先打上面的通報轉介中心問該去哪裡。
+      </p>
+    )}
+
+    <div class="step here">
+      <h3>4　療育　<span class="count">{nTherapy} 家</span></h3>
+      <p>
+        依評估結果安排療育：醫院或診所的治療、早療機構、社區療育據點，或到宅服務。
+        {subLine
+          ? <>費用可以申請{c.county}的早療補助，{subLine}，資格與文件見<a href={`/${code}/subsidy/`}>{S}早療補助怎麼申請</a>。</>
+          : <>費用可以申請縣市補助，規則見<a href={`/${code}/subsidy/`}>{S}早療補助</a>。</>}
+      </p>
+      {therapyPages.length > 0 && (
+        <nav class="pagenav">
+          {therapyPages.map(({ type, list }) => (
+            <a href={typeUrl(code, type.slug)}>{S}{type.label} {list.length} 家</a>
+          ))}
+        </nav>
+      )}
+    </div>
+
+    <div class="step here">
+      <h3>5　學前教育　<span class="count">{nSchool} 家</span></h3>
+      <p>
+        幼兒園的學前特教與巡迴輔導，由縣市的特殊教育學生鑑定及就學輔導會（鑑輔會）鑑定安置。
+        特教的「發展遲緩」類別只用在未滿 6 歲，上小學前要再鑑定，見<a href="/school-entry/">孩子要上小學</a>。
+      </p>
+    </div>
+
+    {latest && (
+      <section class="section">
+        <h2>{c.county}每年的早療通報人數</h2>
+        <p>
+          {latest.year} 年{c.county}早療通報 {Number(latest.value).toLocaleString()} 人{oldest && <>，{oldest.year} 年是 {Number(oldest.value).toLocaleString()} 人</>}。
+          通報代表有人提出疑慮，不代表每個孩子最後都確認是發展遲緩。
+        </p>
+        <p class="meta">資料：衛福部統計處 2.5.4 發展遲緩兒童早期療育服務個案通報概況。</p>
+      </section>
+    )}
 
     <section class="section">
       <h2>各類型家數</h2>
       <p class="lead">左邊是家長平常的說法，右邊是公文與網站上的正式分類，兩者常常對不起來。</p>
       <div class="table-wrap">
         <table>
-          <caption>{c.county}：家長的說法對到官方分類，以及各類型的家數。</caption>
+          <caption>{c.county}：家長的說法對到官方分類，以及各類型的家數（一家可能算進兩類）。</caption>
           <thead><tr><th>說法</th><th>官方分類</th><th class="num">家數</th></tr></thead>
           <tbody>
             {byCat.map((r) => (
@@ -76,11 +243,12 @@ const byCat = Object.entries(
     </section>
 
     <p class="meta">
+      法條：兒童及少年福利與權益保障法第 32 條、施行細則第 9 條。
       早期療育與發展遲緩的法規定義見<a href="/early-intervention/">早療是什麼</a>、
       <a href="/developmental-delay/">發展遲緩是什麼</a>。
     </p>
 
-    <Caveat kind="wait" />
+    <Caveat kind="list" />
 
     <SiteFooter code={code} generatedAt={c.generated_at} />
   </main>

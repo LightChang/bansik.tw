@@ -5,6 +5,7 @@
 // 名單在建置期就輸出成真的表格列：這些頁存在的理由就是讓搜尋引擎與 AI 工具
 // 不跑 JS 也讀得到「某區有哪幾家語言治療所」。
 import Tel from './Tel.astro';
+import ReferralCard from './ReferralCard.astro';
 import Base from '../layouts/Base.astro';
 import Nav from './Nav.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -102,9 +103,6 @@ const subLine = type && THERAPY_SLUGS.includes(type.slug) && sub
     + '。各單位收費與能不能用在補助上，先打電話問。'
   : '';
 
-// 行政區頁優先放設在同一區的通報轉介中心
-const referrals = c.entities.filter((e) => e.journey_step === '2');
-const referral = (district && referrals.find((e) => e.district === district)) || referrals[0];
 
 // 2026-11-15 用戶拍板（Google 2026 年 11 月核心更新期間，降低彙整型薄頁的比例）：
 // 「行政區 × 服務類型」名單頁一律 noindex（sitemap 也排除，見 astro.config.mjs），頁面留著給站內導覽。
@@ -198,18 +196,7 @@ const itemList = placeItemList(h1, list);
 
     <Caveat kind="list" />
 
-    {referral && (
-      <div class="cards">
-        <div class="card call">
-          <h3>不確定該找哪一類，先打這支</h3>
-          <div class="entry">
-            <span>{referral.name}</span>
-            <span class="tel num"><Tel tel={referral.tel} /></span>
-          </div>
-          <p class="meta">{referral.cat}。不確定下一步該找哪一類，可以先打這支問。</p>
-        </div>
-      </div>
-    )}
+    <ReferralCard c={c} district={district} code={code} />
 
     <section class="section">
       <h2>{S}其他服務類型</h2>

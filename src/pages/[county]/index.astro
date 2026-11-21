@@ -5,6 +5,8 @@ import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
 import RecentPlaces from '../../components/RecentPlaces.astro';
+import ReferralCard from '../../components/ReferralCard.astro';
+import { latestQuota } from '../../lib/referral.mjs';
 import { countyPaths, countyBundle, SUBPAGES, subpageUrl } from '../../lib/data.mjs';
 import { typePages, typeUrl, shortCounty } from '../../lib/facets.mjs';
 import { scriptJson } from '../../lib/scriptjson.mjs';
@@ -17,8 +19,6 @@ const { county: code } = Astro.params;
 const { c, s } = countyBundle(code);
 
 // 通報轉介中心（journey_step 2）：不知道從哪開始就打這支
-const referrals = c.entities.filter((e) => e.journey_step === '2');
-const call = referrals[0];
 
 // 聯合評估中心，重點中心優先
 const centers = c.entities
@@ -28,9 +28,7 @@ const centers = c.entities
 
 // 名額必須跟它所屬的機構一起輸出。先前把它獨立放在清單末尾，窄螢幕隱藏第 2 列後
 // 就變成「榜上是甲醫院、名額寫乙醫院」，會誤導家長。
-const quotaOf = (key) => c.observations
-  .filter((o) => o.entity_key === key && o.field === 'quota_release_date')
-  .map((o) => o.value).sort()[0] || null;
+const quotaOf = (key) => latestQuota(c.observations, key);
 
 // 0–5 個月大那一段要用的家數（發展篩檢要滿 6 個月才開始，但這段不是沒事做）
 const ear = c.entities.filter((e) => e.cat === '新生兒聽力篩檢院所').length;
@@ -124,18 +122,7 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
 
     <h2>在{c.county}先找誰</h2>
     <div class="cards">
-      {call && (
-        <div class="card call">
-          <h3>不知道從哪開始，先打這支</h3>
-          <div class="entry">
-            <span>{call.name}</span>
-            <span class="tel num"><Tel tel={call.tel} /></span>
-          </div>
-          <p class="meta">
-            通報轉介中心是單一窗口，{c.county}共 {referrals.length} 處，打這支會幫你轉。
-          </p>
-        </div>
-      )}
+      <ReferralCard c={c} code={code} title="不知道從哪開始，先打這支" bare />
       <div class="card">
         <h3>做評估的地方<span class="sub">{c.county} {centers.length} 家，重點中心優先</span></h3>
         {centers.slice(0, 3).map((e) => (
@@ -148,7 +135,7 @@ const desc = `${c.county}的兒童發展篩檢時程與早期療育資源：${c.
               <span class="tel num"><Tel tel={e.tel} /></span>
             </div>
             {quotaOf(e.entity_key) && (
-              <p class="meta">下次開放名額 {quotaOf(e.entity_key)}（醫院公告，以院方為準）</p>
+              <p class="meta">{quotaOf(e.entity_key).text}（醫院公告，以院方為準）</p>
             )}
           </div>
         ))}

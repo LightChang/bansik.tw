@@ -1,0 +1,32 @@
+---
+// 縣市全部通報轉介中心與個案管理中心，附「負責哪些區」（社家署名錄的服務區域欄）。
+// 家長要先知道自己住的那一區歸哪一處管，才知道打哪支；只給一支電話會打錯中心。
+import Tel from './Tel.astro';
+import { referralsOf, areaText } from '../lib/referral.mjs';
+import { catList } from '../lib/placepages.mjs';
+
+// 一處常常同時是通報轉介與個案管理中心（臺中 8 處都是），兩個都寫出來
+const roles = (e) => catList(e).filter((k) => /通報轉介中心|個案管理中心/.test(k)).join('、') || e.cat;
+
+interface Props { c: any; caption: string; id?: string }
+const { c, caption, id } = Astro.props;
+const rows = referralsOf(c);
+---
+{rows.length > 0 && (
+  <div class="table-wrap" id={id}>
+    <table>
+      <caption>{caption}</caption>
+      <thead><tr><th>名稱</th><th>負責的區</th><th>類型</th><th>電話</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td>{r.e.name}</td>
+            <td>{r.wide ? `全${c.county}` : areaText(r)}</td>
+            <td>{roles(r.e)}</td>
+            <td class="num"><Tel tel={r.e.tel} /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}

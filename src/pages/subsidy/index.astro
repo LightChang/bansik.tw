@@ -6,6 +6,7 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Caveat from '../../components/Caveat.astro';
 import { counties, county } from '../../lib/data.mjs';
+import { firstCall } from '../../lib/referral.mjs';
 
 const fmt = (v) => (v == null ? null : v.toLocaleString());
 
@@ -15,7 +16,8 @@ const rows = counties().map(({ code, name }) => {
   const ok = s && s.status !== 'pending';
   const ap = (s && s.apply) || {};
   const online = [ap.how_to_apply, s && s.apply_window].filter(Boolean).some((t) => /線上|網路|eservice|https?:/.test(t));
-  const call = c.entities.find((e) => e.journey_step === '2');
+  const f = firstCall(c);
+  const call = f ? f.e : null;
   return {
     code, name, s, ok, call,
     general: ok ? fmt(s.monthly_max_general) : null,

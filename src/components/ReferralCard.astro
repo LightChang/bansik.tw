@@ -1,0 +1,58 @@
+---
+// 「先打這支」卡片：有行政區就用名錄的服務區域找負責那一區的中心，
+// 沒有行政區（縣市層級的頁）而縣市又是分區負責的，就把各處連同負責的區一起列出來。
+import Tel from './Tel.astro';
+import { referralFor, firstCall, referralsOf, areaText } from '../lib/referral.mjs';
+
+interface Props { c: any; district?: string; title?: string; code: string; bare?: boolean }
+const { c, district, title = '不確定該找哪一類，先打這支', code, bare = false } = Astro.props;
+
+let rows = [];
+let note = '';
+if (district) {
+  const r = referralFor(c, district);
+  if (r.intake.length) {
+    const it = r.intake[0];
+    rows.push({ r: it, label: it.wide ? `${it.e.cat}，全${c.county}都收` : `${it.e.cat}，負責${district}` });
+    for (const m of r.caseMgr) rows.push({ r: m, label: `${m.e.cat}，負責${district}；通報後跟著孩子的是這一處` });
+    note = '評估、療育、補助該從哪裡開始，可以先打第一支問。負責的區依社家署名錄的服務區域。';
+  } else {
+    rows = referralsOf(c).filter((x) => x.e.cat === '通報轉介中心').map((x) => ({ r: x, label: `負責${areaText(x)}` }));
+    note = `社家署名錄沒有寫到${district}由哪一處負責，上面是${c.county}全部的通報轉介中心，打最近的一處問。`;
+  }
+} else {
+  const f = firstCall(c);
+  if (f) {
+    rows.push({ r: f, label: `${f.e.cat}，全${c.county}都收` });
+    note = '不知道下一步做什麼就打這支，它會幫你轉到評估或療育。';
+  } else {
+    rows = referralsOf(c).filter((x) => x.e.cat === '通報轉介中心').map((x) => ({ r: x, label: `負責${areaText(x)}` }));
+    note = `${c.county}的通報轉介中心依行政區分工，先找住的那一區歸哪一處。負責的區依社家署名錄的服務區域。`;
+  }
+}
+---
+{rows.length > 0 && (bare ? (
+  <div class="card call">
+    <h3>{title}</h3>
+    {rows.map(({ r, label }) => (
+      <div class="entry">
+        <span>{r.e.name}<span class="sub">{label}</span></span>
+        <span class="tel num"><Tel tel={r.e.tel} /></span>
+      </div>
+    ))}
+    <p class="meta">{note} <a href={`/${code}/steps/#centers`}>{c.county}各處負責的區</a></p>
+  </div>
+) : (
+  <div class="cards">
+    <div class="card call">
+      <h3>{title}</h3>
+      {rows.map(({ r, label }) => (
+        <div class="entry">
+          <span>{r.e.name}<span class="sub">{label}</span></span>
+          <span class="tel num"><Tel tel={r.e.tel} /></span>
+        </div>
+      ))}
+      <p class="meta">{note} <a href={`/${code}/steps/#centers`}>{c.county}各處負責的區</a></p>
+    </div>
+  </div>
+))}

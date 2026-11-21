@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Caveat from '../../components/Caveat.astro';
+import ReferralTable from '../../components/ReferralTable.astro';
 import { countyPaths, county, counties } from '../../lib/data.mjs';
 import { shortCounty, typePages, typeUrl } from '../../lib/facets.mjs';
 
@@ -220,19 +221,9 @@ const compare = counties().map(({ code: k, name }) => {
         <h2>{c.county}問早療補助打哪支</h2>
         <p class="lead">
           申請方式、要準備的文件、自己的情況補不補得到，打通報轉介中心或個案管理中心問。
-          {c.county}共 {referrals.length} 處。
+          {c.county}共 {referrals.length} 處，先看自己住的區歸哪一處。
         </p>
-        <div class="table-wrap">
-          <table>
-            <caption>{c.county}的通報轉介中心與個案管理中心電話。資料產生於 {c.generated_at.slice(0, 10)}。</caption>
-            <thead><tr><th>名稱</th><th>類型</th><th>電話</th></tr></thead>
-            <tbody>
-              {referrals.map((e) => (
-                <tr><td>{e.name}</td><td>{e.cat}</td><td class="num">{e.tel}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ReferralTable c={c} caption={`${c.county}的通報轉介中心與個案管理中心：負責的區與電話。負責的區依社家署名錄的服務區域，資料產生於 ${c.generated_at.slice(0, 10)}。`} />
       </section>
     )}
 

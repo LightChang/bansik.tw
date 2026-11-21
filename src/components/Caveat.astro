@@ -5,13 +5,14 @@
 // 所以在會被單獨抄走的內頁，把前提放進內文裡。
 //
 // kind 決定講哪一句：
-//   list  機構名錄（places、map）
-//   wait  流程與時程（steps、checkups）
+//   list  機構名錄與流程（places、map、steps）
+//   wait  檢查時程（checkups）
 //   money 補助（subsidy）
 //   age   月齡頁（/age/）：題目是手冊原文，不是診斷
+//   tool  檢核表與量表下載（materials）：篩檢工具，不是診斷
 
 interface Props {
-  kind: 'list' | 'wait' | 'money' | 'age';
+  kind: 'list' | 'wait' | 'money' | 'age' | 'tool';
 }
 const { kind } = Astro.props;
 
@@ -25,6 +26,8 @@ const TEXT = {
        + '也不保證申請一定通過。',
   age: '這裡的題目照國健署兒童健康手冊原文抄錄，是家長在健檢前記錄、給醫師參考用的，'
      + '網站不做判讀。篩檢沒過不等於診斷，診斷只能由醫療院所做。',
+  tool: '檢核表與量表是篩檢工具，不是診斷標準；勾到「否」不等於發展遲緩，'
+      + '結果怎麼看請問醫師或縣市的通報轉介中心。',
 };
 ---
 
