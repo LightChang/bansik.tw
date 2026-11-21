@@ -176,7 +176,7 @@ const itemList = placeItemList(h1, list);
                 <tr>
                   <td>
                     {e.tier && <span class={`pill ${e.tier === '重點' ? 'key' : ''}`}>{e.tier}</span>}
-                    <a href={placeUrl(code, slugs.get(e.entity_key))}>{e.name}</a>
+                    <a href={placeUrl(code, slugs.get(e.entity_key))}>{where}{e.name}</a>
                     {e.url && <> <a class="meta" href={e.url} target="_blank" rel="noopener">官網</a></>}
                   </td>
                   <td>{e.plain_cat}</td>
